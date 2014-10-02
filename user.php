@@ -10,9 +10,9 @@ if( isset($_POST['mod']) )
 {
   $mod = @$_POST['mod'];
 }
-elseif( isset($_GET['get']) && $_GET['get']!='login')
+elseif( isset($_GET['mod']) && $_GET['mod']!='login')
 {
-  $mod=@$_POST['mod'];
+  $mod=@$_GET['mod'];
 }
 if($mod == '' )
 {
