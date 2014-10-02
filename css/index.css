@@ -2,13 +2,11 @@ body{
     background-color:#141e23;
     color: #fcfaf2;
     margin:0 auto;
-  	font-family: 'Consolas';
+  	font-family: 'Consolas','Microsoft JhengHei';
   	font-size: 17px;
 }
 html,body{
-    height:100%
-}
-a{
+    height:100%;
 }
 
 .nav{
@@ -26,7 +24,6 @@ a{
 	list-style: none;
 	float: left;
 }
-
 .nav a {
 	margin: 0 0;
 	padding: 7.5px 8px 6.5px 8px;
@@ -42,4 +39,14 @@ a{
 }
 .container{
    	width:95%;
+}
+
+.signin {
+  margin-top:64px;
+}
+.signinlogo{
+  height:600px;
+  background-image:url('http://toj.twbbs.org/oj/img/signin.png');
+  background-size:contain;
+  background-repeat:no-repeat
 }
