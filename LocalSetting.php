@@ -11,7 +11,7 @@ $_E = array();
 $_E['ROOT'] = __DIR__;
 $_E['site']['name']='TNFSH Online Judge(Test)';
 
-$_E['EnableMathJax'] = 0;
+$_E['EnableMathJax'] = 1;
 $_E['uesLocalMathJaxFile'] = 0;
 
 ?>

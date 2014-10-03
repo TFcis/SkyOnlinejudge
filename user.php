@@ -3,36 +3,36 @@ require_once('LocalSetting.php');
 require_once('function/renderCore.php');
 
 
-$allowmod =array('login','loginbox');
+$allowmod =array('loginbox');
 
 $mod = '';
 if( isset($_POST['mod']) )
 {
-  $mod = @$_POST['mod'];
+    $mod = @$_POST['mod'];
 }
 elseif( isset($_GET['mod']) && $_GET['mod']!='login')
 {
-  $mod=@$_GET['mod'];
+    $mod=@$_GET['mod'];
 }
 if($mod == '' )
 {
-  $mod = 'loginbox';
+    $mod = 'loginbox';
 }
 
 if( !in_array($mod,$allowmod) )
 {
-  render('nonedefine');
+    render('nonedefined');
 }
 else
 {
-  if(!file_exists("$_E[ROOT]/function/user_$mod.php"))
-  {
-    render("user/user_$mod");
-  }
-  else
-  {
-    reuqire("$_E[ROOT]/function/user_$mod.php");
-  }
+    if(!file_exists("$_E[ROOT]/function/user_$mod.php"))
+    {
+        render("user/user_$mod");
+    }
+    else
+    {
+        reuqire("$_E[ROOT]/function/user_$mod.php");
+    }
 }
 
 ?>

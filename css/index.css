@@ -46,7 +46,22 @@ html,body{
 }
 .signinlogo{
   height:600px;
+  margin-top:32px;
   background-image:url('http://toj.twbbs.org/oj/img/signin.png');
   background-size:contain;
   background-repeat:no-repeat
+}
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by it's height */
+  margin: 0 auto -30px;
+}
+
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+  height: 30px;
+  text-align:right;
 }
