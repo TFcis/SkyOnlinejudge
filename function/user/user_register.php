@@ -28,8 +28,7 @@ if( $registerToken
             render('user/user_register_check');
             break;
         case 'accept':
-            render('nonedefined');
-            //render('user/user_register_form');
+            render('user/user_register_form');
             break;
         case 'reg':
             render('nonedefined');
