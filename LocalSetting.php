@@ -2,10 +2,11 @@
 //this file Will include all basic setting
 //Load SQL Setting
 
-define('IN_OJSYSTEM',1);
+define('IN_SKYOJSYSTEM',1);
 
 require_once('config/config.php');
-
+error_reporting(E_ALL);
+session_start();
 $_E = array();
 
 $_E['ROOT'] = __DIR__;

@@ -3,7 +3,7 @@ require_once('LocalSetting.php');
 require_once('function/renderCore.php');
 
 
-$allowmod =array('loginbox');
+$allowmod =array('loginbox','register');
 
 $mod = '';
 if( isset($_POST['mod']) )
@@ -12,7 +12,7 @@ if( isset($_POST['mod']) )
 }
 elseif( isset($_GET['mod']) && $_GET['mod']!='login')
 {
-    $mod=@$_GET['mod'];
+    $mod = @$_GET['mod'];
 }
 if($mod == '' )
 {
@@ -25,13 +25,14 @@ if( !in_array($mod,$allowmod) )
 }
 else
 {
-    if(!file_exists("$_E[ROOT]/function/user_$mod.php"))
+    ;
+    if(!file_exists($_E['ROOT']."/function/user/user_$mod.php"))
     {
         render("user/user_$mod");
     }
     else
     {
-        reuqire("$_E[ROOT]/function/user_$mod.php");
+        require($_E['ROOT']."/function/user/user_$mod.php");
     }
 }
 

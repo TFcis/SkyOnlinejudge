@@ -1,14 +1,14 @@
 <?php
 if(!defined('IN_TEMPLATE'))
 {
-  exit('Access denied');
+    exit('Access denied');
 }
 ?>
 <div class="container">
     <div class="row">
-        <div class="col-md-4 col-md-offset-1 signinlogo">
+        <div class="col-md-4 col-md-offset-1" id="signinlogo">
         </div>
-        <div class="col-md-3 col-md-offset-1 signin">
+        <div class="col-md-3 col-md-offset-1" id="signin">
             <h3>登入開始今日的挑戰！</h3>
             <form role="form" action="user.php" method="post">
                 <input type="hidden" value="login" name="mod">

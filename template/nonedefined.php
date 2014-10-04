@@ -8,7 +8,8 @@ if(!defined('IN_TEMPLATE'))
     <div class="row">
         <div class="col-md-4 col-md-offset-4">
             <h1>Oops! 不存在的操作</h1>
+            <p>我們正在努力中</p>
         </div>
     </div>
 </div>  
-<? //<iframe src="http://404page.missingkids.org.tw/api?key=cV-dWyzEykpsKPiMFxcE" width="100%" height="635" frameborder="0"></iframe> ?>
+<?php //<iframe src="http://404page.missingkids.org.tw/api?key=cV-dWyzEykpsKPiMFxcE" width="100%" height="635" frameborder="0"></iframe> ?>

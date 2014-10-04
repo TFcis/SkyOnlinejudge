@@ -37,19 +37,22 @@ html,body{
 .nav a:hover{
     color: #ffffff;
 }
+.pull-r{
+    float: right !important;
+}
 .container{
    	width:95%;
 }
 
-.signin {
+#signin {
   margin-top:64px;
 }
-.signinlogo{
-  height:600px;
+#signinlogo{
+  height:500px;
   margin-top:32px;
   background-image:url('http://toj.twbbs.org/oj/img/signin.png');
   background-size:contain;
-  background-repeat:no-repeat
+  background-repeat:no-repeat;
 }
 #wrap {
   min-height: 100%;
@@ -64,4 +67,11 @@ html,body{
 #footer {
   height: 30px;
   text-align:right;
+}
+
+#license{
+    max-height :350px;
+    overflow-y : auto;
+    overflow-x : hidden;
+    margin-bottom : 30px;
 }
