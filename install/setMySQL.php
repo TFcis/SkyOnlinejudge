@@ -15,7 +15,7 @@ echo "Connect!\n";
 mysql_query("SET NAMES 'utf8'");
 mysql_select_db($_config['db']['dbname']);
 
-if(!mysql_query("CREATE TABLE IF NOT EXISTS `tojtest_account` (".
+if(!mysql_query("CREATE TABLE IF NOT EXISTS `".$_config['db']['tablepre']."_account` (".
     "`uid` int(11) NOT NULL AUTO_INCREMENT,".
     "`email` varchar(64) NOT NULL,".
     "`passhash` varchar(200) NOT NULL,".

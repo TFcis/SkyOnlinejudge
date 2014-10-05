@@ -35,7 +35,7 @@ if( $registerToken
                 register($_POST['email'],$_POST['nickname'],$_POST['password'],$_POST['repeat']))
             {
                 // need better page
-                header("Location:index.php");
+                header("Location:user.php");
             }
             else
             {

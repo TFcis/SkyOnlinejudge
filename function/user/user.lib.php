@@ -43,7 +43,7 @@ function register($email,$nickname,$password,$repeat)
         $_E['template']['reg'] = '帳號已被註冊';
         return false;
     }
-    if(!mysql_query("INSERT INTO `toj`.`$acctable` ".
+    if(!mysql_query("INSERT INTO `".$_config['db']['dbname']."`.`$acctable` ".
                     "(`uid`, `email`, `passhash`, `nickname`, `timestamp`) ".
                     "VALUES (NULL, '$email', '$password', '$nickname', '$timestamp')"))
     {
