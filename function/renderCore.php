@@ -5,23 +5,40 @@ if(!defined('IN_SKYOJSYSTEM'))
 }
 define('IN_TEMPLATE',1);
 
-function _renderSingleTemplate($pagename)
+class RenderCore
 {
-    global $_E;
-    $path = $_E['ROOT']."/template/$pagename.php";
-    if( file_exists($path) )
+    private $head_css;
+    private $head_js;
+    
+    function __construct()
     {
-        require($path);
-        return true;
+        $head_css = array();
+        $head_js = array();
     }
-    return false;
+    
+    static function renderSingleTemplate( $pagename , $namespace = 'common' )
+    {
+        global $_E;
+        $path = $_E['ROOT']."/template/$namespace/$pagename.php";
+        if( file_exists($path) )
+        {
+            require($path);
+            return true;
+        }
+        return false;
+    }
+    
+    function render($pagename , $namespace = 'common')
+    {
+        $this->renderSingleTemplate('common_header');
+        $this->renderSingleTemplate('common_nav');
+        if(!$this->renderSingleTemplate($pagename,$namespace))
+        {
+            $this->renderSingleTemplate('nonedefined');
+        }
+        $this->renderSingleTemplate('common_footer');
+    }
 }
 
-function render($pagename)
-{
-    _renderSingleTemplate('common/common_header');
-    _renderSingleTemplate('common/common_nav');
-    _renderSingleTemplate($pagename);
-    _renderSingleTemplate('common/common_footer');
-}
+$Render = new RenderCore();
 ?>

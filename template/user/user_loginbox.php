@@ -14,11 +14,11 @@ if(!defined('IN_TEMPLATE'))
                 <input type="hidden" value="login" name="mod">
                 <div class="form-group">
                     <label for="accountname">Username</label>
-                    <input type="text" class="form-control" id="accountname" name="accountname" placeholder="Username">
+                    <input type="text" class="form-control" id="accountname" name="accountname" placeholder="Username" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                 </div>
                 <button type="submit" class="btn btn-success">登入</button>
             </form>

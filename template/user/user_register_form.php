@@ -3,6 +3,25 @@ if(!defined('IN_TEMPLATE'))
 {
     exit('Access denied');
 }
+//For Template
+function CreateInputText($id ,$type ,$help = '' ,$oldvalue = null)
+{
+    echo "<div class='form-group'>";
+    // it should use language file
+    echo "<label for='$id' class='col-sm-2 control-label'>$id</label>";
+    echo "<div class='col-sm-9'>";
+    if($oldvalue)
+    {
+        echo "<input type='$type' class='form-control' name='$id' placeholder='$help' value='$oldvalue' required>";
+    }
+    else
+    {
+        echo "<input type='$type' class='form-control' name='$id' placeholder='$help' required>";
+    }
+    echo '</div>';
+    echo "<div class='col-sm-1' id=e_$id></div>";
+    echo '</div>';
+}
 ?>
 <div class="container">
     <div class="row">
@@ -11,40 +30,23 @@ if(!defined('IN_TEMPLATE'))
         <div class="col-md-4 col-md-offset-1" id="signin">
             <h3><?php echo($_E['site']['name']);?><small>帳號資料</small></h3>
             <div class="text-right">
+                <?php if(isset($_E['template']['reg'])):?>
+                <p><i><small><?php echo($_E['template']['reg']);?></small></i></p>
+                <?php else:?>
                 <p><i><small>Coding is like poetry</small></i></p>
+                <?php endif;?>
             </div>
             <div class=".container-fluid">
                 <div class="row">
                     <form role="form" action="user.php" method="post" class="form-horizontal">
-                        <input type="hidden" value="reg" name="mod">
-                        <div class="form-group">
-                            <label for="username" class="col-sm-2 control-label">Username</label>
-                            <div class="col-sm-9">
-                                 <input type="text" class="form-control" id="username" placeholder="Username">
-                            </div>
-                            <div class="col-sm-1"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="col-sm-2 control-label">Email</label>
-                            <div class="col-sm-9">
-                                 <input type="email" class="form-control" id="email" placeholder="Email">
-                            </div>
-                            <div class="col-sm-1"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="col-sm-2 control-label">Password</label>
-                            <div class="col-sm-9">
-                                 <input type="password" class="form-control" id="password" placeholder="Password">
-                            </div>
-                            <div class="col-sm-1"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="password2" class="col-sm-2 control-label">Repeat</label>
-                            <div class="col-sm-9">
-                                 <input type="password" class="form-control" id="password2" placeholder="Password">
-                            </div>
-                            <div class="col-sm-1"></div>
-                        </div>
+                        <input type='hidden' name='mod' value='register'>
+                        <input type='hidden' name='accept' value='reg'>
+                        <?php
+                            CreateInputText('email','email','Email for login');
+                            CreateInputText('nickname','text','Nickname');
+                            CreateInputText('password','password','password');
+                            CreateInputText('repeat','password','Repeat password again');
+                        ?>
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-success">註冊</button>
