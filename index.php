@@ -6,4 +6,3 @@ require_once('function/renderCore.php');
 //it may be need a template
 
 $Render->render('index','index');
-?>

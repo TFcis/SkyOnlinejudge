@@ -10,11 +10,18 @@ if(!defined('IN_TEMPLATE'))
         </div>
         <div class="col-md-3 col-md-offset-1" id="signin">
             <h3>登入開始今日的挑戰！</h3>
+            <div class="text-right">
+                <?php if(isset($_E['template']['login'])):?>
+                <p><i><small><?php echo($_E['template']['login']);?></small></i></p>
+                <?php else:?>
+                <p><i><small>-Programming Is the New Literacy</small></i></p>
+                <?php endif;?>
+            </div>
             <form role="form" action="user.php" method="post">
                 <input type="hidden" value="login" name="mod">
                 <div class="form-group">
-                    <label for="accountname">Username</label>
-                    <input type="text" class="form-control" id="accountname" name="accountname" placeholder="Username" required>
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>

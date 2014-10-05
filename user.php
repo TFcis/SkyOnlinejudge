@@ -3,20 +3,13 @@ require_once('LocalSetting.php');
 require_once('function/renderCore.php');
 require_once('function/mysqlCore.php');
 
-$allowmod =array('loginbox','register');
+$allowmod =array('login','register','logout');
 
-$mod = '';
-if( isset($_POST['mod']) )
+//set Default mod
+$mod = 'login';
+if( isset($_REQUEST['mod']) )
 {
-    $mod = @$_POST['mod'];
-}
-elseif( isset($_GET['mod']) && $_GET['mod']!='login')
-{
-    $mod = @$_GET['mod'];
-}
-if($mod == '' )
-{
-    $mod = 'loginbox';
+    $mod = @$_REQUEST['mod'];
 }
 
 if( !in_array($mod,$allowmod) )

@@ -18,7 +18,7 @@ class RenderCore
     
     static function renderSingleTemplate( $pagename , $namespace = 'common' )
     {
-        global $_E;
+        global $_E,$_G;
         $path = $_E['ROOT']."/template/$namespace/$pagename.php";
         if( file_exists($path) )
         {

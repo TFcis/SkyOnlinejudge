@@ -34,7 +34,8 @@ if( $registerToken
             if( isset($_POST['accept']) &&
                 register($_POST['email'],$_POST['nickname'],$_POST['password'],$_POST['repeat']))
             {
-                $Render->render('nonedefined');
+                // need better page
+                header("Location:index.php");
             }
             else
             {
