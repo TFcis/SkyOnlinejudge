@@ -14,7 +14,7 @@ class userControl
     //this must call before use $_G
     static function intro()
     {
-        global $_G;
+        global $_G,$permission;
         if( !isset($_COOKIE['token']) || !isset($_COOKIE['uid']) )
         {
             $_G = $permission['guest'];
