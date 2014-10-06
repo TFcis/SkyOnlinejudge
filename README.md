@@ -11,4 +11,4 @@ Install
 4. Open folder `config` and you will find a file named `config.example.php`
 5. Fill out your MySQL setting and rename file to `config.php`
 6. Run `install/setMySQL.php` in command line to set table. If everything is fine, it will show `SUCC`
-7. start yout SKY Online Judge ~
+7. start your SKY Online Judge ~
