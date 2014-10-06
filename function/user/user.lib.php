@@ -85,11 +85,3 @@ function login($email,$password)
     }
     return $userdata;
 }
-
-function setUserAccountdata($accout)
-{
-    global $_G;
-    $_G['uid'] = $accout['uid'];
-    $_G['email'] = $accout['email'];
-    $_G['nickname'] = $accout['nickname'];
-}

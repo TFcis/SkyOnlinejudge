@@ -3,7 +3,5 @@ if( !defined('IN_SKYOJSYSTEM') )
 {
     exit('Access denied');
 }
-unset($_SESSION['logintoken'][$_COOKIE['token']]);
-setcookie('token', '', time()-3600);
-
+userControl::DelLoginToken();
 header("Location:index.php");

@@ -28,7 +28,7 @@ function CreateInputText($id ,$type ,$help = '' ,$oldvalue = null)
         <div class="col-md-4 col-md-offset-1" id="signinlogo">
         </div>
         <div class="col-md-4 col-md-offset-1" id="signin">
-            <h3><?php echo($_E['site']['name']);?><small>帳號資料</small></h3>
+            <h3><?php echo($_E['site']['name']);?><br><small>帳號資料</small></h3>
             <div class="text-right">
                 <?php if(isset($_E['template']['reg'])):?>
                 <p><i><small><?php echo($_E['template']['reg']);?></small></i></p>

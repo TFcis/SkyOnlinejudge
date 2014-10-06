@@ -21,9 +21,7 @@ else
     }
     else
     {
-        $logintoken = md5(uniqid('login_',true));
-        $_SESSION['logintoken'][$logintoken] = $user;
-        setcookie('token',$logintoken,time()+3600);
+        userControl::SetLoginToken($user['uid']);
         header("Location:index.php");
     }
 }
