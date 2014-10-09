@@ -24,3 +24,9 @@ if(!defined('IN_TEMPLATE'))
             </ul>
         </div>
     </nav>
+    <?php if($_E['template']['alert']):?>
+    <div class="alert alert-danger fade in" role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+      <strong>Oh! My GOD</strong> <?php echo($_E['template']['alert']); ?>
+    </div>
+    <?php endif;?>

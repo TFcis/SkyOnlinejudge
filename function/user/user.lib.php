@@ -11,7 +11,6 @@ function passwordHash($resoure)
 }
 function getTimestamp()
 {
-    date_default_timezone_set( "Asia/Taipei" );
     return date('Y-m-d G:i:s');
 }
 function register($email,$nickname,$password,$repeat)
@@ -21,7 +20,7 @@ function register($email,$nickname,$password,$repeat)
     $pattern  = '/^[._@a-zA-Z0-9]{3,20}$/';
     
     $_E['template']['reg'] = array();
-    $acctable = $_config['db']['tablepre'].'_account';
+    $acctable = MQ::tname('account');
     $timestamp = getTimestamp();
     $sqlres;
     
@@ -60,13 +59,13 @@ function login($email,$password)
     $pattern  = '/^[._@a-zA-Z0-9]{3,20}$/';
     
     $_E['template']['login'] = array();
-    $acctable = $_config['db']['tablepre'].'_account';
+    $acctable = MQ::tname('account');
     $sqlres;
     $userdata = null;
     
     if( !preg_match($pattern,$email) || !preg_match($pattern,$password) )
     {
-        $_E['template']['login'] = '帳密錯誤';
+        $_E['template']['alert'] = '帳密錯誤';
         return false;
     }
     $password = passwordHash($password);
@@ -75,12 +74,12 @@ function login($email,$password)
                         "WHERE  `email` =  '$email'");
     if(! ($userdata = mysql_fetch_array($sqlres)) )
     {
-        $_E['template']['login'] = '無此帳號';
+        $_E['template']['alert'] = '無此帳號';
         return false;
     }
     if( $userdata['passhash'] != $password )
     {
-        $_E['template']['login'] = '密碼錯誤';
+        $_E['template']['alert'] = '密碼錯誤';
         return false;
     }
     return $userdata;

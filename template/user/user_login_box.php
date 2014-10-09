@@ -11,11 +11,7 @@ if(!defined('IN_TEMPLATE'))
         <div class="col-md-3 col-md-offset-1" id="signin">
             <h3>登入開始今日的挑戰！</h3>
             <div class="text-right">
-                <?php if(isset($_E['template']['login'])):?>
-                <p><i><small><?php echo($_E['template']['login']);?></small></i></p>
-                <?php else:?>
                 <p><i><small>-Programming Is the New Literacy</small></i></p>
-                <?php endif;?>
             </div>
             <form role="form" action="user.php" method="post">
                 <input type="hidden" value="login" name="mod">

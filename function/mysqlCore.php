@@ -23,6 +23,11 @@ class MQ
         mysql_query("SET NAMES 'utf8'");
         mysql_select_db($_config['db']['dbname']);
     }
+    static function tname($name)
+    {
+        global $_config;
+        return  $_config['db']['tablepre']."_".$name;
+    }
 }
 
 MQ::connect();

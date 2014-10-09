@@ -9,7 +9,7 @@ class class_toj{
     public $name = 'Toj capturer';
 	public $description = 'TOJ capturer for test';
 	public $copyright = 'test by LFsWang';
-	public $pattern = "/^toj_[0-9]+^/";
+	public $pattern = "/^toj_[0-9]+$/";
 	function __construct()
 	{
 	    echo 'Toj capturer create!';

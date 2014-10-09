@@ -11,18 +11,24 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
   <?php if($_E['EnableMathJax']): ?>
-  	<script type="text/x-mathjax-config">
-  		MathJax.Hub.Config(
-        {	tex2jax:
-           	{
-               	inlineMath: [['$','$'], ['\\(','\\)']],
-                processEscapes: true
-            }
-        });
-	</script>
-    <?php if($_E['uesLocalMathJaxFile']):?>
-    <script type="text/javascript" src="js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <?php else:?>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      	<script type="text/x-mathjax-config">
+      		MathJax.Hub.Config(
+            {	tex2jax:
+               	{
+                   	inlineMath: [['$','$'], ['\\(','\\)']],
+                    processEscapes: true
+                }
+            });
+    	</script>
+        <?php if($_E['uesLocalMathJaxFile']):?>
+        <script type="text/javascript" src="js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <?php else:?>
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <?php endif;?>
     <?php endif;?>
-  <?php endif; //EnableMathJax?>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script>
+    $(".alert").alert();
+    </script>

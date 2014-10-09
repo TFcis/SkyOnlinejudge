@@ -11,58 +11,125 @@ $_G = $permission['guest'];
 
 class userControl
 {
-    //this must call before use $_G
-    static function intro()
+    //this must call before use $_G[uid]
+    static function RegisterTokenInNamespace($namespace,$timeleft,$data = null)
     {
-        global $_G,$permission;
-        if( !isset($_COOKIE['token']) || !isset($_COOKIE['uid']) )
+        global $_G;
+        $table = MQ::tname('usertoken');
+        $token = md5(uniqid($namespace,true));
+        $timeout = time() + $timeleft;
+        
+        $_SESSION[$namespace][$token]['timeout'] = $timeout;
+        $_SESSION[$namespace][$token]['data'] = $data;
+        setcookie($namespace,$token,$timeout);
+        if($_G['uid'])
         {
-            $_G = $permission['guest'];
-            return ;
+            $_SESSION[$namespace][$token]['uid'] = $_G['uid'];
+            $id = $_G['uid'];
+            $data = isset($data)?mysql_real_escape_string(json_encode($data)):"";
+            mysql_query("INSERT INTO `$table`".
+                        "(`uid`, `timeout`, `type`, `token`, `data`)".
+                        "VALUES ($id,$timeout,'$namespace','$token','$data')");
         }
-        $token = $_COOKIE['token'];
+    }
+    
+    static function DeleteDataByNamespace($namespace)
+    {
+        global $_G;
+        $table = MQ::tname('usertoken');
+        
+        setcookie($namespace,'',0);
+        if( isset( $_SESSION[$namespace] ) )
+            unset($_SESSION[$namespace]);
+        if($_G['uid'])
+        {
+            $id = $_G['uid'];
+            mysql_query("DELETE FROM  `$table` ".
+                        "WHERE  `uid` = $id ".
+                        "AND  `type` = '$namespace'");
+        }
+    }
+    
+    static function LoadDataByNamespace($namespace)
+    {
+        global $_G;
+        $table = MQ::tname('usertoken');
+        if( !isset($_COOKIE[$namespace]) || !isset($_COOKIE['uid']) )
+        {
+            return false;
+        }
+        $token = $_COOKIE[$namespace];
         $uid   = $_COOKIE['uid'];
         
-        if( isset($_SESSION['login'][$token]) )
+        if( isset($_SESSION[$namespace][$token]) )
         {
-            if( $_SESSION['login'][$token]['uid'] == $uid )
-            {
-                //Load from cache
-                $_G = $_SESSION['login'][$token];
-                return ;
-            }
+            if( $_SESSION[$namespace][$token]['uid'] == $uid )
+                return $_SESSION[$namespace][$token]['data'];
             else
-            {
-                //May be hacked
-                setcookie('token','',time()-6000);
-                $_G = $permission['guest'];
-                return ;
-            }
+                return false;
         }
         else{
             //Load form SQL
-            //need token ckeck table!
-            $_G = $permission['guest'];
+            if($sqlres = mysql_query("SELECT * FROM  `$table` ".
+                                     "WHERE  `uid` = $uid".
+                                     "AND  `token` ='$token'"))
+            {
+                if( $sqldata = mysql_fetch_array($sqlres) )
+                {
+                    if( $sqldata['timeout']>time() )
+                    {
+                        return json_decode($sqldata['data']);
+                    }
+                    else
+                    {
+                        mysql_query("DELETE FROM  `$table` ".
+                                     "WHERE  `uid` = $uid".
+                                     "AND  `token` ='$token'");
+                        return false;
+                    }
+                }
+                else //No data stroe in MYSQL
+                {
+                    return true;
+                }
+            }
+            else // SQL error
+            {
+                return false;
+            }
+        }
+        //protect
+        return false;
+    }
+    
+    static function intro()
+    {
+        global $_G,$permission;
+        if( $_G = userControl::LoadDataByNamespace('login') )
+        {
             return ;
+        }
+        else
+        {
+             $_G = $permission['guest'];
+             return ;
         }
     }
     
     static function SetLoginToken($uid)
     {
-        global $_config;
-        $acctable = $_config['db']['tablepre'].'_account';
-        
-        $sqldata;
-        $logintoken = md5(uniqid('login_',true));
+        global $_G;
+        $acctable = MQ::tname('account');
         
         $sqlres=mysql_query("SELECT * FROM  `$acctable`".
                             "WHERE  `uid` =  $uid");
         if( $sqldata = mysql_fetch_array($sqlres) )
         {
-            $_SESSION['login'][$logintoken] = $sqldata;
-            setcookie('token',$logintoken,time()+3600);
-            setcookie('uid',$uid,time()+3600);
-            
+            $_G['uid'] = $uid;
+            userControl::RegisterTokenInNamespace('login',3600,$sqldata);
+            //$_SESSION['login'][$logintoken] = $sqldata;
+            //setcookie('token',$logintoken,time()+3600);
+            setcookie('uid',$uid,time()+864000);
             return true;
         }
         else
@@ -73,8 +140,6 @@ class userControl
     
     static function DelLoginToken()
     {
-        unset($_SESSION['login']);
-        setcookie('token','',time()-6000);
-        setcookie('uid','',time()-6000);
+        userControl::DeleteDataByNamespace('login');
     }
 }
