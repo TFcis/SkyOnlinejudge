@@ -4,9 +4,15 @@ if( !defined('IN_SKYOJSYSTEM') )
     exit('Access denied');
 }
 
-if( !isset($_POST['mod']) )
+if( $_G['uid'] )
 {
-    $Render->render('user_login_box','user');
+    Render::ShowMessage("你不是登入了!?");
+    exit('');
+}
+
+if( !isset($_POST['mod']))
+{
+    Render::render('user_login_box','user');
     exit('');
 }
 else
@@ -16,7 +22,7 @@ else
     $user; 
     if( !($user = login($email,$password)) )
     {
-        $Render->render('user_login_box','user');
+        Render::render('user_login_box','user');
         exit('');
     }
     else

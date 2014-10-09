@@ -5,4 +5,4 @@ require_once('function/pluginsCore.php');
 
 $plugins->loadClassByPluginsFolder('rank/board_other_oj');
 
-$Render->render('rank_index','rank');
+Render::render('rank_index','rank');

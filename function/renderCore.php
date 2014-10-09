@@ -5,7 +5,7 @@ if(!defined('IN_SKYOJSYSTEM'))
 }
 define('IN_TEMPLATE',1);
 
-class RenderCore
+class Render
 {
     private $head_css;
     private $head_js;
@@ -28,17 +28,24 @@ class RenderCore
         return false;
     }
     
-    function render($pagename , $namespace = 'common')
+    static function render($pagename , $namespace = 'common')
     {
-        $this->renderSingleTemplate('common_header');
-        $this->renderSingleTemplate('common_nav');
-        if(!$this->renderSingleTemplate($pagename,$namespace))
+        Render::renderSingleTemplate('common_header');
+        Render::renderSingleTemplate('common_nav');
+        if(!Render::renderSingleTemplate($pagename,$namespace))
         {
-            $this->renderSingleTemplate('nonedefined');
+            Render::renderSingleTemplate('nonedefined');
         }
-        $this->renderSingleTemplate('common_footer');
+        Render::renderSingleTemplate('common_footer');
+    }
+    
+    static function ShowMessage($cont)
+    {
+        global $_E;
+        $_E['template']['message'] = $cont;
+        Render::render('common_message');
     }
 }
 
-$Render = new RenderCore();
+//$Render = new RenderCore();
 ?>

@@ -21,10 +21,11 @@ class userControl
         
         $_SESSION[$namespace][$token]['timeout'] = $timeout;
         $_SESSION[$namespace][$token]['data'] = $data;
+        $_SESSION[$namespace][$token]['uid'] = $_G['uid'];
         setcookie($namespace,$token,$timeout);
         if($_G['uid'])
         {
-            $_SESSION[$namespace][$token]['uid'] = $_G['uid'];
+            
             $id = $_G['uid'];
             $data = isset($data)?mysql_real_escape_string(json_encode($data)):"";
             mysql_query("INSERT INTO `$table`".
@@ -54,17 +55,20 @@ class userControl
     {
         global $_G;
         $table = MQ::tname('usertoken');
-        if( !isset($_COOKIE[$namespace]) || !isset($_COOKIE['uid']) )
+        if( !isset($_COOKIE[$namespace]) || !isset( $_COOKIE['uid']) )
         {
             return false;
         }
+        
         $token = $_COOKIE[$namespace];
         $uid   = $_COOKIE['uid'];
         
         if( isset($_SESSION[$namespace][$token]) )
         {
+            //check if store data
             if( $_SESSION[$namespace][$token]['uid'] == $uid )
-                return $_SESSION[$namespace][$token]['data'];
+                return $_SESSION[$namespace][$token]['data'] ?
+                        $_SESSION[$namespace][$token]['data'] : true;
             else
                 return false;
         }
@@ -126,7 +130,7 @@ class userControl
         if( $sqldata = mysql_fetch_array($sqlres) )
         {
             $_G['uid'] = $uid;
-            userControl::RegisterTokenInNamespace('login',3600,$sqldata);
+            userControl::RegisterTokenInNamespace('login',864000,$sqldata);
             //$_SESSION['login'][$logintoken] = $sqldata;
             //setcookie('token',$logintoken,time()+3600);
             setcookie('uid',$uid,time()+864000);

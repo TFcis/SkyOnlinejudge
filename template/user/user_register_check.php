@@ -14,7 +14,7 @@ if(!defined('IN_TEMPLATE'))
                 <div class="row">
                     <div class="col-md-12" id="license">
                     測試網站不保證資料會保存歐<br>
-                    <?php RenderCore::renderSingleTemplate('mit_license','user'); ?>
+                    <?php Render::renderSingleTemplate('mit_license','user'); ?>
                     </div>
                 </div>
                 <div class="row text-right">
