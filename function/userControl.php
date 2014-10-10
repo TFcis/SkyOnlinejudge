@@ -60,8 +60,14 @@ class userControl
             return false;
         }
         
-        $token = $_COOKIE[$namespace];
-        $uid   = $_COOKIE['uid'];
+        $token = isset($_COOKIE[$namespace])?$_COOKIE[$namespace]:'';
+        $uid   = isset($_COOKIE['uid'])?$_COOKIE['uid']:'';
+        
+        if( !preg_match('/^[a-z0-9]+$/',$token) ||
+            !preg_match('/^[0-9]+$/',$uid))
+        {
+            return false;
+        }
         
         if( isset($_SESSION[$namespace][$token]) )
         {
