@@ -20,7 +20,7 @@ class class_toj{
 			'method'	=> 'POST',
 			'content'   => http_build_query($data, '', '&'),
 		);
-		$response = file_get_contents('http://210.70.137.215/oj/be/api', false, stream_context_create($context));
+		$response = @file_get_contents('http://210.70.137.215/oj/be/api', false, stream_context_create($context));
 		return $response;
 	}
 	
@@ -42,7 +42,7 @@ class class_toj{
 	            $_E['template']['dbg'].="$uid download from toj<br>";
 	            $this->useraclist[$uid]  = json_decode($aclist)->ac;
 	            $_SESSION['cache']['toj'][$uid] = array();
-	            $_SESSION['cache']['toj'][$uid]['time'] = time()+rand(30,120);
+	            $_SESSION['cache']['toj'][$uid]['time'] = time()+rand(30,300);
 	            $_SESSION['cache']['toj'][$uid]['data'] = $this->useraclist[$uid];
 	        }
 	    }

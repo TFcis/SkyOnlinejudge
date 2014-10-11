@@ -15,7 +15,7 @@ error_reporting(E_ALL);
 userControl::intro();
 
 $_E = array();
-
+$_E['template']['alert'] ='';
 $_E['ROOT'] = __DIR__;
 $_E['site']['name']='Sky Online Judge(Test)';
 $_E['site']['host']='http://ulkk2285d976.lfswang.koding.io/TNFSHOnlineJudge/';
