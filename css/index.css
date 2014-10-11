@@ -75,3 +75,24 @@ html,body{
     overflow-x : hidden;
     margin-bottom : 30px;
 }
+
+.AC {
+	color: #00cc00;
+	font-size: 20px;
+}
+
+.WA {
+	color: #cc0000;
+	font-size: 20px;
+}
+.NO {
+	color: #444444;	
+	font-size: 20px;
+}
+tr:nth-child(odd) {
+    background: #101020;
+}
+
+tr:nth-child(even) {
+    background: #141e23;
+}

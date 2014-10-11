@@ -4,28 +4,29 @@ if(!defined('IN_SKYOJSYSTEM'))
   exit('Access denied');
 }
 
-class plugins{
-    // path base on
-    function loadClassByPluginsFolder($path)
+class Plugin{
+    // path base on ROOT/function/plugins/
+    static function loadClassByPluginsFolder($path)
     {
         global $_E;
         $loadedClass = array();
+        $nameList = array();
         $pattern = $_E['ROOT'].'/function/plugins/'.$path.'/class_*.php';
         $pname = "/\/(class_[^.\/]*)\.php/";
         $classfile = glob($pattern);
         foreach($classfile as $str)
         {
-            echo $str;
             include($str);
             if( preg_match($pname,$str,$matches) )
             {
                 $matches = $matches[1];
                 if(class_exists($matches))
                 {
-                    $classfile[$matches] = new $matches;
+                    $loadedClass[$matches] = new $matches;
+                    $nameList[] = $matches;
                 }
             }
         }
+        return array($nameList,$loadedClass);
     }
 }
-$plugins = new plugins;

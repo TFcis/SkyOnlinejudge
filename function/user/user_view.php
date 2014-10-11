@@ -3,7 +3,7 @@ if( !defined('IN_SKYOJSYSTEM') )
 {
     exit('Access denied');
 }
-$showid = $_E['uid'];
+$showid = $_G['uid'];
 
 if( isset($_GET['id']) )
 {

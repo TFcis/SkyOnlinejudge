@@ -19,6 +19,10 @@ class Render
     static function renderSingleTemplate( $pagename , $namespace = 'common' )
     {
         global $_E,$_G;
+        if( !isset($_E['template']) )
+        {
+            $_E['template'] = array();
+        }
         $path = $_E['ROOT']."/template/$namespace/$pagename.php";
         if( file_exists($path) )
         {
