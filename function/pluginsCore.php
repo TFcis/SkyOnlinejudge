@@ -10,7 +10,6 @@ class Plugin{
     {
         global $_E;
         $loadedClass = array();
-        $nameList = array();
         $pattern = $_E['ROOT'].'/function/plugins/'.$path.'/class_*.php';
         $pname = "/\/(class_[^.\/]*)\.php/";
         $classfile = glob($pattern);
@@ -23,10 +22,9 @@ class Plugin{
                 if(class_exists($matches))
                 {
                     $loadedClass[$matches] = new $matches;
-                    $nameList[] = $matches;
                 }
             }
         }
-        return array($nameList,$loadedClass);
+        return $loadedClass;
     }
 }

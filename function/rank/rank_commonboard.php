@@ -5,61 +5,56 @@ if(!defined('IN_SKYOJSYSTEM'))
 }
 
 $class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
-$sitelist = $class[0];
-$class = $class[1];
+
 $_E['template']['rank_site'] = array();
 $_E['template']['dbg'] = '';
 
-foreach($sitelist as $site)
+foreach($class as $site => $c)
 {
-    $_E['template']['rank_site'][$site]['name']   = $class[$site]->name;
-    $_E['template']['rank_site'][$site]['author'] = $class[$site]->copyright;
-    $_E['template']['rank_site'][$site]['desc']   = $class[$site]->description;
-    $_E['template']['rank_site'][$site]['version']= $class[$site]->version;
-    $_E['template']['rank_site'][$site]['format'] = htmlspecialchars($class[$site]->pattern);
+    $_E['template']['rank_site'][$site]['name']   = $c->name;
+    $_E['template']['rank_site'][$site]['author'] = $c->copyright;
+    $_E['template']['rank_site'][$site]['desc']   = $c->description;
+    $_E['template']['rank_site'][$site]['version']= $c->version;
+    $_E['template']['rank_site'][$site]['format'] = htmlspecialchars($c->pattern);
 }
 //test
-$userid   = array(3,7,18,17,46,18,10,26,30);
+$userid   = array(3,7,18,17,46,10,26,30);
 $problist = "toj64,toj100,toj101,toj102,toj103,zosj01,toj159,toj160,toj161,toj162,toj163,toj164,toj165,toj166";
 //select
 $prob = explode(',',$problist);
 $probinfo = array();
 $prelist = array();
-$i = 0;
-//var_dump($class);
+
 foreach($prob as $pname)
 {
-    $probinfo[$i]['name'] = $pname;
-    $probinfo[$i]['oj']   = '';
-    
+    $probdata['name'] = $pname;
+    $probdata['oj']   = '';
     foreach($class as $cn => $c)
     {
         if( preg_match( $c->pattern, $pname ) )
         {
-            $probinfo[$i]['oj'] = $cn;
+            $probdata['oj'] = $cn;
             $prelist[$cn][] = $pname;
             $_E['template']['dbg'].=$pname." match ".$cn."<br>";
             break;
         }
     }
-    $i++;
+    $probinfo[] = $probdata;
 }
+
+//preprocess
 foreach($prelist as $name => $arr)
 {
-    $_E['template']['dbg'].=$name."<br>";
     if( method_exists($class[$name],'preprocess') )
     {
         $class[$name]->preprocess($userid ,$arr);
-        $_E['template']['dbg'].="pre $name<br>";
-    }
-    else
-    {
-        $_E['template']['dbg'].="none<br>";
     }
 }
+
 $_E['template']['board'] = array();
 $_E['template']['plist'] = $prob;
 $_E['template']['id'] = $userid;
+
 foreach($userid as $u)
 {
     foreach($probinfo as $p)
@@ -79,4 +74,5 @@ foreach($userid as $u)
         }
     }
 }
+
 Render::render('rank_index','rank');

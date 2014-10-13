@@ -12,6 +12,11 @@ if( isset($_GET['id']) )
     {
         $showid = $tid;
     }
+    else
+    {
+         $_E['template']['alert'] = 'WTF!?';
+    }
 }
+
 $_E['template']['avaterurl'] = "http://www.gravatar.com/avatar/$showid?d=identicon&s=400";
 Render::render('user_view','user');

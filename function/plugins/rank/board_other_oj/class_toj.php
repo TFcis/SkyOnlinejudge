@@ -46,8 +46,8 @@ class class_toj{
 	            $_SESSION['cache']['toj'][$uid]['data'] = $this->useraclist[$uid];
 	        }
 	    }
-	    //var_dump($this->useraclist);
 	}
+	
 	function query($uid,$pid)
 	{
 	    $pid = preg_replace('/[^0-9]*/','',$pid);

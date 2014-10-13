@@ -46,8 +46,8 @@ class userControl
         {
             $id = $_G['uid'];
             mysql_query("DELETE FROM  `$table` ".
-                        "WHERE  `uid` = $id ".
-                        "AND  `type` = '$namespace'");
+                        " WHERE  `uid` = $id ".
+                        " AND  `type` = '$namespace'");
         }
     }
     
@@ -80,21 +80,22 @@ class userControl
         }
         else{
             //Load form SQL
+            
             if($sqlres = mysql_query("SELECT * FROM  `$table` ".
-                                     "WHERE  `uid` = $uid".
-                                     "AND  `token` ='$token'"))
+                                     " WHERE  `uid` = $uid ".
+                                     " AND  `token` ='$token'"))
             {
                 if( $sqldata = mysql_fetch_array($sqlres) )
                 {
                     if( $sqldata['timeout']>time() )
                     {
-                        return json_decode($sqldata['data']);
+                        return json_decode($sqldata['data'],true);
                     }
                     else
                     {
                         mysql_query("DELETE FROM  `$table` ".
-                                     "WHERE  `uid` = $uid".
-                                     "AND  `token` ='$token'");
+                                     " WHERE  `uid` = $uid".
+                                     " AND  `token` ='$token'");
                         return false;
                     }
                 }
@@ -105,6 +106,7 @@ class userControl
             }
             else // SQL error
             {
+                echo mysql_error();
                 return false;
             }
         }
@@ -132,7 +134,7 @@ class userControl
         $acctable = MQ::tname('account');
         
         $sqlres=mysql_query("SELECT * FROM  `$acctable`".
-                            "WHERE  `uid` =  $uid");
+                            " WHERE  `uid` =  $uid");
         if( $sqldata = mysql_fetch_array($sqlres) )
         {
             $_G['uid'] = $uid;

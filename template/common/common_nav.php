@@ -15,7 +15,7 @@ if(!defined('IN_TEMPLATE'))
 	            <li><a href="http://forum.tfcis.org/forum.php?mod=group&fid=107" target="_new">Discuss</a></li>
 	        </ul>
 	        <ul class="pull-r">
-	            <?php if(!$_G['uid']): ?>
+	            <?php if( !$_G['uid']): ?>
                 <li><a href="user.php?mod=login">登入</a></li>
                 <?php else: ?>
                 <li><a href="user.php?mod=view"><?php echo(htmlspecialchars($_G['nickname']));?></a></li>
