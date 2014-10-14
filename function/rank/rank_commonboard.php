@@ -36,6 +36,10 @@ foreach($prob as $pname)
             $probdata['oj'] = $cn;
             $prelist[$cn][] = $pname;
             $_E['template']['dbg'].=$pname." match ".$cn."<br>";
+            if( method_exists($c,'showname') )
+            {
+                $pname = $c->showname($pname);
+            }
             break;
         }
     }

@@ -17,7 +17,7 @@ function register($email,$nickname,$password,$repeat)
 {
     global $_E;
     global $_config;
-    $pattern  = '/^[._@a-zA-Z0-9]{3,20}$/';
+    $pattern  = '/^[._@a-zA-Z0-9]{3,30}$/';
     
     $_E['template']['reg'] = array();
     $acctable = MQ::tname('account');
@@ -56,7 +56,7 @@ function login($email,$password)
 {
     global $_E;
     global $_config;
-    $pattern  = '/^[._@a-zA-Z0-9]{3,20}$/';
+    $pattern  = '/^[._@a-zA-Z0-9]{3,30}$/';
     
     $_E['template']['login'] = array();
     $acctable = MQ::tname('account');

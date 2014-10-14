@@ -20,7 +20,7 @@ $_E['ROOT'] = __DIR__;
 $_E['site']['name']='Sky Online Judge(Test)';
 $_E['site']['host']='http://ulkk2285d976.lfswang.koding.io/TNFSHOnlineJudge/';
 
-$_E['EnableMathJax'] = 1;
+$_E['EnableMathJax'] = 0;
 $_E['uesLocalMathJaxFile'] = 0;
 
 ?>

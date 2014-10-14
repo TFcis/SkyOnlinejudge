@@ -60,4 +60,11 @@ class class_toj{
 	        return 0;
 	    }
 	}
+	
+	function showname($str)
+	{
+	    $pid = preg_replace('/[^0-9]*/','',$str);
+	    $str="<a href='http://toj.tfcis.org/oj/pro/$pid/'>TOJ $pid</a>";
+	    return $str;
+	}
 }
