@@ -96,3 +96,8 @@ tr:nth-child(odd) {
 tr:nth-child(even) {
     background: #141e23;
 }
+
+#jumbotron{
+    background-color:rgba(0,0,255,0.1);
+    color: #fcfaf2 !important;
+}

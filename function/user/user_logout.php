@@ -3,6 +3,9 @@ if( !defined('IN_SKYOJSYSTEM') )
 {
     exit('Access denied');
 }
-userControl::DelLoginToken();
-setcookie('uid','',0);
+if($_G['uid'])
+{
+    userControl::DelLoginToken();
+    setcookie('uid','',0);
+}
 header("Location:index.php");

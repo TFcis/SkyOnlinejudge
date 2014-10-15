@@ -20,7 +20,7 @@ function register($email,$nickname,$password,$repeat)
     $pattern  = '/^[._@a-zA-Z0-9]{3,30}$/';
     
     $_E['template']['reg'] = array();
-    $acctable = MQ::tname('account');
+    $acctable = DB::tname('account');
     $timestamp = getTimestamp();
     $sqlres;
     
@@ -59,7 +59,7 @@ function login($email,$password)
     $pattern  = '/^[._@a-zA-Z0-9]{3,30}$/';
     
     $_E['template']['login'] = array();
-    $acctable = MQ::tname('account');
+    $acctable = DB::tname('account');
     $sqlres;
     $userdata = null;
     

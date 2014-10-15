@@ -15,7 +15,7 @@ class userControl
     static function registertoken($namespace,$timeleft)
     {
         global $_G;
-        $table = MQ::tname('usertoken');
+        $table = DB::tname('usertoken');
         $token = md5(uniqid($namespace,true));
         $timeout = time() + $timeleft;
         
@@ -38,7 +38,7 @@ class userControl
     static function deletetoken($namespace)
     {
         global $_G;
-        $table = MQ::tname('usertoken');
+        $table = DB::tname('usertoken');
         
         setcookie($namespace,'',0);
         if( isset( $_SESSION[$namespace] ) )
@@ -57,7 +57,7 @@ class userControl
     static function checktoken($namespace)
     {
         global $_G;
-        $table = MQ::tname('usertoken');
+        $table = DB::tname('usertoken');
         if( !isset($_COOKIE[$namespace]) || !isset($_COOKIE['uid']) )
         {
             return false;
@@ -116,16 +116,16 @@ class userControl
     static function intro()
     {
         global $_G,$permission;
-        $acctable = MQ::tname('account');
+        $acctable = DB::tname('account');
         if( userControl::checktoken('login') )
         {
             //load user data
             //$_COOKIE['uid'] is checked in userControl::checktoken
             $loginuid = $_COOKIE['uid'];
-            if( MQ::loadcache('login',$loginuid) )
+            if( DB::loadcache('login',$loginuid) )
             {
                 //Load form cache
-                $_G=MQ::loadcache('login',$loginuid);
+                $_G=DB::loadcache('login',$loginuid);
             }
             else
             {
@@ -134,7 +134,7 @@ class userControl
                 if( $sqldata = mysql_fetch_array($sqlres) )
                 {
                     $_G = $sqldata;
-                    MQ::putcache('login',$_G,5,$loginuid);
+                    DB::putcache('login',$_G,5,$loginuid);
                 }
                 else //sql error
                 {
@@ -152,7 +152,7 @@ class userControl
     static function SetLoginToken($uid)
     {
         global $_G;
-        $acctable = MQ::tname('account');
+        $acctable = DB::tname('account');
         
         $sqlres=mysql_query("SELECT * FROM  `$acctable`".
                             " WHERE  `uid` =  $uid");
@@ -161,7 +161,7 @@ class userControl
             $_G['uid'] = $uid;
             userControl::registertoken('login',864000);
             // save $sqldata in cache
-            MQ::putcache('login', $sqldata ,10 ,$uid);
+            DB::putcache('login', $sqldata ,10 ,$uid);
             setcookie('uid',$uid,time()+864000);
             return true;
         }
@@ -173,6 +173,13 @@ class userControl
     
     static function DelLoginToken()
     {
+        global $_G;
+        DB::deletecache('login',$_G['uid']);
         userControl::deletetoken('login');
+    }
+    
+    static function getuserdata( $table ,$uid = null )
+    {
+        $table = DB::tname($table);
     }
 }

@@ -31,19 +31,18 @@ class class_toj{
 	    foreach($userlist as $uid)
 	    {
 	        $query['acct_id'] = $uid;
-	        if( isset($_SESSION['cache']['toj'][$uid]) &&
-	                  $_SESSION['cache']['toj'][$uid]['time']>time())
+	        if( $cache = DB::loadcache("class_toj_uid_$uid") )
 	        {
 	            $_E['template']['dbg'].="$uid load form cache<br>";
-	            $this->useraclist[$uid] = $_SESSION['cache']['toj'][$uid]['data'];
+	            $this->useraclist[$uid] = $cache;
 	        }
 	        elseif( $aclist = $this->post($query) )
 	        {
 	            $_E['template']['dbg'].="$uid download from toj<br>";
 	            $this->useraclist[$uid]  = json_decode($aclist)->ac;
-	            $_SESSION['cache']['toj'][$uid] = array();
-	            $_SESSION['cache']['toj'][$uid]['time'] = time()+rand(30,300);
-	            $_SESSION['cache']['toj'][$uid]['data'] = $this->useraclist[$uid];
+	            DB::putcache(   "class_toj_uid_$uid",
+	                            $this->useraclist[$uid],
+	                            rand(1,5));
 	        }
 	    }
 	}
