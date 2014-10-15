@@ -49,5 +49,10 @@ run("CREATE TABLE IF NOT EXISTS `".tname('usertoken')."` (
   `token` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
-
+run("CREATE TABLE IF NOT EXISTS `".tname('cache')."` (
+  `uid` int(11) NOT NULL,
+  `timeout` int(11) NOT NULL,
+  `type` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `token` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 ?>

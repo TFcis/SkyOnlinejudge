@@ -33,9 +33,8 @@ if($showid==$_G['uid'])
 else if($res = DB::getuserdata('account',$showid))
 {
     //protect
-    $res['password']='';
+    $res['passhash']='';
     $opt = $res[$showid];
-    var_dump($opt);
 }
 else
 {
