@@ -84,3 +84,21 @@ function login($email,$password)
     }
     return $userdata;
 }
+
+function prepareUserView($uid)
+{
+    global $_G;
+    $opt = array();
+    if($uid==$_G['uid']){
+        $opt = $_G;
+    }
+    else if( $res = DB::getuserdata('account',$uid) ){
+        //protect
+        $res['passhash']='';
+        $opt = $res[$uid];
+    }
+    else{
+        return false;
+    }
+    return $opt;
+}

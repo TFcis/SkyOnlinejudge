@@ -7,7 +7,7 @@ if(!defined('IN_TEMPLATE'))
 </head>
 <body>
 <div id="wrap"> 
-    <nav class="nav" role="navigation">
+    <nav id="nav" role="navigation">
         <div class="container">
   	        <a href="index.php"><?php echo($_E['site']['name']);?></a>
             <ul>

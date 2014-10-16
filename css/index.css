@@ -9,22 +9,22 @@ html,body{
     height:100%;
 }
 
-.nav{
+#nav{
     height:31px;
 	width: 100%;
 	border-bottom:#bdc0ba 1px solid;
 	background-color:#000;
 }
-.nav ul {
+#nav ul {
 	margin: 0 0;
 	padding: 0 0;
 	display: inline-block;
 }
-.nav ul>li {
+#nav ul>li {
 	list-style: none;
 	float: left;
 }
-.nav a {
+#nav a {
 	margin: 0 0;
 	padding: 7.5px 8px 6.5px 8px;
 	color: #bdc0ba;
@@ -34,7 +34,7 @@ html,body{
 	display: inline-block;
 	float: left;
 }
-.nav a:hover{
+#nav a:hover{
     color: #ffffff;
 }
 .pull-r{
@@ -98,6 +98,22 @@ tr:nth-child(even) {
 }
 
 #jumbotron{
-    background-color:rgba(0,0,255,0.1);
+    background-color:rgba(0,0,0,0);
     color: #fcfaf2 !important;
+}
+
+#user_view_avater{
+    width:100%;
+    height: auto;
+    display: block;
+}
+
+#cover {
+    width: 100%;
+    height: 418px;
+    background-size: cover;
+    position: absolute;
+    top: 32px;
+    left: 0;
+    z-index: 0;
 }
