@@ -9,8 +9,11 @@ if(!defined('IN_TEMPLATE'))
 	var old;
 	$(document).ready(function(){
         CONT = document.getElementById('content');
-		var curTemplate = 'summary';
-		old = curTemplate;
+        
+        var curTemplate = location.hash.slice(1);
+        if(curTemplate=="")	{ curTemplate = "summary"; }
+        $('#li-'+curTemplate).addClass('active');
+        old = curTemplate;
         loadTemplate(curTemplate);
         
         $('#nav-summary').click(function(){loadTemplate('summary'); });
@@ -18,11 +21,16 @@ if(!defined('IN_TEMPLATE'))
         $('#nav-modify').click(function(){ loadTemplate('modify');  });
 	});
 	function loadTemplate(template){
-		location.hash = template;
-		$('#li-'+old).removeClass();
-		$('#li-'+template).addClass('active');
-		old = template;
-    	$(CONT).load("user.php?mod=view&page="+template+"&id=<?=$_E['template']['showid']?>");
+	    $('#content').toggle(true)
+        location.hash = template;
+        $('#li-'+old).removeClass();
+        $('#li-'+template).addClass('active');
+        old = template;
+        $(CONT).load("user.php?mod=view&page="+template+"&id=<?=$_E['template']['showid']?>",function(){
+            $('#content').hide();
+            $('#content').fadeIn();
+        });
+        
 	}
 </script>
 
@@ -43,7 +51,7 @@ if(!defined('IN_TEMPLATE'))
 <div style="width:100%;margin-bottom:-30px;"></div>
 
 <ul class="nav nav-tabs navbar-inverse" role="tablist" id="nav-userview">
-    <li role="presentation" id="li-summary" class="active">
+    <li role="presentation" id="li-summary">
         <a id="nav-summary">總覽</a>
     </li>
     <li role="presentation" id="li-solve">

@@ -102,3 +102,18 @@ function prepareUserView($uid)
     }
     return $opt;
 }
+
+function page_ojacct($uid)
+{
+    global $_E;
+    $table_oj = DB::tname('ojlist');
+    $_E['template']['oj']=array();
+    if(!( $res = DB::query("SELECT `class`, `name`, `description` FROM `$table_oj` WHERE `available` = 1")) )
+    {
+        return false;
+    }
+    while( $data =DB::fetch($res) )
+    {
+        $_E['template']['oj'][]=$data;
+    }
+}

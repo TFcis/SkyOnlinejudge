@@ -31,7 +31,10 @@ if( isset($_GET['page']) )//subpage
     {
         case 'modify':
             if($showid == $_G['uid'])
+            {
+                page_ojacct($showid);
                 Render::renderSingleTemplate('user_data_modify_acct','user');
+            }
             else
                 Render::renderSingleTemplate('nonedefined');
             break;
