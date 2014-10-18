@@ -62,5 +62,5 @@ if(!defined('IN_TEMPLATE'))
     </li>
 </ul>
 
-<div class="tab-content" id="content">
-</div>
+<div class="tab-content" id="content" style="min-height:100px"></div>
+<div style="width:100%;height:100px"></div>

@@ -10,7 +10,7 @@ function run($str)
 {
     if(!mysql_query($str))
     {
-        echo(mysql_error()."\n".$str);
+        exit(mysql_error()."\n".$str);
     }
     else
     {
@@ -55,4 +55,13 @@ run("CREATE TABLE IF NOT EXISTS `".tname('cache')."` (
   `data` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
+
+run("CREATE TABLE IF NOT EXISTS `".tname('ojlist')."` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `class` text COLLATE utf8_bin NOT NULL,
+  `name` text COLLATE utf8_bin NOT NULL,
+  `description` text COLLATE utf8_bin NOT NULL,
+  `available` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;")
 ?>

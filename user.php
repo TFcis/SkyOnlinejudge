@@ -3,7 +3,7 @@ require_once('LocalSetting.php');
 require_once('function/renderCore.php');
 
 
-$allowmod =array('login','register','logout','view');
+$allowmod =array('login','register','logout','view','edit');
 
 //set Default mod
 $mod = $_G['uid']?'view':'login';
@@ -17,6 +17,7 @@ if( !in_array($mod,$allowmod) )
     Render::render('nonedefined');
     exit('');
 }
+
 else
 {
     require_once($_E['ROOT']."/function/user/user.lib.php");

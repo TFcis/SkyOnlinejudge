@@ -117,3 +117,8 @@ function page_ojacct($uid)
         $_E['template']['oj'][]=$data;
     }
 }
+
+function throwjson($status,$data)
+{
+    exit(json_encode(array('status'=>$status,'data'=>$data)));
+}

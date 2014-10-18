@@ -32,6 +32,7 @@ if( isset($_GET['page']) )//subpage
         case 'modify':
             if($showid == $_G['uid'])
             {
+                userControl::registertoken('EDIT',600);
                 page_ojacct($showid);
                 Render::renderSingleTemplate('user_data_modify_acct','user');
             }
