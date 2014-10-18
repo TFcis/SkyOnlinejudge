@@ -60,5 +60,5 @@ if(!defined('IN_TEMPLATE'))
 </div>
 <?=$_E['template']['dbg']?>
 <div align="center">
-<iframe src="http://www.tfcis.org/problemlist_test/" width="90%" height="550"></iframe>
+<iframe src="http://www.tfcis.org/ECHO_STATS/#board" width="90%" height="550"></iframe>
 </div>

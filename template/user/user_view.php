@@ -21,7 +21,6 @@ if(!defined('IN_TEMPLATE'))
         $('#nav-modify').click(function(){ loadTemplate('modify');  });
 	});
 	function loadTemplate(template){
-	    $('#content').toggle(true)
         location.hash = template;
         $('#li-'+old).removeClass();
         $('#li-'+template).addClass('active');

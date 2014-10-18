@@ -53,7 +53,10 @@ class userControl
                         " AND  `type` = '$namespace'");
         }
     }
-    
+    #bool userControl::checktoken(namespace)
+    #if function return true ,it mean two things:
+    #1.$_COOKIE['uid'] is leagl
+    #2.token $namespace is leagl
     static function checktoken($namespace)
     {
         global $_G;
@@ -81,11 +84,11 @@ class userControl
         }
         else{
             //Load form SQL
-            if($sqlres = mysql_query("SELECT * FROM  `$table` ".
-                                     " WHERE  `uid` = $uid ".
-                                     " AND  `token` ='$token'"))
+            if($sqlres = DB::query("SELECT * FROM  `$table` ".
+                                   " WHERE  `uid` = $uid ".
+                                   " AND  `token` ='$token'"))
             {
-                if( $sqldata = mysql_fetch_array($sqlres) )
+                if( $sqldata = DB::fetch($sqlres) )
                 {
                     if( $sqldata['timeout']>time() )
                     {
@@ -113,6 +116,8 @@ class userControl
         return false;
     }
     
+    #userControl::intro()
+    #this function must call first to check if user has logined and set var $_G
     static function intro()
     {
         global $_G,$permission;
@@ -122,30 +127,31 @@ class userControl
             //load user data
             //$_COOKIE['uid'] is checked in userControl::checktoken
             $loginuid = $_COOKIE['uid'];
-            if( DB::loadcache('login',$loginuid) )
+            if( $cache = DB::loadcache('login',$loginuid) )
             {
                 //Load form cache
-                $_G=DB::loadcache('login',$loginuid);
+                $_G = $cache;
             }
             else
             {
-                $sqlres=mysql_query("SELECT * FROM  `$acctable`".
+                //reload from SQL
+                $sqlres=DB::query("SELECT * FROM  `$acctable`".
                                     " WHERE  `uid` =  $loginuid");
-                if( $sqldata = mysql_fetch_array($sqlres) )
+                if( $sqldata = DB::fetch($sqlres) )
                 {
                     $_G = $sqldata;
                     DB::putcache('login',$_G,5,$loginuid);
                 }
                 else //sql error
                 {
-                    echo mysql_error();
-                    exit(0);
+                    #may be someone drop DB... It will lost the data of users.
+                    $_G = $permission['guest'];
                 }
             }
         }
         else // guest
         {
-             $_G = $permission['guest'];
+            $_G = $permission['guest'];
         }
     }
     
@@ -154,8 +160,8 @@ class userControl
         global $_G;
         $acctable = DB::tname('account');
         
-        $sqlres=mysql_query("SELECT * FROM  `$acctable`".
-                            " WHERE  `uid` =  $uid");
+        $sqlres=mysql_query("SELECT * FROM  `$acctable` ".
+                            " WHERE  `uid` =  $uid ");
         if( $sqldata = mysql_fetch_array($sqlres) )
         {
             $_G['uid'] = $uid;

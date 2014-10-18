@@ -7,9 +7,9 @@ session_start();
 date_default_timezone_set( "Asia/Taipei" );
 
 require_once('config/config.php');
+
 require_once('function/mysqlCore.php');
 require_once('function/userControl.php');
-
 error_reporting(E_ALL);
 
 userControl::intro();

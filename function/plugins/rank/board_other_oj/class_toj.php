@@ -13,6 +13,17 @@ class class_toj{
 	private $api = 'http://210.70.137.215/oj/be/api';
 	private $useraclist = array();
 	
+	function install()
+	{
+	    //set SQL
+	}
+	
+	function checkid($id)
+	{
+	    $id = (string)$id;
+	    return preg_match('/^[1-9]+[0-9]*$/',$id);
+	}
+	
 	function post($data)
 	{
 	    $context['http'] = array (
@@ -30,6 +41,8 @@ class class_toj{
 	    $query = array('reqtype' => 'AC','acct_id' => 0 );
 	    foreach($userlist as $uid)
 	    {
+	        if(!$this->checkid($uid))
+	            continue;
 	        $query['acct_id'] = $uid;
 	        if( $cache = DB::loadcache("class_toj_uid_$uid") )
 	        {

@@ -35,14 +35,14 @@ function register($email,$nickname,$password,$repeat)
     $nickname = mysql_real_escape_string($nickname);
     $password = passwordHash($password);
 
-    $sqlres = mysql_query(  "SELECT * FROM  `$acctable`".
+    $sqlres = DB::query(  "SELECT * FROM  `$acctable`".
                             "WHERE  `email` =  '$email'");
-    if(mysql_fetch_array($sqlres))
+    if(DB::fetch($sqlres))
     {
         $_E['template']['reg'] = '帳號已被註冊';
         return false;
     }
-    if(!mysql_query("INSERT INTO `".$_config['db']['dbname']."`.`$acctable` ".
+    if(!DB::query("INSERT INTO `".$_config['db']['dbname']."`.`$acctable` ".
                     "(`uid`, `email`, `passhash`, `nickname`, `timestamp`) ".
                     "VALUES (NULL, '$email', '$password', '$nickname', '$timestamp')"))
     {
@@ -55,7 +55,6 @@ function register($email,$nickname,$password,$repeat)
 function login($email,$password)
 {
     global $_E;
-    global $_config;
     $pattern  = '/^[._@a-zA-Z0-9]{3,30}$/';
     
     $_E['template']['login'] = array();
@@ -70,9 +69,9 @@ function login($email,$password)
     }
     //$password = passwordHash($password);
     
-    $sqlres=mysql_query("SELECT * FROM  `$acctable`".
+    $sqlres=DB::query("SELECT * FROM  `$acctable`".
                         "WHERE  `email` =  '$email'");
-    if(! ($userdata = mysql_fetch_array($sqlres)) )
+    if(! ($userdata = DB::fetch($sqlres)) )
     {
         $_E['template']['alert'] = '無此帳號';
         return false;
