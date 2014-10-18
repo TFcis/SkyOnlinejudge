@@ -6,7 +6,7 @@ if( !defined('IN_SKYOJSYSTEM') )
 
 function passwordHash($resoure)
 {
-    $re = md5("ncid".md5($resoure));
+    $re = password_hash($resoure, PASSWORD_BCRYPT);
     return $re;
 }
 function getTimestamp()
@@ -68,7 +68,7 @@ function login($email,$password)
         $_E['template']['alert'] = '帳密錯誤';
         return false;
     }
-    $password = passwordHash($password);
+    //$password = passwordHash($password);
     
     $sqlres=mysql_query("SELECT * FROM  `$acctable`".
                         "WHERE  `email` =  '$email'");
@@ -77,7 +77,7 @@ function login($email,$password)
         $_E['template']['alert'] = '無此帳號';
         return false;
     }
-    if( $userdata['passhash'] != $password )
+    if( !password_verify($password, $userdata['passhash']) )
     {
         $_E['template']['alert'] = '密碼錯誤';
         return false;
