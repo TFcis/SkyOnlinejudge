@@ -2,6 +2,10 @@ SKY Online Judge (Developing)
 =================
 >An open source online judge web system 
 
+Required
+-------------
+PHP 5.5.0 +
+
 Install
 -------------
 ###On Koding
