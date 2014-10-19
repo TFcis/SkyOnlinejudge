@@ -63,5 +63,16 @@ run("CREATE TABLE IF NOT EXISTS `".tname('ojlist')."` (
   `description` text COLLATE utf8_bin NOT NULL,
   `available` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;")
-?>
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
+
+//for test
+
+run("INSERT INTO `".tname('ojlist')."` (`id`, `class`, `name`, `description`, `available`) VALUES
+(1, 'class_toj', 'TNFSH Online Judge', '台南一中OJ', 1);");
+
+run("CREATE TABLE IF NOT EXISTS `".tname('userojlist')."` (
+  `uid` int(11) NOT NULL,
+  `data` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+");
