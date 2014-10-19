@@ -102,22 +102,121 @@ function prepareUserView($uid)
     return $opt;
 }
 
+function envadd($table)
+{
+    global $_E;
+    $_E[$table] = array();
+    $tb = DB::tname($table);
+    if( $res = DB::query("SELECT * FROM `$tb`") )
+    {
+        while( $dat = DB::fetch($res) )
+        {
+            $_E[$table][]=$dat;
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 function page_ojacct($uid)
 {
     global $_E;
     $table_oj = DB::tname('ojlist');
     $_E['template']['oj']=array();
-    if(!( $res = DB::query("SELECT `class`, `name`, `description` FROM `$table_oj` WHERE `available` = 1")) )
+    
+    if( !isset($_E['ojlist']) )
+        if( !envadd('ojlist') )
+            return false;
+            
+    $userojacctlist = DB::getuserdata('userojlist',$uid);
+    
+    if( isset($userojacctlist[$uid]) )
+        $userojacctlist = ojid_reg($userojacctlist[$uid]['data']);
+    else
+        $userojacctlist = array();
+    
+    foreach($_E['ojlist'] as $oj)
     {
-        return false;
+        $tmp = $oj;
+        if( $userojacctlist[ $oj['class'] ]['acct']  )
+        {
+            $tmp['value'] = $userojacctlist[ $oj['class'] ]['acct'];
+        }
+        $_E['template']['oj'][] = $tmp;
     }
-    while( $data =DB::fetch($res) )
-    {
-        $_E['template']['oj'][]=$data;
-    }
+    
+    return true;
 }
 
 function throwjson($status,$data)
 {
     exit(json_encode(array('status'=>$status,'data'=>$data)));
+}
+function ojid_reg($json)
+{
+    global $_E;
+    if( !isset($_E['ojlist']) )
+    {//envadd
+        return false;
+    }
+    $ojname = array();
+    foreach($_E['ojlist'] as $oj)
+        $ojname[]=$oj['class'];
+    
+    if(! ($acct = json_decode($json,true)) )
+        $acct = array();
+        
+    $oldacct = $acct;
+    foreach($oldacct as $oj => $stats)
+    {
+        if(!in_array($oj,$ojname))
+            unset($acct[$oj]);
+    }
+    
+    foreach($ojname as $oj)
+    {
+        if(!isset($acct[$oj]))
+        {
+            $acct[$oj] = array(
+                'acct' => '',
+                'approve' => 0);
+        }
+    }
+    return $acct;
+}
+function modify_ojacct($argv,$euid)
+{
+    global $_E;
+    $table = DB::tname('userojlist');
+    if( !isset($_E['ojlist']) )
+    {   //envadd
+        return array(false,'ENVERROR');
+    }
+    $class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
+    $uacct = DB::getuserdata('userojlist',$euid);
+    if(!isset($uacct[$euid]))
+        $uacct = '';
+    else
+        $uacct = $uacct[$euid]['data'];
+    $uacct = ojid_reg($uacct);
+    foreach($argv as $oj => $acct)
+    {
+        if( !empty($acct) && $class[$oj]->checkid($acct) )
+        {
+            $uacct[$oj]['acct'] = $acct;
+            $uacct[$oj]['approve']=0;
+        }
+    }
+    $uacct = addslashes(json_encode($uacct));
+    if( DB::query("INSERT INTO $table
+                    (`uid`,`data`) VALUES 
+                    ($euid,'$uacct')
+                    ON DUPLICATE KEY UPDATE `data`= '$uacct'"))
+    {
+        return array(true);
+    }
+    return array(false,'SQL ERROR');
 }

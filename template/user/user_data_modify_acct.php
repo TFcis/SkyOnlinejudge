@@ -31,7 +31,7 @@ $(document).ready(function()
             <div class="form-group">
                 <label for="inputEmail3" class="col-md-2 control-label"><?=$oj['name']?></label>
                 <div class="col-md-5">
-                    <input type="text" class="form-control" id="<?=$oj['class']?>" placeholder="<?=$oj['description']?>">
+                    <input type="text" class="form-control" name="<?=$oj['class']?>" placeholder="<?=$oj['description']?>" <?php if(isset($oj['value'])):?> value="<?=$oj['value']?>" <?php endif;?>>
                 </div>
             </div>
             <?php } ?>

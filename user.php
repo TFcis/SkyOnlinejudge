@@ -1,7 +1,7 @@
 <?php
 require_once('LocalSetting.php');
 require_once('function/renderCore.php');
-
+require_once('function/pluginsCore.php');
 
 $allowmod =array('login','register','logout','view','edit');
 

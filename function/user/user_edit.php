@@ -1,4 +1,5 @@
 <?php
+
 if( !defined('IN_SKYOJSYSTEM') )
 {
     exit('Access denied');
@@ -27,9 +28,30 @@ switch($editpage)
         if( !isset($_E['ojlist']) )
         {
             //envadd('ojlist');
+            $_E['ojlist'] = array();
+            $tb = DB::tname('ojlist');
+            if( $res = DB::query("SELECT * FROM `$tb`") )
+            {
+                while( $dat = DB::fetch($res) )
+                {
+                    $_E['ojlist'][]=$dat;
+                }
+            }
         }
         $argv = array();
-        throwjson('error','zzz');
+        
+        foreach($_E['ojlist'] as $oj)
+        {
+            if( isset( $_POST[$oj['class']] ) )
+            {
+                $argv[$oj['class']]=$_POST[$oj['class']];
+            }
+        }
+        $res = modify_ojacct($argv,$euid);
+        if( $res[0] )
+            throwjson('SUCC','SUCC');
+        else
+            throwjson('error',$res[1]);
         break;
     default:
         throwjson('error','modifying');
