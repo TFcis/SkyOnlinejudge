@@ -15,6 +15,10 @@ class class_toj{
 	
 	function install()
 	{
+	    $tb = DB::tname('ojlist');
+	    DB::query("INSERT INTO `tojtest_ojlist`
+	            (`id`, `class`, `name`, `description`, `available`) VALUES
+	            (NULL,'class_toj','TNFSH Online Judge','TOJ uid',1)");
 	    //set SQL
 	}
 	

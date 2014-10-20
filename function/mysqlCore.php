@@ -25,7 +25,10 @@ class DB
         global $_config;
         return  $_config['db']['tablepre']."_".$name;
     }
-    
+    static function timestamp()
+    {
+        return date('Y-m-d G:i:s');
+    }
     static function query($query)
     {
         if( $stat = mysql_query($query) )
@@ -84,6 +87,7 @@ class DB
             }
         }
     }
+    
     static function deletecache($name,$uid = 0)
     {
         if(isset($_SESSION['cache'][$name]))

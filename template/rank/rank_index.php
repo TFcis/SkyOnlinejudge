@@ -45,11 +45,11 @@ if(!defined('IN_TEMPLATE'))
                     </tr>
                 </thead>
                 </tbody>
-                    <?php foreach($_E['template']['id'] as $name){?>
+                    <?php foreach($_E['template']['id'] as $uid => $name){?>
                     <tr>
-                        <td><?=$name?></td>
+                        <td><?=$name['nickname']?></td>
                         <?php foreach($_E['template']['plist'] as $pname ){?>
-                            <td class="<?=$_E['template']['s'][$name][$pname]?>">●</td>
+                            <td class="<?=$_E['template']['s'][$uid][$pname]?>">●</td>
                         <?php }?>
                     </tr>
                     <?php }?>

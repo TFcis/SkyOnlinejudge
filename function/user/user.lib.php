@@ -162,9 +162,9 @@ function ojid_reg($json)
 {
     global $_E;
     if( !isset($_E['ojlist']) )
-    {//envadd
-        return false;
-    }
+        if( !envadd('ojlist') )
+            return false;
+            
     $ojname = array();
     foreach($_E['ojlist'] as $oj)
         $ojname[]=$oj['class'];

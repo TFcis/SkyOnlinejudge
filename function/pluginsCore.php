@@ -5,6 +5,21 @@ if(!defined('IN_SKYOJSYSTEM'))
 }
 
 class Plugin{
+    static function install($name,$class)
+    {
+        $tb = DB::tname('plugin');
+        if($sql = DB::query("SELECT `id` FROM $tb WHERE `class` LIKE '$name'"))
+            if(DB::fetch($sql))
+                return true;
+        if(method_exists($class,'install'))
+            $class->install();
+        $timestamp = DB::timestamp();
+        if(DB::query("INSERT INTO `$tb` 
+                    (`id`, `class`, `version`, `author`, `timestamp`) VALUES
+                    (NULL,'$name','0','0','$timestamp')"))
+            return true;
+        return false;
+    }
     // path base on ROOT/function/plugins/
     static function loadClassByPluginsFolder($path)
     {
@@ -22,6 +37,7 @@ class Plugin{
                 if(class_exists($matches))
                 {
                     $loadedClass[$matches] = new $matches;
+                    Plugin::install($matches,$loadedClass[$matches]);
                 }
             }
         }
