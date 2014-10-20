@@ -1,5 +1,4 @@
 <?php
-require_once($_E['ROOT'].'/function/user/user.lib.php');
 if(!defined('IN_SKYOJSYSTEM'))
 {
   exit('Access denied');

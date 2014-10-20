@@ -90,13 +90,16 @@ html,body{
 	font-size: 20px;
 }
 tr:nth-child(odd) {
-    background: #101020;
+    background: #383838;
 }
 
 tr:nth-child(even) {
     background: #141e23;
 }
-
+tr:hover{
+	background-color:#317082;
+	color:#FFF;
+}
 #jumbotron{
     background-color:rgba(0,0,0,0);
     color: #fcfaf2 !important;
