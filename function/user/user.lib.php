@@ -139,7 +139,7 @@ function page_ojacct($uid)
     if( isset($userojacctlist[$uid]) )
         $userojacctlist = ojid_reg($userojacctlist[$uid]['data']);
     else
-        $userojacctlist = array();
+        $userojacctlist = ojid_reg('');
     
     foreach($_E['ojlist'] as $oj)
     {

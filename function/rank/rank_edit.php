@@ -34,7 +34,7 @@ switch($editpage)
             throwjson('error','sqlerror');
         }
         //Check owner
-        if( $cb['owner'] != $_G['uid'] ){
+        if( !userControl::getpermission($cb['owner']) ){
             throwjson('error','Not owner');
         }
         //Check data

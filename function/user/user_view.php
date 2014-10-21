@@ -30,7 +30,7 @@ if( isset($_GET['page']) )//subpage
     switch($require)
     {
         case 'modify':
-            if($showid == $_G['uid'])
+            if( userControl::getpermission($showid) )
             {
                 userControl::registertoken('EDIT',3600);
                 page_ojacct($showid);

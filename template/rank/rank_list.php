@@ -37,21 +37,21 @@ $(document).ready(function()
         <?php foreach($_E['template']['row'] as $row){ ?>
             <tr>
                 <td class="text-center"><?=$row['id'];?></td>
-                <td><a style="color:white" href="rank.php?mod=commonboard&id=<?=$row['id'];?>"><?=$row['name'];?></a></td>
+                <td><a style="color:white" href="rank.php?mod=commonboard&id=<?=$row['id'];?>"><?=htmlspecialchars($row['name']);?></a></td>
                 <td class="text-right">
                     <?php if($_G['uid']): ?>
-                        <span class="glyphicon glyphicon-plus-sign" style="color:green"></span>
-                        <span class="glyphicon glyphicon-remove" style="color:red"></span>
-                        <?php if($row['owner'] == $_G['uid']): ?>
-                        <span class="glyphicon glyphicon-pencil" onclick="location.href='rank.php?mod=cbedit&id=<?=$row['id'];?>'"></span>
-                        <span class="glyphicon glyphicon-lock"   style="color:yellow"></span>
-                        <span class="glyphicon glyphicon-trash"  style="color:red"></span>
+                        <span class="pointer glyphicon glyphicon-plus-sign" style="color:green" title="加入"></span>
+                        <span class="pointer glyphicon glyphicon-remove" style="color:red" title="離開"></span>
+                        <?php if(userControl::getpermission($row['owner'])): ?>
+                        <span class="pointer glyphicon glyphicon-pencil" onclick="location.href='rank.php?mod=cbedit&id=<?=$row['id'];?>'" title="編輯"></span>
+                        <span class="pointer glyphicon glyphicon-lock"   style="color:yellow" title="鎖定"></span>
+                        <span class="pointer glyphicon glyphicon-trash"  style="color:red" title="移除"></span>
                         <?php endif;?>
                     <?php endif;?>
                 </td>
-                <td><?=$_E['template']['nickname'][$row['owner']]?></td>
+                <td><?=htmlspecialchars($_E['template']['nickname'][$row['owner']])?></td>
                 <td>
-                    <span class="glyphicon glyphicon-thumbs-up" style="color:green"></span>
+                    <span class="pointer glyphicon glyphicon-thumbs-up" style="color:green"></span>
                     Join
                 </td>
             </tr>

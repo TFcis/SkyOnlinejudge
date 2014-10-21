@@ -9,7 +9,7 @@ if(!defined('IN_TEMPLATE'))
 <div class="container">
     <div class="row">
         <div class="page-header">
-            <h1><?=$_E['template']['title']?> <small>Statistics</small></h1>
+            <h1><?=htmlspecialchars($_E['template']['title'])?> <small>Statistics</small></h1>
             <p>剩餘時間:FOREVER</p>
         </div>
     </div>

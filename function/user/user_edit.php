@@ -19,7 +19,7 @@ if(!preg_match('/^[0-9]+$/',$euid))
     throwjson('error','UID error');
 $euid = (string)((int)$euid);
 // for admin test!
-if( $euid!=$_G['uid'] && $_G['uid']!= 1 )
+if( !userControl::getpermission($euid) )
     throwjson('error','not admin or owner');
 
 switch($editpage)

@@ -40,6 +40,14 @@ $userarray = explode(',',$setting['userlist']);
 $user = DB::getuserdata('account',$userarray,'`uid`,`nickname`');
 $useracct = DB::getuserdata('userojlist',$userarray);
 $userid = array();
+
+//delete not availbe uid
+$userarray = array();
+foreach($user as $uid => $data)
+{
+    $userarray[ ]= (int)$uid;
+}
+
 foreach($userarray as $uid)
 {
     if(isset( $useracct[(string)$uid] )){

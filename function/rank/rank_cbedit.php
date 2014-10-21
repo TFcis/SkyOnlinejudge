@@ -10,6 +10,18 @@ if(!$_G['uid'])
     include('rank_list.php');
     exit('');
 }
+//class
+$class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
+
+$_E['template']['rank_site'] = array();
+foreach($class as $site => $c)
+{
+    $_E['template']['rank_site'][$site]['name']   = $c->name;
+    $_E['template']['rank_site'][$site]['author'] = $c->copyright;
+    $_E['template']['rank_site'][$site]['desc']   = $c->description;
+    $_E['template']['rank_site'][$site]['version']= $c->version;
+    $_E['template']['rank_site'][$site]['format'] = htmlspecialchars($c->pattern);
+}
 
 $default = array();
 $default['name']='';
@@ -34,7 +46,7 @@ else
         include('rank_list.php');
         exit('');
     }
-    if( $setting['owner']!=$_G['uid'] )
+    if( !userControl::getpermission($setting['owner']) )
     {
         $_E['template']['alert'].="權限不足";
         include('rank_list.php');

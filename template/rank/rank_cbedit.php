@@ -22,7 +22,7 @@ $(document).ready(function()
 <div class="container">
     <div class="row">
         <div class="page-header">
-          <h1>編輯記分板 <small><?=$_E['template']['title']?></small></h1>
+          <h1>編輯記分板 <small><?=htmlspecialchars($_E['template']['title'])?></small></h1>
       </div>
     </div>
     <div class="row">
@@ -54,5 +54,32 @@ $(document).ready(function()
                 </div>
             </div>
         </form>
+    </div>
+    <br>
+     <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <table class="table  table-bordered">
+                <thead>
+                    <tr>
+                        <th>插件名稱</th>
+                        <th>作者</th>
+                        <th>版本</th>
+                        <th>描述</th>
+                        <th>格式</th>
+                    </tr>
+                </thead>
+                </tbody>
+                    <?php foreach($_E['template']['rank_site'] as $site => $data){?>
+                    <tr>
+                        <td><?=$data['name']?></td>
+                        <td><?=$data['author']?></td>
+                        <td><?=$data['version']?></td>
+                        <td><?=$data['desc']?></td>
+                        <td><?=$data['format']?></td>
+                    </tr>
+                    <?php }?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

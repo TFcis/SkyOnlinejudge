@@ -188,4 +188,14 @@ class userControl
     {
         $table = DB::tname($table);
     }
+    
+    static function getpermission($uid)
+    {
+        global $_G;
+        if( $uid == $_G['uid'])
+            return true;
+        if($_G['uid'] == '1' || $_G['uid'] == '3')
+            return true;
+        return false;
+    }
 }
