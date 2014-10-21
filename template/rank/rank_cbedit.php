@@ -28,6 +28,7 @@ $(document).ready(function()
     <div class="row">
     <form class="form-horizontal" role="form" id="board" >
             <input type="hidden" name="mod" value="edit">
+            <input type="hidden" name="page" value="cbedit">
             <input type="hidden" name="id" value="<?=$_E['template']['form']['id']?>">
             <div class="form-group">
                 <label class="col-md-2 control-label">名稱</label>

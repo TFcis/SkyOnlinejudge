@@ -43,7 +43,7 @@ $(document).ready(function()
                         <span class="glyphicon glyphicon-plus-sign" style="color:green"></span>
                         <span class="glyphicon glyphicon-remove" style="color:red"></span>
                         <?php if($row['owner'] == $_G['uid']): ?>
-                        <span class="glyphicon glyphicon-pencil"></span>
+                        <span class="glyphicon glyphicon-pencil" onclick="location.href='rank.php?mod=cbedit&id=<?=$row['id'];?>'"></span>
                         <span class="glyphicon glyphicon-lock"   style="color:yellow"></span>
                         <span class="glyphicon glyphicon-trash"  style="color:red"></span>
                         <?php endif;?>

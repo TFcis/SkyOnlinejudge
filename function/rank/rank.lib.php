@@ -33,3 +33,15 @@ function getCBdatabyid($id)
         return DB::fetch($res);
     return false;
 }
+
+function checkpostdata($array)
+{
+    $res = array();
+    foreach($array as $p)
+    {
+        if(!isset($_POST[$p]))
+            return false;
+        $res[$p] = $_POST[$p];
+    }
+    return $res;
+}

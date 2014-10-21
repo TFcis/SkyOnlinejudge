@@ -18,6 +18,7 @@ $default['userlist']='';
 $default['problems']='';
 $default['state']='1';
 $default['id']='0';
+
 if( !isset($_GET['id']) )
 {
     //new
@@ -42,5 +43,5 @@ else
     $_E['template']['title'] = $setting['name'];
     $_E['template']['form'] = $setting;
 }
-
+userControl::registertoken('CBEDIT',900);
 Render::render('rank_cbedit','rank');
