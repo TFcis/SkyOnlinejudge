@@ -3,46 +3,60 @@ if(!defined('IN_SKYOJSYSTEM'))
 {
   exit('Access denied');
 }
-
 $class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
 
-$_E['template']['rank_site'] = array();
-$_E['template']['dbg'] = '';
+$id='error';
+$data = false;
 
-foreach($class as $site => $c)
-{
-    $_E['template']['rank_site'][$site]['name']   = $c->name;
-    $_E['template']['rank_site'][$site]['author'] = $c->copyright;
-    $_E['template']['rank_site'][$site]['desc']   = $c->description;
-    $_E['template']['rank_site'][$site]['version']= $c->version;
-    $_E['template']['rank_site'][$site]['format'] = htmlspecialchars($c->pattern);
-}
-//test
+$tbstats = DB::tname('statsboard');
 $unamet = DB::tname('account');
 $uojt = DB::tname('userojlist');
-$res = DB::query("SELECT `nickname`,`uid` FROM $unamet");
 
-$user = array();
-while( $data = DB::fetch($res) )
+$_E['template']['dbg'] = '';
+
+//Check id
+if( isset($_GET['id']) )
 {
-    $user[$data['uid']]=$data['nickname'];
+    $id = $_GET['id'];
+    if(!preg_match('/^[0-9]+$/',$id))
+    {
+        $id = 'error';
+    }
 }
 
-$res = DB::query("SELECT `data`,`uid` FROM $uojt");
-while( $data = DB::fetch($res))
+if( !(isset($_GET['id']) && ($setting = getCBdatabyid($id) )) )
 {
-    $userid[$data['uid']] = ojid_reg($data['data']);
-    $userid[$data['uid']]['nickname'] = $user[$data['uid']];
+    $_E['template']['alert'].="沒有這一個記分板";
+    include('rank_list.php');
+    exit('');
+}
+$_E['template']['title'] = $setting['name'];
+
+
+#preprocess user data to $userid
+#notice  $userid[$uid] $uid is INT
+
+$userarray = explode(',',$setting['userlist']);
+$user = DB::getuserdata('account',$userarray,'`uid`,`nickname`');
+$useracct = DB::getuserdata('userojlist',$userarray);
+$userid = array();
+foreach($userarray as $uid)
+{
+    if(isset( $useracct[(string)$uid] )){
+        $userid[$uid]= ojid_reg($useracct[(string)$uid]['data']);
+    }
+    else{
+        $userid[$uid]= ojid_reg('');
+    }
+    //add information before ojid_reg();
+    $userid[$uid]['nickname'] = $user[$uid]['nickname'];
 }
 
-//var_dump($userid);
-//$userid   = array(3,7,18,17,46,10,26,30);
-$problist = "toj64,toj100,toj101,toj102,toj103,zj:a001,toj159,toj160,toj161,toj162,toj163,toj164,toj165,toj166";
-//select
-$prob = explode(',',$problist);
+#preprocess prob data to probinfo
+$prob = explode(',',$setting['problems']);
 $probinfo = array();
 $prelist = array();
-
+#分類
 foreach($prob as $pname)
 {
     $probdata['name'] = $pname;
@@ -64,7 +78,7 @@ foreach($prob as $pname)
     $probinfo[] = $probdata;
 }
 
-//preprocess
+//送入預處理
 foreach($prelist as $name => $arr)
 {
     if( method_exists($class[$name],'preprocess') )
@@ -77,8 +91,7 @@ foreach($prelist as $name => $arr)
     }
 }
 
-$_E['template']['board'] = array();
-$_E['template']['plist'] = $prob;
+$_E['template']['plist'] = $probinfo;
 $_E['template']['id'] = $userid;
 
 foreach($userid as $uid => $u)
@@ -101,4 +114,4 @@ foreach($userid as $uid => $u)
     }
 }
 
-Render::render('rank_index','rank');
+Render::render('rank_statboard_cm','rank');

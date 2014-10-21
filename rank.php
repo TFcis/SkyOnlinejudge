@@ -3,8 +3,8 @@ require_once('LocalSetting.php');
 require_once('function/renderCore.php');
 require_once('function/pluginsCore.php');
 require_once('function/user/user.lib.php');
-$allowmod =array('list','commonboard');
-$mod = isset($_GET['mod'])?$_GET['mod']:'commonboard';
+$allowmod =array('list','commonboard','cbedit','edit');
+$mod = isset($_REQUEST['mod'])?$_REQUEST['mod']:'list';
 
 if( !in_array($mod,$allowmod) )
 {
