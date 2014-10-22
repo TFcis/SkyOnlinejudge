@@ -13,6 +13,7 @@ class class_toj{
 	private $api = 'http://210.70.137.215/oj/be/api';
 	private $useraclist = array();
 	
+
 	function install()
 	{
 	    $tb = DB::tname('ojlist');
@@ -38,19 +39,20 @@ class class_toj{
 		$response = @file_get_contents('http://210.70.137.215/oj/be/api', false, stream_context_create($context));
 		return $response;
 	}
+	
 	function back($uid,$query)
 	{
 	    global $_E;
+	    if( DB::loadcache("class_toj_work_$uid") ){
+            exit('');
+        }
 	    $pid = pcntl_fork();
         if ( $pid==-1 ) return ;
-        elseif(!$pid){
+        elseif($pid){
             return ;
         }
         else
         {
-            if( DB::loadcache("class_toj_work_$uid") ){
-                exit('');
-            }
             DB::putcache("class_toj_work_$uid",'work',86400);
             if( $aclist = $this->post($query) )
             {
@@ -61,8 +63,8 @@ class class_toj{
                                 array(time()+rand(120,420),$this->useraclist[$uid]),86400);
                 DB::deletecache("class_toj_work_$uid");
             }
-            
-            exit('');
+            sleep(5);
+            exit(0);
         }
 	}
 	function preprocess($userlist,$problist)

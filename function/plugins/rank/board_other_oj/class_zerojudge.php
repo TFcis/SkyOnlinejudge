@@ -40,9 +40,12 @@ class class_zerojudge{
 	    }
 	    else
 	    {
-	        $response=file_get_contents("http://zerojudge.tw/UserStatistic?account=".$uid);
-	        $_E['template']['dbg'].="$uid download from ZJ<br>";
-	        DB::putcache("class_zerojudge_$uid",$response,5);
+	        $response=@file_get_contents("http://zerojudge.tw/UserStatistic?account=".$uid);
+	        if($response)
+	        {
+    	        $_E['template']['dbg'].="$uid download from ZJ<br>";
+    	        DB::putcache("class_zerojudge_$uid",$response,5);
+	        }
 	    }
 		
 		if(!$response) return 0;
