@@ -154,10 +154,6 @@ function page_ojacct($uid)
     return true;
 }
 
-function throwjson($status,$data)
-{
-    exit(json_encode(array('status'=>$status,'data'=>$data)));
-}
 function ojid_reg($json)
 {
     global $_E;
@@ -190,6 +186,7 @@ function ojid_reg($json)
     }
     return $acct;
 }
+
 function modify_ojacct($argv,$euid)
 {
     global $_E;

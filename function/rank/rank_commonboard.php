@@ -36,7 +36,7 @@ $_E['template']['title'] = $setting['name'];
 #preprocess user data to $userid
 #notice  $userid[$uid] $uid is INT
 
-$userarray = explode(',',$setting['userlist']);
+$userarray = expand_userlist($setting['userlist']);
 $user = DB::getuserdata('account',$userarray,'`uid`,`nickname`');
 $useracct = DB::getuserdata('userojlist',$userarray);
 $userid = array();

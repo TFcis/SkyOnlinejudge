@@ -8,11 +8,6 @@ date_default_timezone_set( "Asia/Taipei" );
 
 require_once('config/config.php');
 
-require_once('function/mysqlCore.php');
-require_once('function/userControl.php');
-error_reporting(E_ALL);
-
-userControl::intro();
 
 $_E = array();
 $_E['template']['alert'] ='';
@@ -22,5 +17,13 @@ $_E['site']['host']='http://ulkk2285d976.lfswang.koding.io/TNFSHOnlineJudge/';
 
 $_E['EnableMathJax'] = 0;
 $_E['uesLocalMathJaxFile'] = 0;
+
+
+require_once('function/Skyoj.lib.php');
+require_once('function/mysqlCore.php');
+require_once('function/userControl.php');
+error_reporting(E_ALL);
+
+userControl::intro();
 
 ?>
