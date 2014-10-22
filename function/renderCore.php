@@ -32,9 +32,27 @@ class Render
         return false;
     }
     
+    //work in progress
+    static function renderStylesheetLink($namespace = 'common', $options = '') {
+        global $_E,$_G;
+        if(!isset($_E['template'])) { $_E['template'] = array(); }
+        $path = $_E['ROOT']."/template/$namespace/theme.css";
+        if( file_exists($path))
+        {
+            echo '<style>';
+            echo file_get_contents($path);
+            echo '</style>';
+            return true;
+        }
+        return false;
+    }
+
+    
     static function render($pagename , $namespace = 'common')
     {
         Render::renderSingleTemplate('common_header');
+        Render::renderStylesheetLink($namespace);
+        
         Render::renderSingleTemplate('common_nav');
         if(!Render::renderSingleTemplate($pagename,$namespace))
         {

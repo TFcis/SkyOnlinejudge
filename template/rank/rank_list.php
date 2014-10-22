@@ -37,15 +37,15 @@ $(document).ready(function()
         <?php foreach($_E['template']['row'] as $row){ ?>
             <tr>
                 <td class="text-center"><?=$row['id'];?></td>
-                <td><a style="color:white" href="rank.php?mod=commonboard&id=<?=$row['id'];?>"><?=htmlspecialchars($row['name']);?></a></td>
+                <td><a href="rank.php?mod=commonboard&id=<?=$row['id'];?>"><?=htmlspecialchars($row['name']);?></a></td>
                 <td class="text-right">
                     <?php if($_G['uid']): ?>
-                        <span class="pointer glyphicon glyphicon-plus-sign" style="color:green" title="加入"></span>
-                        <span class="pointer glyphicon glyphicon-remove" style="color:red" title="離開"></span>
+                        <span class="icon-bttn glyphicon glyphicon-plus-sign" title="加入"></span>
+                        <span class="icon-bttn glyphicon glyphicon-remove" title="離開"></span>
                         <?php if(userControl::getpermission($row['owner'])): ?>
-                        <span class="pointer glyphicon glyphicon-pencil" onclick="location.href='rank.php?mod=cbedit&id=<?=$row['id'];?>'" title="編輯"></span>
-                        <span class="pointer glyphicon glyphicon-lock"   style="color:yellow" title="鎖定"></span>
-                        <span class="pointer glyphicon glyphicon-trash"  style="color:red" title="移除"></span>
+                        <span class="icon-bttn glyphicon glyphicon-pencil" onclick="location.href='rank.php?mod=cbedit&id=<?=$row['id'];?>'" title="編輯"></span>
+                        <span class="icon-bttn glyphicon glyphicon-lock" title="鎖定"></span>
+                        <span class="icon-bttn glyphicon glyphicon-trash" title="移除"></span>
                         <?php endif;?>
                     <?php endif;?>
                 </td>

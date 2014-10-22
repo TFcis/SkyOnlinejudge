@@ -9,7 +9,7 @@ if(!defined('IN_TEMPLATE'))
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <table class="table  table-bordered">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>插件名稱</th>
