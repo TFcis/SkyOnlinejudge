@@ -38,28 +38,62 @@ class class_toj{
 		$response = @file_get_contents('http://210.70.137.215/oj/be/api', false, stream_context_create($context));
 		return $response;
 	}
-	
+	function back($uid,$query)
+	{
+	    global $_E;
+	    $pid = pcntl_fork();
+        if ( $pid==-1 ) return ;
+        elseif(!$pid){
+            return ;
+        }
+        else
+        {
+            if( DB::loadcache("class_toj_work_$uid") ){
+                exit('');
+            }
+            DB::putcache("class_toj_work_$uid",'work',86400);
+            if( $aclist = $this->post($query) )
+            {
+                
+                $_E['template']['dbg'].="$uid download from toj<br>";
+                $this->useraclist[$uid]  = json_decode($aclist)->ac;
+                DB::putcache(   "class_toj_uid_$uid",
+                                array(time()+rand(120,420),$this->useraclist[$uid]),86400);
+                DB::deletecache("class_toj_work_$uid");
+            }
+            
+            exit('');
+        }
+	}
 	function preprocess($userlist,$problist)
 	{
 	    global $_E;
 	    $query = array('reqtype' => 'AC','acct_id' => 0 );
 	    foreach($userlist as $uid)
 	    {
+	        $rebuild = true;
 	        if(!$this->checkid($uid))
 	            continue;
 	        $query['acct_id'] = $uid;
-	        if( $cache = DB::loadcache("class_toj_uid_$uid") )
+	        $cache = DB::loadcache("class_toj_uid_$uid");
+	        if( $cache !== false )
 	        {
 	            $_E['template']['dbg'].="$uid load form cache<br>";
-	            $this->useraclist[$uid] = $cache;
+	            $this->useraclist[$uid] = $cache[1];
+	            if( $cache[0]>time())
+	            {
+	                $rebuild=false;
+	            }
 	        }
-	        elseif( $aclist = $this->post($query) )
+	        else
 	        {
-	            $_E['template']['dbg'].="$uid download from toj<br>";
-	            $this->useraclist[$uid]  = json_decode($aclist)->ac;
-	            DB::putcache(   "class_toj_uid_$uid",
-	                            $this->useraclist[$uid],
-	                            rand(1,5));
+	            $this->useraclist[$uid] = array();
+	        }
+	        
+	        if( $rebuild )
+	        {
+	            $_E['template']['dbg'].="$uid Build!<br>";
+	            $this->back($uid,$query);
 	        }
 	    }
 	}
