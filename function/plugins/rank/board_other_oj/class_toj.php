@@ -9,7 +9,7 @@ class class_toj{
     public $name = 'Toj capturer';
 	public $description = 'TOJ capturer for test';
 	public $copyright = 'test by LFsWang';
-	public $pattern = "/^toj[0-9]+$/";
+	public $pattern = "/^toj[0-9]+$/i";
 	private $api = 'http://210.70.137.215/oj/be/api';
 	private $useraclist = array();
 	
@@ -80,7 +80,7 @@ class class_toj{
 	function showname($str)
 	{
 	    $pid = preg_replace('/[^0-9]*/','',$str);
-	    $str="<a href='http://toj.tfcis.org/oj/pro/$pid/'>TOJ $pid</a>";
+	    $str="<a style='color:rgb(255,246,157)' href='http://toj.tfcis.org/oj/pro/$pid/' target='_blank'>toj $pid</a>";
 	    return $str;
 	}
 }

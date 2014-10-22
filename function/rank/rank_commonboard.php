@@ -68,6 +68,7 @@ $prelist = array();
 foreach($prob as $pname)
 {
     $probdata['name'] = $pname;
+    $probdata['show'] = $pname;
     $probdata['oj']   = '';
     foreach($class as $cn => $c)
     {
@@ -76,14 +77,10 @@ foreach($prob as $pname)
             $probdata['oj'] = $cn;
             $prelist[$cn][] = $pname;
             $_E['template']['dbg'].=$pname." match ".$cn."<br>";
-            if( method_exists($c,'showname') )
-            {
-                $pname = $c->showname($pname);
-            }
             break;
         }
     }
-    $probinfo[] = $probdata;
+    $probinfo[$pname] = $probdata;
 }
 
 //送入預處理
@@ -97,11 +94,18 @@ foreach($prelist as $name => $arr)
                 $classid[]=$u[$name]['acct'];
         $class[$name]->preprocess($classid ,$arr);
     }
+    if( method_exists($class[$name],'showname') )
+    {
+        foreach($arr as $pn)
+            $probinfo[$pn]['show'] = $class[$name]->showname($pn);
+    }
 }
 
-$_E['template']['plist'] = $probinfo;
-$_E['template']['id'] = $userid;
 
+$_E['template']['plist'] = $probinfo;
+$_E['template']['user'] = $userid;
+$_E['template']['owner'] = $setting['owner'];
+$_E['template']['id'] = $setting['owner'];
 foreach($userid as $uid => $u)
 {
     foreach($probinfo as $p)
@@ -121,5 +125,4 @@ foreach($userid as $uid => $u)
         }
     }
 }
-
 Render::render('rank_statboard_cm','rank');

@@ -9,12 +9,21 @@ $(document).ready(function()
 {
     $("#board").submit(function(e)
     {
+        $("#display").html("SUBMIT...");
         e.preventDefault();
         $.post("rank.php",
             $("#board").serialize(),
-            function(data){
-                alert("Data Loaded: " + data);
-        });
+            function(res){
+                if(res.status === 'error')
+                {
+                   $("#display").html(res.data);
+                }
+                else if(res.status === 'SUCC')
+                {
+                    $("#display").html("YES");
+                    setTimeout(function(){location.href="rank.php?mod=cbedit&id="+res.data;}, 500);
+                }
+        },"json");
         return true;
     });
 })
@@ -51,6 +60,7 @@ $(document).ready(function()
             <div class="form-group">
                 <div class="col-sm-offset-2 col-md-5">
                     <button type="submit" class="btn btn-success text-right">送出</button>
+                    <span id="display"></span>
                 </div>
             </div>
         </form>

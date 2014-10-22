@@ -9,7 +9,12 @@ if(!defined('IN_TEMPLATE'))
 <div class="container">
     <div class="row">
         <div class="page-header">
-            <h1><?=htmlspecialchars($_E['template']['title'])?> <small>Statistics</small></h1>
+            <h1><?=htmlspecialchars($_E['template']['title'])?> <small>Statistics
+            <?php if(userControl::getpermission($_E['template']['owner'])): ?>
+            <span class="pointer glyphicon glyphicon-pencil" onclick="location.href='rank.php?mod=cbedit&id=<?=$_E['template']['id'];?>'" title="編輯"></span>
+            <?php endif; ?>
+                </small>
+            </h1>
             <p>剩餘時間:FOREVER</p>
         </div>
     </div>
@@ -20,14 +25,14 @@ if(!defined('IN_TEMPLATE'))
                     <tr>
                         <th style="padding: 4px;width: 40px;"></th>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
-                            <th style="padding: 4px;width: 40px;"><?=$prob['name']?></th>
+                            <th class="text-center" style="padding: 4px;width: 40px;"><?=$prob['show']?></th>
                         <?php }?>
                     </tr>
                 </thead>
                 </tbody>
-                    <?php foreach($_E['template']['id'] as $uid => $name){?>
+                    <?php foreach($_E['template']['user'] as $uid => $name){?>
                     <tr>
-                        <td><?=$name['nickname']?></td>
+                        <td><a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>><?=$name['nickname']?></a></td>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
                             <td class="<?=$_E['template']['s'][$uid][$prob['name']]?>">●</td>
                         <?php }?>

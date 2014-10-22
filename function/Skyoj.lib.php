@@ -35,8 +35,6 @@ function expand_userlist($string)
             }
         }
     }
-    
     sort($users);
-    //var_dump($users);
     return array_unique($users);
 }

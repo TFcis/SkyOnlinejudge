@@ -49,7 +49,7 @@ switch($editpage)
         $cts = $cb['state'];
         foreach($argv as $ag)
             $data[$ag] = addslashes($data[$ag]);
-        if(DB::query("INSERT INTO `$tb`
+        if($res= DB::query("INSERT INTO `$tb`
             (`id`, `name`, `owner`, `timestamp`, `userlist`, `problems`, `state`) VALUES
             ($cid,'$cname',$cowner,CURRENT_TIMESTAMP,'$cul','$cps',$cts)
             ON DUPLICATE KEY UPDATE
@@ -58,7 +58,11 @@ switch($editpage)
             `problems` = '$cps'"))
         {
         //var_dump($cb);
-            throwjson('SUCC','cbedit'.mysql_error());
+            if( $cb['id'] == 'NULL' )
+            {
+                $cb['id'] = mysql_insert_id();
+            }
+            throwjson('SUCC',$cb['id']);
         }
         else
         {
