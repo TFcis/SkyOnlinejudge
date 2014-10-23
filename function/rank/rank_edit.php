@@ -41,6 +41,9 @@ switch($editpage)
         if( !( $data = checkpostdata($argv)) ){
             throwjson('error','cbedit');
         }
+        if( !expand_userlist($data['userlist']) ){
+            throwjson('error','user list error');
+        }
         $cid = $cb['id'];
         $cname = $data['name'];
         $cowner = $cb['owner'];

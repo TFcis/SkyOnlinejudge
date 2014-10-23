@@ -8,7 +8,7 @@ if(!defined('IN_TEMPLATE'))
 <body>
 <div id="wrap"> 
     <nav id="nav" role="navigation">
-        <div class="container">
+        <div class="container" id="mainnavbar">
   	        <a href="index.php"><?php echo($_E['site']['name']);?></a>
             <ul>
                 <li><a href="rank.php">Stats</a></li>
