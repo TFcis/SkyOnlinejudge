@@ -5,15 +5,24 @@ if(!defined('IN_SKYOJSYSTEM'))
 }
 
 class class_toj{
-    public $version = '1.0';
+    public $version = '1.1';
     public $name = 'Toj capturer';
-	public $description = 'TOJ capturer for test';
-	public $copyright = 'test by LFsWang';
+	public $description = 'TOJ capturer';
+	public $copyright = 'TFcis';
 	public $pattern = "/^toj[0-9]+$/i";
 	private $api = 'http://210.70.137.215/oj/be/api';
 	private $useraclist = array();
-	
-
+	function __construct()
+	{
+	    if(!function_exists('pcntl_fork'))
+	    {
+	        $this->description .= "(安裝pcntl來取得更好的效率!)";
+	    }
+	    else
+	    {
+	        $this->description .= "(使用pcntl加速中!)";
+	    }
+	}
 	function install()
 	{
 	    $tb = DB::tname('ojlist');
@@ -44,11 +53,18 @@ class class_toj{
 	{
 	    global $_E;
 	    if( DB::loadcache("class_toj_work_$uid") ){
-            exit('');
+            return ;
         }
-	    $pid = pcntl_fork();
-        if ( $pid==-1 ) return ;
-        elseif($pid){
+        if( function_exists('pcntl_fork') )
+	        $pid = pcntl_fork();
+	    else
+	        $pid = 'NO_PCNTL';
+	   
+        if ( $pid === -1 )
+        {
+            return ;
+        }
+        elseif( $pid!==0 && $pid!=='NO_PCNTL' ){
             return ;
         }
         else
@@ -63,8 +79,11 @@ class class_toj{
                                 array(time()+rand(120,420),$this->useraclist[$uid]),86400);
                 DB::deletecache("class_toj_work_$uid");
             }
+            if($pid === 'NO_PCNTL')
+            {
+                return ;
+            }
             sleep(5);
-            exit(0);
         }
 	}
 	function preprocess($userlist,$problist)
