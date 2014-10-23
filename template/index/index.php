@@ -4,22 +4,10 @@ if(!defined('IN_TEMPLATE'))
   exit('Access denied');
 }
 ?>
+<center>
 
-
-
-<h1>HIHI</h1>
-Math Test<br>
-$a,\ b(a,\ b\ <\ 2^{63})$
-<br>
-
-<h1>MUSIC LOGIN ONLY~</h1>
-<?php if($_G['uid']): ?>
-
-<audio controls>
-  <source src="http://pc2.tfcis.org:81/lfs/20140830/egg.mp3">
-  <source src="http://pc2.tfcis.org:81/lfs/20140830/egg.ogg">
-  HTML5 ONLY! 請升級您的瀏覽器
-</audio>
-<br>
-<iframe width="560" height="315" src="//www.youtube.com/embed/videoseries?list=PLvLX2y1VZ-tEmqtENBW39gdozqFCN_WZc" frameborder="0" allowfullscreen></iframe>
-<?php endif; ?>
+<div id = 'title' style = 'padding: 20px; color: #444444; background-color: #ffffff; height: 600px;'>
+    <h1 style = 'font-size: 72px; font-weight: 300; letter-spacing: 2px; margin: 40px 0'>Sky Online Judge</h1>
+    <div><i>AN OPEN ONLINE JUDGE SYSTEM</i></div>
+</div>
+</center>

@@ -22,8 +22,9 @@ a:hover{ color: #ffffff;}
     /*height:31px;*/
     padding: 4px 0 2px 0;
 	width: 100%;
-	/*border-bottom:#060606 4px solid;*/
-	background-color:#1e1e1e;
+	
+	border-bottom:#0e0e0e 4px solid;
+	/*background-color:#1e1e1e;*/
 }
 #nav ul {
 	margin: 0 0;
