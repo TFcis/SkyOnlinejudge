@@ -5,9 +5,10 @@ if(!defined('IN_TEMPLATE'))
 }
 ?>
 <!-- show all load plugins -->
-<br>
+<div id = "image-bar"></div>
 <div class="container">
-    <div class="row">
+
+    <div>
         <div class="page-header">
             <h1><?=htmlspecialchars($_E['template']['title'])?> <small>Statistics
             <?php if(userControl::getpermission($_E['template']['owner'])): ?>
@@ -15,37 +16,46 @@ if(!defined('IN_TEMPLATE'))
             <?php endif; ?>
                 </small>
             </h1>
-            <p>剩餘時間:FOREVER</p>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <table class="text-center">
+    
+    <div>
+        <div>
+        <table>
                 <thead>
                     <tr>
-                        <th style="padding: 4px;width: 40px;"></th>
+                        <th style="padding: 4px;width: 160px;"></th>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
                             <th class="text-center" style="padding: 4px;width: 40px;"><?=$prob['show']?></th>
                         <?php }?>
+                        <th></th>
                     </tr>
                 </thead>
+                
                 </tbody>
                     <?php foreach($_E['template']['user'] as $uid => $name){?>
                     <tr>
-                        <td><a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>><?=$name['nickname']?></a></td>
+                        <td style = "text-align: right"><a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>><?=$name['nickname']?></a></td>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
-                            <td class="<?=$_E['template']['s'][$uid][$prob['name']]?>">●</td>
+                            <td class = "<?=$_E['template']['s'][$uid][$prob['name']]?>">●</td>
                         <?php }?>
+                        <td>
+                        </td>
                     </tr>
                     <?php }?>
                 </tbody>
-            </table>
+        </table>
         </div>
     </div>
+    
+    <div style = "color: #666666; text-align: right; padding-right: 20px">Until next update: FOREVER</div>
+    
     <div class="row">
         <h1>DEBUG</h1>
         <p><?=$_E['template']['dbg']?></p>
     </div>
+    
+
 </div>
 
 <!--<iframe src="http://www.tfcis.org/ECHO_STATS/#board" width="90%" height="550"></iframe>-->

@@ -6,9 +6,9 @@
 }
 
 #signinlogo{
-  height:500px;
-  margin-top:32px;
+  height: 500px;
+  margin-top: 32px;
   background-image:url('http://toj.twbbs.org/oj/img/signin.png');
-  background-size:contain;
-  background-repeat:no-repeat;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
