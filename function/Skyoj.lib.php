@@ -16,22 +16,51 @@ function expand_userlist($string)
     $users = array();
     foreach($tmp as $user)
     {
-        if( intval($user) == $user)
-        {
-            $users[]=intval($user);
+        $res = array();
+        $user = trim($user);
+        $flag = 'add';
+        if( $user === '' ){
+            continue;
         }
-        if( preg_match('/(\d+)-(\d+)/',$user,$match) )
+        if( $user[0] === '^'){
+            $flag = 'remove';
+            $user = preg_replace('/^\^/','',$user);
+        }
+        
+        if( is_numeric($user) )
+        {
+            $res[]=intval($user);
+        }
+        else if( preg_match('/^(\d+)-(\d+)$/',$user,$match) )
         {
             $a = intval($match[1]);
             $b = intval($match[2]);
-            if($a && $b)
-            {
+            if($a && $b){
                 if($a > $b)
                     list($a,$b) = array($b,$a);
                 for(;$a<=$b;$a++)
                 {
-                    $users[]=$a;
+                    $res[]=$a;
                 }
+            }
+            else{
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+        if($flag == 'add'){
+            $users =array_merge($res,$users);
+        }
+        else //remove
+        {
+            foreach($res as $v)
+            {
+                $key = array_search($v,$users);
+                if($key !== false)
+                    unset($users[$key]);
             }
         }
     }

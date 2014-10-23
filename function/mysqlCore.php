@@ -103,7 +103,7 @@ class DB
             }
         }
     }
-    static function loadcache($name,$uid = 0)
+    static function loadcache( $name,$uid = 0)
     {
         $cachetable = DB::tname('cache');
         $time = time();
