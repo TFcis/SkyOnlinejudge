@@ -6,8 +6,12 @@ if(!defined('IN_TEMPLATE'))
 ?>
 <center>
 
-<div id = 'title' style = 'padding: 20px; color: #444444; background-color: #ffffff; height: 600px;'>
-    <h1 style = 'font-size: 72px; font-weight: 300; letter-spacing: 2px; margin: 40px 0'>Sky Online Judge</h1>
-    <div><i>AN OPEN ONLINE JUDGE SYSTEM</i></div>
+<div id = 'title-blok'>
+    <h1 id = "title-text">Sky Online Judge</h1>
+    <div style = 'color: #ffffff; font-weight: 700'>AN OPEN ONLINE JUDGE SYSTEM</div>
+</div>
+
+<div>
+    
 </div>
 </center>

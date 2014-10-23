@@ -20,7 +20,7 @@ a:hover{ color: #ffffff;}
 
 #nav{
     /*height:31px;*/
-    padding: 4px 0 2px 0;
+    padding: 6px 0 0 0;
 	width: 100%;
 	
 	border-bottom:#0e0e0e 4px solid;
@@ -57,16 +57,6 @@ a:hover{ color: #ffffff;}
    	width:95%;
 }
 
-#signin {
-  margin-top:40px;
-}
-#signinlogo{
-  height:500px;
-  margin-top:32px;
-  background-image:url('http://toj.twbbs.org/oj/img/signin.png');
-  background-size:contain;
-  background-repeat:no-repeat;
-}
 #wrap {
   min-height: 100%;
   height: auto !important;
@@ -112,4 +102,44 @@ a:hover{ color: #ffffff;}
 
 .pointer{
     cursor:pointer;
+}
+
+/* FORMS & INPUT */
+
+.form-group{
+    margin: 8px;
+}
+
+.textinput {
+    color: #444444;
+    background-color: #ffffff;
+    
+    margin: 0;
+    padding: 4px 2px;
+    border: none;
+}
+
+.textinput:focus{
+    outline: none;
+}
+
+label {
+    color: #666666;
+    font-weight: normal;
+}
+
+button {
+    padding: 6px;
+    
+    color: #444444;
+    background-color: #ffffff;
+    
+    border: none;
+    
+    transition: 0.2s;
+}
+
+button:hover{
+    background-color: #666666;
+    cursor: pointer;
 }
