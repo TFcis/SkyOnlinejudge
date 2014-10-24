@@ -12,7 +12,7 @@ class class_zerojudge{
 	public $pattern = "/^zj:[a-z]{1}[0-9]+$/";
 	private $api = 'http://210.70.137.215/oj/be/api';
 	private $useraclist = array();
-	
+
 	function install()
 	{
 	    $tb = DB::tname('ojlist');

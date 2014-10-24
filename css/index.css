@@ -21,6 +21,15 @@ a:link{ color: #a0a0a0; text-decoration: none; transition: 0.2s; }
 a:visited{ color: #a0a0a0;}
 a:avtice{ color: #a0a0a0;}
 a:hover{ color: #ffffff;}
+.link-like{ color: #a0a0a0; text-decoration: none; transition: 0.2s; cursor: pointer;}
+.link-like:hover{ color: #ffffff; }
+
+h1 {
+    font-size: 34px;
+    font-weight: normal;
+}
+
+/* ...................................COMMON NAVIGATION */
 
 #nav{
     /*height:31px;*/
@@ -54,11 +63,17 @@ a:hover{ color: #ffffff;}
 #nav a:hover{
     color: #ffffff;
 }
+
+/* ...................................PAGE STRUCTURE */
+
 .pull-r{
     float: right !important;
 }
 
 .container {
+    overflow: hidden;
+    position: relative;
+    margin: auto;
     width: 95%;
 }
 #wrap {
@@ -83,27 +98,6 @@ a:hover{ color: #ffffff;}
     margin-bottom : 30px;
 }
 
-#jumbotron{
-    background-color:rgba(0,0,0,0);
-    color: #fcfaf2 !important;
-}
-
-#user_view_avater{
-    width:100%;
-    height: auto;
-    display: block;
-}
-
-#cover {
-    width: 100%;
-    height: 418px;
-    background-size: cover;
-    position: absolute;
-    top: 32px;
-    left: 0;
-    z-index: 0;
-}
-
 .page-header{
     text-align: left;
 }
@@ -112,11 +106,22 @@ a:hover{ color: #ffffff;}
     cursor:pointer;
 }
 
-/* FORMS & INPUT */
+
+/* ...................................FORMS & INPUT */
 
 .form-group{
     margin: 8px;
 }
+
+input[type = "text"]{
+    color: #444444;
+    background-color: #ffffff;
+    
+    margin: 0;
+    padding: 4px 2px;
+    border: none;
+}
+input[type = "text"]:focus{outline: none;}
 
 .textinput {
     color: #444444;
@@ -126,10 +131,7 @@ a:hover{ color: #ffffff;}
     padding: 4px 2px;
     border: none;
 }
-
-.textinput:focus{
-    outline: none;
-}
+.textinput:focus{ outline: none;}
 
 label {
     color: #666666;
@@ -160,9 +162,9 @@ th {
 
 #image-bar{
     width: 100%;
-    height: 140px;
+    height: 160px;
     
     background-image: url('http://i.imgur.com/KiKOjd6.jpg');
     background-size: cover;
-    background-position: 0 500px;
+    background-position: 0 68%;
 }
