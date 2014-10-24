@@ -194,7 +194,7 @@ class userControl
         global $_G;
         if( $uid == $_G['uid'])
             return true;
-        if($_G['uid'] == '1' || $_G['uid'] == '3')
+        if($_G['uid'] == '1' || $_G['uid'] == '3' || $_G['uid'] == '21'  )
             return true;
         return false;
     }
