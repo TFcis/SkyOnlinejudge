@@ -5,9 +5,7 @@ if(!defined('IN_TEMPLATE'))
 }
 ?>
 <div class="container">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-1" id="signinlogo">
-        </div>
+
         <div class="col-md-4 col-md-offset-1" id="signin">
             <h3><?php echo($_E['site']['name']);?><br><small>註冊須知</small></h3>
             <div class=".container-fluid">
@@ -18,10 +16,14 @@ if(!defined('IN_TEMPLATE'))
                     </div>
                 </div>
                 <div class="row text-right">
-                    <button type="button" class="btn btn-success" onclick="location.href='user.php?mod=register&accept=accept'">同意</button>
-                    <button type="button" class="btn btn-danger" onclick="location.href='index.php'">拒絕</button>
+                    <button type="button" class="btn-grn btn-large" onclick="location.href='user.php?mod=register&accept=accept'">
+                    I agree to these terms
+                    </button>
+                    <button type="button" class="btn-red btn-large" onclick="location.href='index.php'">
+                    Deny
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
+
 </div>

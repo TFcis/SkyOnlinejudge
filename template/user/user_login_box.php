@@ -5,14 +5,11 @@ if(!defined('IN_TEMPLATE'))
 }
 ?>
 <div class="container">
-    <div class="row">
-        <!--<div class="col-md-4 col-md-offset-1" id="signinlogo">
-        </div>-->
         <center>
         <div id="signin">
         
             <h3>登入開始今日的挑戰！</h3>
-            <div style = "text-align: right">
+            <div>
                 <p><i><small>-Programming Is the New Literacy</small></i></p>
             </div>
             
@@ -34,14 +31,23 @@ if(!defined('IN_TEMPLATE'))
                     
                     <br>
                     
-                <button type="submit" class="btn btn-success">登入</button>
+                <button type="submit" class= "btn-grn btn-large btn-wide" style = "width:168px">
+                <b>LOGIN</b>
+                </button>
                 
             </form>
-            
+            <!--
             <br>
-            <h3>沒有帳號？立即加入！</h3>
-            <button type="button" class="btn btn-primary"  onclick="location.href='user.php?mod=register'">註冊</button>
+            <h3>沒有帳號？<br>立即加入！</h3>
+            <button type="button" class="btn-blu btn-large btn-wide"  onclick="location.href='user.php?mod=register'">
+            <b>REGISTER</b>
+            </button>-->
+            <small>OR</small>
+        
+            <div class = 'link-like' onclick="location.href='user.php?mod=register'">
+            <u><b>REGISTER</b></u>
+            </div>
+            
         </div>
-        </center>
-    </div>
+    </center>
 </div>
