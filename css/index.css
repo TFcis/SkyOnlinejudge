@@ -122,7 +122,6 @@ input[type = "text"]{
     border: none;
 }
 input[type = "text"]:focus{outline: none;}
-
 .textinput {
     color: #444444;
     background-color: #ffffff;

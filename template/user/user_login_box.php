@@ -8,8 +8,8 @@ if(!defined('IN_TEMPLATE'))
         <center>
         <div id="signin">
         
-            <h3>登入開始今日的挑戰！</h3>
-            <div>
+            <h3><?php echo($_E['site']['name']);?><br><small>User Login</small></h3>
+            <div class="text-right">
                 <p><i><small>-Programming Is the New Literacy</small></i></p>
             </div>
             
@@ -32,7 +32,7 @@ if(!defined('IN_TEMPLATE'))
                     <br>
                     
                 <button type="submit" class= "btn-grn btn-large btn-wide" style = "width:168px">
-                <b>LOGIN</b>
+                <b>Login</b>
                 </button>
                 
             </form>
@@ -45,7 +45,7 @@ if(!defined('IN_TEMPLATE'))
             <small>OR</small>
         
             <div class = 'link-like' onclick="location.href='user.php?mod=register'">
-            <u><b>REGISTER</b></u>
+            <u><b>Register</b></u>
             </div>
             
         </div>

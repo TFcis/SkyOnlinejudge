@@ -7,7 +7,7 @@ if(!defined('IN_TEMPLATE'))
 <div class="container">
 
         <div class="col-md-4 col-md-offset-1" id="signin">
-            <h3><?php echo($_E['site']['name']);?><br><small>註冊須知</small></h3>
+            <h3><?php echo($_E['site']['name']);?><br><small>Terms & Conditions</small></h3>
             <div class=".container-fluid">
                 <div class="row">
                     <div class="col-md-12" id="license">
