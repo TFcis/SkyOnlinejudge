@@ -4,9 +4,6 @@ if(!defined('IN_TEMPLATE'))
     exit('Access denied');
 }
 ?>
-<p>The MIT License (MIT)</p>
-<br>
-<p><big>FOR TEST!</big></p>
 <br>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

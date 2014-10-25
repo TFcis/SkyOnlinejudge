@@ -5,8 +5,9 @@ if(!defined('IN_TEMPLATE'))
 }
 ?>
 <div class="container">
+
         <center>
-        <div id="signin">
+        <div id = "signin">
         
             <h3><?php echo($_E['site']['name']);?><br><small>User Login</small></h3>
             <div class="text-right">
@@ -31,9 +32,11 @@ if(!defined('IN_TEMPLATE'))
                     
                     <br>
                     
-                <button type="submit" class= "btn-grn btn-large btn-wide" style = "width:168px">
-                <b>Login</b>
-                </button>
+                    <div class="form-group">
+                        <button type="submit" class= "btn-grn btn-large btn-wide" style = "width:168px">
+                        <b>Login</b>
+                        </button>
+                    </div>
                 
             </form>
             <!--
@@ -49,5 +52,7 @@ if(!defined('IN_TEMPLATE'))
             </div>
             
         </div>
+
     </center>
+
 </div>

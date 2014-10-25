@@ -28,11 +28,12 @@ function CreateInputText($id ,$type ,$help = '' ,$oldvalue = null)
         <div id="signin">
         
             <h3><?php echo($_E['site']['name']);?><br><small>User Registry</small></h3>
-            <div class="text-right">
+            
+            <div>
                 <?php if(isset($_E['template']['reg'])):?>
                 <p><i><small><?php echo($_E['template']['reg']);?></small></i></p>
                 <?php else:?>
-                <p><i><small>Coding is like poetry</small></i></p>
+                <p><i><small>-Coding is like poetry</small></i></p>
                 <?php endif;?>
             </div>
             
@@ -47,6 +48,9 @@ function CreateInputText($id ,$type ,$help = '' ,$oldvalue = null)
                             CreateInputText('password','password','password');
                             CreateInputText('repeat','password','Repeat password again');
                         ?>
+                        
+                        <br>
+                        
                         <div class="form-group">
                             <button type="submit" class="btn-blu btn-large btn-wide">Register</button>
                         </div>

@@ -129,8 +129,10 @@ input[type = "text"]:focus{outline: none;}
     margin: 0;
     padding: 4px 2px;
     border: none;
+    
+    transition: 0.2s;
 }
-.textinput:focus{ outline: none;}
+.textinput:focus{ outline: none; border-bottom: 4px solid #cccccc;}
 
 label {
     font-size: 14px;
@@ -178,7 +180,6 @@ th {
 }
 
 #image-column{
-    width: 160px;
     background-image: url('http://i.imgur.com/KiKOjd6.jpg');
     background-size: cover;
 }

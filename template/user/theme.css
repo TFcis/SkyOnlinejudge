@@ -1,7 +1,7 @@
 #signin {
     width: 400px;
 }
-
+/*
 #signinlogo{
   height: 500px;
   margin-top: 32px;
@@ -9,7 +9,11 @@
   background-size: contain;
   background-repeat: no-repeat;
 }
-
+*/
+#license{
+    background-color: #0c0c0c;
+    text-align: left;
+}
 
 #jumbotron{
     min-height: 300px;
