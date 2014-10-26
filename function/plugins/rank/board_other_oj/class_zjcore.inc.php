@@ -44,8 +44,9 @@ class zjcore{
 	    if($pid === 'NO_PCNTL'){
             return ;
         }
-        sleep(10);
-        exit(0);
+        sleep(3);
+        #Fix No output bug
+        exit('<head><meta http-equiv="refresh" content="1"/></head>');
 	}
 	
     function preprocess($userlist,$problems)
