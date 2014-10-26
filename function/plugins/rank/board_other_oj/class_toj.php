@@ -80,7 +80,7 @@ class class_toj{
             return ;
         }
         sleep(5);
-        exit('E');
+        exit('<head><meta http-equiv="refresh" content="1"/></head>');
 	}
 	function preprocess($userlist,$problist)
 	{

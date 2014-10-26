@@ -8,8 +8,8 @@ class zjcore{
     public $websiteurl;
     public $classname;
     public $userpage = "UserStatistic?account=";
-	public $useraclist = array();
-	public $html_sumary = array();
+    public $useraclist = array();
+    public $html_sumary = array();
 
 	function checkid($id)
 	{
@@ -17,14 +17,14 @@ class zjcore{
 	}
 
 	function build($user){
-	    if( DB::loadcache($this->classname."_work_$user") ){
+        if( DB::loadcache($this->classname."_work_$user") ){
             return ;
         }
         if( function_exists('pcntl_fork') )
-	        $pid = pcntl_fork();
-	    else
-	        $pid = 'NO_PCNTL';
-	    if ( $pid === -1 ){
+            $pid = pcntl_fork();
+        else
+            $pid = 'NO_PCNTL';
+        if ( $pid === -1 ){
             $pid = 'NO_PCNTL';
         }
         
@@ -33,18 +33,18 @@ class zjcore{
         }
         
         DB::putcache($this->classname."_work_$user",'work',86400);
-	    $response = file_get_contents($this->websiteurl.$this->userpage.$user);
-	    if($response !== false ){
-	        DB::putcache($this->classname."_$user",
-	            array('time' => time()+600+rand(0,300),'data'=>$response)
-	            ,86400);
-	    }
-	    DB::deletecache($this->classname."_work_$user");
-	    
-	    if($pid === 'NO_PCNTL'){
+        $response = file_get_contents($this->websiteurl.$this->userpage.$user);
+        if($response !== false ){
+            DB::putcache($this->classname."_$user",
+                array('time' => time()+600+rand(0,300),'data'=>$response)
+                ,86400);
+        }
+        DB::deletecache($this->classname."_work_$user");
+        
+        if($pid === 'NO_PCNTL'){
             return ;
         }
-        sleep(3);
+        sleep(5);
         #Fix No output bug
         exit('<head><meta http-equiv="refresh" content="1"/></head>');
 	}
