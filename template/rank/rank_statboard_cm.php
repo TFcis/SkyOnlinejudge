@@ -4,10 +4,8 @@ if(!defined('IN_TEMPLATE'))
   exit('Access denied');
 }
 ?>
-<!-- show all load plugins -->
 <div id = "image-bar"></div>
 <div class="container">
-
     <div>
         <div class="page-header">
             <h1><?=htmlspecialchars($_E['template']['title'])?> <small>Statistics
@@ -16,6 +14,26 @@ if(!defined('IN_TEMPLATE'))
             <?php endif; ?>
                 </small>
             </h1>
+            <div class='container-fluid'>
+                <div class="row">
+                    <div class="col-xs-4 col-md-4 text-left">
+                        <a href="rank.php?mod=commonboard&id=<?=$_E['template']['leftid']?>" class="btn btn-primary btn-sm active" <?php if(!$_E['template']['leftid'])echo('disabled="disabled"');?>>
+                        <span class="glyphicon glyphicon-arrow-left"></span>
+                        </a>
+                    </div>
+                    <div class="col-xs-4 col-md-4 text-center">
+                        <a href="rank.php?mod=list&page=<?=$_E['template']['homeid']?>" class="btn btn-primary btn-sm active">
+                        <span class="glyphicon glyphicon-home"></span>
+                        </a>
+                    </div>
+                    <div class="col-xs-4 col-md-4 text-right">
+                        <a href="rank.php?mod=commonboard&id=<?=$_E['template']['rightid']?>" class="btn btn-primary btn-sm active" <?php if(!$_E['template']['rightid'])echo('disabled="disabled"');?>>
+                        <span class="glyphicon glyphicon-arrow-right"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </div>
     

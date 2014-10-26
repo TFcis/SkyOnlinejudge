@@ -30,7 +30,7 @@ class Plugin{
         $classfile = glob($pattern);
         foreach($classfile as $str)
         {
-            include($str);
+            require_once($str);
             if( preg_match($pname,$str,$matches) )
             {
                 $matches = $matches[1];

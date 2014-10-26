@@ -32,6 +32,29 @@ echo "MySQL Connect!\n";
 mysql_query("SET NAMES 'utf8'");
 mysql_select_db($_config['db']['dbname']);
 
+//get version
+
+run("CREATE TABLE IF NOT EXISTS `".tname('skysystem')."` (
+  `name` char(64) COLLATE utf8_bin NOT NULL,
+  `var` text COLLATE utf8_bin NOT NULL,
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
+
+$res = mysql_query("SELECT `var` FROM `".tname('skysystem')."` WHERE `name` LIKE 'sqlversion'");
+if( $res &&  $data = mysql_fetch_array($res) )
+{
+    $var = intval($data['var']);
+}
+else
+{
+    echo mysql_error()."\n";
+    $var = 0;
+}
+
+echo "Your Version : $var \n";
+switch($var)
+{
+case 0:
 run("CREATE TABLE IF NOT EXISTS `".tname('account')."` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(64) COLLATE utf8_bin NOT NULL,
@@ -81,4 +104,28 @@ run("CREATE TABLE IF NOT EXISTS `".tname('plugin')."` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `class` (`class`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=2 ;");
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
+
+run("CREATE TABLE IF NOT EXISTS `".tname('statsboard')."` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` text COLLATE utf8_bin NOT NULL,
+  `owner` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `userlist` text COLLATE utf8_bin NOT NULL,
+  `problems` text COLLATE utf8_bin NOT NULL,
+  `state` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
+
+case 1:
+
+run("ALTER TABLE `".tname("ojlist")."` 
+CHANGE  `accountname`  `accountname` VARCHAR( 64 ) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL ;");
+run("ALTER TABLE  `".tname("ojlist")."` ADD UNIQUE (
+`accountname`
+);");
+
+}
+
+run("UPDATE  `".tname('skysystem')."` SET  `var` =  '2' WHERE  `name` =  'sqlversion';");

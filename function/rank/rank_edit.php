@@ -7,7 +7,7 @@ if(!defined('IN_SKYOJSYSTEM'))
 //Only By Post Login Token
 if(!isset($_POST['mod']) || !$_G['uid'] || !userControl::checktoken('CBEDIT'))
     throwjson('error','Access denied');
-$allowpage = array('cbedit');
+$allowpage = array('cbedit','cbremove');
 
 $editpage = isset($_POST['page'])?$_POST['page']:'';
 if(!in_array($editpage ,$allowpage))
@@ -41,6 +41,12 @@ switch($editpage)
         if( !( $data = checkpostdata($argv)) ){
             throwjson('error','cbedit');
         }
+        if( !expand_userlist($data['userlist']) ){
+            throwjson('error','user list error');
+        }
+        if( !expand_promlemlist($data['problems']) ){
+            throwjson('error','problem list error');
+        }
         $cid = $cb['id'];
         $cname = $data['name'];
         $cowner = $cb['owner'];
@@ -57,7 +63,6 @@ switch($editpage)
             `userlist` = '$cul',
             `problems` = '$cps'"))
         {
-        //var_dump($cb);
             if( $cb['id'] == 'NULL' )
             {
                 $cb['id'] = mysql_insert_id();
@@ -68,6 +73,9 @@ switch($editpage)
         {
             throwjson('error','sql_cbedit');
         }
+        break;
+    case 'cbremove':
+         throwjson('error','sql_cbremove');
         break;
     default:
         throwjson('error','modify');

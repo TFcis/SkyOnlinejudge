@@ -35,19 +35,19 @@ $_E['template']['title'] = $setting['name'];
 
 #preprocess user data to $userid
 #notice  $userid[$uid] $uid is INT
-
 $userarray = expand_userlist($setting['userlist']);
-$user = DB::getuserdata('account',$userarray,'`uid`,`nickname`');
-$useracct = DB::getuserdata('userojlist',$userarray);
 $userid = array();
 
 //delete not availbe uid
+$user = DB::getuserdata('account',$userarray,'`uid`,`nickname`');
 $userarray = array();
 foreach($user as $uid => $data)
 {
-    $userarray[ ]= (int)$uid;
+    $userarray[]= (int)$uid;
 }
 
+//get user oj account
+$useracct = DB::getuserdata('userojlist',$userarray);
 foreach($userarray as $uid)
 {
     if(isset( $useracct[(string)$uid] )){
@@ -56,12 +56,12 @@ foreach($userarray as $uid)
     else{
         $userid[$uid]= ojid_reg('');
     }
-    //add information before ojid_reg();
+    //add information after ojid_reg();
     $userid[$uid]['nickname'] = $user[$uid]['nickname'];
 }
 
 #preprocess prob data to probinfo
-$prob = explode(',',$setting['problems']);
+$prob = expand_promlemlist($setting['problems']);
 $probinfo = array();
 $prelist = array();
 #分類
@@ -101,11 +101,31 @@ foreach($prelist as $name => $arr)
     }
 }
 
-
+//頁面資訊
 $_E['template']['plist'] = $probinfo;
 $_E['template']['user'] = $userid;
 $_E['template']['owner'] = $setting['owner'];
 $_E['template']['id'] = $setting['owner'];
+
+//導覽列
+$tbstats = DB::tname('statsboard');
+$res = DB::query("SELECT COUNT(1) FROM `$tbstats`");
+$maxid = DB::fetch($res);$maxid = $maxid[0];
+//it sholuld be use SQL!
+$_E['template']['leftid'] = 0;
+$_E['template']['rightid'] = 0;
+if($id-1 > 0) $_E['template']['leftid'] = $id-1;
+if($id+1 <= $maxid)$_E['template']['rightid'] = $id+1;
+
+$_E['template']['homeid'] = 0;
+for( $t=$maxid; $t>0 ;$t-=10)
+{
+    if($t<$id)
+        break;
+    $_E['template']['homeid']++;
+}
+
+//rate map
 foreach($userid as $uid => $u)
 {
     foreach($probinfo as $p)
@@ -119,7 +139,10 @@ foreach($userid as $uid => $u)
             case 0 : 
                 $_E['template']['s'][$uid][$p['name']] = 'NO';
                 break;
-            case 9 :
+            case 70 :
+                $_E['template']['s'][$uid][$p['name']] = 'WA';
+                break;
+            case 90 :
                 $_E['template']['s'][$uid][$p['name']] = 'AC';
                 break;
         }

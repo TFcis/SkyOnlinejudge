@@ -24,7 +24,7 @@ $rowprepage = 10;
 $_E['template']['pagerange'] = $tmp =page_range($numofAllboard,$rowprepage,$page,3);
 $page = $tmp[1];
 $jump = ($page-1)*$rowprepage;
-if(! ($res = DB::query("SELECT * FROM `$tbstats` ORDER BY `id` LIMIT $jump,$rowprepage") ))
+if(! ($res = DB::query("SELECT * FROM `$tbstats` ORDER BY `id` DESC LIMIT $jump,$rowprepage") ))
 {
     Render::ShowMessage('Something error...');
     exit('');
