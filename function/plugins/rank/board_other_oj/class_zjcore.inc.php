@@ -36,7 +36,7 @@ class zjcore{
 	    $response = file_get_contents($this->websiteurl.$this->userpage.$user);
 	    if($response !== false ){
 	        DB::putcache($this->classname."_$user",
-	            array('time' => time()+600,'data'=>$response)
+	            array('time' => time()+600+rand(0,300),'data'=>$response)
 	            ,86400);
 	    }
 	    DB::deletecache($this->classname."_work_$user");
@@ -44,8 +44,8 @@ class zjcore{
 	    if($pid === 'NO_PCNTL'){
             return ;
         }
-        sleep(5);
-        exit('E');
+        sleep(10);
+        exit(0);
 	}
 	
     function preprocess($userlist,$problems)

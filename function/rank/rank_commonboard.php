@@ -105,7 +105,7 @@ foreach($prelist as $name => $arr)
 $_E['template']['plist'] = $probinfo;
 $_E['template']['user'] = $userid;
 $_E['template']['owner'] = $setting['owner'];
-$_E['template']['id'] = $setting['owner'];
+$_E['template']['id'] = $id;
 
 //導覽列
 $tbstats = DB::tname('statsboard');
