@@ -31,7 +31,11 @@ $(document).ready(function()
 <div class="container">
     <div class="row">
         <div class="page-header">
-          <h1>編輯記分板 <small><?=htmlspecialchars($_E['template']['title'])?></small></h1>
+          <h1>編輯記分板 <small><?=htmlspecialchars($_E['template']['title'])?>
+          <?php if($_E['template']['form']['id']):?>
+          <span class="pointer glyphicon glyphicon-ok" onclick="location.href='rank.php?mod=commonboard&id=<?=$_E['template']['form']['id']?>'" title="回到記分板"></span>
+          <?php endif;?>
+          </small></h1>
       </div>
     </div>
     <div class="row">

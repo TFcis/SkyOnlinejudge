@@ -59,32 +59,28 @@ class class_toj{
 	        $pid = pcntl_fork();
 	    else
 	        $pid = 'NO_PCNTL';
-	   
-        if ( $pid === -1 )
-        {
+        if ( $pid === -1 ){
+            $pid = 'NO_PCNTL';
+        }
+        if( $pid!==0 && $pid!=='NO_PCNTL' ){
             return ;
         }
-        elseif( $pid!==0 && $pid!=='NO_PCNTL' ){
+
+        DB::putcache("class_toj_work_$uid",'work',86400);
+        if( $aclist = $this->post($query) )
+        {
+            
+            $_E['template']['dbg'].="$uid download from toj<br>";
+            $this->useraclist[$uid]  = json_decode($aclist)->ac;
+            DB::putcache(   "class_toj_uid_$uid",
+                            array(time()+rand(120,420),$this->useraclist[$uid]),86400);
+            DB::deletecache("class_toj_work_$uid");
+        }
+        if($pid === 'NO_PCNTL'){
             return ;
         }
-        else
-        {
-            DB::putcache("class_toj_work_$uid",'work',86400);
-            if( $aclist = $this->post($query) )
-            {
-                
-                $_E['template']['dbg'].="$uid download from toj<br>";
-                $this->useraclist[$uid]  = json_decode($aclist)->ac;
-                DB::putcache(   "class_toj_uid_$uid",
-                                array(time()+rand(120,420),$this->useraclist[$uid]),86400);
-                DB::deletecache("class_toj_work_$uid");
-            }
-            if($pid === 'NO_PCNTL')
-            {
-                return ;
-            }
-            sleep(5);
-        }
+        sleep(5);
+        exit('E');
 	}
 	function preprocess($userlist,$problist)
 	{
@@ -124,7 +120,7 @@ class class_toj{
 	    $pid = preg_replace('/[^0-9]*/','',$pid);
 	    if(in_array($pid,$this->useraclist[$uid]))
 	    {
-	        return 9;
+	        return 90;
 	    }
 	    else
 	    {
