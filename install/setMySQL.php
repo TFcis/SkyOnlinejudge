@@ -119,13 +119,8 @@ run("CREATE TABLE IF NOT EXISTS `".tname('statsboard')."` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
 
 case 1:
-
-run("ALTER TABLE `".tname("ojlist")."` 
-CHANGE  `accountname`  `accountname` VARCHAR( 64 ) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL ;");
-run("ALTER TABLE  `".tname("ojlist")."` ADD UNIQUE (
-`accountname`
-);");
+//nothing
 
 }
 
-run("UPDATE  `".tname('skysystem')."` SET  `var` =  '2' WHERE  `name` =  'sqlversion';");
+run("UPDATE  `".tname('skysystem')."` SET  `var` =  '1' WHERE  `name` =  'sqlversion';");
