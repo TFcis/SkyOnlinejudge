@@ -126,6 +126,7 @@ for( $t=$maxid; $t>0 ;$t-=10)
 }
 
 //rate map
+echo "<!-- start : ".microtime()."-->\n";
 foreach($userid as $uid => $u)
 {
     foreach($probinfo as $p)
@@ -148,4 +149,5 @@ foreach($userid as $uid => $u)
         }
     }
 }
+echo "<!-- start : ".microtime()."-->\n";
 Render::render('rank_statboard_cm','rank');
