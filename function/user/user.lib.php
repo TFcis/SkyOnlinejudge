@@ -105,24 +105,7 @@ function prepareUserView($uid)
     return $opt;
 }
 
-function envadd($table)
-{
-    global $_E;
-    $_E[$table] = array();
-    $tb = DB::tname($table);
-    if( $res = DB::query("SELECT * FROM `$tb`") )
-    {
-        while( $dat = DB::fetch($res) )
-        {
-            $_E[$table][]=$dat;
-        }
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
+
 
 function page_ojacct($uid)
 {
@@ -154,38 +137,7 @@ function page_ojacct($uid)
     return true;
 }
 
-function ojid_reg($json)
-{
-    global $_E;
-    if( !isset($_E['ojlist']) )
-        if( !envadd('ojlist') )
-            return false;
-            
-    $ojname = array();
-    foreach($_E['ojlist'] as $oj)
-        $ojname[]=$oj['class'];
-    
-    if(! ($acct = json_decode($json,true)) )
-        $acct = array();
-        
-    $oldacct = $acct;
-    foreach($oldacct as $oj => $stats)
-    {
-        if(!in_array($oj,$ojname))
-            unset($acct[$oj]);
-    }
-    
-    foreach($ojname as $oj)
-    {
-        if(!isset($acct[$oj]))
-        {
-            $acct[$oj] = array(
-                'acct' => '',
-                'approve' => 0);
-        }
-    }
-    return $acct;
-}
+
 
 function modify_ojacct($argv,$euid)
 {

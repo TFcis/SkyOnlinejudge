@@ -51,9 +51,9 @@ if(!defined('IN_TEMPLATE'))
                 </thead>
                 
                 </tbody>
-                    <?php foreach($_E['template']['user'] as $uid => $name){?>
+                    <?php foreach($_E['template']['user'] as $uid){?>
                     <tr>
-                        <td style = "text-align: right"><a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>><?=$name['nickname']?></a></td>
+                        <td style = "text-align: right"><a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>><?=$_E['nickname'][$uid]?></a></td>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
                             <td class = "<?=$_E['template']['s'][$uid][$prob['name']]?>">●</td>
                         <?php }?>
