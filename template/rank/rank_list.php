@@ -28,9 +28,9 @@ $(document).ready(function()
                 <?php if($_G['uid']): ?>
                 <!--<button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新增記分板" id="b_add" onclick="location.href='rank.php?mod=cbedit'">-->
                     TOOLS
-                    <span class = "icon-bttn" title = "Create New" onclick="location.href='rank.php?mod=cbedit'">
-                    <span class="glyphicon glyphicon-plus"></span>
-                    </span>
+                    <a class = "icon-bttn" title = "Create New" href="rank.php?mod=cbedit">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
                 <!--</button>-->
                 <?php endif;?>
                 </th>
@@ -48,17 +48,17 @@ $(document).ready(function()
                         <!--<span class="icon-bttn glyphicon glyphicon-plus-sign" title="加入"></span>
                         <span class="icon-bttn glyphicon glyphicon-remove" title="離開"></span>-->
                         <?php if(userControl::getpermission($row['owner'])): ?>
-                        <span class = "icon-bttn">
-                        <span class="glyphicon glyphicon-pencil" onclick="location.href='rank.php?mod=cbedit&id=<?=$row['id'];?>'" title="編輯">
-                        </span></span>
+                        <a class = "icon-bttn" href="rank.php?mod=cbedit&id=<?=$row['id'];?>">
+                            <span class="glyphicon glyphicon-pencil" title="編輯"></span>
+                        </a>
+
+                        <!--<span class = "icon-bttn">
+                            <span class="glyphicon glyphicon-lock" title="鎖定"></span>
+                        </span>-->
                         
                         <span class = "icon-bttn">
-                        <span class="glyphicon glyphicon-lock" title="鎖定">
-                        </span></span>
-                        
-                        <span class = "icon-bttn">
-                        <span class="glyphicon glyphicon-trash" title="移除">
-                        </span></span>
+                            <span class="glyphicon glyphicon-trash" title="移除"></span>
+                        </span>
                         <?php endif;?>
                     <?php endif;?>
                 </td>
@@ -77,7 +77,8 @@ $(document).ready(function()
     </div>
     
     <center>
-        <ul class="page-nav">
+        <ul class="pagination">
+        <!-- <ul class="page-nav">-->
             <?php
                 $_L = max($_E['template']['pagerange']['0'],$_E['template']['pagerange']['1']-1);
                 $_R = max($_E['template']['pagerange']['2'],$_E['template']['pagerange']['1']+1);
@@ -85,7 +86,7 @@ $(document).ready(function()
             <li><a href="rank.php?mod=list&page=<?=$_L ?>">&laquo;</a></li>
             <?php for($i=$_E['template']['pagerange']['0'];$i<=$_E['template']['pagerange']['2'];$i++){ ?>
                 <?php if($i==$_E['template']['pagerange']['1']): ?>
-                    <li class="active"><a href="rank.php?mod=list&page=<?=$i?>"><?=$i?></a></li>
+                    <li class="active"><a href="#"><?=$i?></a></li>
                 <?php else:?>
                     <li><a href="rank.php?mod=list&page=<?=$i?>"><?=$i?></a></li>
                 <?php endif;?>
