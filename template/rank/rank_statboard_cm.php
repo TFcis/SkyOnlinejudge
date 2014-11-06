@@ -55,7 +55,7 @@ if(!defined('IN_TEMPLATE'))
                     <tr>
                         <td style = "text-align: right"><a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>><?=$_E['nickname'][$uid]?></a></td>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
-                            <td class = "<?=$_E['template']['s'][$uid][$prob['name']]?>">●</td>
+                            <td class = "text-center <?=$_E['template']['s'][$uid][$prob['name']]?>">●</td>
                         <?php }?>
                         <td>
                         </td>

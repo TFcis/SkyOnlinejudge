@@ -41,10 +41,10 @@ switch($editpage)
         if( !( $data = checkpostdata($argv)) ){
             throwjson('error','cbedit');
         }
-        if( !expand_userlist($data['userlist']) ){
+        if( !extend_userlist($data['userlist']) ){
             throwjson('error','user list error');
         }
-        if( !expand_promlemlist($data['problems']) ){
+        if( !extend_promlemlist($data['problems']) ){
             throwjson('error','problem list error');
         }
         $cid = $cb['id'];
@@ -67,6 +67,8 @@ switch($editpage)
             {
                 $cb['id'] = mysql_insert_id();
             }
+            userControl::deletetoken('CBEDIT');
+            DB::deletecache("cache_board_".$cb['id']);
             throwjson('SUCC',$cb['id']);
         }
         else

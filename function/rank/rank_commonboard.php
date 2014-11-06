@@ -21,7 +21,7 @@ if( isset($_GET['id']) )
     else
     {
         $id = intval($id);
-        if( $cache = DB::loadcache("cache_board_$id") )
+        if( !isset($_GET['force']) && $cache = DB::loadcache("cache_board_$id") )
         {
             $boarddata = $cache;
             $_E['template']['dbg'].="Load from global cache!<br>";
@@ -32,7 +32,7 @@ if( isset($_GET['id']) )
             $boarddata = buildcbboard($id);
             if($boarddata)
             {
-                DB::putcache("cache_board_$id",$boarddata,900);
+                DB::putcache("cache_board_$id",$boarddata,15);
                 $_E['template']['dbg'].="Rebuild!<br>";
             }
         }

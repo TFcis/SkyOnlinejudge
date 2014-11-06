@@ -58,10 +58,13 @@ class DB
         $path = $_E['ROOT']."/data/cache/$name.cache";
         return $path;
     }
-    
+
     static function putcache($name ,$data ,$time = 5, $uid = 0)
     {
-        $timeout = time()+$time*60;
+        if($time === 'forever')
+            $timeout = PHP_INT_MAX ;
+        else
+            $timeout = time()+$time*60;
         $cachetable = DB::tname('cache');
         $_SESSION['cache'][$name]['time'] = $timeout;
         $_SESSION['cache'][$name]['data'] = $data;

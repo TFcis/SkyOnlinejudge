@@ -97,6 +97,10 @@ function buildcbboard($bid)
     $userojacct_sql = DB::getuserdata('userojlist', $res['userlist'] );
     $userojacct = array();
     $emptyacct = ojid_reg('');
+    #delete not avaible uid
+    $res['userlist'] = array();
+    foreach($userojacct_sql as $uid => $data)
+        $res['userlist'][]=$uid;
     foreach( $res['userlist'] as &$uid )
     {
         $uid = (string)$uid;
@@ -174,6 +178,6 @@ function buildcbboard($bid)
                 $accache[$uid][$p['name']] = 1;
         }
     }
-    DB::putcache("rate_ac_cb_$bid",$accache,86400);
+    DB::putcache("rate_ac_cb_$bid",$accache,'forever');
     return $res;
 }
