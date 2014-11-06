@@ -25,13 +25,19 @@ class class_uva{
 	function checkid($uname)
 	{
 	    $uname = (string)$uname;
-	    return preg_match('/[\da-zA-Z]{2,}/',$uname); //No spaces, at least 2 characters and contain 0-9,a-z,A-Z
+	    if(!preg_match('/[\da-zA-Z]{2,}/',$uname)) //No spaces, at least 2 characters and contain 0-9,a-z,A-Z
+	    	return false;
+	    if(uname2id($uname))
+	    	return false;
+	    return true;
 	}
 	
 	function uname2id($uname){
 		$data = DB::loadcache("class_uva_uname2id_$uid");
 		if($data === false){
 			$data = file_get_contents("http://uhunt.felix-halim.net/api/uname2uid/$uname");
+			if($data=="0")
+				return false;
 			DB::putcache("class_uva_uname2id_$uid", $data, 365*24*60); //todo forever
 		}
 		return $data;
@@ -55,7 +61,7 @@ class class_uva{
 		$tpl = array();
 		foreach($userlist as $user){
 			foreach($problist as $pnum){
-				if(DB::loadcache("class_uva_uid_$uid"."_pnum_$pnum") === false){
+				if(DB::loadcache("class_uva_uid_$user"."_pnum_$pnum") === false){
 					$tul[$user] = true;
 					$tpl[$pnum] = true;
 				}
