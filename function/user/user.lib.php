@@ -161,6 +161,10 @@ function modify_ojacct($argv,$euid)
             $uacct[$oj]['acct'] = $acct;
             $uacct[$oj]['approve']=0;
         }
+        else
+        {
+            return array(false,"Accout error :$oj");
+        }
     }
     $uacct = addslashes(json_encode($uacct));
     if( DB::query("INSERT INTO $table

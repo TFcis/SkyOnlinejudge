@@ -74,7 +74,9 @@ function extend_promlemlist($problems)
     $substr = array();
     $stack = 0;
     $pos = 0;
+    
     $problems = str_replace('*','',$problems);
+    $problems = trim($problems);
     $len = strlen($problems);
     for( $i=0 ; $i<$len ;++$i )
     {
@@ -147,7 +149,7 @@ function extend_promlemlist($problems)
             else
             {
                 $word= str_replace('*','',$word);
-                if( $sb = extend_promlemlist($substr[$subnum++]) )
+                if( $sb = extend_promlemlist(trim($substr[$subnum++])) )
                 {
                     foreach($sb as $w){
                         $res[]=$word.$w;
@@ -160,7 +162,7 @@ function extend_promlemlist($problems)
             }
         }
         if($flag == 'add'){
-            $problist=array_merge($problist,$res);
+            $problist = array_merge($problist,$res);
             $problist = array_unique($problist);
         }else{
             foreach($res as $v)

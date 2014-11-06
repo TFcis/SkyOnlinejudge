@@ -10,7 +10,9 @@ if(!defined('IN_TEMPLATE'))
         <div class="page-header">
             <h1><?=htmlspecialchars($_E['template']['title'])?> <small>Statistics
             <?php if(userControl::getpermission($_E['template']['owner'])): ?>
-            <span class="pointer glyphicon glyphicon-pencil" onclick="location.href='rank.php?mod=cbedit&id=<?=$_E['template']['id'];?>'" title="編輯"></span>
+            <a class = "icon-bttn" href='rank.php?mod=cbedit&id=<?=$_E['template']['id'];?>'>
+            <span class="pointer glyphicon glyphicon-pencil"  title="編輯"></span>
+            </a>
             <?php endif; ?>
                 </small>
             </h1>

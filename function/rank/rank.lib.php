@@ -138,7 +138,7 @@ function buildcbboard($bid)
         {
             $class_acct = array();
             foreach($userojacct as $acct)
-                if( $acct[$classname] )
+                if( $acct[$classname] && $class[$classname]->checkid($acct[$classname]['acct']) )
                     $class_acct[]=$acct[$classname]['acct'];
             $class[$classname]->preprocess($class_acct ,$arr);
         }

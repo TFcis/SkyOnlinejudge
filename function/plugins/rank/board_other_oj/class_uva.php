@@ -27,29 +27,34 @@ class class_uva{
 	    $uname = (string)$uname;
 	    if(!preg_match('/[\da-zA-Z]{2,}/',$uname)) //No spaces, at least 2 characters and contain 0-9,a-z,A-Z
 	    	return false;
-	    if(uname2id($uname))
+	    if(!$this->uname2id($uname))
 	    	return false;
 	    return true;
 	}
 	
+	function realpname($pname)
+	{
+	    return preg_replace('/[^0-9]*/','',$pname);
+	}
 	function uname2id($uname){
-		$data = DB::loadcache("class_uva_uname2id_$uid");
+		$data = DB::loadcache("class_uva_uname2id_$uname");
 		if($data === false){
 			$data = file_get_contents("http://uhunt.felix-halim.net/api/uname2uid/$uname");
 			if($data=="0")
 				return false;
-			DB::putcache("class_uva_uname2id_$uid", $data, 365*24*60); //todo forever
+			DB::putcache("class_uva_uname2id_$uname", trim($data), 'forever'); //todo forever
 		}
 		return $data;
 	}
 	
 	function probId2Num($pid){
+	    $pid = $this->realpname($pid);
 		$data = DB::loadcache("class_uva_probId2Num_$pid");
 		if($data === false){
 			$data = file_get_contents("http://uhunt.felix-halim.net/api/p/id/$pid");
 			$data = json_decode($data, true);
-			$data = $data["num"];
-			DB::putcache("class_uva_probId2Num_$pid", $data, 365*24*60); //todo forever
+			$data = trim($data["num"]);
+			DB::putcache("class_uva_probId2Num_$pid", $data, 'forever'); //todo forever
 		}
 		return $data;
 	}
@@ -70,21 +75,26 @@ class class_uva{
 		$userlist = array();
 		$problist = array();
 		foreach($tul as $user => $t)
-			array_push($userlist,$user);
-		foreach($tul as $pnum => $t)
-			array_push($problist,$pnum);
+			array_push($userlist,$this->uname2id($user));
+		foreach($tpl as $pnum => $t)
+			array_push($problist,$this->realpname($pnum));
 		
 		//fetch
 		$data = file_get_contents("http://uhunt.felix-halim.net/api/subs-nums/".implode(',', $userlist)."/".implode(',', $problist)."/0");
 		if($data === false) return;
 		$data = json_decode($data, true);
 		foreach($userlist as $user){
-			$uid = uname2id($user);
+			$uid = $user;
 			$udata = $data[$uid]['subs'];
 			$verdict = array();
 			foreach($udata as $sub){
 				if($sub[2] != 20)
-					$verdict[probId2Num($sub[1])] = max($verdict[probId2Num($sub[1])], $sub[2]);
+				{
+				    $pnum = $this->probId2Num($sub[1]);
+				    if(!isset($verdict[$pnum])) 
+				        $verdict[$pnum] = 0;
+					$verdict[$pnum] = max($verdict[$pnum], $sub[2]);
+				}
 			}
 			foreach($verdict as $p => $v){
 				DB::putcache("class_uva_uid_$uid"."_pnum_$p", $v, 86400);
@@ -95,13 +105,15 @@ class class_uva{
 	function query($uid,$pnum)
 	{
 	    $pnum = preg_replace('/[^0-9]*/','',$pnum);
+	    $uid  = $this->uname2id($uid);
+	    $pnum = $this->realpname($pnum);
 	    $cache = DB::loadcache("class_uva_uid_$uid"."_pnum_$pnum");
 	    if($cache===false)
 	    	return 0; //throw error
 	    if($cache=="90")
-	        return 9;
+	        return 90;
 	    else
-	        return 0;
+	        return 70;
 	}
 	
 	function showname($str)
