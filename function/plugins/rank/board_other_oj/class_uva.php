@@ -29,11 +29,23 @@ class class_uva{
 	}
 	
 	function uname2id($uname){
-		//todo
+		$data = DB::loadcache("class_uva_uname2id_$uid");
+		if($data === false){
+			$data = file_get_contents("http://uhunt.felix-halim.net/api/uname2uid/$uname");
+			DB::putcache("class_uva_uname2id_$uid", $data, 365*24*60); //todo forever
+		}
+		return $data;
 	}
 	
 	function probId2Num($pid){
-		//todo
+		$data = DB::loadcache("class_uva_probId2Num_$pid");
+		if($data === false){
+			$data = file_get_contents("http://uhunt.felix-halim.net/api/p/id/$pid");
+			$data = json_decode($data, true);
+			$data = $data["num"];
+			DB::putcache("class_uva_probId2Num_$pid", $data, 365*24*60); //todo forever
+		}
+		return $data;
 	}
 	
 	function preprocess($userlist,$problist)
