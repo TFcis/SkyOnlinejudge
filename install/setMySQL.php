@@ -22,9 +22,13 @@ function tname($table)
     global $_config;
     return $_config['db']['tablepre']."_$table";
 }
+$skysystem = tname('skysystem');
+$account   = tname('account');
+$usertoken = tname('usertoken');
+$cache     = tname('cache');
+$ojlist    = tname('ojlist');
 //CREATE TABLE 
 $conn = mysql_connect($_config['db']['dbhost'],$_config['db']['dbuser'],$_config['db']['dbpw']);
-
 if(!$conn){
     die('ERROR:'.mysql_error());
 }
@@ -34,13 +38,13 @@ mysql_select_db($_config['db']['dbname']);
 
 //get version
 
-run("CREATE TABLE IF NOT EXISTS `".tname('skysystem')."` (
+run("CREATE TABLE IF NOT EXISTS `$skysystem` (
   `name` char(64) COLLATE utf8_bin NOT NULL,
   `var` text COLLATE utf8_bin NOT NULL,
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
-$res = mysql_query("SELECT `var` FROM `".tname('skysystem')."` WHERE `name` LIKE 'sqlversion'");
+$res = mysql_query("SELECT `var` FROM `$skysystem` WHERE `name` LIKE 'sqlversion'");
 if( $res &&  $data = mysql_fetch_array($res) )
 {
     $var = intval($data['var']);
@@ -55,7 +59,7 @@ echo "Your Version : $var \n";
 switch($var)
 {
 case 0:
-run("CREATE TABLE IF NOT EXISTS `".tname('account')."` (
+run("CREATE TABLE IF NOT EXISTS `$account` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(64) COLLATE utf8_bin NOT NULL,
   `passhash` varchar(200) COLLATE utf8_bin NOT NULL,
@@ -65,21 +69,21 @@ run("CREATE TABLE IF NOT EXISTS `".tname('account')."` (
   KEY `uid` (`uid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
 
-run("CREATE TABLE IF NOT EXISTS `".tname('usertoken')."` (
+run("CREATE TABLE IF NOT EXISTS `$usertoken` (
   `uid` int(11) NOT NULL,
   `timeout` int(11) NOT NULL,
   `type` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `token` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
-run("CREATE TABLE IF NOT EXISTS `".tname('cache')."` (
+run("CREATE TABLE IF NOT EXISTS `$cache` (
   `name` varchar(64) COLLATE utf8_bin NOT NULL,
   `timeout` int(11) NOT NULL,
   `data` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
-run("CREATE TABLE IF NOT EXISTS `".tname('ojlist')."` (
+run("CREATE TABLE IF NOT EXISTS `$ojlist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `class` char(64) COLLATE utf8_bin NOT NULL,
   `name` text COLLATE utf8_bin NOT NULL,
@@ -119,8 +123,16 @@ run("CREATE TABLE IF NOT EXISTS `".tname('statsboard')."` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
 
 case 1:
+    run("ALTER TABLE  `$ojlist` 
+    CHANGE  `class`  `class` CHAR( 64 ) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL ;");
+    run("ALTER TABLE  `$ojlist` ADD UNIQUE (`class`);");
 //nothing
 
 }
 
-run("UPDATE  `".tname('skysystem')."` SET  `var` =  '1' WHERE  `name` =  'sqlversion';");
+
+$version = 1;
+run("INSERT INTO `$skysystem`
+    (`name`, `var`) VALUES
+    ('sqlversion',$version)
+    ON DUPLICATE KEY UPDATE `var` = $version");

@@ -12,8 +12,9 @@
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">-->
     <!--<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">-->
 
-    <!--<link rel="stylesheet" type="text/css" href="css/index.css">-->
-  <?php if($_E['EnableMathJax']): ?>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <?php if($_E['EnableMathJax']): ?>
+
       	<script type="text/x-mathjax-config">
       		MathJax.Hub.Config(
             {	tex2jax:

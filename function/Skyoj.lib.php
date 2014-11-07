@@ -10,7 +10,7 @@ function throwjson($status,$data)
     exit(json_encode(array('status'=>$status,'data'=>$data)));
 }
 
-function expand_userlist($string)
+function extend_userlist($string)
 {
     $tmp = explode(',',$string);
     $users = array();
@@ -69,12 +69,14 @@ function expand_userlist($string)
     return array_unique($users);
 }
 
-function expand_promlemlist($problems)
+function extend_promlemlist($problems)
 {
     $substr = array();
     $stack = 0;
     $pos = 0;
+    
     $problems = str_replace('*','',$problems);
+    $problems = trim($problems);
     $len = strlen($problems);
     for( $i=0 ; $i<$len ;++$i )
     {
@@ -147,7 +149,7 @@ function expand_promlemlist($problems)
             else
             {
                 $word= str_replace('*','',$word);
-                if( $sb = expand_promlemlist($substr[$subnum++]) )
+                if( $sb = extend_promlemlist(trim($substr[$subnum++])) )
                 {
                     foreach($sb as $w){
                         $res[]=$word.$w;
@@ -160,7 +162,7 @@ function expand_promlemlist($problems)
             }
         }
         if($flag == 'add'){
-            $problist=array_merge($problist,$res);
+            $problist = array_merge($problist,$res);
             $problist = array_unique($problist);
         }else{
             foreach($res as $v)
@@ -172,4 +174,71 @@ function expand_promlemlist($problems)
         }
     }
     return array_unique($problist);
+}
+
+function envadd($table)
+{
+    global $_E;
+    $_E[$table] = array();
+    $tb = DB::tname($table);
+    if( $res = DB::query("SELECT * FROM `$tb`") )
+    {
+        while( $dat = DB::fetch($res) )
+        {
+            $_E[$table][]=$dat;
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+function ojid_reg($json)
+{
+    global $_E;
+    if( !isset($_E['ojlist']) )
+        if( !envadd('ojlist') )
+            return false;
+            
+    $ojname = array();
+    foreach($_E['ojlist'] as $oj)
+        $ojname[]=$oj['class'];
+    
+    if(! ($acct = json_decode($json,true)) )
+        $acct = array();
+        
+    $oldacct = $acct;
+    foreach($oldacct as $oj => $stats)
+    {
+        if(!in_array($oj,$ojname))
+            unset($acct[$oj]);
+    }
+    
+    foreach($ojname as $oj)
+    {
+        if(!isset($acct[$oj]))
+        {
+            $acct[$oj] = array(
+                'acct' => '',
+                'approve' => 0);
+        }
+    }
+    return $acct;
+}
+
+function nickname( $uid )
+{
+    global $_E;
+    if(!is_array($uid))
+        $uid = array($uid);
+    $res =  DB::getuserdata('account',$uid,'uid,nickname');
+    foreach( $uid as $u )
+    {
+        $u=(string)$u;
+        if(isset($res[$u]))
+            $_E['nickname'][$u] = $res[$u]['nickname'];
+    }
+    return $res;
 }

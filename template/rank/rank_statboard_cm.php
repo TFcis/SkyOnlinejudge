@@ -10,7 +10,9 @@ if(!defined('IN_TEMPLATE'))
         <div class="page-header">
             <h1><?=htmlspecialchars($_E['template']['title'])?> <small>Statistics
             <?php if(userControl::getpermission($_E['template']['owner'])): ?>
-            <span class="pointer glyphicon glyphicon-pencil" onclick="location.href='rank.php?mod=cbedit&id=<?=$_E['template']['id'];?>'" title="編輯"></span>
+            <a class = "icon-bttn" href='rank.php?mod=cbedit&id=<?=$_E['template']['id'];?>'>
+            <span class="pointer glyphicon glyphicon-pencil"  title="編輯"></span>
+            </a>
             <?php endif; ?>
                 </small>
             </h1>
@@ -51,11 +53,11 @@ if(!defined('IN_TEMPLATE'))
                 </thead>
                 
                 </tbody>
-                    <?php foreach($_E['template']['user'] as $uid => $name){?>
+                    <?php foreach($_E['template']['user'] as $uid){?>
                     <tr>
-                        <td style = "text-align: right"><a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>><?=$name['nickname']?></a></td>
+                        <td style = "text-align: right"><a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>><?=$_E['nickname'][$uid]?></a></td>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
-                            <td class = "<?=$_E['template']['s'][$uid][$prob['name']]?>">●</td>
+                            <td class = "text-center <?=$_E['template']['s'][$uid][$prob['name']]?>">●</td>
                         <?php }?>
                         <td>
                         </td>

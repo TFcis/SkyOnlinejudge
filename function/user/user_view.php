@@ -49,7 +49,7 @@ else //main page
     $opt = array();
     if( !($opt = prepareUserView($showid)) )
     {
-        $_E['template']['alert'] = 'WTF!? SQL ERROR.';
+        $_E['template']['alert'] = 'WTF!? 查無此人.';
         Render::render('nonedefined');
         exit('');
     }

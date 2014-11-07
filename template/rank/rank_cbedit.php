@@ -33,7 +33,9 @@ $(document).ready(function()
         <div class="page-header">
           <h1>編輯記分板 <small><?=htmlspecialchars($_E['template']['title'])?>
           <?php if($_E['template']['form']['id']):?>
-          <span class="pointer glyphicon glyphicon-ok" onclick="location.href='rank.php?mod=commonboard&id=<?=$_E['template']['form']['id']?>'" title="回到記分板"></span>
+            <a class = "icon-bttn" href = "rank.php?mod=commonboard&id=<?=$_E['template']['form']['id']?>">
+                <span class="pointer glyphicon glyphicon-ok" title="回到記分板"></span>
+            </a>
           <?php endif;?>
           </small></h1>
       </div>
