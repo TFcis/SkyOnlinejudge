@@ -34,7 +34,7 @@ $(document).ready(function()
           <h1>編輯記分板 <small><?=htmlspecialchars($_E['template']['title'])?>
           <?php if($_E['template']['form']['id']):?>
             <a class = "icon-bttn" href = "rank.php?mod=commonboard&id=<?=$_E['template']['form']['id']?>">
-                <span class="pointer glyphicon glyphicon-ok" title="回到記分板"></span>
+                <span class="pointer glyphicon glyphicon-arrow-left" title="回到記分板"></span>
             </a>
           <?php endif;?>
           </small></h1>

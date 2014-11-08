@@ -10,6 +10,20 @@ function throwjson($status,$data)
     exit(json_encode(array('status'=>$status,'data'=>$data)));
 }
 
+function save_get($key)
+{
+    if(isset($_GET[$key]))
+        return $_GET[$key];
+    return false;
+}
+
+function save_post($key)
+{
+    if(isset($_POST[$key]))
+        return $_POST[$key];
+    return false;
+}
+
 function extend_userlist($string)
 {
     $tmp = explode(',',$string);
@@ -233,6 +247,7 @@ function nickname( $uid )
     global $_E;
     if(!is_array($uid))
         $uid = array($uid);
+
     $res =  DB::getuserdata('account',$uid,'uid,nickname');
     foreach( $uid as $u )
     {

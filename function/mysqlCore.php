@@ -164,6 +164,11 @@ class DB
         }
         $uid =  implode(',', array_map('intval', $uid) );
         
+        if( empty($uid) )
+        {
+            return array();
+        }
+        
         if( $res = DB::query("SELECT $data FROM `$table` WHERE `uid` IN($uid);") )
         {
             while($sqldata = DB::fetch($res))

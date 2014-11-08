@@ -90,7 +90,7 @@ class class_toj{
     function showname($str)
     {
         $pid = preg_replace('/[^0-9]*/','',$str);
-        $str="<a style='color:rgb(255,246,157)' href='http://toj.tfcis.org/oj/pro/$pid/' target='_blank'>toj $pid</a>";
+        $str="<a style='color:rgb(255,246,157)' href='http://toj.tfcis.org/oj/pro/$pid/' target='_blank'>TOJ $pid</a>";
         return $str;
     }
 }

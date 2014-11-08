@@ -4,6 +4,41 @@ if(!defined('IN_TEMPLATE'))
   exit('Access denied');
 }
 ?>
+<script>
+    function build_cb_data(user,scallid)
+    {
+        $("#infobox").html("Rebuilding...");
+        scallid = typeof scallid !== 'undefined' ? scallid : '';
+        $.get(
+            "rank.php",
+            {
+                mod : 'cbfetch',
+                id  : '<?=$_E['template']['id']?>',
+                scallid : scallid,
+                user : user
+            },
+            function(res){
+                if(res.status === 'error')
+                {
+                   $("#infobox").html(res.data);
+                }
+                else if(res.status === 'SUCC')
+                {
+                    $("#infobox").html("YES");
+                    setTimeout(function(){location.reload();}, 500);
+                }
+            },"json"
+        );
+    }
+    $(document).ready(function()
+    {
+        //$("#display").html("SUBMIT...");
+        <?php if($_E['template']['cbrebuild']):?>
+        build_cb_data('all','<?=$_E['template']['cbrebuildkey']?>');
+        <?php endif;?>
+        $(".problemname").popover({trigger : 'hover'});
+    })
+</script>
 <div id = "image-bar"></div>
 <div class="container">
     <div>
@@ -11,7 +46,10 @@ if(!defined('IN_TEMPLATE'))
             <h1><?=htmlspecialchars($_E['template']['title'])?> <small>Statistics
             <?php if(userControl::getpermission($_E['template']['owner'])): ?>
             <a class = "icon-bttn" href='rank.php?mod=cbedit&id=<?=$_E['template']['id'];?>'>
-            <span class="pointer glyphicon glyphicon-pencil"  title="編輯"></span>
+                <span class="pointer glyphicon glyphicon-pencil"  title="編輯"></span>
+            </a>
+            <a class = "icon-bttn" onclick="build_cb_data('all')">
+                <span class="pointer glyphicon glyphicon-refresh"  title="重新擷取"></span>
             </a>
             <?php endif; ?>
                 </small>
@@ -44,9 +82,14 @@ if(!defined('IN_TEMPLATE'))
         <table>
                 <thead>
                     <tr>
-                        <th style="padding: 4px;width: 160px;"></th>
+                        <th style="padding: 4px;width: 40px;"></th>
+                        <th style="padding: 4px;width: 120px;"><span id="infobox"></span></th>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
-                            <th class="text-center" style="padding: 4px;width: 40px;"><?=$prob['show']?></th>
+                            <th class="text-center" style="padding: 4px;width: 40px;">
+                                <div data-toggle="popover" data-placement="top" data-content="Tooltip on left" class="problemname">
+                                    <?=$prob['show']?>
+                                </div>
+                            </th>
                         <?php }?>
                         <th></th>
                     </tr>
@@ -55,7 +98,20 @@ if(!defined('IN_TEMPLATE'))
                 </tbody>
                     <?php foreach($_E['template']['user'] as $uid){?>
                     <tr>
-                        <td style = "text-align: right"><a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>><?=$_E['nickname'][$uid]?></a></td>
+                        <td>
+                            <?php if(userControl::getpermission($_E['template']['owner']) || $uid == $_G['uid']): ?>
+                            <a class = "icon-bttn" onclick="build_cb_data('<?=$uid?>')">
+                                <span class="pointer glyphicon glyphicon-refresh"  title="重新擷取"></span>
+                            </a>
+                            <?php endif;?>
+                        </td>
+                        <td class = "text-right">
+                            <div class="nickname">
+                                <a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>>
+                                    <?=$_E['nickname'][$uid]?>
+                                </a>
+                            </div>
+                        </td>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
                             <td class = "text-center <?=$_E['template']['s'][$uid][$prob['name']]?>">●</td>
                         <?php }?>

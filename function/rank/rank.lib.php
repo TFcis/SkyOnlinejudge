@@ -25,10 +25,12 @@ function page_range($all,$row,$now,$div)
 function getCBdatabyid($id)
 {
     $tbstats = DB::tname('statsboard');
-    if(!preg_match('/^[0-9]+$/',$id))
-    {
+    if(is_numeric($id))
+        $id = (string)$id;
+    if(!is_string($id))
         return false;
-    }
+    if(!preg_match('/^[0-9]+$/',$id))
+        return false;
     if($res = DB::query("SELECT * FROM `$tbstats` WHERE `id` = $id"))
         return DB::fetch($res);
     return false;
@@ -67,10 +69,10 @@ function verdictIDtoword($vid)
     return $res;
 }
 
-function buildcbboard($bid)
+function buildcbboard($bid , $selectuser = null)
 {
     $class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
-    $res =array();
+    $res = array();
     #check bid
     if( !is_numeric($bid) )
         return false;
@@ -79,12 +81,14 @@ function buildcbboard($bid)
         return false;
         
     $boarddata = getCBdatabyid($bid);
-    if(!$boarddata)
+    if(!$boarddata){
         return false;
+    }
     
     $res['name']  = $boarddata['name'];
     $res['owner'] = $boarddata['owner'];
     $res['createtime'] = $boarddata['timestamp'];
+    
     $res['userlist'] = extend_userlist($boarddata['userlist']);
     $res['problems'] = extend_promlemlist($boarddata['problems']);
     
@@ -93,14 +97,19 @@ function buildcbboard($bid)
     if( $res['problems']===false )
         $res['problems'] = array();
     
+    #delete not avaible uid
+    $useracct_sql = DB::getuserdata('account', $res['userlist'] ,'uid');
+    $res['userlist'] = array();
+    foreach($useracct_sql as $uid => $data)
+    {
+        if( $selectuser === null || in_array( $uid,$selectuser) )
+            $res['userlist'][]=$uid;
+    }
     #get oj account
     $userojacct_sql = DB::getuserdata('userojlist', $res['userlist'] );
     $userojacct = array();
     $emptyacct = ojid_reg('');
-    #delete not avaible uid
-    $res['userlist'] = array();
-    foreach($userojacct_sql as $uid => $data)
-        $res['userlist'][]=$uid;
+
     foreach( $res['userlist'] as &$uid )
     {
         $uid = (string)$uid;
@@ -140,7 +149,8 @@ function buildcbboard($bid)
             foreach($userojacct as $acct)
                 if( $acct[$classname] && $class[$classname]->checkid($acct[$classname]['acct']) )
                     $class_acct[]=$acct[$classname]['acct'];
-            $class[$classname]->preprocess($class_acct ,$arr);
+            if(!empty($class_acct))
+                $class[$classname]->preprocess($class_acct ,$arr);
         }
         if( method_exists($class[$classname],'showname') )
         {
@@ -180,4 +190,21 @@ function buildcbboard($bid)
     }
     DB::putcache("rate_ac_cb_$bid",$accache,'forever');
     return $res;
+}
+
+function merge_cb_rate_map($direct,$data)
+{
+    foreach($data['ratemap'] as $uid => $arr)
+    {
+        if( !isset($direct['ratemap'][$uid]) )
+            $direct['ratemap'][$uid] = array();
+        $direct['ratemap'][$uid] = array_merge($direct['ratemap'][$uid],$arr);
+    }
+    foreach($data['userlist'] as $uid)
+    {
+        if(!in_array($uid,$direct['userlist']))  
+            $direct['userlist'][]=$uid;
+    }
+    sort($direct['userlist']);
+    return $direct;
 }

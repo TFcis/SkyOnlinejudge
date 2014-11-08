@@ -45,6 +45,9 @@ tr:nth-child(odd) {
 tr:nth-child(even) {
     background: #282828;
 }
+tr:hover{
+    background-color:#317082;
+}
 tr .label{ width: 80px; }
 
 
@@ -52,6 +55,17 @@ th { text-align: left; }
 td { padding: 0 4px;}
 
 
-.page-nav > li{
+.page-nav > li {
     display: inline-block;
+}
+
+.nickname {
+    width : 120px;
+    white-space : nowrap;
+    overflow:hidden;
+    text-overflow : ellipsis;
+}
+.nickname:hover {
+    text-overflow:inherit;
+    overflow:visible;
 }

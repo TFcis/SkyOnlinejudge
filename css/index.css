@@ -1,8 +1,4 @@
 body{
-    /*
-    background-color:#141e23;
-    color: #fcfaf2;
-    */
     color: #fcfcfc;
     background-color: #111111;
     margin:0 auto;
@@ -158,6 +154,8 @@ th {
     font-weight: normal;
     border-bottom: 4px solid #111111;
 }
+
+
 
 #image-bar{
     width: 100%;
