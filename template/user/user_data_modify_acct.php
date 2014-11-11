@@ -19,14 +19,17 @@ $(document).ready(function()
     });
 })
 </script>
-<h1>可用的Online Judge System</h1>
-<br>
+
 <div class="container">
-    <div class="row">
+
+    <div><h2>Availavle online judge systems:</h2></div>
+
+    <div>
         <form class="form-horizontal" role="form" id="ojacct">
             <input type='hidden' name='mod' value='edit'>
             <input type='hidden' name='page' value='ojacct'>
             <input type='hidden' name='id' value='<?=$_E['template']['showid']?>'>
+            
             <?php foreach($_E['template']['oj'] as $oj){ ?>
             <div class="form-group">
                 <label for="inputEmail3" class="col-md-2 control-label"><?=$oj['name']?></label>
@@ -35,11 +38,13 @@ $(document).ready(function()
                 </div>
             </div>
             <?php } ?>
+            
             <div class="form-group">
                 <div class="col-sm-offset-2 col-md-5">
                     <button type="submit" class="btn btn-success text-right">送出</button>
                 </div>
             </div>
+            
         </form>
     </div>
 </div>

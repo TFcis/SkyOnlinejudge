@@ -44,9 +44,11 @@ switch($editpage)
         if( !extend_userlist($data['userlist']) ){
             throwjson('error','user list error');
         }
+
         if( !extend_promlemlist($data['problems']) ){
             throwjson('error','problem list error');
         }
+
         $cid = $cb['id'];
         $cname = $data['name'];
         $cowner = $cb['owner'];

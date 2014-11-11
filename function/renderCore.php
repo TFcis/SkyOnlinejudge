@@ -36,13 +36,23 @@ class Render
     static function renderStylesheetLink($namespace = 'common', $options = '') {
         global $_E,$_G;
         if(!isset($_E['template'])) { $_E['template'] = array(); }
-        $path = $_E['ROOT']."/template/$namespace/theme.css";
-        if( file_exists($path))
+        $path = $_E['ROOT']."/template/$namespace/theme";
+        
+        if( file_exists($path.'-'.$options.'.css'))
         {
             echo '<style>';
-            echo file_get_contents($path);
+            echo file_get_contents($path.'-'.$options.'.css');
             echo '</style>';
-            return true;
+        } else if (file_exists($path.'.css')){
+            echo '<style>';
+            echo file_get_contents($path.'.css');
+            echo '</style>';
+        }
+        
+        if (file_exists('css/index-'.$options.'.css')){
+            echo '<link rel="stylesheet" type="text/css" href="css/index-'.$options.'.css">';
+        } else if (file_exists('css/index.css')){
+            echo '<link rel="stylesheet" type="text/css" href="css/index.css">';    
         }
         return false;
     }
@@ -51,6 +61,7 @@ class Render
     static function render($pagename , $namespace = 'common')
     {
         Render::renderSingleTemplate('common_header');
+        //Render::renderStylesheetLink($namespace, 'light');
         Render::renderStylesheetLink($namespace);
         
         Render::renderSingleTemplate('common_nav');

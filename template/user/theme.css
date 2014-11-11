@@ -1,10 +1,7 @@
 #signin {
-    display: inline-block;
-    
     width: 400px;
-    text-align: left;
 }
-
+/*
 #signinlogo{
   height: 500px;
   margin-top: 32px;
@@ -12,3 +9,66 @@
   background-size: contain;
   background-repeat: no-repeat;
 }
+*/
+#license{
+    background-color: #0c0c0c;
+    text-align: left;
+}
+
+#jumbotron{
+    min-height: 300px;
+    background-color:rgba(0,0,0,0);
+    color: #f0f0f0 !important;
+
+    overflow: hidden;
+}
+
+/*
+#user_view_avater{
+    width: 100%;
+    height: auto;
+    display: inline-block;
+}
+
+@media screen and (max-width: 500px) {
+    .avatar-box{
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+}
+
+@media screen and (min-width: 500px){
+    .avatar-box{
+        width: 20%;
+        height: auto;
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+
+*/
+
+
+
+#cover {
+    width: 100%;
+    height: 418px;
+    background-size: cover;
+    position: absolute;
+    top: 32px;
+    left: 0;
+    z-index: 0;
+}
+/*
+.avatar-box {
+    display: block;
+    box-sizing: border-box;
+    width: 25%;
+    float: left;
+    position: relative;
+    min-height: 40px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+*/

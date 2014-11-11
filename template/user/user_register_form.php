@@ -12,11 +12,11 @@ function CreateInputText($id ,$type ,$help = '' ,$oldvalue = null)
     echo "<div class='col-sm-9'>";
     if($oldvalue)
     {
-        echo "<input type='$type' class='form-control' name='$id' placeholder='$help' value='$oldvalue' required>";
+        echo "<input type='$type' class='form-control textinput' name='$id' placeholder='$help' value='$oldvalue' required>";
     }
     else
     {
-        echo "<input type='$type' class='form-control' name='$id' placeholder='$help' required>";
+        echo "<input type='$type' class='form-control textinput' name='$id' placeholder='$help' required>";
     }
     echo '</div>';
     echo "<div class='col-sm-1' id=e_$id></div>";
@@ -24,19 +24,20 @@ function CreateInputText($id ,$type ,$help = '' ,$oldvalue = null)
 }
 ?>
 <div class="container">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-1" id="signinlogo">
-        </div>
-        <div class="col-md-4 col-md-offset-1" id="signin">
-            <h3><?php echo($_E['site']['name']);?><br><small>帳號資料</small></h3>
-            <div class="text-right">
+        <center>
+        <div id="signin">
+        
+            <h3><?php echo($_E['site']['name']);?><br><small>User Registry</small></h3>
+            
+            <div>
                 <?php if(isset($_E['template']['reg'])):?>
                 <p><i><small><?php echo($_E['template']['reg']);?></small></i></p>
                 <?php else:?>
-                <p><i><small>Coding is like poetry</small></i></p>
+                <p><i><small>-Coding is like poetry</small></i></p>
                 <?php endif;?>
             </div>
-            <div class=".container-fluid">
+            
+            <div>
                 <div class="row">
                     <form role="form" action="user.php" method="post" class="form-horizontal">
                         <input type='hidden' name='mod' value='register'>
@@ -47,14 +48,16 @@ function CreateInputText($id ,$type ,$help = '' ,$oldvalue = null)
                             CreateInputText('password','password','password');
                             CreateInputText('repeat','password','Repeat password again');
                         ?>
+                        
+                        <br>
+                        
                         <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-success">註冊</button>
-                            </div>
+                            <button type="submit" class="btn-blu btn-large btn-wide">Register</button>
                         </div>
                     </form>
                 </div>
             </div>
+            
         </div>
-    </div>
+        </center>
 </div>
