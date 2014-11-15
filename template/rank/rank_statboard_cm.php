@@ -76,55 +76,51 @@ if(!defined('IN_TEMPLATE'))
             
         </div>
     </div>
-    
+    <!--table-->
     <div>
         <div>
-        <table>
+            <table id="cbtable">
                 <thead>
                     <tr>
-                        <th style="padding: 4px;width: 40px;"></th>
-                        <th style="padding: 4px;width: 120px;"><span id="infobox"></span></th>
+                        <th style="padding: 4px;width: 40px;left:0px;position: absolute;"></th>
+                        <th style="padding: 4px;width: 120px;left:40px;position: absolute;"><span id="infobox"></span></th>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
                             <th class="text-center" style="padding: 4px;width: 40px;">
-                                <div data-toggle="popover" data-placement="top" data-content="Tooltip on left" class="problemname">
-                                    <?=$prob['show']?>
-                                </div>
+                                <div data-toggle="popover" data-placement="top" data-content="Tooltip on left" class="problemname"><?=$prob['show']?></div>
                             </th>
                         <?php }?>
                         <th></th>
                     </tr>
                 </thead>
                 
-                </tbody>
+                <tbody sytle="white-space: nowrap;">
                     <?php foreach($_E['template']['user'] as $uid){?>
                     <tr>
-                        <td>
+                        <td style="left:0px;position: absolute;">
                             <?php if(userControl::getpermission($_E['template']['owner']) || $uid == $_G['uid']): ?>
                             <a class = "icon-bttn" onclick="build_cb_data('<?=$uid?>')">
                                 <span class="pointer glyphicon glyphicon-refresh"  title="重新擷取"></span>
                             </a>
                             <?php endif;?>
                         </td>
-                        <td class = "text-right">
+                        <td class="text-right" style="left:40px;position:absolute;">
                             <div class="nickname">
                                 <a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>>
                                     <?=$_E['nickname'][$uid]?>
                                 </a>
                             </div>
                         </td>
-                        <?php foreach($_E['template']['plist'] as $prob ){?>
-                            <td class = "text-center <?=$_E['template']['s'][$uid][$prob['name']]?>">●</td>
-                        <?php }?>
+<?php foreach($_E['template']['plist'] as $prob ){?><td class = "text-center <?=$_E['template']['s'][$uid][$prob['name']]?>">●</td><?php }?>
                         <td>
                         </td>
                     </tr>
                     <?php }?>
                 </tbody>
-        </table>
+            </table>
         </div>
     </div>
     
-    <div style = "color: #666666; text-align: right; padding-right: 20px">Until next update: FOREVER</div>
+    <div style = "color: #666666; text-align: right; padding-right: 20px">Lastest update: <?=$_E['template']['buildtime'] ?></div>
     
     <div class="row">
         <h1>DEBUG</h1>
@@ -134,5 +130,7 @@ if(!defined('IN_TEMPLATE'))
 
 </div>
 
-<!--<iframe src="http://www.tfcis.org/ECHO_STATS/#board" width="90%" height="550"></iframe>-->
+<script>
+
+</script>
 

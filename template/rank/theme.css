@@ -11,29 +11,33 @@
 }
 .AC {
     width: 50px;
-    /*text-align: right;*/
 	color: #00cc00;
 	font-size: 20px;
 }
 
 .WA {
     width: 50px;
-    /*text-align: right;*/
 	color: #cc0000;
 	font-size: 20px;
 }
 .NO {
     width: 50px;
-    /*text-align: right;*/
 	color: #444444;	
 	font-size: 20px;
 }
 
 table {
-    width: 100%;
+    
     border-collapse: collapse;
+    
 }
-
+#cbtable{
+    display: inline-block;
+    overflow:auto;
+    margin-left: 160px;
+    width: calc( 100% - 160px );
+    background: #1A1A1A;
+}
 tr{
     border: 0;
     transition: 0.2s;

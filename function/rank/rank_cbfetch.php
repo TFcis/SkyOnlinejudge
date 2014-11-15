@@ -6,6 +6,7 @@ if(!defined('IN_SKYOJSYSTEM'))
 ignore_user_abort(true);
 set_time_limit(0);
 //
+$cachetime = 2*60*60; //second
 $BID = save_get('id');
 $refresh_user = save_get('user');
 $syscall = save_get('scallid');
@@ -55,7 +56,7 @@ if( $refresh_user === 'all' && $cachefile === false ){
     if( $build_data = buildcbboard($BID,''))
     {
         DB::putcache("cache_board_$BID",
-            array('data'=>$build_data,'time'=>time()+900)
+            array('data'=>$build_data,'time'=>time()+$cachetime)
             ,'forever');
     }
     else
@@ -82,7 +83,7 @@ foreach( $refresh_user as $uid)
     {
         $cachefile = merge_cb_rate_map($cachefile,$child);
         DB::putcache("cache_board_$BID",
-                    array('data'=>$cachefile,'time'=>time()+900)
+                    array('data'=>$cachefile,'time'=>time()+$cachetime)
                     ,'forever');
     }
     else

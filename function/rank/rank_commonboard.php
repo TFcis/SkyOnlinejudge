@@ -24,6 +24,7 @@ if( isset($_GET['id']) )
         {
             $boarddata = $cache['data'];
             $_E['template']['dbg'].="Load from global cache!<br>";
+            $_E['template']['buildtime'] = $cache['time'];
             if( $cache['time']<time() ){
                 $_E['template']['cbrebuild'] = true;
                 $_E['template']['dbg'].="Rebuild call!";
@@ -34,8 +35,10 @@ if( isset($_GET['id']) )
             $boarddata = buildcbboard($id,array());
             if($boarddata)
             {
+                $time = time();
+                $_E['template']['buildtime'] = $time;
                 DB::putcache("cache_board_$id",
-                            array('data'=>$boarddata,'time'=>time()+900),
+                            array('data'=>$boarddata,'time'=>$time+900),
                             'forever');
                 $_E['template']['dbg'].="Call Build!<br>";
                 $_E['template']['cbrebuild'] = true;
@@ -48,7 +51,7 @@ if( !isset($_GET['id']) || !$boarddata )
 {
     $_E['template']['alert'].="沒有這一個記分板";
     include('rank_list.php');
-    exit('');
+    exit(0);
 }
 
 //頁面資訊
@@ -59,7 +62,7 @@ if($_E['template']['cbrebuild'])
     $_SESSION["cbsyscall"][$key] = $id;
     $_E['template']['cbrebuildkey'] = $key;
 }
-
+$_E['template']['buildtime'] = date("Y-m-d H:i:s",$_E['template']['buildtime']);
 $_E['template']['title'] = $boarddata['name'];
 $_E['template']['plist'] = $boarddata['probinfo'];
 $_E['template']['user']  = $boarddata['userlist'];
