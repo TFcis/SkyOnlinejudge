@@ -10,17 +10,27 @@ function throwjson($status,$data)
     exit(json_encode(array('status'=>$status,'data'=>$data)));
 }
 
-function save_get($key)
+function safe_get($key,$usearray = false)
 {
     if(isset($_GET[$key]))
-        return $_GET[$key];
+    {
+        if( is_array($_GET[$key]) == $usearray )
+            return $_GET[$key];
+        else
+            return false;
+    }
     return false;
 }
 
-function save_post($key)
+function safe_post($key,$usearray = false)
 {
     if(isset($_POST[$key]))
-        return $_POST[$key];
+    {
+        if( is_array($_POST[$key]) == $usearray )
+            return $_POST[$key];
+        else
+            return false;
+    }
     return false;
 }
 
@@ -256,4 +266,29 @@ function nickname( $uid )
             $_E['nickname'][$u] = $res[$u]['nickname'];
     }
     return $res;
+}
+
+class privatedata
+{
+    private $name = null;
+    function __construct()
+    {
+        global $_E;
+        $folder = $_E['ROOT']."/data/private/";
+        $file = '';
+        //do{
+            $file = md5(uniqid(uniqid())).".tmp";
+        //}while( file_exists($folder. $file)) ;
+        $this->name =  $folder. $file;
+        
+    }
+    function name()
+    {
+        return $this->name;
+    }
+    function __destruct()
+    {
+        if($this->name && file_exists($this->name))
+            unlink($this->name);
+    }
 }

@@ -17,10 +17,11 @@ if( !isset($_POST['mod']))
 }
 else
 {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = safe_post('email');
+    $password = safe_post('password');
+    $usenickname = ( safe_post('usenickname') === "1" );
     $user; 
-    if( !($user = login($email,$password)) )
+    if( !($user = login($email,$password,$usenickname)) )
     {
         Render::render('user_login_box','user');
         exit('');

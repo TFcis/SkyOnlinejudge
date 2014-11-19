@@ -10,6 +10,8 @@ class class_zerojudge{
 	public $description = 'Zerojudge capturer';
 	public $copyright = 'by ECHO_STATS';
 	public $pattern = "/^zj:[a-z]{1}[0-9]+$/";
+	private $cookiefile;
+	private $loginflag = false ;
 	private $zjcore;
 
 	function __construct()
@@ -17,7 +19,37 @@ class class_zerojudge{
 	    $this->zjcore = new zjcore;
 	    $this->zjcore->websiteurl = "http://zerojudge.tw/";
 	    $this->zjcore->classname  = "class_zerojudge";
+	    $this->cookiefile = new privatedata();
 	}
+	
+	function httpRequest( $url , $post = null , $usepost =true )
+    {
+        if( is_array($post) )
+        {
+            ksort( $post );
+            $post = http_build_query( $post );
+        }
+        
+        $ch = curl_init();
+        curl_setopt( $ch , CURLOPT_URL , $url );
+        curl_setopt( $ch , CURLOPT_ENCODING, "UTF-8" );
+        if($usepost)
+        {
+            curl_setopt( $ch , CURLOPT_POST, true );
+            curl_setopt( $ch , CURLOPT_POSTFIELDS , $post );
+        }
+        curl_setopt( $ch , CURLOPT_RETURNTRANSFER , true );
+        curl_setopt ($ch , CURLOPT_COOKIEFILE, $this->cookiefile->name() );
+        curl_setopt ($ch , CURLOPT_COOKIEJAR , $this->cookiefile->name() );
+        
+        $data = curl_exec($ch);
+        curl_close($ch);
+        if(!$data)
+        {
+            return false;
+        }
+        return $data;
+    }
 	
 	function install()
 	{
@@ -35,7 +67,28 @@ class class_zerojudge{
     function preprocess($userlist,$problems)
     {
         global $_E;
-        $this->zjcore->preprocess($userlist,$problems);
+        if( $this->loginflag === false )
+        {
+            $this->httpRequest('zerojudge.tw/Login',array('account' => 'tester123123' , 'passwd' => '123123' ,'returnPage' => '' ));
+            $this->loginflag = true;
+        }
+        foreach($userlist as $user)
+        {
+            if( !$this->checkid($user) ){
+	            continue;
+            }
+            if( $res = DB::loadcache("class_zerojudge_$user") )
+            {
+                //.....
+            }
+            else
+            {
+                $res = $this->httpRequest("zerojudge.tw/UserStatistic?account=".$user,false,false);
+                $res = str_replace(array("\r\n","\t","  "),"",$res);
+                DB::putcache("class_zerojudge__$user",$res,10);
+            }
+            $this->zjcore->html_sumary[$user] = $res;
+        }
         return ;
     }
     

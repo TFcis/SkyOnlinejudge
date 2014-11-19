@@ -8,16 +8,47 @@ class Plugin{
     static function install($name,$class)
     {
         $tb = DB::tname('plugin');
-        if($sql = DB::query("SELECT `id` FROM $tb WHERE `class` LIKE '$name'"))
-            if(DB::fetch($sql))
+        $sql = DB::query("SELECT `id`,`version` FROM $tb WHERE `class` = '$name'");
+        if($sql === false)
+            return false;
+        //format check
+        if(!isset($class->version)){
+            return false;
+        }$version = $class->version;
+        
+        if( $res = DB::fetch($sql) )
+        {
+            if( $res['version'] == $version)
+            {
                 return true;
-        if(method_exists($class,'install'))
-            $class->install();
-        $timestamp = DB::timestamp();
-        if(DB::query("INSERT INTO `$tb` 
-                    (`id`, `class`, `version`, `author`, `timestamp`) VALUES
-                    (NULL,'$name','0','0','$timestamp')"))
+            }
+            elseif (method_exists($class,'upgrade') ) 
+            {
+                if(!$class->upgrade($res['version']))
+                {
+                    return false;
+                }
+            }
+            DB::query("UPDATE `$tb` SET `version`= '$version' WHERE `class` = '$name'");
             return true;
+        }
+        else
+        {
+            $timestamp = DB::timestamp();
+            
+            if(method_exists($class,'install'))
+            {
+                $class->install();
+            }
+            
+            if(DB::query("INSERT INTO `$tb` 
+                        (`id`, `class`, `version`, `author`, `timestamp`) VALUES
+                        (NULL,'$name','$version','0',NULL)"))
+            {
+                return true;
+            }
+        }
+        
         return false;
     }
     // path base on ROOT/function/plugins/

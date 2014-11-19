@@ -52,6 +52,9 @@ class userControl
                         " WHERE  `uid` = $id ".
                         " AND  `type` = '$namespace'");
         }
+        $time = time();
+        mysql_query("DELETE FROM  `$table` ".
+                    " WHERE  `timeout` < $time ");
     }
     #bool userControl::checktoken(namespace)
     #if function return true ,it mean two things:

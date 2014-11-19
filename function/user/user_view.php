@@ -4,21 +4,26 @@ if( !defined('IN_SKYOJSYSTEM') )
     exit('Access denied');
 }
 // Check Who will viewed
-$showid = $_G['uid'];
 if( isset($_GET['id']) )
 {
-    $tid = $_GET['id'];
+    $tid = safe_get('id');
     if( is_numeric ($tid) ){
         $showid = $tid;
     }
     else{
          $_E['template']['alert'] = 'WTF!?';
+         Render::render('nonedefined');
+         exit('');
     }
 }
-
-if($showid == 0)
+else
 {
-    $_E['template']['alert'] = 'WTF!? NO Such One.';
+    $showid = $_G['uid'];
+}
+
+if( empty(DB::getuserdata('account',$showid,'uid')) )
+{
+    $_E['template']['alert'] = 'QQ NO Such One.';
     Render::render('nonedefined');
     exit('');
 }
@@ -26,7 +31,7 @@ $_E['template']['showid'] = $showid;
 
 if( isset($_GET['page']) )//subpage
 {
-    $require = $_GET['page'];
+    $require = safe_get('page');
     switch($require)
     {
         case 'modify':
@@ -35,14 +40,21 @@ if( isset($_GET['page']) )//subpage
                 userControl::registertoken('EDIT',3600);
                 page_ojacct($showid);
                 Render::renderSingleTemplate('user_data_modify_acct','user');
+                exit(0);
             }
-            else
-                Render::renderSingleTemplate('nonedefined');
             break;
-        default:
-            Render::renderSingleTemplate('nonedefined');
+        case 'setting':
+            if( userControl::getpermission($showid) )
+            {
+                userControl::registertoken('EDIT',3600);
+                page_ojacct($showid);
+                Render::renderSingleTemplate('user_data_modify','user');
+                exit(0);
+            }
+            break;
     }
-    exit('');
+    Render::renderSingleTemplate('nonedefined');
+    exit(0);
 }
 else //main page
 {

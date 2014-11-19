@@ -23,13 +23,14 @@
     overflow: hidden;
 }
 
-/*
+
 #user_view_avater{
     width: 100%;
     height: auto;
     display: inline-block;
 }
 
+/*
 @media screen and (max-width: 500px) {
     .avatar-box{
         width: 100%;

@@ -71,7 +71,11 @@ function verdictIDtoword($vid)
 
 function buildcbboard($bid , $selectuser = null)
 {
-    $class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
+    static $class = null;
+    if( $class === null )
+    {
+        $class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
+    }
     $res = array();
     #check bid
     if( !is_numeric($bid) )

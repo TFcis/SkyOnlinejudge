@@ -126,6 +126,7 @@ case 1:
     run("ALTER TABLE  `$ojlist` 
     CHANGE  `class`  `class` CHAR( 64 ) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL ;");
     run("ALTER TABLE  `$ojlist` ADD UNIQUE (`class`);");
+    run("ALTER TABLE  `$account` ADD UNIQUE (`nickname`);");
 //nothing
 
 }

@@ -26,7 +26,7 @@ function register($email,$nickname,$password,$repeat)
     $sqlres;
     
     if( !preg_match($pattern,$email) || !preg_match($pattern,$password) || $password!= $repeat ||
-        $nickname != mysql_real_escape_string($nickname))
+        $nickname !== mysql_real_escape_string($nickname))
     {
         //use language!
         $_E['template']['reg'] = '格式錯誤';
@@ -53,7 +53,7 @@ function register($email,$nickname,$password,$repeat)
     return true;
 }
 
-function login($email,$password)
+function login($email,$password,$usenickname = false)
 {
     global $_E;
     $pattern  = '/^[._@a-zA-Z0-9]{3,30}$/';
@@ -62,7 +62,26 @@ function login($email,$password)
     $acctable = DB::tname('account');
     $sqlres;
     $userdata = null;
-    
+    if( $usenickname )
+    {
+        $nick = $email;
+        if($nick !== mysql_real_escape_string($nick))
+        {
+            $_E['template']['alert'] = '格式錯誤';
+            return false;
+        }
+        $sqlres=DB::query("SELECT `email` FROM  `$acctable` ".
+                            "WHERE  `nickname` =  '$nick' ");
+        if($res = DB::fetch($sqlres) )
+        {
+            $email = $res['email'];
+        }
+        else
+        {
+            $_E['template']['alert'] = '無此暱稱';
+            return false;
+        }
+    }
     if( !preg_match($pattern,$email) || !preg_match($pattern,$password) )
     {
         $_E['template']['alert'] = '帳密錯誤';

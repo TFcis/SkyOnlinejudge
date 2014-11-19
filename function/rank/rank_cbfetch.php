@@ -7,9 +7,9 @@ ignore_user_abort(true);
 set_time_limit(0);
 //
 $cachetime = 2*60*60; //second
-$BID = save_get('id');
-$refresh_user = save_get('user');
-$syscall = save_get('scallid');
+$BID = safe_get('id');
+$refresh_user = safe_get('user');
+$syscall = safe_get('scallid');
 $sysflag = false;
 
 if(!is_string($BID) || !is_string($refresh_user)){
@@ -69,7 +69,7 @@ if( DB::loadcache("cbfetch_work_$BID")){
     throwjson('error','WORKING!');
 }
 
-if( $refresh_user === 'all'){
+if( $refresh_user === 'all' ){
     DB::putcache("cbfetch_work_$BID",true,'forever');
     $refresh_user = $boarduserlist;
 }
@@ -77,7 +77,7 @@ else
     $refresh_user = array($refresh_user);
 
 $cachefile = $cachefile['data'];
-foreach( $refresh_user as $uid)
+foreach( $refresh_user as $uid )
 {
     if( $child = buildcbboard($BID,array($uid)) )
     {

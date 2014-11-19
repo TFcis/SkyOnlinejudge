@@ -21,8 +21,8 @@ if(!defined('IN_TEMPLATE'))
                     <br>
                     
                     <div class="form-group">
-                    <label for="email" style = "display: block">EMAIL</label>
-                    <input type="email" class="textinput" id="email" name="email" placeholder="Email" required>
+                    <label for="email" style = "display: block">Nickname / Email</label>
+                    <input type="text" class="textinput" id="email" name="email" placeholder="Nickname / Email" required>
                     </div>
                     
                     <div class="form-group">
@@ -31,7 +31,11 @@ if(!defined('IN_TEMPLATE'))
                     </div>
                     
                     <br>
-                    
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="usenickname" value="1" checked > Login By Nickname
+                        </label>
+                    </div>
                     <div class="form-group">
                         <button type="submit" class= "btn-grn btn-large btn-wide" style = "width:168px">
                         <b>Login</b>

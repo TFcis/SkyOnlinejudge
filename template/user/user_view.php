@@ -19,6 +19,7 @@ if(!defined('IN_TEMPLATE'))
         $('#nav-summary').click(function(){loadTemplate('summary'); });
         $('#nav-solve').click(function(){  loadTemplate('solve');   });
         $('#nav-modify').click(function(){ loadTemplate('modify');  });
+        $('#nav-setting').click(function(){ loadTemplate('setting');  });
 	});
 	function loadTemplate(template){
         location.hash = template;
@@ -34,13 +35,13 @@ if(!defined('IN_TEMPLATE'))
 </script>
 
 <div class="jumbotron" id="jumbotron" style="background-image: url(http://i.imgur.com/n2EOWhO.jpg); background-size: cover">
-    <!--<div class="container">
+    <div class="container">
         
-        <div class = "col-md-3">
+        <div class = "col-xs-5 col-sm-4 col-md-3">
             <img src="<?=$_E['template']['avaterurl']?>" id="user_view_avater">
         </div>
         
-        <div style = "width: 70%; float: left">
+        <div style = "width: 70%; float: left" class = "col-md-7">
             <h1>[L]<?=$_E['template']['nickname']?><h1>
             <blockquote style = "font-size: 14px">
                 <p><?=$_E['template']['quote']?></p>
@@ -48,7 +49,7 @@ if(!defined('IN_TEMPLATE'))
             </blockquote>
         </div>
         
-    </div>-->
+    </div>
 </div>
 
 <div style="width:100%;"></div>
@@ -56,7 +57,8 @@ if(!defined('IN_TEMPLATE'))
 <ul>
         <a class = 'link-like' id="nav-summary">Overview</a> |
         <a class = 'link-like' id="nav-solve">Statstistics</a> |
-        <a class = 'link-like' id="nav-modify">Edit</a>
+        <a class = 'link-like' id="nav-modify">Edit</a> |
+        <a class = 'link-like' id="nav-setting">Setting</a>
 </ul>
 
 <div class="tab-content" id="content" style="min-height:100px; padding: 0 10px"></div>
