@@ -20,8 +20,8 @@ else
 {
     $showid = $_G['uid'];
 }
-
-if( empty(DB::getuserdata('account',$showid,'uid')) )
+$tmp = DB::getuserdata('account',$showid,'uid');
+if( $tmp===false || !isset($tmp[$showid] ))
 {
     $_E['template']['alert'] = 'QQ NO Such One.';
     Render::render('nonedefined');
