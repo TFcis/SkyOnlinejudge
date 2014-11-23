@@ -84,6 +84,7 @@ if(!defined('IN_TEMPLATE'))
                     <tr>
                         <th style="padding: 4px;width: 40px;left:0px;position: absolute;"></th>
                         <th style="padding: 4px;width: 120px;left:40px;position: absolute;"><span id="infobox"></span></th>
+                        <th class="text-center" style="padding: 4px;width: 40px;">rate</th>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
                             <th class="text-center" style="padding: 4px;width: 40px;">
                                 <div data-toggle="popover" data-placement="top" data-content="Tooltip on left" class="problemname"><?=$prob['show']?></div>
@@ -110,6 +111,7 @@ if(!defined('IN_TEMPLATE'))
                                 </a>
                             </div>
                         </td>
+                        <td class="text-right"><?=$_E['template']['userdetail'][$uid]['statistics']['90']?>AC</td>
 <?php foreach($_E['template']['plist'] as $prob ){?><td class = "text-center <?=$_E['template']['s'][$uid][$prob['name']]?>">●</td><?php }?>
                         <td>
                         </td>

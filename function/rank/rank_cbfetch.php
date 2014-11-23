@@ -12,7 +12,7 @@ $refresh_user = safe_get('user');
 $syscall = safe_get('scallid');
 $sysflag = false;
 
-if(!is_string($BID) || !is_string($refresh_user)){
+if(!$BID || !$refresh_user){
     throwjson('error','Data ERROR');
 }
 
@@ -23,7 +23,10 @@ if($boarddata === false)
 }
 
 $boarduserlist = extend_userlist($boarddata['userlist']);
-
+if( $boarduserlist === false )
+{
+    throwjson('error','userlist format error');
+}
 //check permissions
 if( $syscall ){
     if( !is_string($syscall) ||
@@ -37,7 +40,7 @@ if( $syscall ){
         unset($_SESSION["cbsyscall"][$syscall]);
     }
 }
-elseif( $boarddata['owner'] == $_G['uid'] || userControl::getpermission($boarddata['owner']) ){
+elseif( userControl::getpermission($boarddata['owner']) ){
     if($refresh_user !== 'all'){
         if( !in_array(intval($refresh_user),$boarduserlist) ){
             throwjson('error','No Such UID');
@@ -66,7 +69,7 @@ if( $refresh_user === 'all' && $cachefile === false ){
 }
 
 if( DB::loadcache("cbfetch_work_$BID")){
-    throwjson('error','WORKING!');
+    throwjson('error','WORKING! try later');
 }
 
 if( $refresh_user === 'all' ){
@@ -93,5 +96,40 @@ foreach( $refresh_user as $uid )
     }
     usleep(50000);
 }
+
+$sortrule = 'sort_by_ac';
+$u = $cachefile['userlist'];
+$usernum = count($u);
+for($i = 0; $i < $usernum; $i++)
+{
+    for($j = $i+1; $j < $usernum; $j++)
+    {
+        switch($sortrule)
+        {
+            case 'sort_by_ac' :
+                if( $cachefile['userdetail'][$u[$i]]['statistics']['90'] <
+                    $cachefile['userdetail'][$u[$j]]['statistics']['90'])
+                {
+                    $t = $u[$i];
+                    $u[$i] = $u[$j];
+                    $u[$j] =$t;
+                }
+                break;
+            case 'sort_by_id_desc' :
+                if($u[$i] < $u[$j])
+                {
+                    $t = $u[$i];
+                    $u[$i] = $u[$j];
+                    $u[$j] =$t;
+                }
+                break;
+        }
+    }
+}
+
+$cachefile['userlist'] = $u;
+DB::putcache("cache_board_$BID",
+            array('data'=>$cachefile,'time'=>time()+$cachetime)
+            ,'forever');
 DB::deletecache("cbfetch_work_$BID");
 throwjson('SUCC','build!');

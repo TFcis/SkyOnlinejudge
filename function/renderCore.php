@@ -78,7 +78,20 @@ class Render
         $_E['template']['message'] = $cont;
         Render::render('common_message');
     }
+    
+    static function errormessage($text,$namespace = '')
+    {
+        global $_E;
+        if( !is_string($text) )
+        {
+            ob_start();
+            var_dump($text);
+            $text = ob_get_clean();
+        }
+        $_E['template']['error'][]=array('msg'=>nl2br(htmlspecialchars($text)),'namespace'=>$namespace);
+    }
 }
+$_E['template']['error'] = array();
 
 //$Render = new RenderCore();
 ?>

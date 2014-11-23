@@ -7,22 +7,22 @@ require_once('class_zjcore.inc.php');
 class class_zerojudge{
     public $version = '1.0';
     public $name = 'ZJ capturer';
-	public $description = 'Zerojudge capturer';
-	public $copyright = 'by ECHO_STATS';
-	public $pattern = "/^zj:[a-z]{1}[0-9]+$/";
-	private $cookiefile;
-	private $loginflag = false ;
-	private $zjcore;
+    public $description = 'Zerojudge capturer';
+    public $copyright = 'by ECHO_STATS';
+    public $pattern = "/^zj:[a-z]{1}[0-9]+$/";
+    private $cookiefile;
+    private $loginflag = false ;
+    private $zjcore;
 
-	function __construct()
-	{
-	    $this->zjcore = new zjcore;
-	    $this->zjcore->websiteurl = "http://zerojudge.tw/";
-	    $this->zjcore->classname  = "class_zerojudge";
-	    $this->cookiefile = new privatedata();
-	}
+    function __construct()
+    {
+        $this->zjcore = new zjcore;
+        $this->zjcore->websiteurl = "http://zerojudge.tw/";
+        $this->zjcore->classname  = "class_zerojudge";
+        $this->cookiefile = new privatedata();
+    }
 	
-	function httpRequest( $url , $post = null , $usepost =true )
+    function httpRequest( $url , $post = null , $usepost =true )
     {
         if( is_array($post) )
         {
@@ -51,18 +51,18 @@ class class_zerojudge{
         return $data;
     }
 	
-	function install()
-	{
-	    $tb = DB::tname('ojlist');
-	    DB::query("INSERT INTO `$tb`
-	            (`id`, `class`, `name`, `description`, `available`) VALUES
-	            (NULL,'class_zerojudge','Zerojudge','Account Name',1)");
-	}
+    function install()
+    {
+        $tb = DB::tname('ojlist');
+        DB::query("INSERT INTO `$tb`
+                (`id`, `class`, `name`, `description`, `available`) VALUES
+                (NULL,'class_zerojudge','Zerojudge','Account Name',1)");
+    }
 	
-	function checkid($id)
-	{
-	    return $this->zjcore->checkid($id);
-	}
+    function checkid($id)
+    {
+        return $this->zjcore->checkid($id);
+    }
 	
     function preprocess($userlist,$problems)
     {

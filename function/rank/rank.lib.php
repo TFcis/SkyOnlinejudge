@@ -48,6 +48,7 @@ function checkpostdata($array)
     return $res;
 }
 
+define('verdictIDlist',serialize(array(0,10,15,20,30,35,40,45,50,60,70,80,90)));
 function verdictIDtoword($vid)
 {
     $res = 'NO';
@@ -69,12 +70,27 @@ function verdictIDtoword($vid)
     return $res;
 }
 
+function ranksort_calc_ac(&$list,$bd)
+{
+    if(!function_exists('ranksort_calc_ac_cmp'))
+    {
+        function ranksort_calc_ac_cmp($a,$b){
+            global $bd;
+            if( $bd[$a][90] == $bd[$b][90] )return 0;
+            return ($bd[$a][90]<$bd[$b][90])?-1:1;
+        }
+    }
+    usort($list,'ranksort_calc_ac_cmp');
+}
+
 function buildcbboard($bid , $selectuser = null)
 {
     static $class = null;
+    static $vidlist = null;
     if( $class === null )
     {
         $class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
+        $vidlist = unserialize(verdictIDlist);
     }
     $res = array();
     #check bid
@@ -166,7 +182,7 @@ function buildcbboard($bid , $selectuser = null)
     }
     
     #set problem data and user acct to res
-    $res['userojacct'] = $userojacct;
+    //$res['userojacct'] = $userojacct;
     $res['probinfo']   = $probleminfo;
     $res['ratemap'] = array();
     
@@ -192,6 +208,28 @@ function buildcbboard($bid , $selectuser = null)
                 $accache[$uid][$p['name']] = 1;
         }
     }
+    #sort user, may be it need perfect structure
+    $userdetail = array();
+    $sortrule = 'ranksort_calc_ac';
+    $emptystatistics = array();
+    $res['userdetail'] = array();
+    foreach($vidlist as $vid)
+    {
+        $emptystatistics[$vid] = 0;
+    }
+    foreach($res['userlist'] as $uid)
+    {
+        $info = array();
+        $info['oj'] = $userojacct[$uid];
+        $info['score'] = 0;
+        $info['statistics'] = $emptystatistics;
+        foreach($res['ratemap'][$uid] as $value)
+        {
+            $info['statistics'][$value]++;
+            //if set score rule . it should add here!
+        }
+        $res['userdetail'][$uid] = $info;
+    }
     DB::putcache("rate_ac_cb_$bid",$accache,'forever');
     return $res;
 }
@@ -208,6 +246,10 @@ function merge_cb_rate_map($direct,$data)
     {
         if(!in_array($uid,$direct['userlist']))  
             $direct['userlist'][]=$uid;
+    }
+    foreach($data['userdetail'] as $uid => $data)
+    {
+        $direct['userdetail'][$uid] = $data;
     }
     sort($direct['userlist']);
     return $direct;

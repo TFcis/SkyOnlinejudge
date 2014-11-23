@@ -4,6 +4,32 @@ if(!defined('IN_TEMPLATE'))
     exit('Access denied');
 }
 ?>
+<script>
+$(document).ready(function()
+{
+    $("#loginform").submit(function(e)
+    {
+        $("#display").html('...');
+        e.preventDefault();
+        $.post("user.php",
+            $("#loginform").serialize(),
+            function(res){
+                if(res.status == 'error')
+                {
+                    $("#display").html(res.data);
+                    $("#display").css('color','Red');
+                }
+                else
+                {
+                    $("#display").css('color','Lime');
+                    $("#display").html('Welcome!');
+                    location.href = res.data;
+                }
+        },"json");
+        return true;
+    });
+})
+</script>
 <div class="container">
 
         <center>
@@ -14,33 +40,36 @@ if(!defined('IN_TEMPLATE'))
                 <p><i><small>-Programming Is the New Literacy</small></i></p>
             </div>
             
-            <form role="form" action="user.php" method="post">
+            <form role="form" action="user.php" method="post" id="loginform">
             
                 <input type="hidden" value="login" name="mod">
                     
-                    <br>
-                    
-                    <div class="form-group">
-                    <label for="email" style = "display: block">Nickname / Email</label>
-                    <input type="text" class="textinput" id="email" name="email" placeholder="Nickname / Email" required>
-                    </div>
-                    
-                    <div class="form-group">
-                    <label for="password" style = "display: block">PASSWORD</label>
-                    <input type="password" class="textinput" id="password" name="password" placeholder="Password" required>
-                    </div>
-                    
-                    <br>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="usenickname" value="1" checked > Login By Nickname
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class= "btn-grn btn-large btn-wide" style = "width:168px">
-                        <b>Login</b>
-                        </button>
-                    </div>
+                <br>
+                
+                <div class="form-group">
+                <label for="email" style = "display: block">Nickname / Email</label>
+                <input type="text" class="textinput" id="email" name="email" placeholder="Nickname / Email" required>
+                </div>
+                
+                <div class="form-group">
+                <label for="password" style = "display: block">PASSWORD</label>
+                <input type="password" class="textinput" id="password" name="password" placeholder="Password" required>
+                </div>
+                
+                <br>
+                <div>
+                    <small><span id="display"></span></small>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="usenickname" value="1" checked > Login By Nickname
+                    </label>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class= "btn-grn btn-large btn-wide" style = "width:168px">
+                    <b>Login</b>
+                    </button>
+                </div>
                 
             </form>
             <!--

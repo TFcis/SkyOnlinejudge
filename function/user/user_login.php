@@ -10,25 +10,26 @@ if( $_G['uid'] )
     exit('');
 }
 
-if( !isset($_POST['mod']))
+if( !isset($_POST['mod']) )
 {
     Render::render('user_login_box','user');
-    exit('');
+    exit(0);
 }
-else
+else // API CALL
 {
     $email = safe_post('email');
     $password = safe_post('password');
     $usenickname = ( safe_post('usenickname') === "1" );
-    $user; 
-    if( !($user = login($email,$password,$usenickname)) )
+    $user = login($email,$password,$usenickname);
+    if( !$user[0]  )
     {
-        Render::render('user_login_box','user');
-        exit('');
+        $_E['template']['alert'] = $user[1];
+        throwjson('error',$user[1]);
     }
     else
     {
+        $user = $user[1];
         userControl::SetLoginToken($user['uid']);
-        header("Location:index.php");
+        throwjson('SUCC','index.php');
     }
 }

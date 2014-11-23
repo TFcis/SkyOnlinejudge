@@ -68,24 +68,19 @@ $_E['template']['plist'] = $boarddata['probinfo'];
 $_E['template']['user']  = $boarddata['userlist'];
 $_E['template']['owner'] = $boarddata['owner'];
 $_E['template']['id'] = $id;
-
+$_E['template']['userdetail'] = $boarddata['userdetail'];
 //導覽列
-$tbstats = DB::tname('statsboard');
-$res = DB::query("SELECT COUNT(1) FROM `$tbstats`");
-$maxid = DB::fetch($res);$maxid = $maxid[0];
+
+$maxid = DB::countrow('statsboard');
 //it sholuld be use SQL!
+//$res = DB::query("SELECT `id` AS 'id' FROM `tojtest_statsboard` WHERE `id`<>3 ORDER BY `id`, abs(`id`-3) LIMIT 0,2  ;");
 $_E['template']['leftid'] = 0;
 $_E['template']['rightid'] = 0;
 if($id-1 > 0) $_E['template']['leftid'] = $id-1;
 if($id+1 <= $maxid)$_E['template']['rightid'] = $id+1;
 
-$_E['template']['homeid'] = 0;
-for( $t=$maxid; $t>0 ;$t-=10)
-{
-    if($t<$id)
-        break;
-    $_E['template']['homeid']++;
-}
+$hcount = DB::countrow('statsboard',"`id`>$id");
+$_E['template']['homeid'] = 1 + intval($hcount/10);
 
 
 foreach($boarddata['userlist'] as $uid)
@@ -95,7 +90,6 @@ foreach($boarddata['userlist'] as $uid)
         $_E['template']['s'][$uid][$pname] = verdictIDtoword($boarddata['ratemap'][$uid][$pname]);
     }
 }
-
 #add nickname
 nickname($boarddata['userlist']);
 

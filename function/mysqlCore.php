@@ -37,7 +37,7 @@ class DB
         }
         else
         {
-            echo mysql_error().'<br>'.$query.'<br>';
+            Render::errormessage(mysql_error(),'SQL Core');
             return false;
         }
     }
@@ -50,6 +50,16 @@ class DB
         else{
             return false;
         }
+    }
+    
+    static function countrow($table,$rule = null)
+    {
+        $table = DB::tname($table);
+        $match = '';
+        if( $rule !== null )
+            $match = ' WHERE '.$rule;
+        $res = DB::query("SELECT COUNT(1) FROM `$table` $match");
+        return $res[0];
     }
     
     static function cachefilepath($name)

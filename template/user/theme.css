@@ -1,15 +1,7 @@
 #signin {
     width: 400px;
 }
-/*
-#signinlogo{
-  height: 500px;
-  margin-top: 32px;
-  background-image:url('http://toj.twbbs.org/oj/img/signin.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-*/
+
 #license{
     background-color: #0c0c0c;
     text-align: left;
@@ -49,9 +41,6 @@
 }
 
 */
-
-
-
 #cover {
     width: 100%;
     height: 418px;
@@ -73,3 +62,6 @@
     padding-left: 15px;
 }
 */
+#dispaly{
+    transition : 0.2s;
+}

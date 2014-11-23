@@ -26,7 +26,18 @@ if(!defined('IN_TEMPLATE'))
     </nav>
     <?php if($_E['template']['alert']):?>
     <div class="alert alert-danger fade in" role="alert">
-      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-      <strong>Oh! My GOD</strong> <?php echo($_E['template']['alert']); ?>
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <strong>Oh! My GOD</strong> <?php echo($_E['template']['alert']); ?>
+    </div>
+    <?php endif;?>
+    <?php if($_E['template']['error']):?>
+    <div class="alert alert-danger fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <strong>Oh! System error</strong>
+        <ul>
+        <?php foreach($_E['template']['error'] as $list){ ?>
+            <li>(<?=$list['namespace']?>)<?=$list['msg']?></li>
+        <?php }?>
+        </ul>
     </div>
     <?php endif;?>

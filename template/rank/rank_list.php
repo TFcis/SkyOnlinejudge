@@ -62,11 +62,21 @@ $(document).ready(function()
                         <?php endif;?>
                     <?php endif;?>
                 </td>
-                <td><?=htmlspecialchars($_E['template']['nickname'][$row['owner']])?></td>
+                <td><?=htmlspecialchars($_E['nickname'][$row['owner']])?></td>
                 <td>
                     <span class = 'jointoggle-on'>
-                        <span class = 'AC'>●</span>
-                        <span>joined</span>
+                        <?php if($row['userstatus']):?>
+                            <?php if($row['userstatusinfo'] === true):?>
+                            <span class = 'AC'>●</span>
+                            <span>Finish!</span>
+                            <?php else:?>
+                            <span class = 'WA'>●</span>
+                            <span>完成<?=$row['userstatusinfo']?></span>
+                            <?php endif;?>
+                        <?php else:?>
+                        <span class = 'NO'>●</span>
+                        <span></span>
+                        <?php endif;?>
                     </span>
                 </td>
             </tr>

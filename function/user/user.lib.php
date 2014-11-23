@@ -62,13 +62,14 @@ function login($email,$password,$usenickname = false)
     $acctable = DB::tname('account');
     $sqlres;
     $userdata = null;
+    $resultdata = array(false,'');
     if( $usenickname )
     {
         $nick = $email;
         if($nick !== mysql_real_escape_string($nick))
         {
-            $_E['template']['alert'] = '格式錯誤';
-            return false;
+            $resultdata[1] = '格式錯誤';
+            return $resultdata;
         }
         $sqlres=DB::query("SELECT `email` FROM  `$acctable` ".
                             "WHERE  `nickname` =  '$nick' ");
@@ -78,14 +79,14 @@ function login($email,$password,$usenickname = false)
         }
         else
         {
-            $_E['template']['alert'] = '無此暱稱';
-            return false;
+            $resultdata[1] = '無此暱稱';
+            return $resultdata;
         }
     }
     if( !preg_match($pattern,$email) || !preg_match($pattern,$password) )
     {
-        $_E['template']['alert'] = '帳密錯誤';
-        return false;
+        $resultdata[1] = '帳密錯誤';
+        return $resultdata;
     }
     //$password = passwordHash($password);
     
@@ -93,17 +94,19 @@ function login($email,$password,$usenickname = false)
                         "WHERE  `email` =  '$email'");
     if(! ($userdata = DB::fetch($sqlres)) )
     {
-        $_E['template']['alert'] = '無此帳號';
-        return false;
+        $resultdata[1] = '無此帳號';
+        return $resultdata;
     }
     //$password = passwordHash($password);
     if( passwordHash($password)!=$userdata['passhash'] )
     //if( !password_verify($password, $userdata['passhash']) )
     {
-        $_E['template']['alert'] = '密碼錯誤';
-        return false;
+        $resultdata[1] = '密碼錯誤';
+        return $resultdata;
     }
-    return $userdata;
+    $resultdata[0]=true;
+    $resultdata[1]=$userdata;
+    return $resultdata;
 }
 
 function prepareUserView($uid)
