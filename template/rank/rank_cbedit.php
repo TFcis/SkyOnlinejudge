@@ -5,7 +5,17 @@ if(!defined('IN_TEMPLATE'))
 }
 ?>
 <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-<script>tinymce.init({selector:'#announcement'});</script>
+<script>
+    tinymce.init({
+        selector:'#announcement',
+        plugins :[
+            "advlist autolink lists link charmap preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen",
+            "insertdatetime nonbreaking table contextmenu directionality",
+            "emoticons template paste textcolor colorpicker textpattern"
+        ]
+    });
+</script>
 <script>
 $(document).ready(function()
 {
@@ -49,30 +59,30 @@ $(document).ready(function()
             <input type="hidden" name="id" value="<?=$_E['template']['form']['id']?>">
             <div class="form-group">
                 <label class="col-md-2 control-label">名稱</label>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <input type="text" class="form-control" name="name" placeholder="Board Name" value="<?=$_E['template']['form']['name']?>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label">登記ID</label>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <input type="text" class="form-control" name="userlist" placeholder="Account ID" value="<?=$_E['template']['form']['userlist']?>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label">題目列表</label>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <input type="text" class="form-control" name="problems" placeholder="Problems" value="<?=$_E['template']['form']['problems']?>">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label">公告</label>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <textarea id="announcement"><?=$_E['template']['form']['announce']?></textarea>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-offset-2 col-md-5">
+                <div class="col-sm-offset-2 col-md-6">
                     <button type="submit" class="btn btn-success text-right">送出</button>
                     <span id="display"></span>
                 </div>
