@@ -59,6 +59,7 @@ class DB
         if( $rule !== null )
             $match = ' WHERE '.$rule;
         $res = DB::query("SELECT COUNT(1) FROM `$table` $match");
+        $res = DB::fetch($res);
         return $res[0];
     }
     

@@ -36,7 +36,7 @@ if(!defined('IN_TEMPLATE'))
         <?php if($_E['template']['cbrebuild']):?>
         build_cb_data('all','<?=$_E['template']['cbrebuildkey']?>');
         <?php endif;?>
-        $(".problemname").popover({trigger : 'hover'});
+        //$(".problemname").popover({trigger : 'hover'});
     })
 </script>
 <div id = "image-bar"></div>
@@ -87,7 +87,7 @@ if(!defined('IN_TEMPLATE'))
                         <th class="text-center" style="padding: 4px;width: 40px;">rate</th>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
                             <th class="text-center" style="padding: 4px;width: 40px;">
-                                <div data-toggle="popover" data-placement="top" data-content="Tooltip on left" class="problemname"><?=$prob['show']?></div>
+                                <div class="problemname"><?=$prob['show']?></div>
                             </th>
                         <?php }?>
                         <th></th>

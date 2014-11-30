@@ -6,7 +6,7 @@ if(!defined('IN_SKYOJSYSTEM'))
 ignore_user_abort(true);
 set_time_limit(0);
 //
-$cachetime = 2*60*60; //second
+$cachetime = 24*60*60; //second
 $BID = safe_get('id');
 $refresh_user = safe_get('user');
 $syscall = safe_get('scallid');
@@ -27,6 +27,7 @@ if( $boarduserlist === false )
 {
     throwjson('error','userlist format error');
 }
+
 //check permissions
 if( $syscall ){
     if( !is_string($syscall) ||
@@ -54,9 +55,10 @@ else{
     throwjson('error','No permissions');
 }
 
+#check and create cache if not avaibile
 $cachefile = DB::loadcache("cache_board_$BID");
 if( $refresh_user === 'all' && $cachefile === false ){
-    if( $build_data = buildcbboard($BID,''))
+    if( $build_data = buildcbboard($BID,'') )
     {
         DB::putcache("cache_board_$BID",
             array('data'=>$build_data,'time'=>time()+$cachetime)
@@ -64,7 +66,7 @@ if( $refresh_user === 'all' && $cachefile === false ){
     }
     else
     {
-        throwjson('error','build error!');
+        throwjson('error','Default buildcbboard() error!');
     }
 }
 

@@ -73,3 +73,12 @@ td { padding: 0 4px;}
     text-overflow:inherit;
     overflow:visible;
 }
+.problemname{
+    color:rgb(255,246,157);
+}
+.problemname > a:link {
+    color:rgb(255,246,157) !important;
+}
+.problemname > a:visited {
+    color:rgb(255,246,157) !important;
+}

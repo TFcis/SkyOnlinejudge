@@ -120,7 +120,7 @@ class class_uva{
 	{
 	    $pnum = preg_replace('/[^0-9]*/','',$str);
 		$url =  "http://domen.heliohost.org/uva/?$pnum";
-	    $str="<a style='color:rgb(255,246,157)' href='$url' target='_blank'>UVa $pnum</a>";
+	    $str="<a href='$url' target='_blank'>UVa $pnum</a>";
 	    return $str;
 	}
 }
