@@ -111,7 +111,8 @@ if(!defined('IN_TEMPLATE'))
                                 </a>
                             </div>
                         </td>
-                        <td class="text-right"><?=$_E['template']['userdetail'][$uid]['statistics']['90']?>AC</td>
+						<?php $AC_count = $_E['template']['userdetail'][$uid]['statistics']['90']; ?>
+                        <td class="text-right"><?=$AC_count?>/<?=round($AC_count/count($_E['template']['plist'])*100.0)?>%</td>
 <?php foreach($_E['template']['plist'] as $prob ){?><td class = "text-center <?=$_E['template']['s'][$uid][$prob['name']]?>">●</td><?php }?>
                         <td>
                         </td>
