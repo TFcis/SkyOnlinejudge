@@ -11,7 +11,7 @@ if(!defined('IN_TEMPLATE'))
         CONT = document.getElementById('content');
         
         var curTemplate = location.hash.slice(1);
-        if(curTemplate=="")	{ curTemplate = "summary"; }
+        if(curTemplate=="")	{ curTemplate = "modify"; }
         $('#li-'+curTemplate).addClass('active');
         old = curTemplate;
         loadTemplate(curTemplate);
@@ -42,7 +42,7 @@ if(!defined('IN_TEMPLATE'))
         </div>
         
         <div style = "width: 70%; float: left" class = "col-md-7">
-            <h1>[L]<?=$_E['template']['nickname']?><h1>
+            <h1><?=$_E['template']['nickname']?><h1>
             <blockquote style = "font-size: 14px">
                 <p><?=$_E['template']['quote']?></p>
                 <footer>By Pokemon</footer>

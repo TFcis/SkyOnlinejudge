@@ -82,3 +82,6 @@ td { padding: 0 4px;}
 .problemname > a:visited {
     color:rgb(255,246,157) !important;
 }
+#svchange {
+    color : white;
+}

@@ -166,8 +166,8 @@ function modify_ojacct($argv,$euid)
     global $_E;
     $table = DB::tname('userojlist');
     if( !isset($_E['ojlist']) )
-    {   //envadd
-        return array(false,'ENVERROR');
+    {
+        envadd('ojlist');
     }
     $class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
     $uacct = DB::getuserdata('userojlist',$euid);
@@ -178,14 +178,17 @@ function modify_ojacct($argv,$euid)
     $uacct = ojid_reg($uacct);
     foreach($argv as $oj => $acct)
     {
-        if( !empty($acct) && $class[$oj]->checkid($acct) )
+        if( !empty($acct) )
         {
-            $uacct[$oj]['acct'] = $acct;
-            $uacct[$oj]['approve']=0;
-        }
-        else
-        {
-            return array(false,"Accout error :$oj");
+            if( $class[$oj]->checkid($acct) )
+            {
+                $uacct[$oj]['acct'] = $acct;
+                $uacct[$oj]['approve']=0;
+            }
+            else
+            {
+                return array(false,"Accout error :$oj");
+            }
         }
     }
     $uacct = addslashes(json_encode($uacct));

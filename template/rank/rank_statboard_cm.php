@@ -30,6 +30,23 @@ if(!defined('IN_TEMPLATE'))
             },"json"
         );
     }
+    var viededrate = 'score';
+    function change_rate()
+    {
+        if( viededrate == 'rate' )
+        {
+            $(".ac_rate").hide();
+            $(".score").show();
+            viededrate = 'score';
+        }
+        else
+        {
+            $(".score").hide();
+            $(".ac_rate").show();
+            viededrate = 'rate';
+        }
+        $("#svchange").html(viededrate);
+    }
     $(document).ready(function()
     {
         //$("#display").html("SUBMIT...");
@@ -84,7 +101,7 @@ if(!defined('IN_TEMPLATE'))
                     <tr>
                         <th style="padding: 4px;width: 40px;left:0px;position: absolute;"></th>
                         <th style="padding: 4px;width: 120px;left:40px;position: absolute;"><span id="infobox"></span></th>
-                        <th class="text-center" style="padding: 4px;width: 40px;">rate</th>
+                        <th class="text-center" style="padding: 4px;width: 50px;"><a onclick="change_rate()" id="svchange" title="Change rate/source">score<span></th>
                         <?php foreach($_E['template']['plist'] as $prob ){?>
                             <th class="text-center" style="padding: 4px;width: 40px;">
                                 <div class="problemname"><?=$prob['show']?></div>
@@ -106,13 +123,15 @@ if(!defined('IN_TEMPLATE'))
                         </td>
                         <td class="text-right" style="left:40px;position:absolute;">
                             <div class="nickname">
-                                <a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>>
-                                    <?=$_E['nickname'][$uid]?>
-                                </a>
+                                <a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>><?=$_E['nickname'][$uid]?></a>
                             </div>
                         </td>
 						<?php $AC_count = $_E['template']['userdetail'][$uid]['statistics']['90']; ?>
-                        <td class="text-right"><?=$AC_count?>/<?=round($AC_count/count($_E['template']['plist'])*100.0)?>%</td>
+                        <td class="text-right">
+                        <span class="score"><?=$AC_count?>AC</span>
+                        <span class="ac_rate" style="display:none"><?=round($AC_count/count($_E['template']['plist'])*100.0)?>%</span>
+
+                        </td>
 <?php foreach($_E['template']['plist'] as $prob ){?><td class = "text-center <?=$_E['template']['s'][$uid][$prob['name']]?>">●</td><?php }?>
                         <td>
                         </td>
@@ -124,10 +143,10 @@ if(!defined('IN_TEMPLATE'))
     </div>
     
     <div style = "color: #666666; text-align: right; padding-right: 20px">Lastest update: <?=$_E['template']['buildtime'] ?></div>
-    
+    <hr>
     <div class="row">
-        <h1>DEBUG</h1>
-        <p><?=$_E['template']['dbg']?></p>
+        <h1>Announcement </h1>
+        <p>(Coming soon...)</p>
     </div>
     
 
