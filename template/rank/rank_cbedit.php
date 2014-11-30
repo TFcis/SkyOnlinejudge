@@ -23,8 +23,9 @@ $(document).ready(function()
     {
         $("#display").html("SUBMIT...");
         e.preventDefault();
+        $("#announce").val(tinymce.activeEditor.getContent());
         $.post("rank.php",
-            $("#board").serialize() + "&announce=" + tinymce.activeEditor.getContent(),
+            $("#board").serialize(),// + "&announce=" + encodeURIComponent(tinymce.activeEditor.getContent()),
             function(res){
                 if(res.status === 'error')
                 {
@@ -57,6 +58,7 @@ $(document).ready(function()
             <input type="hidden" name="mod" value="edit">
             <input type="hidden" name="page" value="cbedit">
             <input type="hidden" name="id" value="<?=$_E['template']['form']['id']?>">
+            <input type="hidden" name="announce" id="announce" value="">
             <div class="form-group">
                 <label class="col-md-2 control-label">名稱</label>
                 <div class="col-md-6">
