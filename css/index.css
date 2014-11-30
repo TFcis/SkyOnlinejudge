@@ -170,11 +170,11 @@ th {
 
 #image-bar{
     width: 100%;
-    height: 160px;
+    height: 100px;
     
     background-image: url('http://i.imgur.com/KiKOjd6.jpg');
     background-size: cover;
-    background-position: 0 68%;
+    background-position: 0 65%;
 }
 
 #image-column{

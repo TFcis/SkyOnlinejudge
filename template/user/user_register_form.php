@@ -43,7 +43,7 @@ function CreateInputText($id ,$type ,$help = '' ,$oldvalue = null)
                         <input type='hidden' name='mod' value='register'>
                         <input type='hidden' name='accept' value='reg'>
                         <?php
-                            CreateInputText('email','email','Email for login');
+                            CreateInputText('email','email','Email');
                             CreateInputText('nickname','text','Nickname');
                             CreateInputText('password','password','password');
                             CreateInputText('repeat','password','Repeat password again');

@@ -69,6 +69,14 @@ $_E['template']['user']  = $boarddata['userlist'];
 $_E['template']['owner'] = $boarddata['owner'];
 $_E['template']['id'] = $id;
 $_E['template']['userdetail'] = $boarddata['userdetail'];
+
+$oriboarddata = getCBdatabyid($id);
+if( $oriboarddata !== false ){
+    $_E['template']['announce'] = $oriboarddata['announce'];
+}
+else{
+    $_E['template']['announce'] = '';
+}
 //導覽列
 
 $maxid = DB::countrow('statsboard');

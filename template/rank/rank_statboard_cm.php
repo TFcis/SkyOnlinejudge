@@ -4,6 +4,7 @@ if(!defined('IN_TEMPLATE'))
   exit('Access denied');
 }
 ?>
+
 <script>
     function build_cb_data(user,scallid)
     {
@@ -146,13 +147,12 @@ if(!defined('IN_TEMPLATE'))
     <hr>
     <div class="row">
         <h1>Announcement </h1>
-        <p>(Coming soon...)</p>
+        <div class="well" style="background-color:#565656">
+            <?php if( empty($_E['template']['announce']) ): ?>No Announcement...
+            <?php else: ?><?=$_E['template']['announce']?><?php endif;?>
+        </div>
     </div>
     
 
 </div>
-
-<script>
-
-</script>
 

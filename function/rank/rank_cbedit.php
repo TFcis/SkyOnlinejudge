@@ -28,6 +28,7 @@ $default['name']='';
 $default['owner']=$_G['uid'];
 $default['userlist']='';
 $default['problems']='';
+$default['announce']='';
 $default['state']='1';
 $default['id']='0';
 

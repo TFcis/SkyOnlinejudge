@@ -4,6 +4,8 @@ if(!defined('IN_TEMPLATE'))
   exit('Access denied');
 }
 ?>
+<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+<script>tinymce.init({selector:'#announcement'});</script>
 <script>
 $(document).ready(function()
 {
@@ -12,7 +14,7 @@ $(document).ready(function()
         $("#display").html("SUBMIT...");
         e.preventDefault();
         $.post("rank.php",
-            $("#board").serialize(),
+            $("#board").serialize() + "&announce=" + tinymce.activeEditor.getContent(),
             function(res){
                 if(res.status === 'error')
                 {
@@ -61,6 +63,12 @@ $(document).ready(function()
                 <label class="col-md-2 control-label">題目列表</label>
                 <div class="col-md-5">
                     <input type="text" class="form-control" name="problems" placeholder="Problems" value="<?=$_E['template']['form']['problems']?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">公告</label>
+                <div class="col-md-5">
+                    <textarea id="announcement"><?=$_E['template']['form']['announce']?></textarea>
                 </div>
             </div>
             <div class="form-group">

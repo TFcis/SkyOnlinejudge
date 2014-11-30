@@ -201,4 +201,9 @@ class userControl
             return true;
         return false;
     }
+    static function isAdmin($uid)
+    {
+        global $_G,$_E;
+        return in_array($_G['uid'],$_E['site']['admin']);
+    }
 }

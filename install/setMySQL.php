@@ -6,11 +6,14 @@ if(!$isCLI)
 }
 require_once('../config/config.php');
 
-function run($str)
+function run($str,$abort = true)
 {
     if(!mysql_query($str))
     {
-        exit(mysql_error()."\n".$str);
+        if($abort)
+            exit(mysql_error()."\n".$str);
+        else
+            echo mysql_error()."\n".$str."\n";
     }
     else
     {
@@ -27,6 +30,7 @@ $account   = tname('account');
 $usertoken = tname('usertoken');
 $cache     = tname('cache');
 $ojlist    = tname('ojlist');
+$statsboard= tname('statsboard');
 //CREATE TABLE 
 $conn = mysql_connect($_config['db']['dbhost'],$_config['db']['dbuser'],$_config['db']['dbpw']);
 if(!$conn){
@@ -110,7 +114,7 @@ run("CREATE TABLE IF NOT EXISTS `".tname('plugin')."` (
   UNIQUE KEY `class` (`class`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
 
-run("CREATE TABLE IF NOT EXISTS `".tname('statsboard')."` (
+run("CREATE TABLE IF NOT EXISTS `$statsboard` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` text COLLATE utf8_bin NOT NULL,
   `owner` int(11) NOT NULL,
@@ -128,11 +132,12 @@ case 1:
     run("ALTER TABLE  `$ojlist` ADD UNIQUE (`class`);");
     run("ALTER TABLE  `$account` ADD UNIQUE (`nickname`);");
 //nothing
-
+case 2:
+    run("ALTER TABLE  `$statsboard` ADD  `announce` TEXT NULL AFTER  `problems` ;",false);
 }
 
 
-$version = 1;
+$version = 2;
 run("INSERT INTO `$skysystem`
     (`name`, `var`) VALUES
     ('sqlversion',$version)
