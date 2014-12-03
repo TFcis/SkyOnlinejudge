@@ -19,7 +19,12 @@ if( $id = safe_get('id') )
     else
     {
         $id = intval($id);
-        if( $cache = DB::loadcache("cache_board_$id") )
+        $oriboarddata = getCBdatabyid($id);
+        if( $oriboarddata === false )
+        {
+            $id = null;
+        }
+        elseif( $cache = DB::loadcache("cache_board_$id") )
         {
             $boarddata = $cache['data'];
             $_E['template']['buildtime'] = $cache['time'];
@@ -63,20 +68,16 @@ if($_E['template']['cbrebuild'])
     $_E['template']['cbrebuildkey'] = $key;
 }
 $_E['template']['buildtime'] = date("Y-m-d H:i:s",$_E['template']['buildtime']);
-$_E['template']['title'] = $boarddata['name'];
 $_E['template']['plist'] = $boarddata['probinfo'];
 $_E['template']['user']  = $boarddata['userlist'];
-$_E['template']['owner'] = $boarddata['owner'];
-$_E['template']['id'] = $id;
 $_E['template']['userdetail'] = $boarddata['userdetail'];
+$_E['template']['id'] = $id;
 
-$oriboarddata = getCBdatabyid($id);
-if( $oriboarddata !== false ){
-    $_E['template']['announce'] = $oriboarddata['announce'];
-}
-else{
-    $_E['template']['announce'] = '';
-}
+
+
+$_E['template']['announce'] = $oriboarddata['announce'];
+$_E['template']['title']    = $oriboarddata['name'];
+$_E['template']['owner']    = $oriboarddata['owner'];
 //導覽列
 
 $maxid = DB::countrow('statsboard');

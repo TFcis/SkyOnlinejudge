@@ -18,13 +18,12 @@ $(document).ready(function()
         <div class="page-header">
                 <h1>解題統計 <small>網羅各大OJ資訊</small></h1>
         </div>
-
         <table class = "table">
         <thead>
             <tr>
                 <th style = "width: 40px"></th>
                 <th>NAME</th>
-                <th style = 'width: 140px'>
+                <th style = 'width: 140px' class="hidden-xs">
                 <?php if($_G['uid']): ?>
                 <!--<button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新增記分板" id="b_add" onclick="location.href='rank.php?mod=cbedit'">-->
                     TOOLS
@@ -34,7 +33,7 @@ $(document).ready(function()
                 <!--</button>-->
                 <?php endif;?>
                 </th>
-                <th style = "width: 180px">FOUNDER</th>
+                <th style = "width: 180px" class = "hidden-xs">FOUNDER</th>
                 <th style = "width: 100px">STATUS</th>
             </tr>
         </thead>
@@ -43,7 +42,7 @@ $(document).ready(function()
             <tr style = "height: 40px">
                 <td><?=$row['id'];?></td>
                 <td><a href="rank.php?mod=commonboard&id=<?=$row['id'];?>"><?=htmlspecialchars($row['name']);?></a></td>
-                <td>
+                <td class="hidden-xs">
                     <?php if($_G['uid']): ?>
                         <!--<span class="icon-bttn glyphicon glyphicon-plus-sign" title="加入"></span>
                         <span class="icon-bttn glyphicon glyphicon-remove" title="離開"></span>-->
@@ -62,7 +61,7 @@ $(document).ready(function()
                         <?php endif;?>
                     <?php endif;?>
                 </td>
-                <td><?=htmlspecialchars($_E['nickname'][$row['owner']])?></td>
+                <td class="hidden-xs"><?=htmlspecialchars($_E['nickname'][$row['owner']])?></td>
                 <td>
                     <span class = 'jointoggle-on'>
                         <?php if($row['userstatus']):?>

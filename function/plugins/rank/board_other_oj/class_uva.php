@@ -5,14 +5,12 @@ if(!defined('IN_SKYOJSYSTEM'))
 }
 
 class class_uva{
-    public $version = '1.0';
+    public $version = '1.1';
     public $name = 'UVa capturer';
 	public $description = 'UVa capturer';
 	public $copyright = 'test by Domen';
 	public $pattern = "/^uva[0-9]+$/i";
-	private $useraclist = array();
-	
-
+	private $rate = array();
 	function install()
 	{
 	    $tb = DB::tname('ojlist');
@@ -21,7 +19,7 @@ class class_uva{
 	            (NULL,'class_uva','UVa Online Judge','UVa user name',1)");
 	    //set SQL
 	}
-	
+
 	function checkid($uname)
 	{
 	    $uname = (string)$uname;
@@ -36,58 +34,73 @@ class class_uva{
 	{
 	    return preg_replace('/[^0-9]*/','',$pname);
 	}
-	function uname2id($uname){
-		$data = DB::loadcache("class_uva_uname2id_$uname");
-		if($data === false){
-			$data = file_get_contents("http://uhunt.felix-halim.net/api/uname2uid/$uname");
-			if($data=="0")
+	
+	function uname2id($uname)
+	{
+	    static $data = null;
+	    if( $data === null )
+	    {
+	        $data = DB::loadcache("class_uva_uname2id");
+	        if( $data === false )
+	            $data = array() ;
+	    }
+	    
+		if( !isset($data[$uname]) )
+		{
+			$uid  = @file_get_contents("http://uhunt.felix-halim.net/api/uname2uid/$uname");
+			if( $data == "0" )
 				return false;
-			DB::putcache("class_uva_uname2id_$uname", trim($data), 'forever'); //todo forever
+			$data[$uname] = intval($uid);
+			DB::putcache("class_uva_uname2id", $data , 'forever');
 		}
-		return $data;
+		return $data[$uname];
 	}
 	
-	function probId2Num($pid){
-	    $pid = $this->realpname($pid);
-		$data = DB::loadcache("class_uva_probId2Num_$pid");
-		if($data === false){
-			$data = file_get_contents("http://uhunt.felix-halim.net/api/p/id/$pid");
-			$data = json_decode($data, true);
-			$data = trim($data["num"]);
-			DB::putcache("class_uva_probId2Num_$pid", $data, 'forever'); //todo forever
+	function probId2Num($pid)
+	{
+	    static $data = null ;
+	    if( $data === null )
+	    {
+	        $data = DB::loadcache("class_uva_probId2Num");
+	        if( $data === false )
+	            $data = array() ;
+	    }
+        $pid = $this->realpname($pid);
+		
+		if( !isset($data[$pid]) )
+		{
+			$pnum = @file_get_contents("http://uhunt.felix-halim.net/api/p/id/$pid");
+			$pnum = json_decode($pnum, true);
+			if($pnum == false)
+			{
+                return false;
+			}
+			$pnum = intval($pnum["num"]);
+			$data[$pid]=$pnum;
+			DB::putcache("class_uva_probId2Num", $data, 'forever'); //todo forever
 		}
-		return $data;
+		return $data[$pid];
 	}
 	
 	function preprocess($userlist,$problist)
 	{
-		//load cache
-		$tul = array();
-		$tpl = array();
-		foreach($userlist as $user){
-			foreach($problist as $pnum){
-				if(DB::loadcache("class_uva_uid_$user"."_pnum_$pnum") === false){
-					$tul[$user] = true;
-					$tpl[$pnum] = true;
-				}
-			}
-		}
-		$userlist = array();
-		$problist = array();
-		foreach($tul as $user => $t)
-			array_push($userlist,$this->uname2id($user));
-		foreach($tpl as $pnum => $t)
-			array_push($problist,$this->realpname($pnum));
-		
+		foreach($userlist as &$user)
+			$user = $this->uname2id($user);
+		foreach($problist as &$pnum)
+			$pnum = $this->realpname($pnum);
+
 		//fetch
 		$data = file_get_contents("http://uhunt.felix-halim.net/api/subs-nums/".implode(',', $userlist)."/".implode(',', $problist)."/0");
-		if($data === false) return;
+		if($data === false) return ;
 		$data = json_decode($data, true);
-		foreach($userlist as $user){
-			$uid = $user;
+
+		foreach($userlist as $user)
+		{
+			$uid = intval($user);
 			$udata = $data[$uid]['subs'];
 			$verdict = array();
-			foreach($udata as $sub){
+			foreach($udata as $sub)
+			{
 				if($sub[2] != 20)
 				{
 				    $pnum = $this->probId2Num($sub[1]);
@@ -96,8 +109,10 @@ class class_uva{
 					$verdict[$pnum] = max($verdict[$pnum], $sub[2]);
 				}
 			}
+			if(! isset($this->rate[$uid]) )
+			    $this->rate[$uid] = array();
 			foreach($verdict as $p => $v){
-				DB::putcache("class_uva_uid_$uid"."_pnum_$p", $v, 86400);
+			    $this->rate[$uid][$p] = $p;
 			}
 		}
 	}
@@ -107,10 +122,16 @@ class class_uva{
 	    $pnum = preg_replace('/[^0-9]*/','',$pnum);
 	    $uid  = $this->uname2id($uid);
 	    $pnum = $this->realpname($pnum);
-	    $cache = DB::loadcache("class_uva_uid_$uid"."_pnum_$pnum");
-	    if($cache===false)
-	    	return 0; //throw error
-	    if($cache=="90")
+	    
+	    
+	    if( !isset($this->rate[$uid]) )
+	        return 0;
+
+	    if( !isset($this->rate[$uid][$pnum]) )
+	    	return 0;
+	    	
+	    $data = $this->rate[$uid][$pnum];
+	    if($data=="90")
 	        return 90;
 	    else
 	        return 70;

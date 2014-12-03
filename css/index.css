@@ -35,36 +35,10 @@ h1 {
 	border-bottom:#0e0e0e 4px solid;
 	/*background-color:#1e1e1e;*/
 }
-#nav ul {
-	margin: 0 0;
-	padding: 0 0;
-	display: inline-block;
-}
-#nav ul>li {
-	list-style: none;
-	float: left;
-}
-#nav a {
-	margin: 0 0;
-	padding: 7.5px 8px 6.5px 8px;
-	color: #888888;
-	font-size: 17px;
-	line-height: 17px;
-	text-decoration: none;
-	display: inline-block;
-	float: left;
-	
-	transition: 0.2s;
-}
-#nav a:hover{
-    color: #ffffff;
-}
+
 
 /* ...................................PAGE STRUCTURE */
 
-.pull-r{
-    float: right !important;
-}
 
 .container {
     overflow: hidden;
