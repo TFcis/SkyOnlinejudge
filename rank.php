@@ -1,7 +1,5 @@
 <?php
-require_once('LocalSetting.php');
-require_once('function/renderCore.php');
-require_once('function/pluginsCore.php');
+require_once('GlobalSetting.php');
 require_once('function/user/user.lib.php');
 $allowmod =array('list','commonboard','cbedit','edit','cbfetch');
 $mod = isset($_REQUEST['mod'])?$_REQUEST['mod']:'list';

@@ -1,6 +1,5 @@
 <?php
-require_once('LocalSetting.php');
-require_once('function/renderCore.php');
+require_once('GlobalSetting.php');
 
 if(isset($_GET['old']))
 Render::render('index_1','index');

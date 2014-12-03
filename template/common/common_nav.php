@@ -7,7 +7,7 @@ if(!defined('IN_TEMPLATE'))
 </head>
 <body>
 <div id="wrap"> 
-    <nav class="navbar navbar-default navbar-static-top navbar-inverse" role="navigation">
+    <nav class="navbar navbar-default navbar-static-top navbar-inverse" role="navigation" style="background-color:#101010">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
