@@ -6,18 +6,18 @@ if(!defined('IN_SKYOJSYSTEM'))
 
 class DB
 {
-    public $connect_data;
+    static public $con;
     static function connect()
     {
         global $_config;
-        $connect_data = mysql_connect(  $_config['db']['dbhost'],
+        self::$con = mysqli_connect(  $_config['db']['dbhost'],
                                 $_config['db']['dbuser'],
                                 $_config['db']['dbpw']);
-        if(!$connect_data){
+        if( mysqli_connect_errno() ){
             die('ERROR:'.mysql_error());
         }
-        mysql_query("SET NAMES 'utf8'");
-        mysql_select_db($_config['db']['dbname']);
+        mysqli_query(self::$con,"SET NAMES 'utf8'");
+        mysqli_select_db(self::$con,$_config['db']['dbname']);
     }
     
     static function tname($name)
@@ -31,20 +31,20 @@ class DB
     }
     static function query($query)
     {
-        if( $stat = mysql_query($query) )
+        if( $stat = mysqli_query(self::$con,$query) )
         {
             return $stat;
         }
         else
         {
-            Render::errormessage(mysql_error(),'SQL Core');
+            Render::errormessage(mysqli_error(self::$con),'SQL Core');
             return false;
         }
     }
     
     static function fetch($stat)
     {
-        if($res = mysql_fetch_array($stat)){
+        if($res = mysqli_fetch_array($stat)){
             return $res;
         }
         else{

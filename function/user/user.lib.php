@@ -26,14 +26,14 @@ function register($email,$nickname,$password,$repeat)
     $sqlres;
     
     if( !preg_match($pattern,$email) || !preg_match($pattern,$password) || $password!= $repeat ||
-        $nickname !== mysql_real_escape_string($nickname))
+        $nickname !== addslashes($nickname))
     {
         //use language!
         $_E['template']['reg'] = '格式錯誤';
         return false;
     }
     
-    $nickname = mysql_real_escape_string($nickname);
+    $nickname = addslashes($nickname);
     $password = passwordHash($password);
 
     $sqlres = DB::query(  "SELECT * FROM  `$acctable`".
@@ -66,7 +66,7 @@ function login($email,$password,$usenickname = false)
     if( $usenickname )
     {
         $nick = $email;
-        if($nick !== mysql_real_escape_string($nick))
+        if($nick !== addslashes($nick))
         {
             $resultdata[1] = '格式錯誤';
             return $resultdata;

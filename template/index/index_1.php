@@ -17,6 +17,14 @@ if(!defined('IN_TEMPLATE'))
             </ol>
         </div>
         
+        <div>
+            <time>2014-12-4</time>更新
+            <ol>
+                <li>更新過時的MYSQL函數</li>
+            </ol>
+        </div>
+        
+        
         <br>
         Math Test<br>
         $a,\ b(a,\ b\ <\ 2^{63})$

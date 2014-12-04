@@ -25,7 +25,7 @@ class userControl
         if($_G['uid'])
         {
             $id = $_G['uid'];
-            if(!mysql_query("INSERT INTO `$table`".
+            if(!DB::query("INSERT INTO `$table`".
                         "(`uid`, `timeout`, `type`, `token`)".
                         "VALUES ($id,$timeout,'$namespace','$token')"))
             {
@@ -48,12 +48,12 @@ class userControl
         if($_G['uid'])
         {
             $id = $_G['uid'];
-            mysql_query("DELETE FROM  `$table` ".
+            DB::query("DELETE FROM  `$table` ".
                         " WHERE  `uid` = $id ".
                         " AND  `type` = '$namespace'");
         }
         $time = time();
-        mysql_query("DELETE FROM  `$table` ".
+        DB::query("DELETE FROM  `$table` ".
                     " WHERE  `timeout` < $time ");
     }
     #bool userControl::checktoken(namespace)
@@ -99,7 +99,7 @@ class userControl
                     }
                     else
                     {
-                        mysql_query("DELETE FROM  `$table` ".
+                        DB::query("DELETE FROM  `$table` ".
                                      " WHERE  `uid` = $uid".
                                      " AND  `token` ='$token'");
                         return false;
@@ -163,9 +163,9 @@ class userControl
         global $_G;
         $acctable = DB::tname('account');
         
-        $sqlres=mysql_query("SELECT * FROM  `$acctable` ".
+        $sqlres=DB::query("SELECT * FROM  `$acctable` ".
                             " WHERE  `uid` =  $uid ");
-        if( $sqldata = mysql_fetch_array($sqlres) )
+        if( $sqldata = DB::fetch($sqlres) )
         {
             $_G['uid'] = $uid;
             userControl::registertoken('login',864000);
@@ -201,9 +201,11 @@ class userControl
             return true;
         return false;
     }
-    static function isAdmin($uid)
+    static function isAdmin( $uid = null )
     {
         global $_G,$_E;
-        return in_array($_G['uid'],$_E['site']['admin']);
+        if($uid === null)
+            return in_array($_G['uid'],$_E['site']['admin']);
+        return in_array($uid,$_E['site']['admin']);
     }
 }
