@@ -9,7 +9,7 @@ class class_tcgs{
     public $name = 'TCGS capturer';
 	public $description = 'TCGS Zerojudge (Green Judge) capturer';
 	public $copyright = 'by Domen';
-	public $pattern = "/^tcgs:[a-z]{1}[0-9]+$/";
+	public $pattern = "/^(tcgs|GJ):[a-z]{1}[0-9]+$/i";
 	private $zjcore;
 
 	function __construct()
@@ -25,7 +25,7 @@ class class_tcgs{
 	    $tb = DB::tname('ojlist');
 	    DB::query("INSERT INTO `$tb`
 	            (`id`, `class`, `name`, `description`, `available`) VALUES
-	            (NULL,'class_tcgs','台中女中ZJ(Green Judge)','Account Name',1)");
+	            (NULL,'class_tcgs','Green Judge(台中女中ZJ)','Account Name',1)");
 	}
 	
 	function checkid($id)
@@ -50,6 +50,6 @@ class class_tcgs{
 	
 	function showname($pid){
 	    $pname = $this->zjcore->reg_problemid($pid);
-	    return "<a href='http://www.tcgs.tc.edu.tw:1218/ShowProblem?problemid=$pname' target='_blank'>TCGS $pname</a>";
+	    return "<a href='http://www.tcgs.tc.edu.tw:1218/ShowProblem?problemid=$pname' target='_blank'>GJ $pname</a>";
 	}
 }
