@@ -85,7 +85,7 @@ class class_zerojudge{
             {
                 $res = $this->httpRequest("zerojudge.tw/UserStatistic?account=".$user,false,false);
                 $res = str_replace(array("\r\n","\t","  "),"",$res);
-                DB::putcache("class_zerojudge__$user",$res,10);
+                DB::putcache("class_zerojudge_$user",$res,10);
             }
             $this->zjcore->html_sumary[$user] = $res;
         }
