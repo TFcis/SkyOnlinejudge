@@ -129,8 +129,8 @@ if(!defined('IN_TEMPLATE'))
                         </td>
 						<?php $AC_count = $_E['template']['userdetail'][$uid]['statistics']['90']; ?>
                         <td class="text-right">
-                        <span class="score"><?=$AC_count?>AC</span>
-                        <span class="ac_rate" style="display:none"><?=round($AC_count/count($_E['template']['plist'])*100.0)?>%</span>
+                        <span class="score" onclick="change_rate()"><?=$AC_count?>AC</span>
+                        <span class="ac_rate" style="display:none" onclick="change_rate()"><?=round($AC_count/count($_E['template']['plist'])*100.0)?>%</span>
 
                         </td>
 <?php foreach($_E['template']['plist'] as $prob ){?><td class = "text-center <?=$_E['template']['s'][$uid][$prob['name']]?>">●</td><?php }?>
