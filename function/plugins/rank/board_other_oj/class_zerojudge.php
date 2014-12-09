@@ -69,7 +69,15 @@ class class_zerojudge{
         global $_E;
         if( $this->loginflag === false )
         {
-            $this->httpRequest('zerojudge.tw/Login',array('account' => 'tester123123' , 'passwd' => '123123' ,'returnPage' => '' ));
+            $cont = $this->httpRequest('zerojudge.tw/Login',null,false);
+            if( preg_match('/name="token" value="([^"]+)/',$cont,$res) )
+            {
+                $token = $res[1];
+                $cont = $this->httpRequest('zerojudge.tw/Login',array(  'account' => 'tester123123' , 
+                                                                        'passwd'  => '123123' ,
+                                                                        'returnPage' => '/' ,
+                                                                        'token'   => $token ));
+            }
             $this->loginflag = true;
         }
         foreach($userlist as $user)
@@ -77,7 +85,7 @@ class class_zerojudge{
             if( !$this->checkid($user) ){
 	            continue;
             }
-            if( $res = DB::loadcache("class_zerojudge_$user") )
+            if( $res = DB::loadcache("class_zerojudge_$user") && false )
             {
                 //.....
             }

@@ -1,5 +1,6 @@
 /js/MathJax/
 /config/config.php
 /data/cache/*.cache
+/data/cache/*.cache
 /LocalSetting.php
 
