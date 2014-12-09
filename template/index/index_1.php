@@ -13,6 +13,7 @@ if(!defined('IN_TEMPLATE'))
             <time>2014-12-9</time>更新
             <ol>
                 <li>修復ZJ需要token的問題</li>
+                <li>修復UVA一個愚蠢的變數名稱錯誤</li>
             </ol>
         </div>
         

@@ -112,9 +112,10 @@ class class_uva{
 			if(! isset($this->rate[$uid]) )
 			    $this->rate[$uid] = array();
 			foreach($verdict as $p => $v){
-			    $this->rate[$uid][$p] = $p;
+			    $this->rate[$uid][$p] = $v;
 			}
 		}
+		var_dump($this->rate);
 	}
 	
 	function query($uid,$pnum)
