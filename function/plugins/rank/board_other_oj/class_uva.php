@@ -115,7 +115,6 @@ class class_uva{
 			    $this->rate[$uid][$p] = $v;
 			}
 		}
-		var_dump($this->rate);
 	}
 	
 	function query($uid,$pnum)
