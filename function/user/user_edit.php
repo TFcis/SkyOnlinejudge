@@ -8,7 +8,7 @@ if( !defined('IN_SKYOJSYSTEM') )
 if(!isset($_POST['mod']) || !$_G['uid'] || !userControl::checktoken('EDIT'))
     throwjson('error','Access denied');
 
-$allowpage = array('ojacct');
+$allowpage = array('ojacct','acct');
 // may need a function instead isset(A)?A:''
 $editpage = safe_post('page');
 if(!in_array($editpage ,$allowpage))
@@ -21,7 +21,6 @@ $euid = (string)((int)$euid);
 // for admin test!
 if( !userControl::getpermission($euid) )
     throwjson('error','not admin or owner');
-
 switch($editpage)
 {
     case 'ojacct':
@@ -43,6 +42,33 @@ switch($editpage)
             throwjson('SUCC','SUCC');
         else
             throwjson('error',$res[1]);
+        break;
+    case 'acct' :
+        $data = DB::getuserdata('account',$euid);
+        if( empty($data) )
+            throwjson('error','Cannot get user data');
+            
+        $oldpass = safe_post('oldpasswd');
+        $newpass = safe_post('newpasswd');
+        
+        if( !$oldpass || !$newpass )
+            throwjson('error','Empty Password!');
+        if( !checkpassword($oldpass) || !checkpassword($newpass) )
+            throwjson('error','Password format error!');
+            
+        $oldpass = passwordHash($oldpass);
+        $newpass = passwordHash($newpass);
+
+        if( $data[$euid]['passhash'] !== $oldpass )
+            throwjson('error','Worng Old Password!');
+        
+        $table = DB::tname('account');
+        if(!DB::query("UPDATE  `$table` SET  `passhash` = '$newpass' 
+                    WHERE  `uid` =$euid;"))
+        {
+            throwjson('error','SQL Error!');
+        }
+        throwjson('SUCC','modify');
         break;
     default:
         throwjson('error','modifying');

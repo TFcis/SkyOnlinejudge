@@ -10,6 +10,13 @@ if(!defined('IN_TEMPLATE'))
         <h1>更新日誌</h1>
         
         <div>
+            <time>2014-12-10</time>更新
+            <ol>
+                <li>可以修改密碼</li>
+            </ol>
+        </div>
+        
+        <div>
             <time>2014-12-9</time>更新
             <ol>
                 <li>修復ZJ需要token的問題</li>

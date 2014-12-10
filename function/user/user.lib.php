@@ -14,6 +14,14 @@ function getTimestamp()
 {
     return date('Y-m-d G:i:s');
 }
+
+function checkpassword($pass)
+{
+    $pattern  = '/^[._@a-zA-Z0-9]{3,30}$/';
+    if( !is_string($pass) )
+        return false;
+    return preg_match($pattern,$pass);
+}
 function register($email,$nickname,$password,$repeat)
 {
     global $_E;
