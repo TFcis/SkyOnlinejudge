@@ -77,17 +77,14 @@ class DB
         else
             $timeout = time()+$time*60;
         $cachetable = DB::tname('cache');
-        $_SESSION['cache'][$name]['time'] = $timeout;
-        $_SESSION['cache'][$name]['data'] = $data;
-        $_SESSION['cache'][$name]['uid']  = $uid;
-        
+
         if( $uid )
         {
             $data = addslashes(json_encode($data));
             DB::query("INSERT INTO $cachetable
                         (`name`, `timeout`,`data`)  VALUES
                         ('$uid+$name' ,'$timeout' ,'$data') 
-                        ON DUPLICATE KEY UPDATE `data`= '$data'" );
+                        ON DUPLICATE KEY UPDATE `data`= '$data' , `timeout` = $timeout" );
         }
         else
         {
@@ -104,10 +101,9 @@ class DB
     
     static function deletecache($name,$uid = 0)
     {
-        if(isset($_SESSION['cache'][$name]))
-            unset($_SESSION['cache'][$name]);
+        $cachetable = DB::tname('cache');
         if($uid)
-            DB::query("DELETE FROM $cachetable WHERE `name` LIKE '$uid+$name'");
+            DB::query("DELETE FROM $cachetable WHERE `name` = '$uid+$name'");
         else
         {
             $save = DB::cachefilepath($name);

@@ -93,4 +93,56 @@ class class_toj{
         $str="<a href='http://toj.tfcis.org/oj/pro/$pid/' target='_blank'>TOJ $pid</a>";
         return $str;
     }
+    
+    function getuserinfo($uid)
+    {
+        $query['reqtype'] = 'INFO';
+        $query['acct_id'] = $uid;
+        $json = $this->post($query);
+        if( $data = json_decode($json) )
+            return $data;
+        return false;
+    }
+    
+    function account_detail($uid)
+    {
+        $data = $this->getuserinfo($uid);
+        if( $data )
+        {
+            return "Your Nickname : <strong>".$data->nick."</strong>";
+        }
+        else
+            return false;
+    }
+    
+    function authenticate_message( $uid , $tojid )
+    {
+        $token= DB::loadcache( 'class_toj_authtoken' , $uid );
+        if( !$token )
+        {
+            $token = substr(md5(uniqid(uniqid(),true)),1,8);
+            DB::putcache('class_toj_authtoken',$token,10,$uid);
+        }
+        $msg = "請將TOJ的暱稱改為<b>$token</b>後，點擊驗證繼續操作。<br>驗證完畢後您可以修改回原暱稱";
+        return $msg;
+    }
+    
+    function authenticate( $uid , $tojid )
+    {
+        $res = array(false,'unknown');
+        $token = DB::loadcache( 'class_toj_authtoken' , $uid );
+        if( $token === false )
+        {
+            $res[1] = 'No TOKEN . Please reload page';
+            return $res;
+        }
+        $data = $this->getuserinfo($tojid);
+        if( $data && $data->nick == $token )
+        {
+            DB::deletecache( 'class_toj_authtoken' , $uid );
+            return true;
+        }
+        $res[1] = '驗證錯誤，請重新嘗試 ('.$data->nick.')';
+        return $res;
+    }
 }

@@ -33,7 +33,7 @@ function register($email,$nickname,$password,$repeat)
     $timestamp = getTimestamp();
     $sqlres;
     
-    if( !preg_match($pattern,$email) || !preg_match($pattern,$password) || $password!= $repeat ||
+    if( !preg_match($pattern,$email) || !checkpassword($password) || $password!= $repeat ||
         $nickname !== addslashes($nickname))
     {
         //use language!
@@ -91,7 +91,7 @@ function login($email,$password,$usenickname = false)
             return $resultdata;
         }
     }
-    if( !preg_match($pattern,$email) || !preg_match($pattern,$password) )
+    if( !preg_match($pattern,$email) || !checkpassword($password) )
     {
         $resultdata[1] = '帳密錯誤';
         return $resultdata;
@@ -140,6 +140,7 @@ function prepareUserView($uid)
 function page_ojacct($uid)
 {
     global $_E;
+    $class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
     $table_oj = DB::tname('ojlist');
     $_E['template']['oj']=array();
     
@@ -157,9 +158,24 @@ function page_ojacct($uid)
     foreach($_E['ojlist'] as $oj)
     {
         $tmp = $oj;
-        if( $userojacctlist[ $oj['class'] ]['acct']  )
+        $tmp['info'] = '';
+        $tmp['user'] = $userojacctlist[ $oj['class'] ];
+        $tmp['c'] = $class[ $oj['class'] ];
+        if( $tmp['user']['acct'] )
         {
-            $tmp['value'] = $userojacctlist[ $oj['class'] ]['acct'];
+            if( $tmp['user']['approve'] == 0 ) // No Check
+            {
+                $tmp['info'] = '尚未認證' ;
+            }
+            else
+            {
+                if( method_exists( $class[ $oj['class'] ] , 'account_detail' ) )
+                {
+                    $tmp['info'] = $class[ $oj['class'] ]->account_detail($tmp['user']['acct']);
+                    if( !$tmp['info'] ) $tmp['info'] = '';
+                    $tmp['info'] = "已驗證 ".$tmp['info'];
+                }
+            }
         }
         $_E['template']['oj'][] = $tmp;
     }
@@ -188,7 +204,7 @@ function modify_ojacct($argv,$euid)
     {
         if( !empty($acct) )
         {
-            if( $class[$oj]->checkid($acct) )
+            if( $uacct[$oj]['approve'] ==0 && $class[$oj]->checkid($acct) )
             {
                 $uacct[$oj]['acct'] = $acct;
                 $uacct[$oj]['approve']=0;
@@ -199,6 +215,9 @@ function modify_ojacct($argv,$euid)
             }
         }
     }
+    if( save_ojacct($euid,$uacct) )
+        return array(true);
+    return array(false,'SQL ERROR');
     $uacct = addslashes(json_encode($uacct));
     if( DB::query("INSERT INTO $table
                     (`uid`,`data`) VALUES 
@@ -208,4 +227,19 @@ function modify_ojacct($argv,$euid)
         return array(true);
     }
     return array(false,'SQL ERROR');
+}
+
+function save_ojacct($uid,$res)
+{
+    $table = DB::tname('userojlist');
+    $res = addslashes(json_encode($res));
+    if( DB::query("INSERT INTO $table
+                    (`uid`,`data`) VALUES 
+                    ($uid,'$res')
+                    ON DUPLICATE KEY UPDATE `data`= '$res'"))
+    {
+        return true;
+    }
+    return false;
+    
 }

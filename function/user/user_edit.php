@@ -8,8 +8,8 @@ if( !defined('IN_SKYOJSYSTEM') )
 if(!isset($_POST['mod']) || !$_G['uid'] || !userControl::checktoken('EDIT'))
     throwjson('error','Access denied');
 
-$allowpage = array('ojacct','acct');
-// may need a function instead isset(A)?A:''
+$allowpage = array('ojacct','acct','authacct');
+
 $editpage = safe_post('page');
 if(!in_array($editpage ,$allowpage))
     throwjson('error','No such page');
@@ -18,6 +18,7 @@ $euid = safe_post('id');
 if(!is_string($euid) || !preg_match('/^[0-9]+$/',$euid))
     throwjson('error','UID error');
 $euid = (string)((int)$euid);
+
 // for admin test!
 if( !userControl::getpermission($euid) )
     throwjson('error','not admin or owner');
@@ -43,6 +44,7 @@ switch($editpage)
         else
             throwjson('error',$res[1]);
         break;
+        
     case 'acct' :
         $data = DB::getuserdata('account',$euid);
         if( empty($data) )
@@ -70,8 +72,40 @@ switch($editpage)
         }
         throwjson('SUCC','modify');
         break;
+        
+    case 'authacct':
+        $authclass = safe_post('cls');
+        $class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
+        if( !$authclass || !is_string($authclass) || !isset($class[$authclass]) )
+        {
+            throwjson('error','data error!');
+        }
+        $class = $class[$authclass];
+        
+        $ojacct = DB::getuserdata('userojlist',$euid);
+        if(!$ojacct)
+        {
+            throwjson('error','user data error!');
+        }
+        $ojacct = ojid_reg($ojacct[$euid]['data']);
+        if( !$ojacct[$authclass] )
+        {
+            throwjson('error','empty acct data!');
+        }
+        
+        if( !method_exists($class,'authenticate') )
+            throwjson('error','Not support authenticate!');
+        $res = $class->authenticate($euid,$ojacct[$authclass]['acct']);
+        if( $res === true )
+        {
+            $ojacct[$authclass]['approve'] = 1;
+            save_ojacct($euid,$ojacct);
+            throwjson('SUCC','Success');
+        }
+        throwjson ('error',$res[1]);
+        break;
     default:
-        throwjson('error','modifying');
+        throwjson('error','modifying',$ojacct);
         break;
 }
 
