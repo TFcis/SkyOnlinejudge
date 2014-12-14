@@ -52,4 +52,10 @@ class class_tnfshzj{
 	    $pname = $this->zjcore->reg_problemid($pid);
 	    return "<a href='http://judge.tnfsh.tn.edu.tw:8080/ShowProblem?problemid=$pname' target='_blank'>一中 $pname</a>";
 	}
+	
+	function challink($uid,$pid,$vid){
+		$pname = $this->zjcore->reg_problemid($pid);
+		if($vid=="NO")return "●";
+		else return "<a href='http://judge.tnfsh.tn.edu.tw:8080/RealtimeStatus?problemid=".$pname."&account=".$uid."' target='_blank'>●</a>";
+	}
 }

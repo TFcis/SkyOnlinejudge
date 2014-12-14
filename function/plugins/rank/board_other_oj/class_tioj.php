@@ -69,4 +69,10 @@ class class_tioj{
 	    $pid = preg_replace('/[^0-9]+/','',$pid);
 	    return "<a href='http://tioj.ck.tp.edu.tw/problems/$pid' target='_blank'>TIOJ $pid</a>";
 	}
+	
+	function challink($uid,$pid,$vid){
+		$pid = preg_replace('/[^0-9]+/','',$pid);
+		if($vid=="NO")return "●";
+		else return "<a href='http://tioj.ck.tp.edu.tw/problems/".$pname."/submissions?filter_username=".$uid."' target='_blank'>●</a>";
+	}
 }
