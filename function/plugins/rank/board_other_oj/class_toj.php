@@ -109,7 +109,7 @@ class class_toj{
         $data = $this->getuserinfo($uid);
         if( $data )
         {
-            return "Your Nickname : <strong>".$data->nick."</strong>";
+            return "Your Nickname : <strong>".htmlspecialchars($data->nick)."</strong>";
         }
         else
             return false;
@@ -142,7 +142,7 @@ class class_toj{
             DB::deletecache( 'class_toj_authtoken' , $uid );
             return true;
         }
-        $res[1] = '驗證錯誤，請重新嘗試 ('.$data->nick.')';
+        $res[1] = '驗證錯誤，請重新嘗試 ('.htmlspecialchars($data->nick).')';
         return $res;
     }
 }
