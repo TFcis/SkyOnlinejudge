@@ -52,4 +52,10 @@ class class_tcgs{
 	    $pname = $this->zjcore->reg_problemid($pid);
 	    return "<a href='http://www.tcgs.tc.edu.tw:1218/ShowProblem?problemid=$pname' target='_blank'>GJ $pname</a>";
 	}
+	
+	function challink($uid,$pid,$vid){
+		$pname = $this->zjcore->reg_problemid($pid);
+		if($vid=="NO")return "●";
+		else return "<a href='http://www.tcgs.tc.edu.tw:1218/RealtimeStatus?problemid=".$pname."&account=".$uid."' target='_blank'>●</a>";
+	}
 }

@@ -144,4 +144,8 @@ class class_uva{
 	    $str="<a href='$url' target='_blank'>UVa $pnum</a>";
 	    return $str;
 	}
+	
+	function challink($uid,$pid,$vid){
+		return "●";
+	}
 }

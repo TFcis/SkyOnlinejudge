@@ -133,7 +133,7 @@ if(!defined('IN_TEMPLATE'))
                         <span class="ac_rate" style="display:none" onclick="change_rate()"><?=round($AC_count/count($_E['template']['plist'])*100.0)?>%</span>
 
                         </td>
-<?php foreach($_E['template']['plist'] as $prob ){?><td class = "text-center <?=$_E['template']['s'][$uid][$prob['name']]?>">●</td><?php }?>
+<?php foreach($_E['template']['plist'] as $prob ){?><td class = "text-center <?=$_E['template']['s'][$uid][$prob['name']]["vid"]?>">●</td><?php }?>
                         <td>
                         </td>
                     </tr>
