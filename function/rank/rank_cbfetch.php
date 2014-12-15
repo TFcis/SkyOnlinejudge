@@ -57,17 +57,22 @@ else{
 
 #check and create cache if not avaibile
 $cachefile = DB::loadcache("cache_board_$BID");
-if( $refresh_user === 'all' && $cachefile === false ){
-    if( $build_data = buildcbboard($BID,'') )
+if( $refresh_user === 'all' || $cachefile === false ){
+    if( $build_data = buildcbboard($BID,array()) )
     {
         DB::putcache("cache_board_$BID",
             array('data'=>$build_data,'time'=>time()+$cachetime)
             ,'forever');
+        $cachefile = $build_data;
     }
     else
     {
         throwjson('error','Default buildcbboard() error!');
     }
+}
+else
+{
+    $cachefile = $cachefile['data'];
 }
 
 if( DB::loadcache("cbfetch_work_$BID")){
@@ -81,7 +86,7 @@ if( $refresh_user === 'all' ){
 else
     $refresh_user = array($refresh_user);
 
-$cachefile = $cachefile['data'];
+
 foreach( $refresh_user as $uid )
 {
     if( $child = buildcbboard($BID,array($uid)) )

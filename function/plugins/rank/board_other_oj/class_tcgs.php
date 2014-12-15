@@ -53,9 +53,8 @@ class class_tcgs{
 	    return "<a href='http://www.tcgs.tc.edu.tw:1218/ShowProblem?problemid=$pname' target='_blank'>GJ $pname</a>";
 	}
 	
-	function challink($uid,$pid,$vid){
+	function challink($uid,$pid){
 		$pname = $this->zjcore->reg_problemid($pid);
-		if($vid=="NO")return "●";
-		else return "<a href='http://www.tcgs.tc.edu.tw:1218/RealtimeStatus?problemid=".$pname."&account=".$uid."' target='_blank'>●</a>";
+		return "http://www.tcgs.tc.edu.tw:1218/RealtimeStatus?problemid=".$pname."&account=".$uid;
 	}
 }

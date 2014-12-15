@@ -94,10 +94,9 @@ class class_toj{
         return $str;
     }
 	
-	function challink($uid,$pid,$vid){
-		$pid = preg_replace('/[^0-9]*/','',$str);
-		if($vid=="NO")return "●";
-		else return "<a href='http://toj.tfcis.org/oj/chal/?proid=".$pname."&acctid=".$uid."' target='_blank'>●</a>";
+	function challink($uid,$pid){
+		$pid = preg_replace('/[^0-9]*/','',$pid);
+		return "http://toj.tfcis.org/oj/chal/?proid=".$pid."&acctid=".$uid;
 	}
     
     function getuserinfo($uid)
