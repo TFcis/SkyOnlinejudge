@@ -22,6 +22,11 @@ class Render
         if( !isset($_E['template']) )
         {
             $_E['template'] = array();
+            $tmpl = array();
+        }
+        else
+        {
+            $tmpl = &$_E['template'];
         }
         $path = $_E['ROOT']."/template/$namespace/$pagename.php";
         if( file_exists($path) )
@@ -56,7 +61,14 @@ class Render
         }
         return false;
     }
-
+    
+    static function setbodyclass($val)
+    {
+        global $_E;
+        if(!isset($_E['template']['_body_class']))
+            $_E['template']['_body_class'] = array();
+        $_E['template']['_body_class'][]=$val;
+    }
     
     static function render($pagename , $namespace = 'common')
     {

@@ -5,29 +5,29 @@ if(!defined('IN_TEMPLATE'))
 }
 ?>
 <div class="container">
-        <center>
-        <div id="signin">
-        
-            <h3><?php echo($_E['site']['name']);?><br><small>Terms & Conditions</small></h3>
-            <div class=".container-fluid">
-            
-                <div>
-                    <div id="license">
-                    <?php Render::renderSingleTemplate('mit_license','user'); ?>
+    <div class="row">
+        <div class="col-lg-offset-4 col-lg-4 login_form">
+            <center>
+                <h3><?php echo($_E['site']['name']);?><br><small class="login_sub_title">Terms & Conditions</small></h3>
+                <div class=".container-fluid">
+                
+                    <div>
+                        <div id="license">
+                        <?php Render::renderSingleTemplate('mit_license','user'); ?>
+                        </div>
                     </div>
+                    
+                    <div style = "text-align: right">
+                        <button type="button" class="btn-grn btn-large" onclick="location.href='user.php?mod=register&accept=accept'">
+                        I accept these terms
+                        </button>
+                        <button type="button" class="btn-red btn-large" onclick="location.href='index.php'">
+                        Deny
+                        </button>
+                    </div>
+                    <br><br>
                 </div>
-                
-                <div style = "text-align: right">
-                    <button type="button" class="btn-grn btn-large" onclick="location.href='user.php?mod=register&accept=accept'">
-                    I accept these terms
-                    </button>
-                    <button type="button" class="btn-red btn-large" onclick="location.href='index.php'">
-                    Deny
-                    </button>
-                </div>
-                
-            </div>
-            
+            </center>
         </div>
-        </center>
+    </div>
 </div>

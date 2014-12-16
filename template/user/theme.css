@@ -1,7 +1,3 @@
-#signin {
-    width: 400px;
-}
-
 #license{
     background-color: #0c0c0c;
     text-align: left;
@@ -64,4 +60,40 @@
 */
 #dispaly{
     transition : 0.2s;
+}
+.login_form
+{
+    background-color:rgba(147,147,147,0.47);
+    border-radius: 25px;
+}
+
+.loginbody
+{
+    background-image : url('http://i.imgur.com/4HO4W6L.jpg');
+    background-size: cover;
+    background-position : 0 60%;
+}
+
+.registerbody
+{
+    background-image : url('http://i.imgur.com/I9fosHb.jpg');
+    background-size: cover;
+    background-position : 0 60%;
+}
+
+
+.login_lable_text
+{
+    color : #242424;
+}
+
+.login_sub_title,.white-text
+{
+    color : #FFF;
+}
+
+
+.login_comment
+{
+    color : #373737;
 }

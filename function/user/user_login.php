@@ -12,6 +12,7 @@ if( $_G['uid'] )
 
 if( !isset($_POST['mod']) )
 {
+    Render::setbodyclass('loginbody');
     Render::render('user_login_box','user');
     exit(0);
 }

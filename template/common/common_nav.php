@@ -5,7 +5,16 @@ if(!defined('IN_TEMPLATE'))
 }
 ?>
 </head>
-<body>
+<?php
+    if( isset($tmpl['_body_class']) )
+    {
+        $classtmp = implode(' ',$_E['template']['_body_class']);
+        $classtmp = "class='$classtmp'";
+    }
+    else
+        $classtmp = '';
+?>
+<body <?=$classtmp?>>
 <div id="wrap"> 
     <nav class="navbar navbar-default navbar-static-top navbar-inverse" role="navigation" style="background-color:#101010">
         <div class="container">

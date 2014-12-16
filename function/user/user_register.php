@@ -16,9 +16,11 @@ if( userControl::checktoken('register') )
     switch($checkrule)
     {
         case 'null':
+            Render::setbodyclass('registerbody');
             Render::render('user_register_check','user');
             break;
         case 'accept':
+            Render::setbodyclass('registerbody');
             Render::render('user_register_form','user');
             break;
         case 'reg':
@@ -31,6 +33,7 @@ if( userControl::checktoken('register') )
             }
             else
             {
+                Render::setbodyclass('registerbody');
                 Render::render('user_register_form','user');
             }
             
@@ -44,5 +47,6 @@ else //First visit register page. Give him a taken.
 {
     setcookie('uid','0',time()+300);
     userControl::registertoken('register',300);
+    Render::setbodyclass('registerbody');
     Render::render('user_register_check','user');
 }

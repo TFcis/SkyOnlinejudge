@@ -96,6 +96,7 @@ foreach($boarddata['userlist'] as $uid)
     foreach($boarddata['problems'] as $pname)
     {
         $_E['template']['s'][$uid][$pname]["vid"] = verdictIDtoword($boarddata['ratemap'][$uid][$pname]);
+        $_E['template']['s'][$uid][$pname]["challink"] = $boarddata['challink'][$uid][$pname];
     }
 }
 #add nickname

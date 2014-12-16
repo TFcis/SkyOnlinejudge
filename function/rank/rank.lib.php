@@ -185,7 +185,7 @@ function buildcbboard($bid , $selectuser = null)
     //$res['userojacct'] = $userojacct;
     $res['probinfo']   = $probleminfo;
     $res['ratemap'] = array();
-    
+    $res['challink']= array();
     if( !( $accache = DB::loadcache("rate_ac_cb_$bid") ) )
     {
         $accache = array();
@@ -195,19 +195,32 @@ function buildcbboard($bid , $selectuser = null)
     {
         foreach($probleminfo as $pname => $p)
         {
-            if( array_key_exists( $uid,$accache) && isset($accache[$uid][$p['name']]) )
+            //Find in AC CACHE
+            if( array_key_exists( $uid,$accache) && isset( $accache[$uid][$pname]) )
                 $re = 90;
+            //Match a judge & account
             elseif( $p['oj'] && $u[ $p['oj'] ]['acct'] )
-                $re = $class[$p['oj']]->query($u[$p['oj']]['acct'],$p['name']);
+                $re = $class[$p['oj']]->query($u[$p['oj']]['acct'],$pname);
+            //Unavailable
             else
                 $re=0;
-            $res['ratemap'][$uid][$p['name']] = $re;
+            //Set to Ratemap
+            $res['ratemap'][$uid][$pname] = $re;
             
-            //AC
+            //if AC, Save to cache
             if($re == 90)
-                $accache[$uid][$p['name']] = 1;
+                $accache[$uid][$pname] = 1;
+            
+            #challink
+            $res['challink'][$uid][$pname] = '';
+            if( $p['oj'] && method_exists($class[$p['oj']],'challink') && $re)
+            {
+                $res['challink'][$uid][$pname] = $class[$p['oj']]->challink($u[$p['oj']]['acct'],$pname);
+            }
         }
     }
+    
+    
     #sort user, may be it need perfect structure
     $userdetail = array();
     $sortrule = 'ranksort_calc_ac';
@@ -242,11 +255,20 @@ function merge_cb_rate_map($direct,$data)
             $direct['ratemap'][$uid] = array();
         $direct['ratemap'][$uid] = array_merge($direct['ratemap'][$uid],$arr);
     }
+    
+    foreach($data['challink'] as $uid => $arr)
+    {
+        if( !isset($direct['challink'][$uid]) )
+            $direct['challink'][$uid] = array();
+        $direct['challink'][$uid] = array_merge($direct['challink'][$uid],$arr);
+    }
+    
     foreach($data['userlist'] as $uid)
     {
         if(!in_array($uid,$direct['userlist']))  
             $direct['userlist'][]=$uid;
     }
+    
     foreach($data['userdetail'] as $uid => $data)
     {
         $direct['userdetail'][$uid] = $data;

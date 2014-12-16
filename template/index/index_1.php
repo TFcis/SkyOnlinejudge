@@ -10,6 +10,17 @@ if(!defined('IN_TEMPLATE'))
         <h1>更新日誌</h1>
         
         <div>
+            <time>2014-12-16</time>更新
+            <ol>
+                <li>CBBOARD 可以透過 <code>challink(uid,pid)</code> 取得解題改況連結，點擊圓點即可使用</li>
+                <li>修復 cbfetch 一個錯誤建構空白頁面的方法</li>
+                <li>模板文件<code>$_E['template']</code> 可以用<code>$tmpl</code>取代</li>
+                <li>更好看的登入介面，圖片版權：創用CC <a href='http://commons.wikimedia.org/wiki/File:Sunset_(2).jpg' target="_blank">Sunset(公眾領域使用)</a>,
+                <a href="http://www.public-domain-image.com/nature-landscape/hill/slides/strandhill-ireland-ocean-beaches-couds-sky.html" target="_blank">Strandhill ireland ocean beaches couds sky(公眾領域使用)</a>。</li>
+            </ol>
+        </div>
+        
+        <div>
             <time>2014-12-12</time>更新
             <ol>
                 <li>TOJ驗證功能Open!</li>

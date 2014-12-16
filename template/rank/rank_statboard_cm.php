@@ -14,7 +14,7 @@ if(!defined('IN_TEMPLATE'))
             "rank.php",
             {
                 mod : 'cbfetch',
-                id  : '<?=$_E['template']['id']?>',
+                id  : '<?=$tmpl['id']?>',
                 scallid : scallid,
                 user : user
             },
@@ -51,8 +51,8 @@ if(!defined('IN_TEMPLATE'))
     $(document).ready(function()
     {
         //$("#display").html("SUBMIT...");
-        <?php if($_E['template']['cbrebuild']):?>
-        build_cb_data('all','<?=$_E['template']['cbrebuildkey']?>');
+        <?php if($tmpl['cbrebuild']):?>
+        build_cb_data('all','<?=$tmpl['cbrebuildkey']?>');
         <?php endif;?>
         //$(".problemname").popover({trigger : 'hover'});
     })
@@ -61,9 +61,9 @@ if(!defined('IN_TEMPLATE'))
 <div class="container">
     <div>
         <div class="page-header">
-            <h1><?=htmlspecialchars($_E['template']['title'])?> <small>Statistics
-            <?php if(userControl::getpermission($_E['template']['owner'])): ?>
-            <a class = "icon-bttn" href='rank.php?mod=cbedit&id=<?=$_E['template']['id'];?>'>
+            <h1><?=htmlspecialchars($tmpl['title'])?> <small>Statistics
+            <?php if(userControl::getpermission($tmpl['owner'])): ?>
+            <a class = "icon-bttn" href='rank.php?mod=cbedit&id=<?=$tmpl['id'];?>'>
                 <span class="pointer glyphicon glyphicon-pencil"  title="編輯"></span>
             </a>
             <a class = "icon-bttn" onclick="build_cb_data('all')">
@@ -75,17 +75,17 @@ if(!defined('IN_TEMPLATE'))
             <div class='container-fluid'>
                 <div class="row">
                     <div class="col-xs-4 col-md-4 text-left">
-                        <a href="rank.php?mod=commonboard&id=<?=$_E['template']['leftid']?>" class="btn btn-primary btn-sm active" <?php if(!$_E['template']['leftid'])echo('disabled="disabled"');?>>
+                        <a href="rank.php?mod=commonboard&id=<?=$tmpl['leftid']?>" class="btn btn-primary btn-sm active" <?php if(!$tmpl['leftid'])echo('disabled="disabled"');?>>
                         <span class="glyphicon glyphicon-arrow-left"></span>
                         </a>
                     </div>
                     <div class="col-xs-4 col-md-4 text-center">
-                        <a href="rank.php?mod=list&page=<?=$_E['template']['homeid']?>" class="btn btn-primary btn-sm active">
+                        <a href="rank.php?mod=list&page=<?=$tmpl['homeid']?>" class="btn btn-primary btn-sm active">
                         <span class="glyphicon glyphicon-home"></span>
                         </a>
                     </div>
                     <div class="col-xs-4 col-md-4 text-right">
-                        <a href="rank.php?mod=commonboard&id=<?=$_E['template']['rightid']?>" class="btn btn-primary btn-sm active" <?php if(!$_E['template']['rightid'])echo('disabled="disabled"');?>>
+                        <a href="rank.php?mod=commonboard&id=<?=$tmpl['rightid']?>" class="btn btn-primary btn-sm active" <?php if(!$tmpl['rightid'])echo('disabled="disabled"');?>>
                         <span class="glyphicon glyphicon-arrow-right"></span>
                         </a>
                     </div>
@@ -103,7 +103,7 @@ if(!defined('IN_TEMPLATE'))
                         <th style="padding: 4px;width: 40px;left:0px;position: absolute;"></th>
                         <th style="padding: 4px;width: 120px;left:40px;position: absolute;"><span id="infobox"></span></th>
                         <th class="text-center" style="padding: 4px;width: 50px;"><a onclick="change_rate()" id="svchange" title="Change rate/source">score<span></th>
-                        <?php foreach($_E['template']['plist'] as $prob ){?>
+                        <?php foreach($tmpl['plist'] as $prob ){?>
                             <th class="text-center" style="padding: 4px;width: 40px;">
                                 <div class="problemname"><?=$prob['show']?></div>
                             </th>
@@ -113,10 +113,10 @@ if(!defined('IN_TEMPLATE'))
                 </thead>
                 
                 <tbody sytle="white-space: nowrap;">
-                    <?php foreach($_E['template']['user'] as $uid){?>
+                    <?php foreach($tmpl['user'] as $uid){?>
                     <tr>
                         <td style="left:0px;position: absolute;">
-                            <?php if(userControl::getpermission($_E['template']['owner']) || $uid == $_G['uid']): ?>
+                            <?php if(userControl::getpermission($tmpl['owner']) || $uid == $_G['uid']): ?>
                             <a class = "icon-bttn" onclick="build_cb_data('<?=$uid?>')">
                                 <span class="pointer glyphicon glyphicon-refresh"  title="重新擷取"></span>
                             </a>
@@ -127,13 +127,28 @@ if(!defined('IN_TEMPLATE'))
                                 <a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>><?=$_E['nickname'][$uid]?></a>
                             </div>
                         </td>
-						<?php $AC_count = $_E['template']['userdetail'][$uid]['statistics']['90']; ?>
+						<?php $AC_count = $tmpl['userdetail'][$uid]['statistics']['90']; ?>
                         <td class="text-right">
                         <span class="score" onclick="change_rate()"><?=$AC_count?>AC</span>
-                        <span class="ac_rate" style="display:none" onclick="change_rate()"><?=round($AC_count/count($_E['template']['plist'])*100.0)?>%</span>
+                        <span class="ac_rate" style="display:none" onclick="change_rate()"><?=round($AC_count/count($tmpl['plist'])*100.0)?>%</span>
 
                         </td>
-<?php foreach($_E['template']['plist'] as $prob ){?><td class = "text-center <?=$_E['template']['s'][$uid][$prob['name']]["vid"]?>">●</td><?php }?>
+<?php foreach($tmpl['plist'] as $prob ){ 
+    $vid  = $tmpl['s'][$uid][$prob['name']]["vid"]; 
+    $chal = $tmpl['s'][$uid][$prob['name']]["challink"];
+    
+    ?><td class = "text-center <?=$vid?>"><?php
+    if( $chal == '' )
+    {
+        ?>●<?php
+    }
+    else
+    {
+        ?><span onclick = "javascript:window.open('<?=$chal?>')" target="_blank" style="cursor: pointer;">●</span><?php
+    }
+    
+    ?></td><?php
+}?>
                         <td>
                         </td>
                     </tr>
@@ -143,13 +158,13 @@ if(!defined('IN_TEMPLATE'))
         </div>
     </div>
     
-    <div style = "color: #666666; text-align: right; padding-right: 20px">Lastest update: <?=$_E['template']['buildtime'] ?></div>
+    <div style = "color: #666666; text-align: right; padding-right: 20px">Lastest update: <?=$tmpl['buildtime'] ?></div>
     <hr>
     <div class="row">
         <h1>Announcement </h1>
         <div class="well" style="background-color:#565656">
-            <?php if( empty($_E['template']['announce']) ): ?>No Announcement...
-            <?php else: ?><?=$_E['template']['announce']?><?php endif;?>
+            <?php if( empty($tmpl['announce']) ): ?>No Announcement...
+            <?php else: ?><?=$tmpl['announce']?><?php endif;?>
         </div>
     </div>
     

@@ -112,9 +112,8 @@ class class_zerojudge{
 	    return "<a href='http://zerojudge.tw/ShowProblem?problemid=$pname' target='_blank'>ZJ $pname</a>";
 	}
 	
-	function challink($uid,$pid,$vid){
+	function challink($uid,$pid){
 		$pname = $this->zjcore->reg_problemid($pid);
-		if($vid=="NO")return "●";
-		else return "<a href='http://zerojudge.tw/Submissions?problemid=".$pname."&account=".$uid."' target='_blank'>●</a>";
+		return "http://zerojudge.tw/Submissions?problemid=".$pname."&account=".$uid;
 	}
 }
