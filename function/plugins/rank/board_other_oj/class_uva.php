@@ -48,7 +48,7 @@ class class_uva{
 		if( !isset($data[$uname]) )
 		{
 			$uid  = @file_get_contents("http://uhunt.felix-halim.net/api/uname2uid/$uname");
-			if( $data == "0" )
+			if( $uid == "0" )
 				return false;
 			$data[$uname] = intval($uid);
 			DB::putcache("class_uva_uname2id", $data , 'forever');
