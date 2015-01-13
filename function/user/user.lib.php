@@ -117,26 +117,6 @@ function login($email,$password,$usenickname = false)
     return $resultdata;
 }
 
-function prepareUserView($uid)
-{
-    global $_G;
-    $opt = array();
-    if($uid==$_G['uid']){
-        $opt = $_G;
-    }
-    else if( $res = DB::getuserdata('account',$uid) ){
-        //protect
-        $res['passhash']='';
-        $opt = $res[$uid];
-    }
-    else{
-        return false;
-    }
-    return $opt;
-}
-
-
-
 function page_ojacct($uid)
 {
     global $_E;
@@ -241,5 +221,109 @@ function save_ojacct($uid,$res)
         return true;
     }
     return false;
+}
+
+
+function getgravatarlink($email,$size = null)
+{
+    if( !is_string($email) || !is_numeric($size) && $size !== null )
+        return '';
+    $email = md5( strtolower( trim( $email ) ) );
+    $res = "http://www.gravatar.com/avatar/$email?";
     
+    #check
+    $check = $res."d=404";
+    $header = get_headers($check);
+    if( $header[0] == "HTTP/1.0 404 Not Found" )
+        $res = "http://www.gravatar.com/avatar/$email?d=identicon&";
+    //Render::errormessage($header);
+    if( isset($size) )
+        $res .= "?s=$size";
+    return $res;
+}
+
+class UserInfo
+{
+    private $uid;
+    private $data;
+    function __construct( $_uid = 0 , $debug = false )
+    {
+        if( is_numeric($_uid) )
+        {
+            $acceptflag = true;
+            $uid = (int)$_uid;
+            
+            #guest
+            if( $uid ===0 ){
+                $acceptflag = false;
+            }
+            
+            #registed user
+            $acctdata = DB::getuserdata( 'account',$uid );
+            if( $acctdata === false || !isset( $acctdata[$uid]) ){
+                $acceptflag = false;
+            }
+
+            if($acceptflag)
+            {
+                $this->uid = $uid;
+                $this->data['account'] = $acctdata[$uid];
+            }
+            else
+            {
+                $this->data['account'] = null;
+                if( $uid === 0)
+                    $this->uid = 0;
+                else
+                    $this->uid = -1;
+            }
+        }
+        else
+        {
+            if( $debug )
+                die('construct error : type error');
+            $this->uid = -1;
+        }
+    }
+    function is_registed(){
+        return $this->uid > 0;
+    }
+    function is_guest(){
+        return $this->uid === 0;
+    }
+    function is_load(){
+        return $this->uid !== -1;
+    }
+    
+    private function _load_data($name)
+    {
+        $method = "_load_data_$name";
+        if( method_exists(get_class(),$method) )
+            if( $data = $this->$method() )
+                return $this->data[$name]=$data;
+        return false;
+    }
+    
+    private function _load_data_view()
+    {
+        $res = array();
+        $res['avaterurl'] = getgravatarlink($this->data['account']['email']);
+        $res['nickname'] = $this->data['account']['nickname'];
+        $res['quote'] =  htmlspecialchars("Sylveon (Japanese: ニンフィア Nymphia) is a Fairy-type Pokémon.It evolves from Eevee when leveled up knowing a Fairy-type move and having at least two Affection hearts in Pokémon-Amie. It is one of Eevee's final forms, the others being Vaporeon, Jolteon, Flareon, Espeon, Umbreon, Leafeon, and Glaceon.");
+        return $res;
+    }
+    
+    function load_data($dataname)
+    {
+        $res = null;
+        #account is available when class constructed
+        $available_argvs = array('account','view');
+        
+        if(!in_array($dataname,$available_argvs))
+            return null;
+            
+        if(!isset($this->data[$dataname]))
+            return $this->_load_data($dataname);
+        return $this->data[$dataname];
+    }
 }

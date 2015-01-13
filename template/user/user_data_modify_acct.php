@@ -27,12 +27,7 @@ function authacct(c)
                 $(disname).html('Success! reload page');
                 setTimeout( function(){location.reload();},500);
             }
-            //alert(data);
-            
     });
-    
-    //$(disname).html(c);
-    
 }
 $(document).ready(function()
 {
@@ -88,6 +83,9 @@ $(document).ready(function()
 
     <div class="row">
         <div><h2>Account</h2></div>
+        <p>SOJ ID : <?=$_E['template']['showid']?></p>
+        <p>avatar via <a href="https://gravatar.com/" class="btn btn-primary active" target="_blank">gravatar</a></p>
+        
         <form class="form-horizontal" role="form" id="acct">
             <input type='hidden' name='mod' value='edit'>
             <input type='hidden' name='page' value='acct'>

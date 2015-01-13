@@ -8,7 +8,13 @@ if(!defined('IN_TEMPLATE'))
 
     <div class="row">
         <h1>更新日誌</h1>
-        
+        <div>
+            <time>2015-1-13</time>更新
+            <ol>
+                <li>優化Code of User View page</li>
+                <li>支援 <a href='https://en.gravatar.com/' target="_blank">Gravatar</a></li>
+            </ol>
+        </div>
         <div>
             <time>2014-12-16</time>更新
             <ol>

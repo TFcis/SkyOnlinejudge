@@ -11,9 +11,9 @@ if( isset($_GET['id']) )
         $showid = $tid;
     }
     else{
-         $_E['template']['alert'] = 'WTF!?';
-         Render::render('nonedefined');
-         exit('');
+        Render::errormessage('WTF!?');
+        Render::render('nonedefined');
+        exit('');
     }
 }
 else
@@ -23,7 +23,7 @@ else
 $tmp = DB::getuserdata('account',$showid,'uid');
 if( $tmp===false || !isset($tmp[$showid] ))
 {
-    $_E['template']['alert'] = 'QQ NO Such One.';
+    Render::errormessage('QQ NO Such One.');
     Render::render('nonedefined');
     exit('');
 }
@@ -58,18 +58,21 @@ if( isset($_GET['page']) )//subpage
 }
 else //main page
 {
-    $opt = array();
-    if( !($opt = prepareUserView($showid)) )
+    $userInfo = new UserInfo($showid);
+    $opt = $userInfo->load_data('view');
+    if( $opt !==false )
     {
-        $_E['template']['alert'] = 'WTF!? 查無此人.';
-        Render::render('nonedefined');
-        exit('');
+        $_E['template'] = array_merge( $_E['template'] , $opt );
+        #if use gravatar
+        $_E['template']['avaterurl'] .= "s=400&";
+        Render::render('user_view','user');
+        exit(0);
     }
     else
     {
-        $_E['template']['avaterurl'] = "http://www.gravatar.com/avatar/$showid?d=identicon&s=400";
-        $_E['template']['nickname'] =  htmlspecialchars($opt['nickname']);
-        $_E['template']['quote'] =  htmlspecialchars("Sylveon (Japanese: ニンフィア Nymphia) is a Fairy-type Pokémon.It evolves from Eevee when leveled up knowing a Fairy-type move and having at least two Affection hearts in Pokémon-Amie. It is one of Eevee's final forms, the others being Vaporeon, Jolteon, Flareon, Espeon, Umbreon, Leafeon, and Glaceon.");
-        Render::render('user_view','user');
+        Render::errormessage('WTF!? 查無此人.');
+        Render::render('nonedefined');
+        exit(0);
     }
 }
+exit(0);

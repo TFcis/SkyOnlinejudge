@@ -105,5 +105,4 @@ class Render
 }
 $_E['template']['error'] = array();
 
-//$Render = new RenderCore();
 ?>
