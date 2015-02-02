@@ -63,6 +63,11 @@ class DB
         return $res[0];
     }
     
+    static function insert_id()
+    {
+        return mysqli_insert_id(self::$con);
+    }
+    
     static function cachefilepath($name)
     {
         global $_E;

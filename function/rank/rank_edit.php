@@ -87,7 +87,7 @@ switch($editpage)
         {
             if( $cb['id'] == 'NULL' )
             {
-                $cb['id'] = mysql_insert_id();
+                $cb['id'] = DB::insert_id();
             }
             userControl::deletetoken('CBEDIT');
             if($removecache)
