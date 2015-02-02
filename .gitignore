@@ -3,4 +3,4 @@
 /data/cache/*.cache
 /data/cache/*.cache
 /LocalSetting.php
-
+/data/private/*.tmp
