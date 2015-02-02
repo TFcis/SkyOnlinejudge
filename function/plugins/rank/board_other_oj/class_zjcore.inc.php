@@ -8,6 +8,7 @@ class zjcore{
     public $websiteurl;
     public $classname;
     public $userpage = "UserStatistic?account=";
+    public $userpagepattern = '$WEB.$USERPAGE.$user';
     public $html_sumary = array();
 
 	function checkid($id)
@@ -18,6 +19,8 @@ class zjcore{
     function preprocess($userlist,$problems)
     {
         global $_E;
+        $WEB = $this->websiteurl;
+        $USERPAGE = $this->userpage;
         foreach($userlist as $user)
         {
             if( !$this->checkid($user) ){
@@ -29,9 +32,15 @@ class zjcore{
             }
             else
             {
-                $res = @file_get_contents($this->websiteurl.$this->userpage.$user);
-                $res = str_replace(array("\r\n","\t","  "),"",$res);
-                DB::putcache($this->classname."_$user",$res,10);
+                //$res = @file_get_contents($this->websiteurl.$this->userpage.$user);
+                $url = '';
+                if( eval('$url='.$this->userpagepattern.';') )
+                {
+                    $res = @file_get_contents($url);
+                    //echo($url);
+                    $res = str_replace(array("\r\n","\t","  "),"",$res);
+                    DB::putcache($this->classname."_$user",$res,10);
+                }
             }
             
             $this->html_sumary[$user] = $res;

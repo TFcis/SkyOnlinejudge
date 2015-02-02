@@ -72,6 +72,6 @@ class class_tioj{
 	
 	function challink($uid,$pid){
 		$pid = preg_replace('/[^0-9]+/','',$pid);
-	    return "http://tioj.ck.tp.edu.tw/problems/".$pname."/submissions?filter_username=".$uid;
+	    return "http://tioj.ck.tp.edu.tw/problems/".$pid."/submissions?filter_username=".$uid;
 	}
 }

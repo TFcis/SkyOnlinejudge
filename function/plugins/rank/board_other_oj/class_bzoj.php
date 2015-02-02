@@ -68,6 +68,6 @@ class class_bzoj{
 	
 	function challink($uid,$pid){
 		$pid = preg_replace('/[^0-9]+/','',$pid);
-	    return "http://www.lydsy.com/JudgeOnline/status.php?problem_id=$pname&user_id=$uid";
+	    return "http://www.lydsy.com/JudgeOnline/status.php?problem_id=$pid&user_id=$uid";
 	}
 }

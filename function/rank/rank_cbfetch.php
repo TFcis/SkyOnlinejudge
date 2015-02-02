@@ -48,8 +48,8 @@ elseif( userControl::getpermission($boarddata['owner']) ){
         }
     }
 }
-elseif( $_G['uid'] && $refresh_user != $_G['uid'] ){
-    throwjson('error','No permissions!');
+elseif( $_G['uid'] && $refresh_user == $_G['uid'] ){
+    //throwjson('error','No permissions!');
 }
 else{
     throwjson('error','No permissions');

@@ -17,8 +17,9 @@ class class_poj{
 	{
 	    $this->zjcore = new zjcore;
 	    $this->zjcore->websiteurl = "http://poj.org/";
-	    $this->zjcore->userpage   = "userstatus?user_id=";
+	    $this->zjcore->userpage   = "usercmp?";
 	    $this->zjcore->classname  = "class_poj";
+	    $this->zjcore->userpagepattern = '$WEB.$USERPAGE.\'uid1=\'.$user.\'&uid2=\'.$user';
 	}
 	
 	function install()
@@ -68,6 +69,6 @@ class class_poj{
 	
 	function challink($uid,$pid){
 		$pid = preg_replace('/[^0-9]+/','',$pid);
-	    return "http://poj.org/status?problem_id=$pname&user_id=$uid&result=&language=";
+	    return "http://poj.org/status?problem_id=$pid&user_id=$uid&result=&language=";
 	}
 }
