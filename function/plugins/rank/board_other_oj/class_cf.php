@@ -20,8 +20,7 @@ class class_cf{
 	    $this->zjcore->userpage   = "api/";
 	    $this->zjcore->classname  = "class_cf";
 	    #WTF!
-		include("cf_api_key.php");
-		$this->zjcore->userpagepattern ='$WEB.$USERPAGE.\'user.status?handle=\'.$user.\'&apiKey='.$key.'&time=\'.time().\'&apiSig=123456\'.hash(\'sha512\',\'123456/user.status?apiKey='.$key.'&handle=\'.$user.\'&time=\'.time().\'#'.$secret.'\')';
+		$this->zjcore->userpagepattern ='$WEB.$USERPAGE.\'user.status?handle=\'.$user';
 	}
 	
 	function install()
