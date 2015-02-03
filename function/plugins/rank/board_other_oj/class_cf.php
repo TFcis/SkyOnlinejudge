@@ -56,12 +56,14 @@ class class_cf{
 		if($result["status"]!="OK")return 0;
 		else {
 			$result=$result["result"];
+			$CF_stats = 0;
 			foreach ($result as $temp){
 				if($temp["problem"]["contestId"].$temp["problem"]["index"]==$pid){
 					if($temp["verdict"]=="OK")return 90;
+					else $CF_stats = 70;
 				}
 			}
-			return 70;
+			return $CF_stats;
 		}
 	}
 	
