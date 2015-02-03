@@ -9,12 +9,26 @@ if(!defined('IN_TEMPLATE'))
     <div class="row">
         <h1>更新日誌</h1>
         <div>
+            <time>2015-2-3</time>更新
+            <ol>
+                <li>在大家的努力下增加了很多OJ~ XD</li>
+                <li>追加了<code>syslog</code>資料表</li>
+                <li>為開發者放了一個admin頁面可以看log，需登入且具有權限才可見</li>
+                <li>使用<code>DB::syslog(CONTENT [,NAMESPACE] )</code>可以輸出log到DB，此外SQL錯誤會自動記錄</li>
+                <li>增加<code>DB::real_escape_string(STR)</code>統一的過濾字串</li>
+                <li>增加<code>DB::query(Q,errorno)</code>增加一個參數避免自動記錄SQL錯誤，預設為<code>false</code></li>
+                <li>class_cf會導致cbfetch發生錯誤，於下版本改進</li>
+            </ol>
+        </div>
+        <br>
+        <div>
             <time>2015-1-13</time>更新
             <ol>
                 <li>優化Code of User View page</li>
                 <li>支援 <a href='https://en.gravatar.com/' target="_blank">Gravatar</a></li>
             </ol>
         </div>
+        <br>
         <div>
             <time>2014-12-16</time>更新
             <ol>
@@ -25,21 +39,21 @@ if(!defined('IN_TEMPLATE'))
                 <a href="http://www.public-domain-image.com/nature-landscape/hill/slides/strandhill-ireland-ocean-beaches-couds-sky.html" target="_blank">Strandhill ireland ocean beaches couds sky(公眾領域使用)</a>。</li>
             </ol>
         </div>
-        
+        <br>
         <div>
             <time>2014-12-12</time>更新
             <ol>
                 <li>TOJ驗證功能Open!</li>
             </ol>
         </div>
-        
+        <br>
         <div>
             <time>2014-12-10</time>更新
             <ol>
                 <li>可以修改密碼</li>
             </ol>
         </div>
-        
+        <br>
         <div>
             <time>2014-12-9</time>更新
             <ol>
@@ -47,14 +61,14 @@ if(!defined('IN_TEMPLATE'))
                 <li>修復UVA一個愚蠢的變數名稱錯誤</li>
             </ol>
         </div>
-        
+        <br>
         <div>
             <time>2014-12-4</time>更新
             <ol>
                 <li>更新過時的MYSQL函數</li>
             </ol>
         </div>
-        
+        <br>
         <div>
             <time>2014-12-3</time>更新
             <ol>

@@ -29,16 +29,25 @@ class DB
     {
         return date('Y-m-d G:i:s');
     }
-    static function query($query)
+    static function real_escape_string($str)
+    {
+        return mysqli_real_escape_string(self::$con,$str);
+    }
+    
+    static function query($query,$errorno = false)
     {
         if( $stat = mysqli_query(self::$con,$query) )
         {
             return $stat;
         }
+        elseif(!$errorno)
+        {
+            DB::syslog(mysqli_error(self::$con),'SQL Core');
+            return false;
+        }
         else
         {
             Render::errormessage(mysqli_error(self::$con),'SQL Core');
-            return false;
         }
     }
     
@@ -67,6 +76,23 @@ class DB
     {
         return mysqli_insert_id(self::$con);
     }
+    
+    static function syslog( $content , $namespace = 'GLOBAL' )
+    {
+        $syslog = DB::tname('syslog');
+        if( !is_string($content) || !is_string($namespace) )
+            return false;
+        $content = DB::real_escape_string($content);
+        $namespace = DB::real_escape_string($namespace);
+        #Set errorno to true to prevent bugs
+        DB::query("INSERT INTO `$syslog` (`id`, `timestamp`, `namespace`, `description`) 
+                                VALUES (null,null,'$namespace','$content')",true);
+    }
+    
+    
+    
+    #CACHE SYSTEM
+    
     
     static function cachefilepath($name)
     {
