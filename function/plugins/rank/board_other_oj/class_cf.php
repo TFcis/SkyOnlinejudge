@@ -17,10 +17,8 @@ class class_cf{
 	{
 	    $this->zjcore = new zjcore;
 	    $this->zjcore->websiteurl = "http://codeforces.com/";
-	    $this->zjcore->userpage   = "api/";
+	    $this->zjcore->userpage   = "api/user.status?handle=";
 	    $this->zjcore->classname  = "class_cf";
-	    #WTF!
-		$this->zjcore->userpagepattern ='$WEB.$USERPAGE.\'user.status?handle=\'.$user';
 	}
 	
 	function install()
