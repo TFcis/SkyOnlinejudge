@@ -4,3 +4,4 @@
 /data/cache/*.cache
 /LocalSetting.php
 /data/private/*.tmp
+function/plugins/rank/board_other_oj/cf_api_key.php

@@ -34,7 +34,7 @@ class zjcore{
             {
                 //$res = @file_get_contents($this->websiteurl.$this->userpage.$user);
                 $url = '';
-                if( eval('$url='.$this->userpagepattern.';') )
+                if( eval('$url='.$this->userpagepattern.';')!==false )
                 {
                     $res = @file_get_contents($url);
                     //echo($url);
