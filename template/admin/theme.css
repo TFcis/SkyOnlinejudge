@@ -1,0 +1,44 @@
+.icon-bttn{
+    font-size: 14px;
+    margin: 0 2px;
+    
+    color: #999999;
+    transition: 0.2s;
+}
+.icon-bttn:hover{
+    cursor: pointer;
+    color: #ffffff;
+}
+
+
+table {
+    
+    border-collapse: collapse;
+    
+}
+#cbtable{
+    display: inline-block;
+    overflow:auto;
+    margin-left: 160px;
+    width: calc( 100% - 160px );
+    background: #1A1A1A;
+}
+tr{
+    border: 0;
+    transition: 0.2s;
+}
+tr:nth-child(odd) {
+    background: #222222;
+}
+
+tr:nth-child(even) {
+    background: #282828;
+}
+tr:hover{
+    background-color:#317082;
+}
+tr .label{ width: 80px; }
+
+
+th { text-align: left; }
+td { padding: 0 4px;}
