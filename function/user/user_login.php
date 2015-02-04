@@ -25,6 +25,7 @@ else // API CALL
     if( !$user[0]  )
     {
         $_E['template']['alert'] = $user[1];
+        DB::syslog("[ $email ] want to login but fail.(".$user[1].")","user_login");
         throwjson('error',$user[1]);
     }
     else

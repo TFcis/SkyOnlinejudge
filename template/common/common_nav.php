@@ -37,7 +37,7 @@ if(!defined('IN_TEMPLATE'))
                 <?php if( !$_G['uid']): ?>
                 <li><a href="user.php?mod=login">LOGIN</a></li>
                 <?php else: ?>
-                    <?php if(userControl::getpermission($_G['uid'])):?>
+                    <?php if(userControl::isAdmin()):?>
                 <li><a href="admin.php">Admin</a></li>
                     <?php endif; ?>
                 <li><a href="user.php?mod=view"><?php echo(htmlspecialchars($_G['nickname']));?></a></li>

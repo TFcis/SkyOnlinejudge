@@ -1,7 +1,7 @@
 <?php
 require_once('GlobalSetting.php');
 
-if( !userControl::getpermission($_G['uid']) ) 
+if( !userControl::isAdmin() ) 
 {
     header("Location: index.php");
     exit(0);
