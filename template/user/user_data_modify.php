@@ -5,24 +5,34 @@ if(!defined('IN_TEMPLATE'))
 }
 ?>
 <script>
-$(document).ready(function()
-{
-    $("#ojacct").submit(function(e)
-    {
-        e.preventDefault();
-        $.post("user.php",
-            $("#ojacct").serialize(),
-            function(data){
-                alert("Data Loaded: " + data);
+	var SCONT;
+	var old = 'modify';
+	$(document).ready(function(){
+        SCONT = document.getElementById('setting-main');
+        SubloadTemplate(old);
+        $( "[settingpage]" ).click(function(){SubloadTemplate($(this).attr('settingpage'));});
+	});
+	function SubloadTemplate(template){
+        //alert(template);
+        $("[settingpage = '"+old+"']").removeClass();
+        $("[settingpage = '"+template+"']").addClass('active');
+        old = template;
+        $(SCONT).load("user.php?mod=view&page="+template+"&id=<?=$_E['template']['showid']?>",function(){
+            $(SCONT).hide();
+            $(SCONT).fadeIn();
         });
-        return true;
-    });
-})
+	}
 </script>
 
-<div class="container">
-
-    <div><h2>Come soon...</h2></div>
-
-    
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="nav nav-pills nav-stacked" id="panel">
+                <li settingpage="account" role="presentation"><a>帳號</a></li>
+                <li settingpage="ojacct"  role="presentation"><a>OJ設定</a></li>
+                <li settingpage="modify"  role="presentation"><a >OLD</a></li>
+            </ul>
+        </div>
+        <div class="col-md-10" id="setting-main"></div>
+    </div>
 </div>

@@ -11,7 +11,7 @@ if(!defined('IN_TEMPLATE'))
         CONT = document.getElementById('content');
         
         var curTemplate = location.hash.slice(1);
-        if(curTemplate=="")	{ curTemplate = "modify"; }
+        if(curTemplate=="")	{ curTemplate = "setting"; }
         $('#li-'+curTemplate).addClass('active');
         old = curTemplate;
         loadTemplate(curTemplate);
@@ -51,15 +51,15 @@ if(!defined('IN_TEMPLATE'))
         
     </div>
 </div>
-
-<div style="width:100%;"></div>
-
-<ul>
+<div class="container">
+    <div style="width:100%;"></div>
+    
+    <ul>
         <a class = 'link-like' id="nav-summary">Overview</a> |
         <a class = 'link-like' id="nav-solve">Statstistics</a> |
-        <a class = 'link-like' id="nav-modify">Edit</a> |
         <a class = 'link-like' id="nav-setting">Setting</a>
-</ul>
-
-<div class="tab-content" id="content" style="min-height:100px; padding: 0 10px"></div>
-<div style="width:100%;height:100px"></div>
+    </ul>
+    
+    <div class="tab-content" id="content" style="min-height:100px; padding: 0 10px"></div>
+    <div style="width:100%;height:100px"></div>
+</div>

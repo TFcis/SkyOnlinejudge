@@ -129,11 +129,11 @@ $(document).ready(function()
                 
                 <?php foreach($_E['template']['oj'] as $oj){ ?>
                 <div class="form-group">
-                    <label class="col-md-2 control-label"><?=$oj['name']?></label>
-                    <div class="col-md-3"><?php if($oj['user']['approve']==1)$disabled='disabled';else $disabled='';?>
+                    <label class="col-md-3 control-label"><?=$oj['name']?></label>
+                    <div class="col-md-4"><?php if($oj['user']['approve']==1)$disabled='disabled';else $disabled='';?>
                         <input type="text" class="form-control" name="<?=$oj['class']?>" placeholder="<?=$oj['description']?>" value="<?=$oj['user']['acct']?>" <?=$disabled?>>
                     </div>
-                    <div class="col-md-3"><?=$oj['info'];?>
+                    <div class="col-md-5"><?=$oj['info'];?>
                     <?php if( $oj['user']['acct'] && $oj['user']['approve'] == 0 && method_exists($oj['c'],'authenticate_message') ) : ?>
                         <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal-<?=$oj['class']?>">
                             立即驗證帳號
@@ -164,7 +164,7 @@ $(document).ready(function()
                 <?php } ?>
                 
                 <div class="form-group">
-                    <div class="col-sm-offset-2 col-md-3">
+                    <div class="col-sm-offset-7 col-md-3">
                         <button type="submit" class="btn btn-success text-right">送出</button>
                     </div>
                 </div>
