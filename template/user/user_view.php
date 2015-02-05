@@ -26,9 +26,9 @@ if(!defined('IN_TEMPLATE'))
         $('#li-'+old).removeClass();
         $('#li-'+template).addClass('active');
         old = template;
-        $(CONT).load("user.php?mod=view&page="+template+"&id=<?=$_E['template']['showid']?>",function(){
-            $('#content').hide();
-            $('#content').fadeIn();
+        $(CONT).load("user.php?mod=view&page="+template+"&id=<?=$tmpl['showid']?>",function(){
+            $(CONT).hide();
+            $(CONT).fadeIn();
         });
         
 	}
@@ -38,13 +38,13 @@ if(!defined('IN_TEMPLATE'))
     <div class="container">
         
         <div class = "col-xs-5 col-sm-4 col-md-3">
-            <img src="<?=$_E['template']['avaterurl']?>" id="user_view_avater">
+            <img src="<?=$tmpl['avaterurl']?>" id="user_view_avater">
         </div>
         
         <div style = "width: 70%; float: left" class = "col-md-7">
-            <h1><?=$_E['template']['nickname']?><h1>
+            <h1><?=$tmpl['nickname']?><h1>
             <blockquote style = "font-size: 14px">
-                <p><?=$_E['template']['quote']?></p>
+                <p><?=$tmpl['quote']?></p>
                 <footer>By Pokemon</footer>
             </blockquote>
         </div>

@@ -218,7 +218,34 @@ function envadd($table)
         return false;
     }
 }
-
+function ojid_reg_v2($rel)
+{
+    global $_E;
+    if( !isset($_E['ojlist']) )
+        if( !envadd('ojlist') )
+            return false;
+    #做成 id=>classname
+    $idToclass = array();
+    foreach($_E['ojlist'] as $row)
+    {
+        if( $row['available'] == 1 )
+        {
+            $idToclass[ $row['id'] ]=$row['class'];
+        }
+    }
+    #移除不存在的OJ
+    $oj2 = array();
+    $inner = array();
+    foreach($rel as $row)
+    {
+        if( isset($idToclass[ $row['id'] ]) )
+        {
+            
+        }
+    }
+    Render::errormessage('Skyoj.lib.php line 246');
+    Render::errormessage($idToclass);
+}
 function ojid_reg($json)
 {
     global $_E;

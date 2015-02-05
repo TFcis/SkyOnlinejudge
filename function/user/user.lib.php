@@ -313,11 +313,24 @@ class UserInfo
         return $res;
     }
     
+    private function _load_data_ojacct()
+    {
+        $userojaccttable = DB::tname('userojacct');
+        $res = DB::query("SELECT * FROM `$userojaccttable` WHERE `id` = ".$this->uid);
+        if( !$res ) return false;
+        $val = array();
+        while( $tmp = DB::fetch($res) )
+        {
+            $val[] = $tmp;
+        }
+        return ojid_reg_v2($val);
+    }
+    
     function load_data($dataname)
     {
         $res = null;
         #account is available when class constructed
-        $available_argvs = array('account','view');
+        $available_argvs = array('account','view','ojacct');
         
         if(!in_array($dataname,$available_argvs))
             return null;

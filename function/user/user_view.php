@@ -34,21 +34,26 @@ if( isset($_GET['page']) )//subpage
     $require = safe_get('page');
     switch($require)
     {
-        case 'modify':
-            if( userControl::getpermission($showid) )
-            {
-                userControl::registertoken('EDIT',3600);
-                page_ojacct($showid);
-                Render::renderSingleTemplate('user_data_modify_acct','user');
-                exit(0);
-            }
-            break;
         case 'setting':
             if( userControl::getpermission($showid) )
             {
+                Render::renderSingleTemplate('user_setting','user');
+                exit(0);
+            }
+        case 'account':
+            if( userControl::getpermission($showid) )
+            {
+                userControl::registertoken('EDIT',3600);
+                Render::renderSingleTemplate('user_data_modify_account','user');
+                exit(0);
+            }
+            break;
+        case 'ojacct':
+            if( userControl::getpermission($showid) )
+            {
                 userControl::registertoken('EDIT',3600);
                 page_ojacct($showid);
-                Render::renderSingleTemplate('user_data_modify','user');
+                Render::renderSingleTemplate('user_data_modify_ojacct','user');
                 exit(0);
             }
             break;

@@ -5,7 +5,7 @@ if(!defined('IN_TEMPLATE'))
 }
 ?>
 <script>
-var pageid = <?=$_E['template']['showid']?> ;
+var pageid = <?=$tmpl['showid']?> ;
 function authacct(c)
 {
     var disname = '#display-modal-' + c ;
@@ -42,82 +42,10 @@ $(document).ready(function()
         });
         return true;
     });
-    $("#acct").submit(function(e)
-    {
-        e.preventDefault();
-        var x1 = $("#newpass").val();
-        var x2 = $("#renewpass").val();
-        if( x1 == '' || x2 == '' )
-        {
-            $("#acct-show").html('Empty!');
-            $("#acct-show").css('color','Red');
-            return false;
-        }
-        if( x1!=x2 )
-        {
-            $("#acct-show").html('Are you kidding?');
-            $("#acct-show").css('color','Red');
-            return false;
-        }
-        $.post("user.php",
-            $("#acct").serialize(),
-            function(res){
-                if(res.status == 'error')
-                {
-                    $("#acct-show").html(res.data);
-                    $("#acct-show").css('color','Red');
-                }
-                else
-                {
-                    $("#acct-show").css('color','Lime');
-                    $("#acct-show").html('Success!');
-                    $('#acct').trigger("reset");
-                }
-        },"json");
-        return true;
-    });
 })
 </script>
 
 <div class="container">
-
-    <div class="row">
-        <div><h2>Account</h2></div>
-        <p>SOJ ID : <?=$_E['template']['showid']?></p>
-        <p>avatar via <a href="https://gravatar.com/" class="btn btn-primary active" target="_blank">gravatar</a></p>
-        
-        <form class="form-horizontal" role="form" id="acct">
-            <input type='hidden' name='mod' value='edit'>
-            <input type='hidden' name='page' value='acct'>
-            <input type='hidden' name='id' value='<?=$_E['template']['showid']?>'>
-            <div class="form-group">
-                <label class="col-md-2 control-label">舊密碼</label>
-                <div class="col-md-3">
-                    <input type="password" class="form-control" name="oldpasswd" placeholder="Old Password">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label">新密碼</label>
-                <div class="col-md-3">
-                    <input type="password" class="form-control" name="newpasswd" placeholder="New Password" id="newpass">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label">再次確認</label>
-                <div class="col-md-3">
-                    <input type="password" class="form-control" placeholder="Repeat again" id="renewpass">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-md-3">
-                    <button type="submit" class="btn btn-success text-right">送出</button>
-                    <small><span id="acct-show"></span></small>
-                </div>
-            </div>
-        </form>
-    </div>
-    <hr>
-    
     <div class="row">
         <div><h2>Availavle online judge systems:</h2></div>
         
@@ -125,7 +53,7 @@ $(document).ready(function()
             <form class="form-horizontal" role="form" id="ojacct">
                 <input type='hidden' name='mod' value='edit'>
                 <input type='hidden' name='page' value='ojacct'>
-                <input type='hidden' name='id' value='<?=$_E['template']['showid']?>'>
+                <input type='hidden' name='id' value='<?=$tmpl['showid']?>'>
                 
                 <?php foreach($_E['template']['oj'] as $oj){ ?>
                 <div class="form-group">
@@ -147,7 +75,7 @@ $(document).ready(function()
                                     </div>
                                     
                                     <div class="modal-body">
-                                    <?= $oj['c']->authenticate_message($_E['template']['showid'],$oj['user']['acct']); ?>
+                                    <?= $oj['c']->authenticate_message($tmpl['showid'],$oj['user']['acct']); ?>
                                     </div>
                                     
                                     <div class="modal-footer">
