@@ -23,7 +23,7 @@ class class_uva{
 	function checkid($uname)
 	{
 	    $uname = (string)$uname;
-	    if(!preg_match('/[\da-zA-Z]{2,}/',$uname)) //No spaces, at least 2 characters and contain 0-9,a-z,A-Z
+	    if(!preg_match('/[\da-zA-Z_]{2,}/',$uname)) //No spaces, at least 2 characters and contain 0-9,a-z,A-Z
 	    	return false;
 	    if(!$this->uname2id($uname))
 	    	return false;
