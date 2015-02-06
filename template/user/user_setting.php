@@ -6,16 +6,15 @@ if(!defined('IN_TEMPLATE'))
 ?>
 <script>
 	var SCONT;
-	//var old = 'account';
+	var sold = 'account';
 	$(document).ready(function(){
         SCONT = document.getElementById('setting-main');
-        //SubloadTemplate(old);
         $( "[settingpage]" ).click(function(){SubloadTemplate($(this).attr('settingpage'));});
 	});
 	function SubloadTemplate(template){
-        $("[settingpage = '"+old+"']").removeClass();
+        $("[settingpage = '"+sold+"']").removeClass();
         $("[settingpage = '"+template+"']").addClass('active');
-        old = template;
+        sold = template;
         $(SCONT).load("user.php?mod=view&page="+template+"&id=<?=$tmpl['showid']?>",function(){
             $(SCONT).hide();
             $(SCONT).fadeIn();

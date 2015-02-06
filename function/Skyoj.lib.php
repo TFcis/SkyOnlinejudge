@@ -218,12 +218,16 @@ function envadd($table)
         return false;
     }
 }
-function ojid_reg_v2($rel)
+function ojacct_reg($rel , $uid , &$change = null)
 {
+    if(isset($change))
+        $change = false;
+        
     global $_E;
     if( !isset($_E['ojlist']) )
         if( !envadd('ojlist') )
             return false;
+            
     #做成 id=>classname
     $idToclass = array();
     foreach($_E['ojlist'] as $row)
@@ -235,50 +239,44 @@ function ojid_reg_v2($rel)
     }
     #移除不存在的OJ
     $oj2 = array();
-    $inner = array();
     foreach($rel as $row)
     {
         if( isset($idToclass[ $row['id'] ]) )
         {
-            
+            $oj2[ $idToclass[ $row['id'] ] ] = array(
+                    'uid'   => $row['uid'],
+                    'id'    => $row['id'] ,
+                    'account'=>$row['account'],
+                    'approve'=>$row['approve'],
+                    'indexid'=>$row['indexid'],
+                );
         }
-    }
-    Render::errormessage('Skyoj.lib.php line 246');
-    Render::errormessage($idToclass);
-}
-function ojid_reg($json)
-{
-    global $_E;
-    if( !isset($_E['ojlist']) )
-        if( !envadd('ojlist') )
-            return false;
-            
-    $ojname = array();
-    foreach($_E['ojlist'] as $oj)
-        $ojname[]=$oj['class'];
-    
-    if(! ($acct = json_decode($json,true)) )
-        $acct = array();
-        
-    $oldacct = $acct;
-    foreach($oldacct as $oj => $stats)
-    {
-        if(!in_array($oj,$ojname))
-            unset($acct[$oj]);
-    }
-    
-    foreach($ojname as $oj)
-    {
-        if(!isset($acct[$oj]))
+        elseif( isset($change) )
         {
-            $acct[$oj] = array(
-                'acct' => '',
-                'approve' => 0);
+            $change = true;
         }
     }
-    return $acct;
+    #加回空的OJ
+    $tmp = array(
+                    'uid'   => $uid,
+                    'id'    => 0 ,
+                    'account'=>'',
+                    'approve'=>0,
+                    'indexid'=>'',
+                );
+    foreach( $idToclass as $id => $class )
+    {
+        if( !isset( $oj2[$class] ) )
+        {
+            $oj2[$class] = $tmp;
+            $oj2[$class]['id'] = $id;
+            $oj2[$class]['indexid'] = $oj2[$class]['uid']."+$id";
+            if(isset($change))
+                $change = true;
+        }
+    }
+    return $oj2;
 }
-
 function nickname( $uid )
 {
     global $_E;

@@ -126,17 +126,19 @@ function buildcbboard($bid , $selectuser = null)
             $res['userlist'][]=$uid;
     }
     #get oj account
-    $userojacct_sql = DB::getuserdata('userojlist', $res['userlist'] );
+    //$userojacct_sql = DB::getuserdata('userojlist', $res['userlist'] );
     $userojacct = array();
-    $emptyacct = ojid_reg('');
+    //$emptyacct = ojacct_reg('');
 
-    foreach( $res['userlist'] as &$uid )
+    foreach( $res['userlist'] as $uid )
     {
-        $uid = (string)$uid;
+        $tmp = new UserInfo($uid);
+        $userojacct[$uid] = $tmp->load_data('ojacct');
+        /*$uid = (string)$uid;
         if( isset($userojacct_sql[$uid]) )
             $userojacct[$uid] = ojid_reg( $userojacct_sql[$uid]['data'] ); 
         else
-            $userojacct[$uid] = $emptyacct;
+            $userojacct[$uid] = ojacct_reg(array(),$uid);*/
     }
     
     #setproblem
@@ -167,8 +169,8 @@ function buildcbboard($bid , $selectuser = null)
         {
             $class_acct = array();
             foreach($userojacct as $acct)
-                if( $acct[$classname] && $class[$classname]->checkid($acct[$classname]['acct']) )
-                    $class_acct[]=$acct[$classname]['acct'];
+                if( $acct[$classname] && $class[$classname]->checkid($acct[$classname]['account']) )
+                    $class_acct[]=$acct[$classname]['account'];
             if(!empty($class_acct))
                 $class[$classname]->preprocess($class_acct ,$arr);
         }
@@ -199,8 +201,8 @@ function buildcbboard($bid , $selectuser = null)
             if( array_key_exists( $uid,$accache) && isset( $accache[$uid][$pname]) )
                 $re = 90;
             //Match a judge & account
-            elseif( $p['oj'] && $u[ $p['oj'] ]['acct'] )
-                $re = $class[$p['oj']]->query($u[$p['oj']]['acct'],$pname);
+            elseif( $p['oj'] && $u[ $p['oj'] ]['account'] )
+                $re = $class[$p['oj']]->query($u[$p['oj']]['account'],$pname);
             //Unavailable
             else
                 $re=0;
@@ -215,7 +217,7 @@ function buildcbboard($bid , $selectuser = null)
             $res['challink'][$uid][$pname] = '';
             if( $p['oj'] && method_exists($class[$p['oj']],'challink') && $re)
             {
-                $res['challink'][$uid][$pname] = $class[$p['oj']]->challink($u[$p['oj']]['acct'],$pname);
+                $res['challink'][$uid][$pname] = $class[$p['oj']]->challink($u[$p['oj']]['account'],$pname);
             }
         }
     }

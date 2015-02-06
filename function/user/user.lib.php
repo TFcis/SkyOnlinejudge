@@ -128,20 +128,16 @@ function page_ojacct($uid)
         if( !envadd('ojlist') )
             return false;
             
-    $userojacctlist = DB::getuserdata('userojlist',$uid);
-    
-    if( isset($userojacctlist[$uid]) )
-        $userojacctlist = ojid_reg($userojacctlist[$uid]['data']);
-    else
-        $userojacctlist = ojid_reg('');
-    
+    $userdata = new UserInfo($uid);
+    $userojacctlist = $userdata -> load_data('ojacct');
+
     foreach($_E['ojlist'] as $oj)
     {
         $tmp = $oj;
         $tmp['info'] = '';
         $tmp['user'] = $userojacctlist[ $oj['class'] ];
         $tmp['c'] = $class[ $oj['class'] ];
-        if( $tmp['user']['acct'] )
+        if( $tmp['user']['account'] )
         {
             if( $tmp['user']['approve'] == 0 ) // No Check
             {
@@ -151,7 +147,7 @@ function page_ojacct($uid)
             {
                 if( method_exists( $class[ $oj['class'] ] , 'account_detail' ) )
                 {
-                    $tmp['info'] = $class[ $oj['class'] ]->account_detail($tmp['user']['acct']);
+                    $tmp['info'] = $class[ $oj['class'] ]->account_detail($tmp['user']['account']);
                     if( !$tmp['info'] ) $tmp['info'] = '';
                     $tmp['info'] = "已驗證 ".$tmp['info'];
                 }
@@ -163,8 +159,6 @@ function page_ojacct($uid)
     return true;
 }
 
-
-
 function modify_ojacct($argv,$euid)
 {
     global $_E;
@@ -174,19 +168,17 @@ function modify_ojacct($argv,$euid)
         envadd('ojlist');
     }
     $class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
-    $uacct = DB::getuserdata('userojlist',$euid);
-    if(!isset($uacct[$euid]))
-        $uacct = '';
-    else
-        $uacct = $uacct[$euid]['data'];
-    $uacct = ojid_reg($uacct);
+    
+    $userdata = new UserInfo($euid);
+    $uacct = $userdata -> load_data('ojacct');
+    
     foreach($argv as $oj => $acct)
     {
         if( !empty($acct) )
         {
             if( $uacct[$oj]['approve'] ==0 && $class[$oj]->checkid($acct) )
             {
-                $uacct[$oj]['acct'] = $acct;
+                $uacct[$oj]['account'] = $acct;
                 $uacct[$oj]['approve']=0;
             }
             else
@@ -195,34 +187,10 @@ function modify_ojacct($argv,$euid)
             }
         }
     }
-    if( save_ojacct($euid,$uacct) )
+    if( $userdata -> save_data('ojacct',$uacct) )
         return array(true);
     return array(false,'SQL ERROR');
-    $uacct = addslashes(json_encode($uacct));
-    if( DB::query("INSERT INTO $table
-                    (`uid`,`data`) VALUES 
-                    ($euid,'$uacct')
-                    ON DUPLICATE KEY UPDATE `data`= '$uacct'"))
-    {
-        return array(true);
-    }
-    return array(false,'SQL ERROR');
 }
-
-function save_ojacct($uid,$res)
-{
-    $table = DB::tname('userojlist');
-    $res = addslashes(json_encode($res));
-    if( DB::query("INSERT INTO $table
-                    (`uid`,`data`) VALUES 
-                    ($uid,'$res')
-                    ON DUPLICATE KEY UPDATE `data`= '$res'"))
-    {
-        return true;
-    }
-    return false;
-}
-
 
 function getgravatarlink($email,$size = null)
 {
@@ -316,16 +284,72 @@ class UserInfo
     private function _load_data_ojacct()
     {
         $userojaccttable = DB::tname('userojacct');
-        $res = DB::query("SELECT * FROM `$userojaccttable` WHERE `id` = ".$this->uid);
+        $res = DB::query("SELECT * FROM `$userojaccttable` WHERE `uid` = ".$this->uid);
         if( !$res ) return false;
         $val = array();
         while( $tmp = DB::fetch($res) )
         {
             $val[] = $tmp;
         }
-        return ojid_reg_v2($val);
+        $flag = false;
+        $res = ojacct_reg($val,$this->uid,$flag);
+        if( $flag )
+        {
+            $this->_save_data_ojacct($res);
+        }
+        Render::errormessage($flag);
+        return $res;
     }
-    
+    private function _save_data_ojacct( $ojarray , $cg = null )
+    {
+        $userojaccttable = DB::tname('userojacct');
+        //remove old data
+        if( isset($cg) )
+        {
+            if(is_array($cg[0]))
+            {
+                DB::syslog('RM'.$cg[0],'ojacct');
+                foreach($cg[0] as $indexid)
+                    DB::query("DELETE FROM `$userojaccttable` WHERE `indexid` = '$indexid'");
+            }
+            if(is_array($cg[1]))
+            {
+                foreach($ojarray as $row)
+                {
+                    if( in_array( $row['indexid'] , $cg[1] ) )
+                    {
+                        DB::syslog('ADD'.$row['indexid'],'ojacct');
+                        $uid = (int)$row['uid'];
+                        $id  = (int)$row['id'];
+                        $indexid = "$uid+$id";
+                        $account = DB::real_escape_string($row['account']);
+                        $approve = (int)$row['approve'];
+                        DB::query("INSERT INTO `$userojaccttable` (`indexid`,`uid`,`id` ,`account`,`approve`)
+                                    VALUES ('$indexid',  $uid,  $id,  '$account',  $approve)
+                                    ON DUPLICATE KEY
+                                    UPDATE `account` = '$account' , `approve` = $approve");
+                    }
+                }
+            }
+        }
+        else
+        {
+            DB::syslog('GLOBAL ADD'.$this->uid,'ojacct');
+            DB::query("DELETE FROM `$userojaccttable` WHERE `uid` = ".$this->uid);
+            foreach( $ojarray as $row )
+            {
+                $uid = (int)$row['uid'];
+                $id  = (int)$row['id'];
+                $indexid = "$uid+$id";
+                $account = DB::real_escape_string($row['account']);
+                $approve = (int)$row['approve'];
+                DB::query("INSERT INTO `$userojaccttable` (`indexid`,`uid`,`id` ,`account`,`approve`)
+                            VALUES ('$indexid',  $uid,  $id,  '$account',  '$approve')");
+            }
+        }
+        return true;
+    }
+
     function load_data($dataname)
     {
         $res = null;
@@ -338,5 +362,19 @@ class UserInfo
         if(!isset($this->data[$dataname]))
             return $this->_load_data($dataname);
         return $this->data[$dataname];
+    }
+    
+    function save_data($dataname,$value, $args = null )
+    {
+        $available_argvs = array('ojacct');
+        
+        if(!in_array($dataname,$available_argvs))
+            return false;
+
+        $method = "_save_data_$dataname";
+        if( method_exists(get_class(),$method) )
+            if( $this->$method($value,$args) )
+                return true;
+        return false;
     }
 }

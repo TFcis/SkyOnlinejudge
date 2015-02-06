@@ -32,6 +32,7 @@ $cache     = tname('cache');
 $ojlist    = tname('ojlist');
 $statsboard= tname('statsboard');
 $syslog    = tname('syslog');
+$userojacct= tname('userojacct');
 //CREATE TABLE 
 $conn = mysql_connect($_config['db']['dbhost'],$_config['db']['dbuser'],$_config['db']['dbpw']);
 if(!$conn){
@@ -98,12 +99,12 @@ run("CREATE TABLE IF NOT EXISTS `$ojlist` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
 
 
-run("CREATE TABLE IF NOT EXISTS `".tname('userojlist')."` (
+/*run("CREATE TABLE IF NOT EXISTS `".tname('userojlist')."` (
   `uid` int(11) NOT NULL,
   `data` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-");
+");*/
 
 run("CREATE TABLE IF NOT EXISTS `".tname('plugin')."` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -143,7 +144,19 @@ case 3:
   `description` text COLLATE utf8_bin,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
+
+    run("CREATE TABLE IF NOT EXISTS `$userojacct` (
+  `indexid` char(40) COLLATE utf8_bin NOT NULL,
+  `uid` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
+  `account` char(64) COLLATE utf8_bin NOT NULL,
+  `approve` int(11) NOT NULL,
+  PRIMARY KEY (`indexid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
+    run("DROP TABLE  ".tname('userojlist'),false);
 }
+
+    
 
 
 $version = 3;

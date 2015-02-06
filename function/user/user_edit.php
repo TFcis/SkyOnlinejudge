@@ -81,13 +81,12 @@ switch($editpage)
             throwjson('error','data error!');
         }
         $class = $class[$authclass];
-        
-        $ojacct = DB::getuserdata('userojlist',$euid);
-        if(!$ojacct)
+        $user = new UserInfo($euid);
+        if( !$user->is_registed() )
         {
             throwjson('error','user data error!');
         }
-        $ojacct = ojid_reg($ojacct[$euid]['data']);
+        $ojacct = $user->load_data('ojacct');
         if( !$ojacct[$authclass] )
         {
             throwjson('error','empty acct data!');
@@ -95,11 +94,12 @@ switch($editpage)
         
         if( !method_exists($class,'authenticate') )
             throwjson('error','Not support authenticate!');
-        $res = $class->authenticate($euid,$ojacct[$authclass]['acct']);
+        $res = $class->authenticate($euid,$ojacct[$authclass]['account']);
         if( $res === true )
         {
             $ojacct[$authclass]['approve'] = 1;
-            save_ojacct($euid,$ojacct);
+            $indexid = $ojacct[$authclass]['indexid'] ;
+            $user->save_data('ojacct',$ojacct,array(null,array($indexid)));
             throwjson('SUCC','Success');
         }
         throwjson ('error',$res[1]);
