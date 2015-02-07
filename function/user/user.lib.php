@@ -15,6 +15,10 @@ function getTimestamp()
     return date('Y-m-d G:i:s');
 }
 
+define('NOE_FAIL',0);
+define('NOE_IS_NICKNAMEL',1);
+define('NOE_IS_EMAI',2);
+
 function checkpassword($pass)
 {
     $pattern  = '/^[._@a-zA-Z0-9]{3,30}$/';
@@ -22,6 +26,7 @@ function checkpassword($pass)
         return false;
     return preg_match($pattern,$pass);
 }
+
 function register($email,$nickname,$password,$repeat)
 {
     global $_E;
@@ -96,8 +101,7 @@ function login($email,$password,$usenickname = false)
         $resultdata[1] = '帳密錯誤';
         return $resultdata;
     }
-    //$password = passwordHash($password);
-    
+
     $sqlres=DB::query("SELECT * FROM  `$acctable`".
                         "WHERE  `email` =  '$email'");
     if(! ($userdata = DB::fetch($sqlres)) )
@@ -204,7 +208,7 @@ function getgravatarlink($email,$size = null)
     $header = get_headers($check);
     if( $header[0] == "HTTP/1.0 404 Not Found" )
         $res = "http://www.gravatar.com/avatar/$email?d=identicon&";
-    //Render::errormessage($header);
+
     if( isset($size) )
         $res .= "?s=$size";
     return $res;
@@ -225,7 +229,6 @@ class UserInfo
             if( $uid ===0 ){
                 $acceptflag = false;
             }
-            
             #registed user
             $acctdata = DB::getuserdata( 'account',$uid );
             if( $acctdata === false || !isset( $acctdata[$uid]) ){

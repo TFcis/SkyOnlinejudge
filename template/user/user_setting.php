@@ -7,10 +7,6 @@ if(!defined('IN_TEMPLATE'))
 <script>
 	var SCONT;
 	var sold = 'account';
-	$(document).ready(function(){
-        SCONT = document.getElementById('setting-main');
-        $( "[settingpage]" ).click(function(){SubloadTemplate($(this).attr('settingpage'));});
-	});
 	function SubloadTemplate(template){
         $("[settingpage = '"+sold+"']").removeClass();
         $("[settingpage = '"+template+"']").addClass('active');
@@ -20,6 +16,11 @@ if(!defined('IN_TEMPLATE'))
             $(SCONT).fadeIn();
         });
 	}
+	$(document).ready(function(){
+        SCONT = document.getElementById('setting-main');
+        $( "[settingpage]" ).click(function(){SubloadTemplate($(this).attr('settingpage'));});
+        SubloadTemplate(sold);
+	});
 </script>
 
 <div class="container-fluid">

@@ -155,3 +155,11 @@ th {
     background-image: url('http://i.imgur.com/KiKOjd6.jpg');
     background-size: cover;
 }
+.panel{
+    color: #fcfcfc;
+    background-color: #1A1A1A;
+}
+.panel-default>.panel-heading{
+    color: #fcfcfc;
+    background-color: #002244;
+}

@@ -125,20 +125,13 @@ function buildcbboard($bid , $selectuser = null)
         if( $selectuser === null || in_array( $uid,$selectuser) )
             $res['userlist'][]=$uid;
     }
+    
     #get oj account
-    //$userojacct_sql = DB::getuserdata('userojlist', $res['userlist'] );
     $userojacct = array();
-    //$emptyacct = ojacct_reg('');
-
     foreach( $res['userlist'] as $uid )
     {
         $tmp = new UserInfo($uid);
         $userojacct[$uid] = $tmp->load_data('ojacct');
-        /*$uid = (string)$uid;
-        if( isset($userojacct_sql[$uid]) )
-            $userojacct[$uid] = ojid_reg( $userojacct_sql[$uid]['data'] ); 
-        else
-            $userojacct[$uid] = ojacct_reg(array(),$uid);*/
     }
     
     #setproblem

@@ -27,7 +27,8 @@ function authacct(c)
                 $(disname).html('Success! reload page');
                 setTimeout( function(){
                     $('#modal-'+c).modal('hide');
-                    //SubloadTemplate In USER STEEING PAGE
+                },300);
+                setTimeout( function(){
                     SubloadTemplate('ojacct');
                 },500);
             }

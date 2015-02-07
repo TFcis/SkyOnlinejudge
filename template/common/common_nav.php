@@ -16,8 +16,9 @@ if(!defined('IN_TEMPLATE'))
 ?>
 <body <?=$classtmp?>>
 <div id="wrap"> 
-    <nav class="navbar navbar-default navbar-static-top navbar-inverse" role="navigation" style="background-color:#101010">
-        <div class="container">
+    <script>$('.dropdown-toggle').dropdown();</script>
+    <nav class="navbar navbar-default navbar-static-top navbar-inverse" style="background-color:#101010">
+        <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
@@ -31,6 +32,14 @@ if(!defined('IN_TEMPLATE'))
                 <ul class="nav navbar-nav">
                     <li><a href="rank.php">Stats</a></li>
                     <li><a href="index.php?old">Dev Message</a></li>
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-header">Coder</li>
+                            <li><a href="index.php?test">Codepad</a></li>
+                            <li class="divider"></li>
+                        </ul>
+                    </li>
                     <li><a href="http://forum.tfcis.org/forum.php?mod=group&fid=107" target="_new">Discuss</a></li>
                 </ul>
             <ul class="nav navbar-nav navbar-right">
