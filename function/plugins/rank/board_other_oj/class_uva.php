@@ -144,4 +144,9 @@ class class_uva{
 	    $str="<a href='$url' target='_blank'>UVa $pnum</a>";
 	    return $str;
 	}
+
+	function challink($uid,$pid){
+		$uid = $this->uname2id($uid);
+	    return "http://uhunt.felix-halim.net/id/$uid";
+	}
 }
