@@ -9,22 +9,17 @@ if(!defined('IN_TEMPLATE'))
 	var old;
 	$(document).ready(function(){
         CONT = document.getElementById('content');
-        
         var curTemplate = location.hash.slice(1);
         if(curTemplate=="")	{ curTemplate = "setting"; }
         $('#li-'+curTemplate).addClass('active');
         old = curTemplate;
         loadTemplate(curTemplate);
-        
-        $('#nav-summary').click(function(){loadTemplate('summary'); });
-        $('#nav-solve').click(function(){  loadTemplate('solve');   });
-        $('#nav-modify').click(function(){ loadTemplate('modify');  });
-        $('#nav-setting').click(function(){ loadTemplate('setting');  });
+        $( "[navpage]" ).click(function(){loadTemplate($(this).attr('navpage'));});
 	});
 	function loadTemplate(template){
         location.hash = template;
-        $('#li-'+old).removeClass();
-        $('#li-'+template).addClass('active');
+        $("[navpage='"+old+"']").removeClass();
+        $("[navpage='"+template+"']").addClass('active');
         old = template;
         $(CONT).load("user.php?mod=view&page="+template+"&id=<?=$tmpl['showid']?>",function(){
             $(CONT).hide();
@@ -53,13 +48,12 @@ if(!defined('IN_TEMPLATE'))
 </div>
 <div class="container">
     <div style="width:100%;"></div>
-    
-    <ul>
-        <a class = 'link-like' id="nav-summary">Overview</a> |
-        <a class = 'link-like' id="nav-solve">Statstistics</a> |
-        <a class = 'link-like' id="nav-setting">Setting</a>
+    <ul class="nav nav-pills nav-pills-pink" role="tablist" style="margin-bottom:20px;">
+        <li role="presentation" navpage="summary"><a>Overview</a></li>
+        <li role="presentation" navpage="solve">  <a>Statstistics</a></li>
+        <li role="presentation" navpage="setting"><a>Setting</a></li>
     </ul>
-    
+
     <div class="tab-content" id="content" style="min-height:100px; padding: 0 10px"></div>
     <div style="width:100%;height:100px"></div>
 </div>

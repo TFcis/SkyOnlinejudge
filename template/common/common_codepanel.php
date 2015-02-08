@@ -6,13 +6,7 @@
 ?>
 <style type="text/css" media="screen">
     #editor { 
-        /*position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;*/
         width : 100%;
-        height:500px;
         font-size:14px;
     }
 </style>
@@ -132,4 +126,7 @@ int main()
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/c_cpp");
+    editor.setOptions({
+        maxLines: 30//Infinity
+    });
 </script>

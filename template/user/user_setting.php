@@ -27,6 +27,7 @@ if(!defined('IN_TEMPLATE'))
     <div class="row">
         <div class="col-md-2">
             <ul class="nav nav-pills nav-stacked" id="panel">
+                <li settingpage="profile" role="presentation"><a>profile</a></li>
                 <li settingpage="account" role="presentation"><a>帳號</a></li>
                 <li settingpage="ojacct"  role="presentation"><a>OJ設定</a></li>
             </ul>

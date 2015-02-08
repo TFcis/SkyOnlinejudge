@@ -25,23 +25,7 @@
     left: 0;
     z-index: 0;
 }
-/*
-.avatar-box {
-    display: block;
-    box-sizing: border-box;
-    width: 25%;
-    float: left;
-    position: relative;
-    min-height: 40px;
-    padding-right: 15px;
-    padding-left: 15px;
-}
-*/
-/*
-#dispaly{
-    transition : 0.2s;
-}
-*/
+
 .login_form
 {
     background-color:rgba(147,147,147,0.47);
@@ -88,4 +72,11 @@
 {
     background-color : #1A1A1A;
     border-radius: 4px;
+}
+
+.nav-pills-pink>li.active>a,
+.nav-pills-pink>li.active>a:hover,
+.nav-pills-pink>li.active>a:focus{
+    color: #fff;
+    background-color: #CA426B;
 }
