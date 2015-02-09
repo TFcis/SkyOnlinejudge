@@ -21,7 +21,7 @@ if($boarddata === false)
 {
     throwjson('error','No Such ID');
 }
-if($boarddata !== 1 )
+if($boarddata['state'] != 1 )
 {
     throwjson('error','LOCKED');
 }
