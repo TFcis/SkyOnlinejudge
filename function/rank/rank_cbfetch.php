@@ -21,7 +21,10 @@ if($boarddata === false)
 {
     throwjson('error','No Such ID');
 }
-
+if($boarddata !== 1 )
+{
+    throwjson('error','LOCKED');
+}
 $boarduserlist = extend_userlist($boarddata['userlist']);
 if( $boarduserlist === false )
 {

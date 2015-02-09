@@ -36,6 +36,68 @@ function getCBdatabyid($id)
     return false;
 }
 
+
+function PrepareBoardData( $cbdata , $build = false )
+{
+    global $_E;
+    $id = $cbdata['id'];
+    
+    $boarddata = null;
+    $buildtime = 0; 
+    if( !$build && $cache = DB::loadcache("cache_board_$id") ) //cached!
+    {
+        
+        $boarddata = $cache['data'];
+        $buildtime = $cache['time'];
+        if( $cache['time']<time() ){
+            $_E['template']['cbrebuild'] = true;
+        }
+    }
+    else
+    {
+        if($build)
+        {
+            $userlist = extend_userlist($cbdata['userlist']);
+            if( !$userlist ) {
+                return false;
+            }
+            $boarddata = buildcbboard($id,$userlist);
+            
+        }
+        else
+        {
+            $boarddata = buildcbboard($id,array());
+            $_E['template']['cbrebuild'] = true;
+            
+        }
+        if( $boarddata )
+        {
+            $time = time();
+            $buildtime = $time;
+            DB::putcache("cache_board_$id",
+                        array('data'=>$boarddata,'time'=>$time+900),
+                        'forever');
+        }
+        else
+            return false;
+    }
+    nickname($boarddata['userlist']);
+    $_E['template']['plist'] = $boarddata['probinfo'];
+    $_E['template']['user']  = $boarddata['userlist'];
+    $_E['template']['userdetail'] = $boarddata['userdetail'];
+    $_E['template']['buildtime'] = date("Y-m-d H:i:s",$buildtime);
+    $_E['template']['owner'] = -1;
+    foreach($boarddata['userlist'] as $uid)
+    {
+        foreach($boarddata['problems'] as $pname)
+        {
+            $_E['template']['s'][$uid][$pname]["vid"] = verdictIDtoword($boarddata['ratemap'][$uid][$pname]);
+            $_E['template']['s'][$uid][$pname]["challink"] = $boarddata['challink'][$uid][$pname];
+        }
+    }
+    return $boarddata;
+}
+
 function checkpostdata($array)
 {
     $res = array();

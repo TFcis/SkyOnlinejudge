@@ -102,6 +102,41 @@ class Render
         }
         $_E['template']['error'][]=array('msg'=>nl2br(htmlspecialchars($text)),'namespace'=>$namespace);
     }
+    
+    static function static_html($pagename , $namespace = 'common') 
+    {
+        ob_start();
+        Render::renderSingleTemplate($pagename , $namespace);
+        $res = ob_get_clean();
+        return $res;
+    }
+    static function htmlcachefile($name)
+    {
+        global $_E;
+        return $_E['ROOT']."/data/cachehtml/$name.html";
+    }
+    static function save_html_cache($name,$res)
+    {
+        $handle = fopen( Render::htmlcachefile($name) ,'w');
+        if(!$handle)
+        {
+            return false;
+        }
+        fwrite($handle,$res);
+        fclose($handle);
+        return true;
+    }
+    static function html_cache_exists($name)
+    {
+        return file_exists(Render::htmlcachefile($name));
+    }
+    static function rendercachehtml($name)
+    {
+        $fullname = Render::htmlcachefile($name);
+        if( !file_exists($fullname) )
+            return false;
+        require($fullname);
+    }
 }
 $_E['template']['error'] = array();
 

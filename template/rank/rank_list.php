@@ -1,7 +1,7 @@
 <?php
 if(!defined('IN_TEMPLATE'))
 {
-  exit('Access denied');
+    exit('Access denied');
 }
 ?>
 <script>
@@ -50,7 +50,6 @@ $(document).ready(function()
                         <a class = "icon-bttn" href="rank.php?mod=cbedit&id=<?=$row['id'];?>">
                             <span class="glyphicon glyphicon-pencil" title="編輯"></span>
                         </a>
-
                         <!--<span class = "icon-bttn">
                             <span class="glyphicon glyphicon-lock" title="鎖定"></span>
                         </span>-->

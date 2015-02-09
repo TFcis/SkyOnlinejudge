@@ -195,6 +195,8 @@ class userControl
     static function getpermission($uid)
     {
         global $_G,$_E;
+        if( $uid == -1 )
+            return false;
         if( $uid == $_G['uid'])
             return true;
         if(in_array($_G['uid'],$_E['site']['admin']))

@@ -11,7 +11,7 @@ if(!defined('IN_TEMPLATE'))
         CONT = document.getElementById('content');
         var curTemplate = location.hash.slice(1);
         if(curTemplate=="")	{ curTemplate = "setting"; }
-        $('#li-'+curTemplate).addClass('active');
+        $("[navpage='"+curTemplate+"']").addClass('active');
         old = curTemplate;
         loadTemplate(curTemplate);
         $( "[navpage]" ).click(function(){loadTemplate($(this).attr('navpage'));});

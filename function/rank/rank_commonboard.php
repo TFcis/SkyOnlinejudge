@@ -6,7 +6,6 @@ if(!defined('IN_SKYOJSYSTEM'))
 $id = null;
 $data = false;
 
-//$_E['template']['dbg'] = '';
 $_E['template']['cbrebuild'] = false; 
 
 //Check id
@@ -20,61 +19,59 @@ if( $id = safe_get('id') )
     {
         $id = intval($id);
         $oriboarddata = getCBdatabyid($id);
-        if( $oriboarddata === false )
-        {
-            $id = null;
-        }
-        elseif( $cache = DB::loadcache("cache_board_$id") )
-        {
-            $boarddata = $cache['data'];
-            $_E['template']['buildtime'] = $cache['time'];
-            if( $cache['time']<time() ){
-                $_E['template']['cbrebuild'] = true;
-            }
-        }
-        else
-        {
-            $boarddata = buildcbboard($id,array());
-            if($boarddata)
-            {
-                $time = time();
-                $_E['template']['buildtime'] = $time;
-                DB::putcache("cache_board_$id",
-                            array('data'=>$boarddata,'time'=>$time+900),
-                            'forever');
-                $_E['template']['cbrebuild'] = true;
-            }
-            else
-            {
-                $id = null;
-            }
-        }
     }
 }
 
-if( $id == null || !$boarddata )
+if( $id == null || !$oriboarddata )
 {
     $_E['template']['alert'].="沒有這一個記分板";
     include('rank_list.php');
     exit(0);
 }
 
-//頁面資訊
+$state = $oriboarddata['state'];
 
-if($_E['template']['cbrebuild'])
+//版面
+
+switch($state)
+{
+    case 1: //Normal
+        $boarddata = PrepareBoardData($oriboarddata);
+        break;
+    case 2:
+        if( $oriboarddata['state'] == 2 ) //FREEZE
+        {
+            if( Render::html_cache_exists("cb_cache_$id") )
+                $_E['template']['rank_cb_fzboard'] = "cb_cache_$id"; 
+            else
+                $_E['template']['rank_cb_fzboard'] = false;
+        }
+        $boarddata=true;
+        break;
+    default:    
+}
+
+if( $boarddata == null )
+{
+    $_E['template']['alert'].="記分板 Load Failed!";
+    include('rank_list.php');
+    exit(0);
+}
+
+#頁面資訊
+
+#rebuild
+if( $_E['template']['cbrebuild'] )
 {
     $key = uniqid('cbedit',true);
     $_SESSION["cbsyscall"][$key] = $id;
     $_E['template']['cbrebuildkey'] = $key;
 }
-$_E['template']['buildtime'] = date("Y-m-d H:i:s",$_E['template']['buildtime']);
-$_E['template']['plist'] = $boarddata['probinfo'];
-$_E['template']['user']  = $boarddata['userlist'];
-$_E['template']['userdetail'] = $boarddata['userdetail'];
+
+
+#COMMON
 $_E['template']['id'] = $id;
-
-
-
+$_E['template']['state'] = $oriboarddata['state'];
 $_E['template']['announce'] = $oriboarddata['announce'];
 $_E['template']['title']    = $oriboarddata['name'];
 $_E['template']['owner']    = $oriboarddata['owner'];
@@ -91,15 +88,8 @@ $hcount = DB::countrow('statsboard',"`id`>$id");
 $_E['template']['homeid'] = 1 + intval($hcount/10);
 
 
-foreach($boarddata['userlist'] as $uid)
-{
-    foreach($boarddata['problems'] as $pname)
-    {
-        $_E['template']['s'][$uid][$pname]["vid"] = verdictIDtoword($boarddata['ratemap'][$uid][$pname]);
-        $_E['template']['s'][$uid][$pname]["challink"] = $boarddata['challink'][$uid][$pname];
-    }
-}
+
 #add nickname
-nickname($boarddata['userlist']);
+
 
 Render::render('rank_statboard_cm','rank');

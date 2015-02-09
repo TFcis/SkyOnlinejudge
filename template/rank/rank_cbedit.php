@@ -19,13 +19,25 @@ if(!defined('IN_TEMPLATE'))
 <script>
 $(document).ready(function()
 {
+    pageid = <?=$tmpl['form']['id']?>;
+    $( "[adv-act]" ).click(function(){reqmode($(this).attr('adv-act'));});
+    function reqmode(mode)
+    {
+        $.post("rank.php",{
+            mod : 'edit',
+            page: 'cb'+mode,
+            id  : pageid,
+        },function(res){
+           alert(res); 
+        });
+    }
     $("#board").submit(function(e)
     {
         $("#display").html("SUBMIT...");
         e.preventDefault();
         $("#announce").val(tinymce.activeEditor.getContent());
         $.post("rank.php",
-            $("#board").serialize(),// + "&announce=" + encodeURIComponent(tinymce.activeEditor.getContent()),
+            $("#board").serialize(),
             function(res){
                 if(res.status === 'error')
                 {
@@ -44,52 +56,63 @@ $(document).ready(function()
 <div class="container">
     <div class="row">
         <div class="page-header">
-          <h1>編輯記分板 <small><?=htmlspecialchars($_E['template']['title'])?>
+          <h1>編輯記分板 <small><?=htmlspecialchars($tmpl['title'])?>
           <?php if($_E['template']['form']['id']):?>
-            <a class = "icon-bttn" href = "rank.php?mod=commonboard&id=<?=$_E['template']['form']['id']?>">
+            <a class = "icon-bttn" href = "rank.php?mod=commonboard&id=<?=$tmpl['form']['id']?>">
                 <span class="pointer glyphicon glyphicon-arrow-left" title="回到記分板"></span>
             </a>
           <?php endif;?>
           </small></h1>
-      </div>
+        </div>
     </div>
     <div class="row">
-    <form class="form-horizontal" role="form" id="board" >
-            <input type="hidden" name="mod" value="edit">
-            <input type="hidden" name="page" value="cbedit">
-            <input type="hidden" name="id" value="<?=$_E['template']['form']['id']?>">
-            <input type="hidden" name="announce" id="announce" value="">
-            <div class="form-group">
-                <label class="col-md-2 control-label">名稱</label>
-                <div class="col-md-6">
-                    <input type="text" class="form-control" name="name" placeholder="Board Name" value="<?=$_E['template']['form']['name']?>">
+        <div class="col-lg-8">
+            <form class="form-horizontal" role="form" id="board" >
+                <input type="hidden" name="mod" value="edit">
+                <input type="hidden" name="page" value="cbedit">
+                <input type="hidden" name="id" value="<?=$tmpl['form']['id']?>">
+                <input type="hidden" name="announce" id="announce" value="">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">名稱</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="name" placeholder="Board Name" value="<?=$tmpl['form']['name']?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label">登記ID</label>
-                <div class="col-md-6">
-                    <input type="text" class="form-control" name="userlist" placeholder="Account ID" value="<?=$_E['template']['form']['userlist']?>">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">登記ID</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="userlist" placeholder="Account ID" value="<?=$tmpl['form']['userlist']?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label">題目列表</label>
-                <div class="col-md-6">
-                    <input type="text" class="form-control" name="problems" placeholder="Problems" value="<?=$_E['template']['form']['problems']?>">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">題目列表</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="problems" placeholder="Problems" value="<?=$tmpl['form']['problems']?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-2 control-label">公告</label>
-                <div class="col-md-6">
-                    <textarea id="announcement"><?=$_E['template']['form']['announce']?></textarea>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">公告</label>
+                    <div class="col-md-9">
+                        <textarea id="announcement"><?=$tmpl['form']['announce']?></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-md-6">
-                    <button type="submit" class="btn btn-success text-right">送出</button>
-                    <span id="display"></span>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-md-9">
+                        <button type="submit" class="btn btn-success text-right">送出</button>
+                        <span id="display"></span>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div><!--Main end-->
+        <div class="col-lg-4">
+            <h1>Advance</h1>
+            <?php if($tmpl['form']['id'] != 0): ?>
+                <p>
+                    <buttom class="btn btn-primary" adv-act="freeze">Freeze</buttom>
+                    凍結記分板 <small><span id="adv-act-freeze">重建並鎖定</span></small>
+                </p>
+            <?php endif; ?>
+        </div>
     </div>
     <br>
      <div class="row">

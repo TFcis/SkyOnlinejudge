@@ -7,11 +7,11 @@ if(!defined('IN_SKYOJSYSTEM'))
 //Only By Post Login Token
 if(!isset($_POST['mod']) || !$_G['uid'] || !userControl::checktoken('CBEDIT'))
     throwjson('error','Access denied');
-$allowpage = array('cbedit','cbremove');
+$allowpage = array('cbedit','cbremove','cbfreeze');
 
-$editpage = isset($_POST['page'])?$_POST['page']:'';
+$editpage = safe_post('page');
 if(!in_array($editpage ,$allowpage))
-    throwjson('error','No such page');
+    throwjson('error','No such page'.$_POST['page']);
 
 $id = isset($_POST['id'])?$_POST['id']:'';
 if(!preg_match('/^[0-9]+$/',$id))
@@ -103,6 +103,19 @@ switch($editpage)
         break;
     case 'cbremove':
          throwjson('error','sql_cbremove');
+        break;
+    case 'cbfreeze':
+        $tb = DB::tname('statsboard');
+        if(! ($cbd = getCBdatabyid($id)))
+            throwjson('error','cbfreeze_getCBdatabyid_fail');
+        if(!PrepareBoardData($cbd,true))
+            throwjson('error','cbfreeze_PrepareBoardData_fail');
+        if( !( $html = Render::static_html('rank_statboard_cmtable','rank') ) )
+            throwjson('error','cbfreeze_static_html_fail');
+        if(!Render::save_html_cache("cb_cache_$id",$html))
+            throwjson('error','cbfreeze_static_html_fail');
+        DB::query("UPDATE `$tb` SET `state` = 2 WHERE `id` = $id");
+        throwjson('SUCC','modify');
         break;
     default:
         throwjson('error','modify');
