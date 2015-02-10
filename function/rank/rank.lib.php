@@ -172,7 +172,7 @@ function buildcbboard($bid , $selectuser = null)
     $res['createtime'] = $boarddata['timestamp'];
     
     $res['userlist'] = extend_userlist($boarddata['userlist']);
-    $res['problems'] = extend_promlemlist($boarddata['problems']);
+    $res['problems'] = extend_problems($boarddata['problems']);
     
     if( $res['userlist']===false )
         $res['userlist'] = array();
@@ -332,4 +332,133 @@ function merge_cb_rate_map($direct,$data)
     }
     sort($direct['userlist']);
     return $direct;
+}
+
+class UniversalScoreboard
+{
+    private $id;
+    private $table;
+    private $userlist_etd;
+    private $problems_etd;
+    function __construct( $id ){
+        $tusboard = DB::tname('stats');
+        if( is_numeric($id) )
+        {
+            if( $id != 0)
+            {
+                $res = getCBdatabyid($id);
+                if( $res )
+                {
+                    $this->id = $id;
+                    $this->table = $res;
+                    $this->userlist_etd = extend_userlist($res['userlist']);
+                    $this->problems_etd = extend_problems($res['problems']);
+                }
+                else
+                {
+                    $this->id = -1;
+                }
+            }
+            else
+            {
+                $this->id = 0;
+                $this->userlist_etd = array();
+                $this->problems_etd = array();
+                $this->table = array(
+                    'name' => '',
+                    'owner'=> '' ,
+                    'timestamp'=> DB::timestamp(),
+                    'userlist'=>'',
+                    'problems'=>'',
+                    'announce'=>'',
+                    'state'   => 1,
+                );
+            }
+        }
+        else
+        {
+            $this->id = -1;
+        }
+    }
+    
+    function isload(){
+        return $this->id >= 0;
+    }
+    
+    
+    function userlist(){
+        return $this->userlist;
+    }
+    function problems(){
+        return $this->problems;
+    }
+    function ori_userlist(){
+        return $this->table['userlist'];
+    }
+    function ori_problems(){
+        return $this->table['problems'];
+    }
+    
+    function id(){
+        return $this->id;
+    }
+    
+    function load_data(){
+        return $this->table;
+    }
+    function save_data( $table , &$errmsg = null ){
+        try
+        {
+            $tusboard = DB::tname('statsboard');;
+            if( empty($table['name']) || !is_string($table['name']) )
+                throw new Exception('name error');
+            else 
+                $table['name'] = DB::real_escape_string($table['name']);
+            if( !is_numeric( $table['owner'] ) )
+                throw new Exception('owner error');
+            if( ! ($users = extend_userlist($table['userlist']) ) )
+                throw new Exception('userlist error:'.$table['userlist']);
+            if( ! ($probs = extend_problems($table['problems']) ) )
+                throw new Exception('problems error');
+            $table['announce'] = DB::real_escape_string($table['announce']);
+            if( !is_numeric( $table['state'] ) )
+                throw new Exception('state error');
+        
+            if( $this->id == 0 )
+                $cid = 'NULL';
+            else
+                $cid = $this->id;
+            $cname = $table['name'];
+            $cowner = $table['owner'];
+            $cul = DB::real_escape_string($table['userlist']);
+            $cps = DB::real_escape_string($table['problems']);
+            $cannounce = $table['announce'];
+            $cts = $table['state'];
+                
+            $res= DB::query("INSERT INTO `$tusboard`
+                (`id`, `name`, `owner`, `timestamp`, `userlist`, `problems`, `announce` ,`state`) VALUES
+                ($cid,'$cname',$cowner,CURRENT_TIMESTAMP,'$cul','$cps','$cannounce',$cts)
+                ON DUPLICATE KEY UPDATE
+                `name` = '$cname',
+                `userlist` = '$cul',
+                `problems` = '$cps',
+                `announce` = '$cannounce' ");
+            if( !$res )
+                throw new Exception('SQL error');
+            if( $cid === 'NULL' )
+            {
+                $table['id'] = $this->id = DB::insert_id();
+            }
+            $this->userlist_etd = $users;
+            $this->problems_etd = $probs;
+            $this->table = $res;
+        }
+        catch (Exception $e)
+        {
+            if( isset($errmsg) )
+                $errmsg = $e->getMessage();
+            return false;
+        }
+        return true;
+    }
 }

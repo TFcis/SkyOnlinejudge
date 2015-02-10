@@ -6,7 +6,7 @@ if(!defined('IN_SKYOJSYSTEM'))
 //no login
 if(!$_G['uid'] || !userControl::isAdmin())
 {
-    $_E['template']['alert'].="權限不足";
+    Render::errormessage("權限不足");
     include('rank_list.php');
     exit('');
 }
@@ -43,13 +43,13 @@ else
     $id = $_GET['id'];
     if(!($setting = getCBdatabyid($id)))
     {
-        $_E['template']['alert'].="沒有這一個記分板";
+        Render::errormessage("沒有這一個記分板");
         include('rank_list.php');
         exit('');
     }
     if( !userControl::getpermission($setting['owner']) )
     {
-        $_E['template']['alert'].="權限不足";
+        Render::errormessage("權限不足");
         include('rank_list.php');
         exit('');
     }

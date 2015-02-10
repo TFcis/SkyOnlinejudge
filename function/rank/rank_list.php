@@ -11,7 +11,7 @@ if(!$page || !preg_match('/^[0-9]+$/',$page))
 }
 
 $tbstats = DB::tname('statsboard');
-if(! ($res = DB::query("SELECT COUNT(1) FROM `$tbstats`") ))
+if(! ($res = DB::query("SELECT COUNT(1) FROM `$tbstats` WHERE `state` > 0") ))
 {
     Render::ShowMessage('Something error...');
     exit(0);
@@ -25,7 +25,7 @@ $_E['template']['pagerange'] = $tmp =page_range($numofAllboard,$rowprepage,$page
 $page = $tmp[1];
 $jump = ($page-1)*$rowprepage;
 if(! ($res = DB::query("SELECT `id`,`name`,`owner`
-        FROM `$tbstats` ORDER BY `id` DESC LIMIT $jump,$rowprepage") ))
+        FROM `$tbstats` WHERE `state` > 0 ORDER BY `id` DESC LIMIT $jump,$rowprepage") ))
 {
     Render::ShowMessage('Something error...');
     exit(0);

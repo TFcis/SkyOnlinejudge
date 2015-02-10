@@ -24,7 +24,7 @@ if( $id = safe_get('id') )
 
 if( $id == null || !$oriboarddata )
 {
-    $_E['template']['alert'].="沒有這一個記分板";
+    Render::errormessage("記分板 Load Failed!",'RANK');
     include('rank_list.php');
     exit(0);
 }
@@ -35,6 +35,10 @@ $state = $oriboarddata['state'];
 
 switch($state)
 {
+    case 0:
+        $boarddata = null;
+        Render::errormessage("Closed!",'RANK');
+        break;
     case 1: //Normal
         $boarddata = PrepareBoardData($oriboarddata);
         break;
@@ -48,12 +52,13 @@ switch($state)
         }
         $boarddata=true;
         break;
-    default:    
+    default:
+        $boarddata = null;
 }
 
 if( $boarddata == null )
 {
-    $_E['template']['alert'].="記分板 Load Failed!";
+    Render::errormessage("記分板 Load Failed!",'RANK');
     include('rank_list.php');
     exit(0);
 }
@@ -77,14 +82,14 @@ $_E['template']['title']    = $oriboarddata['name'];
 $_E['template']['owner']    = $oriboarddata['owner'];
 //導覽列
 
-$maxid = DB::countrow('statsboard');
+$maxid = DB::countrow('statsboard','`state` > 0');
 //it sholuld be use SQL!
 //$res = DB::query("SELECT `id` AS 'id' FROM `tojtest_statsboard` WHERE `id`<>3 ORDER BY `id`, abs(`id`-3) LIMIT 0,2  ;");
 $_E['template']['leftid'] = 0;
 $_E['template']['rightid'] = 0;
 if($id-1 > 0) $_E['template']['leftid'] = $id-1;
 if($id+1 <= $maxid)$_E['template']['rightid'] = $id+1;
-$hcount = DB::countrow('statsboard',"`id`>$id");
+$hcount = DB::countrow('statsboard',"`id`>$id AND `state` > 0");
 $_E['template']['homeid'] = 1 + intval($hcount/10);
 
 

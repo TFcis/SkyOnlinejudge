@@ -38,8 +38,8 @@ $(document).ready(function()
         $("#announce").val(tinymce.activeEditor.getContent());
         $.post("rank.php",
             $("#board").serialize(),
-            function(res){
-                if(res.status === 'error')
+            function(res){alert(res);
+                /*if(res.status === 'error')
                 {
                    $("#display").html(res.data);
                 }
@@ -47,8 +47,8 @@ $(document).ready(function()
                 {
                     $("#display").html("YES");
                     setTimeout(function(){location.href="rank.php?mod=cbedit&id="+res.data;}, 500);
-                }
-        },"json");
+                }*/
+        }/*,"json"*/);
         return true;
     });
 })
@@ -111,6 +111,18 @@ $(document).ready(function()
                     <buttom class="btn btn-primary" adv-act="freeze">Freeze</buttom>
                     凍結記分板 <small><span id="adv-act-freeze">重建並鎖定</span></small>
                 </p>
+                <?php if($tmpl['form']['state'] != 0): ?>
+                <p>
+                    <buttom class="btn btn-danger" adv-act="close">Close</buttom>
+                    關閉記分板 <small><span id="adv-act-close">關閉記分板</span></small>
+                </p>
+                <?php endif; ?>
+                <?php if($tmpl['form']['state'] != 1): ?>
+                <p>
+                    <buttom class="btn btn-success" adv-act="open">Open</buttom>
+                    開啟記分板 <small><span id="adv-act-open">開啟記分板</span></small>
+                </p>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
     </div>

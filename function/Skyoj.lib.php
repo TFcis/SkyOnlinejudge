@@ -93,7 +93,7 @@ function extend_userlist($string)
     return array_unique($users);
 }
 
-function extend_promlemlist($problems)
+function extend_problems($problems)
 {
     $substr = array();
     $stack = 0;
@@ -173,7 +173,7 @@ function extend_promlemlist($problems)
             else
             {
                 $word= str_replace('*','',$word);
-                if( $sb = extend_promlemlist(trim($substr[$subnum++])) )
+                if( $sb = extend_problems(trim($substr[$subnum++])) )
                 {
                     foreach($sb as $w){
                         $res[]=$word.$w;
