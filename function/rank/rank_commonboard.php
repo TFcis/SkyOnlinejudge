@@ -6,7 +6,9 @@ if(!defined('IN_SKYOJSYSTEM'))
 $id = null;
 $data = false;
 
-$_E['template']['cbrebuild'] = false; 
+$_E['template']['cbrebuild'] = false;
+$table_statsboard = "statsboard";
+$tboard = DB::tname($table_statsboard);
 
 //Check id
 if( $id = safe_get('id') )
@@ -82,19 +84,18 @@ $_E['template']['title']    = $oriboarddata['name'];
 $_E['template']['owner']    = $oriboarddata['owner'];
 //導覽列
 
-$maxid = DB::countrow('statsboard','`state` > 0');
 //it sholuld be use SQL!
-//$res = DB::query("SELECT `id` AS 'id' FROM `tojtest_statsboard` WHERE `id`<>3 ORDER BY `id`, abs(`id`-3) LIMIT 0,2  ;");
 $_E['template']['leftid'] = 0;
 $_E['template']['rightid'] = 0;
-if($id-1 > 0) $_E['template']['leftid'] = $id-1;
-if($id+1 <= $maxid)$_E['template']['rightid'] = $id+1;
-$hcount = DB::countrow('statsboard',"`id`>$id AND `state` > 0");
+$res = DB::query("SELECT `id` FROM `$tboard` WHERE `id`>$id AND `state`>0 LIMIT 1");
+if( $res && $tmp=DB::fetch($res) ) $_E['template']['rightid'] = $tmp['id'];
+
+$res = DB::query("SELECT `id` FROM `$tboard` WHERE `id`<$id AND `state`>0 ORDER BY `id` DESC LIMIT 1");
+if( $res && $tmp=DB::fetch($res) ) $_E['template']['leftid'] = $tmp['id'];
+
+
+$hcount = DB::countrow($table_statsboard,"`id`>$id AND `state` > 0");
 $_E['template']['homeid'] = 1 + intval($hcount/10);
-
-
-
-#add nickname
 
 
 Render::render('rank_statboard_cm','rank');

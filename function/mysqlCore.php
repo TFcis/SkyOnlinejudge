@@ -42,7 +42,7 @@ class DB
         }
         elseif(!$errorno)
         {
-            DB::syslog(mysqli_error(self::$con),'SQL Core');
+            DB::syslog(mysqli_error(self::$con)."\n $query",'SQL Core');
             return false;
         }
         else

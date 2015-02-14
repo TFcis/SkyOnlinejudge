@@ -17,7 +17,7 @@ $editpage = safe_post('page');
 if(!in_array($editpage ,$allowpage))
     throwjson('error','No such page'.$_POST['page']);
 
-$id = isset($_POST['id'])?$_POST['id']:'';
+$id = safe_post('id');
 if(!preg_match('/^[0-9]+$/',$id))
     throwjson('error','ID error');
 $id = (string)((int)$id);
@@ -74,9 +74,11 @@ switch($editpage)
         else
             throwjson('error',$errmsg);
         break;
+        
     case 'cbremove':
         throwjson('error','sql_cbremove');
         break;
+        
     case 'cbfreeze':
         $tb = DB::tname('statsboard');
         if($id == 0)

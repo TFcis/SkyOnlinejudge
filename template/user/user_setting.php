@@ -30,6 +30,7 @@ if(!defined('IN_TEMPLATE'))
                 <li settingpage="profile" role="presentation"><a>profile</a></li>
                 <li settingpage="account" role="presentation"><a>帳號</a></li>
                 <li settingpage="ojacct"  role="presentation"><a>OJ設定</a></li>
+                <li settingpage="myboard"  role="presentation"><a>我的記分板</a></li>
             </ul>
         </div>
         <div class="col-md-10" id="setting-main"></div>

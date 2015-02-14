@@ -31,6 +31,7 @@ $_E['template']['showid'] = $showid;
 
 if( isset($_GET['page']) )//subpage
 {
+    
     $require = safe_get('page');
     switch($require)
     {
@@ -56,6 +57,25 @@ if( isset($_GET['page']) )//subpage
                 Render::renderSingleTemplate('user_data_modify_ojacct','user');
                 exit(0);
             }
+            break;
+        case 'myboard':
+            #WAIT FOR PRESYSTEM
+            $statsboard = DB::tname('statsboard');
+            $res = DB::query("SELECT `id`,`name` FROM `$statsboard` WHERE `owner` = '$showid'");
+            $rowdata = array();
+            
+            if( !$res  )
+            {
+                $_E['template']['message'] = 'SQL Error...';
+                Render::renderSingleTemplate('common_message','common');
+                exit(0);
+            }
+            while( $data = DB::fetch($res) )
+                $rowdata[]=$data;
+            $_E['template']['row'] = $rowdata;
+            Render::renderSingleTemplate('user_data_modify_myboard','user');
+            exit(0);
+            
             break;
     }
     Render::renderSingleTemplate('nonedefined');

@@ -106,8 +106,8 @@ foreach( $refresh_user as $uid )
     }
     usleep(50000);
 }
-
-$sortrule = 'sort_by_ac';
+$cachefile = sortboard($cachefile);
+/*$sortrule = 'sort_by_ac';
 $u = $cachefile['userlist'];
 $usernum = count($u);
 for($i = 0; $i < $usernum; $i++)
@@ -137,7 +137,7 @@ for($i = 0; $i < $usernum; $i++)
     }
 }
 
-$cachefile['userlist'] = $u;
+$cachefile['userlist'] = $u;*/
 DB::putcache("cache_board_$BID",
             array('data'=>$cachefile,'time'=>time()+$cachetime)
             ,'forever');

@@ -6,7 +6,7 @@ if(!defined('IN_TEMPLATE'))
 ?>
 <div class="container">
     <div class="row">
-        <div class="col-md-4 col-md-offset-4">
+        <div class="text-center">
             <h1>Oops! 不存在的操作</h1>
             <p><?php echo($_E['template']['message']);?></p>
         </div>

@@ -44,6 +44,7 @@ function PrepareBoardData( $cbdata , $build = false )
     
     $boarddata = null;
     $buildtime = 0; 
+    #Get Data
     if( !$build && $cache = DB::loadcache("cache_board_$id") ) //cached!
     {
         
@@ -62,14 +63,14 @@ function PrepareBoardData( $cbdata , $build = false )
                 return false;
             }
             $boarddata = buildcbboard($id,$userlist);
-            
+            $boarddata = sortboard($boarddata);
         }
-        else
+        else #only make a empty board
         {
             $boarddata = buildcbboard($id,array());
             $_E['template']['cbrebuild'] = true;
-            
         }
+        
         if( $boarddata )
         {
             $time = time();
@@ -81,6 +82,7 @@ function PrepareBoardData( $cbdata , $build = false )
         else
             return false;
     }
+    
     nickname($boarddata['userlist']);
     $_E['template']['plist'] = $boarddata['probinfo'];
     $_E['template']['user']  = $boarddata['userlist'];
@@ -333,7 +335,39 @@ function merge_cb_rate_map($direct,$data)
     sort($direct['userlist']);
     return $direct;
 }
-
+function sortboard($board , $sortrule = 'sort_by_ac')
+{
+    $u = $board['userlist'];
+    $usernum = count($u);
+    for($i = 0; $i < $usernum; $i++)
+    {
+        for($j = $i+1; $j < $usernum; $j++)
+        {
+            switch($sortrule)
+            {
+                case 'sort_by_ac' :
+                    if( $board['userdetail'][$u[$i]]['statistics']['90'] <
+                        $board['userdetail'][$u[$j]]['statistics']['90'])
+                    {
+                        $t = $u[$i];
+                        $u[$i] = $u[$j];
+                        $u[$j] =$t;
+                    }
+                    break;
+                case 'sort_by_id_desc' :
+                    if($u[$i] < $u[$j])
+                    {
+                        $t = $u[$i];
+                        $u[$i] = $u[$j];
+                        $u[$j] =$t;
+                    }
+                    break;
+            }
+        }
+    }
+    $board['userlist'] = $u;
+    return $board;
+}
 class UniversalScoreboard
 {
     private $id;

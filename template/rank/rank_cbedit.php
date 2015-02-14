@@ -21,15 +21,33 @@ $(document).ready(function()
 {
     pageid = <?=$tmpl['form']['id']?>;
     $( "[adv-act]" ).click(function(){reqmode($(this).attr('adv-act'));});
+    reqworking = false;
     function reqmode(mode)
     {
+        if(reqworking)
+        {
+            return ;
+        }
+        reqworking = true;
+        $("#adv-act-info").html('Modifying...');
         $.post("rank.php",{
             mod : 'edit',
             page: 'cb'+mode,
             id  : pageid,
         },function(res){
-           alert(res); 
-        });
+            if( res.status == 'SUCC' )
+            {
+                $("#adv-act-info").css('color','Lime');
+                $("#adv-act-info").html('YES!');
+                setTimeout(function(){location.reload();}, 500);
+            }
+            else
+            {
+                $("#adv-act-info").css('color','Red');
+                $("#adv-act-info").html(res.data);
+            }
+        },"json");
+        reqworking = false;
     }
     $("#board").submit(function(e)
     {
@@ -38,17 +56,17 @@ $(document).ready(function()
         $("#announce").val(tinymce.activeEditor.getContent());
         $.post("rank.php",
             $("#board").serialize(),
-            function(res){alert(res);
-                /*if(res.status === 'error')
-                {
-                   $("#display").html(res.data);
-                }
-                else if(res.status === 'SUCC')
+            function(res){
+                if(res.status === 'SUCC')
                 {
                     $("#display").html("YES");
                     setTimeout(function(){location.href="rank.php?mod=cbedit&id="+res.data;}, 500);
-                }*/
-        }/*,"json"*/);
+                }
+                else if(res.status === 'error')
+                {
+                   $("#display").html(res.data);
+                }
+        },"json");
         return true;
     });
 })
@@ -97,7 +115,7 @@ $(document).ready(function()
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-offset-3 col-md-9">
+                    <div class="col-md-offset-3 col-md-9">
                         <button type="submit" class="btn btn-success text-right">送出</button>
                         <span id="display"></span>
                     </div>
@@ -105,7 +123,7 @@ $(document).ready(function()
             </form>
         </div><!--Main end-->
         <div class="col-lg-4">
-            <h1>Advance</h1>
+            <h1>Advance&nbsp;<small><span id="adv-act-info"></span></small></h1>
             <?php if($tmpl['form']['id'] != 0): ?>
                 <p>
                     <buttom class="btn btn-primary" adv-act="freeze">Freeze</buttom>
