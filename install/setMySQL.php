@@ -33,6 +33,7 @@ $ojlist    = tname('ojlist');
 $statsboard= tname('statsboard');
 $syslog    = tname('syslog');
 $userojacct= tname('userojacct');
+$codepad   = tname('codepad');
 //CREATE TABLE 
 $conn = mysql_connect($_config['db']['dbhost'],$_config['db']['dbuser'],$_config['db']['dbpw']);
 if(!$conn){
@@ -154,6 +155,16 @@ case 3:
   PRIMARY KEY (`indexid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     run("DROP TABLE  ".tname('userojlist'),false);
+    run("CREATE TABLE IF NOT EXISTS `$codepad` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `owner` int(11) NOT NULL,
+  `hash` char(30) COLLATE utf8_bin NOT NULL,
+  `filename` char(64) COLLATE utf8_bin NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `filename` (`filename`),
+  UNIQUE KEY `hash` (`hash`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
 }
 
     
