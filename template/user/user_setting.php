@@ -11,7 +11,7 @@ if(!defined('IN_TEMPLATE'))
         $("[settingpage = '"+sold+"']").removeClass();
         $("[settingpage = '"+template+"']").addClass('active');
         sold = template;
-        $(SCONT).load("user.php?mod=view&page="+template+"&id=<?=$tmpl['showid']?>",function(){
+        $(SCONT).load("<?=$_E['SITEROOT']?>user.php?mod=view&page="+template+"&id=<?=$tmpl['showid']?>",function(){
             $(SCONT).hide();
             $(SCONT).fadeIn();
         });

@@ -56,10 +56,8 @@ class Render
         
         if (file_exists('css/index-'.$options.'.css')){
             echo '<link rel="stylesheet" type="text/css" href="css/index-'.$options.'.css">';
-        } else if (file_exists('css/index.css')){
-            echo '<link rel="stylesheet" type="text/css" href="css/index.css">';    
         }
-        return false;
+        return true;
     }
     
     static function setbodyclass($val)

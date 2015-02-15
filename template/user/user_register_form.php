@@ -40,7 +40,7 @@ function CreateInputText($id ,$type ,$help = '' ,$oldvalue = null)
                 
                 <div>
                     <div class="row">
-                        <form role="form" action="user.php" method="post" class="form-horizontal">
+                        <form role="form" action="<?=$_E['SITEROOT']?>user.php" method="post" class="form-horizontal">
                             <input type='hidden' name='mod' value='register'>
                             <input type='hidden' name='accept' value='reg'>
                             <?php

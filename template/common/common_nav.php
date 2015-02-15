@@ -26,17 +26,17 @@ if(!defined('IN_TEMPLATE'))
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php"><?php echo($_E['site']['name']);?></a>
+                <a class="navbar-brand" href="<?=$_E['SITEROOT']?>index.php"><?php echo($_E['site']['name']);?></a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="rank.php">Stats</a></li>
-                    <li><a href="index.php?old">Dev Message</a></li>
+                    <li><a href="<?=$_E['SITEROOT']?>rank.php">Stats</a></li>
+                    <li><a href="<?=$_E['SITEROOT']?>index.php?old">Dev Message</a></li>
                     <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li class="dropdown-header">Coder</li>
-                            <li><a href="index.php?test">Codepad</a></li>
+                            <li><a href="<?=$_E['SITEROOT']?>code.php">Codepad</a></li>
                             <li class="divider"></li>
                         </ul>
                     </li>
@@ -44,13 +44,13 @@ if(!defined('IN_TEMPLATE'))
                 </ul>
             <ul class="nav navbar-nav navbar-right">
                 <?php if( !$_G['uid']): ?>
-                <li><a href="user.php?mod=login">LOGIN</a></li>
+                <li><a href="<?=$_E['SITEROOT']?>user.php?mod=login">LOGIN</a></li>
                 <?php else: ?>
                     <?php if(userControl::isAdmin()):?>
-                <li><a href="admin.php">Admin</a></li>
+                <li><a href="<?=$_E['SITEROOT']?>admin.php">Admin</a></li>
                     <?php endif; ?>
-                <li><a href="user.php?mod=view"><?php echo(htmlspecialchars($_G['nickname']));?></a></li>
-                <li><a href="user.php?mod=logout">LOGOUT</a></li>
+                <li><a href="<?=$_E['SITEROOT']?>user.php?mod=view"><?php echo(htmlspecialchars($_G['nickname']));?></a></li>
+                <li><a href="<?=$_E['SITEROOT']?>user.php?mod=logout">LOGOUT</a></li>
                 <?php endif;?>
             </ul>
         </div>

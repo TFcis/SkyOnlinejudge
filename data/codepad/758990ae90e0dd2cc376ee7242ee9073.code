@@ -1,0 +1,98 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<cstring>
+#include<map>
+#include<set>
+using namespace std;
+struct node{
+	int sum;
+	int l,r;
+};
+node data[5000000] = {0,0,0};
+inline int sum(int i){ return i?data[i].sum:0; }
+//MEMCT
+int _id;
+void init(){
+	_id=0;
+}
+int copy(int c)
+{
+	int newid = ++_id;
+	data[newid] = data[c] ;
+	return newid;
+}
+//RMQ
+int modify(int res,int i,int v,int L,int R)
+{
+	int n = copy(res);
+	if( L == R )
+	{
+		data[n].sum += v;
+		return n;
+	}
+	int M = (L+R)/2;
+	if( i <= M )data[n].l = modify( data[n].l ,i, v , L , M );
+	else		data[n].r = modify( data[n].r ,i, v ,M+1, R );
+	data[n].sum = sum(data[n].l) + sum(data[n].r) ;
+	return n;
+}
+int query(int r1,int l,int r,int L,int R)
+{
+	if(L==l&&R==r)
+		return sum(r1);
+	int M = (L+R)/2;
+	if( r <= M ) return query( data[r1].l , l , r , L , M );
+	if( M <  l ) return query( data[r1].r , l , r , M+1,R );
+	return 	query( data[r1].l , l , M , L , M ) + 
+			query( data[r1].r , M+1,r , M+1,R ) ;
+}
+int head[ 100001 ];
+int last[ 100001 ];
+int buf [ 100001 ];
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	int T,tmp,N,M,a,b;
+	cin>>T;
+	set<int> st;
+	map<int,int> mp;
+	while(T--)
+	{
+		cin>>N>>M;
+		st.clear();
+		mp.clear();
+		init();
+		for(int i=1;i<=N;++i)
+		{
+			cin>>buf[i];
+			st.insert(buf[i]);
+		}
+		tmp=0;
+		for(int c:st)
+			mp[c]=tmp++;
+		for(int i=1;i<=N;++i)
+			buf[i]=mp[buf[i]];
+		int L = 0;
+		int R = N;
+		//BUILD
+		memset(last,0,sizeof(last));
+		for(int i=1;i<=N;++i)
+		{
+			int z = last[ buf[i] ];
+			if( z != 0 )
+				head[i] = modify(head[i-1],z,-1,L,R);
+			else
+				head[i] = head[i-1];
+			last[ buf[i] ] = i;
+			head[i] = modify(head[i],i,1,L,R);
+		}
+		while(M--)
+		{
+			cin>>a>>b;
+			if(a>b)swap(a,b);
+			cout<<query(head[b],a,b,L,R)<<'\n';
+		}
+	}
+}

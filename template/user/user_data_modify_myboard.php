@@ -18,7 +18,7 @@ if(!defined('IN_TEMPLATE'))
         <?php foreach($_E['template']['row'] as $row){ ?>
             <tr style = "height: 40px">
                 <td><?=$row['id'];?></td>
-                <td><a href="rank.php?mod=cbedit&id=<?=$row['id'];?>"><?=htmlspecialchars($row['name']);?></a></td>
+                <td><a href="<?=$_E['SITEROOT']?>rank.php?mod=cbedit&id=<?=$row['id'];?>"><?=htmlspecialchars($row['name']);?></a></td>
             </tr>
         <?php }?>
         </tbody>

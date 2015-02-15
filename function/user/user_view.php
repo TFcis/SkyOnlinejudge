@@ -59,23 +59,25 @@ if( isset($_GET['page']) )//subpage
             }
             break;
         case 'myboard':
-            #WAIT FOR PRESYSTEM
-            $statsboard = DB::tname('statsboard');
-            $res = DB::query("SELECT `id`,`name` FROM `$statsboard` WHERE `owner` = '$showid'");
-            $rowdata = array();
-            
-            if( !$res  )
+            if( userControl::getpermission($showid) )
             {
-                $_E['template']['message'] = 'SQL Error...';
-                Render::renderSingleTemplate('common_message','common');
+                #WAIT FOR PRESYSTEM
+                $statsboard = DB::tname('statsboard');
+                $res = DB::query("SELECT `id`,`name` FROM `$statsboard` WHERE `owner` = '$showid'");
+                $rowdata = array();
+                
+                if( !$res  )
+                {
+                    $_E['template']['message'] = 'SQL Error...';
+                    Render::renderSingleTemplate('common_message','common');
+                    exit(0);
+                }
+                while( $data = DB::fetch($res) )
+                    $rowdata[]=$data;
+                $_E['template']['row'] = $rowdata;
+                Render::renderSingleTemplate('user_data_modify_myboard','user');
                 exit(0);
             }
-            while( $data = DB::fetch($res) )
-                $rowdata[]=$data;
-            $_E['template']['row'] = $rowdata;
-            Render::renderSingleTemplate('user_data_modify_myboard','user');
-            exit(0);
-            
             break;
     }
     Render::renderSingleTemplate('nonedefined');

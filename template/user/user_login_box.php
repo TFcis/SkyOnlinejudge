@@ -11,7 +11,7 @@ $(document).ready(function()
     {
         $("#display").html('...');
         e.preventDefault();
-        $.post("user.php",
+        $.post("<?=$_E['SITEROOT']?>user.php",
             $("#loginform").serialize(),
             function(res){
                 if(res.status == 'error')
@@ -73,7 +73,7 @@ $(document).ready(function()
                 </form>
                 <small>OR</small>
             
-                <div class = 'link-like' onclick="location.href='user.php?mod=register'">
+                <div class = 'link-like' onclick="location.href='<?=$_E['SITEROOT']?>user.php?mod=register'">
                 <u><b>Register</b></u>
                 </div>
             </center>

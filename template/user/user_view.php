@@ -21,7 +21,7 @@ if(!defined('IN_TEMPLATE'))
         $("[navpage='"+old+"']").removeClass();
         $("[navpage='"+template+"']").addClass('active');
         old = template;
-        $(CONT).load("user.php?mod=view&page="+template+"&id=<?=$tmpl['showid']?>",function(){
+        $(CONT).load("<?=$_E['SITEROOT']?>user.php?mod=view&page="+template+"&id=<?=$tmpl['showid']?>",function(){
             $(CONT).hide();
             $(CONT).fadeIn();
         });

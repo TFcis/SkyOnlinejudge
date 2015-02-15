@@ -30,7 +30,7 @@ $(document).ready(function()
         }
         reqworking = true;
         $("#adv-act-info").html('Modifying...');
-        $.post("rank.php",{
+        $.post("<?=$_E['SITEROOT']?>rank.php",{
             mod : 'edit',
             page: 'cb'+mode,
             id  : pageid,
@@ -54,13 +54,13 @@ $(document).ready(function()
         $("#display").html("SUBMIT...");
         e.preventDefault();
         $("#announce").val(tinymce.activeEditor.getContent());
-        $.post("rank.php",
+        $.post("<?=$_E['SITEROOT']?>rank.php",
             $("#board").serialize(),
             function(res){
                 if(res.status === 'SUCC')
                 {
                     $("#display").html("YES");
-                    setTimeout(function(){location.href="rank.php?mod=cbedit&id="+res.data;}, 500);
+                    setTimeout(function(){location.href="<?=$_E['SITEROOT']?>rank.php?mod=cbedit&id="+res.data;}, 500);
                 }
                 else if(res.status === 'error')
                 {
@@ -76,7 +76,7 @@ $(document).ready(function()
         <div class="page-header">
           <h1>編輯記分板 <small><?=htmlspecialchars($tmpl['title'])?>
           <?php if($_E['template']['form']['id']):?>
-            <a class = "icon-bttn" href = "rank.php?mod=commonboard&id=<?=$tmpl['form']['id']?>">
+            <a class = "icon-bttn" href = "<?=$_E['SITEROOT']?>rank.php?mod=commonboard&id=<?=$tmpl['form']['id']?>">
                 <span class="pointer glyphicon glyphicon-arrow-left" title="回到記分板"></span>
             </a>
           <?php endif;?>

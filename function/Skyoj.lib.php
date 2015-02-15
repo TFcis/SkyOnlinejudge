@@ -33,7 +33,6 @@ function safe_post($key,$usearray = false)
     }
     return false;
 }
-
 function extend_userlist($string)
 {
     $tmp = explode(',',$string);

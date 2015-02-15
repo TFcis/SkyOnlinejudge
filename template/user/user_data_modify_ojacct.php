@@ -9,7 +9,7 @@ var pageid = <?=$tmpl['showid']?> ;
 function authacct(c)
 {
     var disname = '#display-modal-' + c ;
-    $.post("user.php",{
+    $.post("<?=$_E['SITEROOT']?>user.php",{
             mod : 'edit',
             page: 'authacct',
             id  : pageid,
@@ -39,7 +39,7 @@ $(document).ready(function()
     $("#ojacct").submit(function(e)
     {
         e.preventDefault();
-        $.post("user.php",
+        $.post("<?=$_E['SITEROOT']?>user.php",
             $("#ojacct").serialize(),
             function(res){
             if( res.status == 'error' )

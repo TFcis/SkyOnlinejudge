@@ -9,7 +9,7 @@ var pageid = <?=$_E['template']['showid']?> ;
 function authacct(c)
 {
     var disname = '#display-modal-' + c ;
-    $.post("user.php",{
+    $.post("<?=$_E['SITEROOT']?>user.php",{
             mod : 'edit',
             page: 'authacct',
             id  : pageid,
@@ -48,7 +48,7 @@ $(document).ready(function()
             $("#acct-show").css('color','Red');
             return false;
         }
-        $.post("user.php",
+        $.post("<?=$_E['SITEROOT']?>user.php",
             $("#acct").serialize(),
             function(res){
                 if(res.status == 'error')

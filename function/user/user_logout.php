@@ -8,4 +8,4 @@ if($_G['uid'])
     userControl::DelLoginToken();
     setcookie('uid','',0);
 }
-header("Location:index.php");
+header("Location:".$_E['SITEROOT']."index.php");

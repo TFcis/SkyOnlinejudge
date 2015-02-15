@@ -41,13 +41,13 @@ $(document).ready(function()
         <?php foreach($_E['template']['row'] as $row){ ?>
             <tr style = "height: 40px">
                 <td><?=$row['id'];?></td>
-                <td><a href="rank.php?mod=commonboard&id=<?=$row['id'];?>"><?=htmlspecialchars($row['name']);?></a></td>
+                <td><a href="<?=$_E['SITEROOT']?>rank.php?mod=commonboard&id=<?=$row['id'];?>"><?=htmlspecialchars($row['name']);?></a></td>
                 <td class="hidden-xs">
                     <?php if($_G['uid']): ?>
                         <!--<span class="icon-bttn glyphicon glyphicon-plus-sign" title="加入"></span>
                         <span class="icon-bttn glyphicon glyphicon-remove" title="離開"></span>-->
                         <?php if(userControl::getpermission($row['owner'])): ?>
-                        <a class = "icon-bttn" href="rank.php?mod=cbedit&id=<?=$row['id'];?>">
+                        <a class = "icon-bttn" href="<?=$_E['SITEROOT']?>rank.php?mod=cbedit&id=<?=$row['id'];?>">
                             <span class="glyphicon glyphicon-pencil" title="編輯"></span>
                         </a>
                         <!--<span class = "icon-bttn">

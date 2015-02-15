@@ -11,7 +11,7 @@ if(!defined('IN_TEMPLATE'))
         $("#infobox").html("Rebuilding...");
         scallid = typeof scallid !== 'undefined' ? scallid : '';
         $.get(
-            "rank.php",
+            "<?=$_E['SITEROOT']?>rank.php",
             {
                 mod : 'cbfetch',
                 id  : '<?=$tmpl['id']?>',
@@ -63,7 +63,7 @@ if(!defined('IN_TEMPLATE'))
         <div class="page-header">
             <h1><?=htmlspecialchars($tmpl['title'])?> <small>Statistics
             <?php if(userControl::getpermission($tmpl['owner'])): ?>
-            <a class = "icon-bttn" href='rank.php?mod=cbedit&id=<?=$tmpl['id'];?>'>
+            <a class = "icon-bttn" href='<?=$_E['SITEROOT']?>rank.php?mod=cbedit&id=<?=$tmpl['id'];?>'>
                 <span class="pointer glyphicon glyphicon-pencil"  title="編輯"></span>
             </a>
                 <?php if( $tmpl['state']==1 ) : ?>
@@ -77,17 +77,17 @@ if(!defined('IN_TEMPLATE'))
             <div class='container-fluid'>
                 <div class="row">
                     <div class="col-xs-4 col-md-4 text-left">
-                        <a href="rank.php?mod=commonboard&id=<?=$tmpl['leftid']?>" class="btn btn-primary btn-sm active" <?php if(!$tmpl['leftid'])echo('disabled="disabled"');?>>
+                        <a href="<?=$_E['SITEROOT']?>rank.php?mod=commonboard&id=<?=$tmpl['leftid']?>" class="btn btn-primary btn-sm active" <?php if(!$tmpl['leftid'])echo('disabled="disabled"');?>>
                         <span class="glyphicon glyphicon-arrow-left"></span>
                         </a>
                     </div>
                     <div class="col-xs-4 col-md-4 text-center">
-                        <a href="rank.php?mod=list&page=<?=$tmpl['homeid']?>" class="btn btn-primary btn-sm active">
+                        <a href="<?=$_E['SITEROOT']?>rank.php?mod=list&page=<?=$tmpl['homeid']?>" class="btn btn-primary btn-sm active">
                         <span class="glyphicon glyphicon-home"></span>
                         </a>
                     </div>
                     <div class="col-xs-4 col-md-4 text-right">
-                        <a href="rank.php?mod=commonboard&id=<?=$tmpl['rightid']?>" class="btn btn-primary btn-sm active" <?php if(!$tmpl['rightid'])echo('disabled="disabled"');?>>
+                        <a href="<?=$_E['SITEROOT']?>rank.php?mod=commonboard&id=<?=$tmpl['rightid']?>" class="btn btn-primary btn-sm active" <?php if(!$tmpl['rightid'])echo('disabled="disabled"');?>>
                         <span class="glyphicon glyphicon-arrow-right"></span>
                         </a>
                     </div>
