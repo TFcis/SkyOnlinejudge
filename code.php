@@ -12,14 +12,12 @@ if( empty($QUEST[0]) )
 //set Default mod
 if( !in_array($QUEST[0],$allowmod) )
 {
-    
     Render::render('nonedefined');
     exit(0);
 }
 else
 {
     $mod = $QUEST[0];
-    //require_once($_E['ROOT']."/function/code/code.lib.php");
     $funcpath =  $_E['ROOT']."/function/code/code_$mod.php";
     if(file_exists($funcpath))
     {

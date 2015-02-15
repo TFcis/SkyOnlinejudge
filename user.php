@@ -9,7 +9,10 @@ if( isset($_REQUEST['mod']) )
 {
     $mod = @$_REQUEST['mod'];
 }
-
+if( !empty($QUEST[0]) )
+{
+    $mod = $QUEST[0];
+}
 if( !in_array($mod,$allowmod) )
 {
     Render::render('nonedefined');

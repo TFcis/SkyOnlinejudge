@@ -25,6 +25,7 @@ fwrite($handle,$code);
 fclose($handle);
 $table = DB::tname('codepad');
 $times = 10;
+
 do{
     $times -- ;
     $hash = substr(md5(uniqid(uniqid(),true)),0,8);

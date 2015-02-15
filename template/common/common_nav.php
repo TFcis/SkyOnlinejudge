@@ -49,8 +49,8 @@ if(!defined('IN_TEMPLATE'))
                     <?php if(userControl::isAdmin()):?>
                 <li><a href="<?=$_E['SITEROOT']?>admin.php">Admin</a></li>
                     <?php endif; ?>
-                <li><a href="<?=$_E['SITEROOT']?>user.php?mod=view"><?php echo(htmlspecialchars($_G['nickname']));?></a></li>
-                <li><a href="<?=$_E['SITEROOT']?>user.php?mod=logout">LOGOUT</a></li>
+                <li><a href="<?=$_E['SITEROOT']."user.php/view/".$_G['uid']?>"><?php echo(htmlspecialchars($_G['nickname']));?></a></li>
+                <li><a href="<?=$_E['SITEROOT']?>user.php/logout">LOGOUT</a></li>
                 <?php endif;?>
             </ul>
         </div>

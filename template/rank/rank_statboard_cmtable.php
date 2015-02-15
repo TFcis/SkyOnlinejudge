@@ -30,7 +30,7 @@ if(!defined('IN_TEMPLATE'))
             </td>
             <td class="text-right" style="left:40px;position:absolute;">
                 <div class="nickname">
-                    <a style="color:white;" href=<?="user.php?mod=view&id=$uid"?>><?=$_E['nickname'][$uid]?></a>
+                    <a style="color:white;" href=<?=$_E['SITEROOT']."user.php/view/$uid"?>><?=$_E['nickname'][$uid]?></a>
                 </div>
             </td>
     		<?php $AC_count = $tmpl['userdetail'][$uid]['statistics']['90']; ?>

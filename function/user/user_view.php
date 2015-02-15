@@ -16,6 +16,18 @@ if( isset($_GET['id']) )
         exit('');
     }
 }
+elseif( isset($QUEST[1]) )
+{
+    $tid = $QUEST[1];
+    if( is_numeric ($tid) ){
+        $showid = $tid;
+    }
+    else{
+        Render::errormessage('WTF!?');
+        Render::render('nonedefined');
+        exit('');
+    }
+}
 else
 {
     $showid = $_G['uid'];
@@ -76,6 +88,27 @@ if( isset($_GET['page']) )//subpage
                     $rowdata[]=$data;
                 $_E['template']['row'] = $rowdata;
                 Render::renderSingleTemplate('user_data_modify_myboard','user');
+                exit(0);
+            }
+            break;
+        case 'mycodepad':
+            if( userControl::getpermission($showid) )
+            {
+                #WAIT FOR PRESYSTEM
+                $codepad = DB::tname('codepad');
+                $res = DB::query("SELECT `id`,`hash` FROM `$codepad` WHERE `owner` = '$showid'");
+                $rowdata = array();
+                
+                if( !$res  )
+                {
+                    $_E['template']['message'] = 'SQL Error...';
+                    Render::renderSingleTemplate('common_message','common');
+                    exit(0);
+                }
+                while( $data = DB::fetch($res) )
+                    $rowdata[]=$data;
+                $_E['template']['row'] = $rowdata;
+                Render::renderSingleTemplate('user_data_modify_mycodepad','user');
                 exit(0);
             }
             break;
