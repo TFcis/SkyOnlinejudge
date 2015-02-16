@@ -13,7 +13,7 @@ function authacct(c)
             mod : 'edit',
             page: 'authacct',
             id  : pageid,
-            cls :c,
+            cls : c,
         },
         function(res){
             if( res.status == 'error' )
@@ -76,6 +76,9 @@ $(document).ready(function()
             <div class="panel-heading">Account Information</div>
             <div class="panel-body">
                 <p>SOJ ID : <?=$tmpl['showid']?></p>
+                <?php if(userControl::isAdmin($tmpl['showid'])):?>
+                <p>WOW ADMIN!</p>
+                <?php endif;?>
                 <p>avatar via <a href="https://gravatar.com/" class="btn btn-primary active" target="_blank">gravatar</a></p>
             </div>
         </div>

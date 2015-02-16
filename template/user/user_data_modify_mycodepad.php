@@ -6,12 +6,14 @@ if(!defined('IN_TEMPLATE'))
 ?>
 <div class="container">
     <div class="row">
-        <h1>My board</h1>
+        <h1>My Codes</h1>
         <table class = "table">
         <thead>
             <tr>
-                <th style = "width: 40px"></th>
-                <th>NAME</th>
+                <th class = 'col-lg-1' style = "width: 40px"></th>
+                <th>TITLE</th>
+                <th class = 'col-lg-1'>Tools</th>
+                <th class = 'col-lg-3' >TIME</th>
             </tr>
         </thead>
         <tbody>
@@ -19,6 +21,15 @@ if(!defined('IN_TEMPLATE'))
             <tr style = "height: 40px">
                 <td><?=$row['id'];?></td>
                 <td><a href="<?=$_E['SITEROOT']?>code.php/view/<?=$row['hash'];?>"><?=htmlspecialchars($row['hash']);?></a></td>
+                <td>
+                    <a class="icon-bttn">
+                        <span class="glyphicon glyphicon-pencil" title="編輯"></span>
+                    </a>
+                    <a class="icon-bttn">
+                        <span class="glyphicon glyphicon-trash" title="移除"></span>
+                    </a>
+                </td>
+                <td><?=$row['timestamp'];?></td>
             </tr>
         <?php }?>
         </tbody>

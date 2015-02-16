@@ -32,7 +32,7 @@ function CreateInputText($id ,$type ,$help = '' ,$oldvalue = null)
                 
                 <div>
                     <?php if(isset($_E['template']['reg'])):?>
-                    <p><i><small><?php echo($_E['template']['reg']);?></small></i></p>
+                    <p><i><small style='color:red'><?php echo($_E['template']['reg']);?></small></i></p>
                     <?php else:?>
                     <p><i><small class="login_comment">-Coding is like poetry</small></i></p>
                     <?php endif;?>

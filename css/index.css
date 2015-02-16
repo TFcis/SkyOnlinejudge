@@ -163,3 +163,15 @@ th {
     color: #fcfcfc;
     background-color: #002244;
 }
+
+.icon-bttn{
+    font-size: 14px;
+    margin: 0 2px;
+    
+    color: #999999;
+    transition: 0.2s;
+}
+.icon-bttn:hover{
+    cursor: pointer;
+    color: #ffffff;
+}

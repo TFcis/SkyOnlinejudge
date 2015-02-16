@@ -26,7 +26,14 @@ function checkpassword($pass)
         return false;
     return preg_match($pattern,$pass);
 }
-
+function checknickname($name)
+{
+    if( $name !== addslashes($name) )
+        return false;
+    if( strpos($name,'@') !== false )
+        return false;
+    return true;
+}
 function register($email,$nickname,$password,$repeat)
 {
     global $_E;
@@ -39,7 +46,7 @@ function register($email,$nickname,$password,$repeat)
     $sqlres;
     
     if( !preg_match($pattern,$email) || !checkpassword($password) || $password!= $repeat ||
-        $nickname !== addslashes($nickname))
+        !checknickname($nickname))
     {
         //use language!
         $_E['template']['reg'] = '格式錯誤';
@@ -66,7 +73,7 @@ function register($email,$nickname,$password,$repeat)
     return true;
 }
 
-function login($email,$password,$usenickname = false)
+function login($email,$password)
 {
     global $_E;
     $pattern  = '/^[._@a-zA-Z0-9]{3,30}$/';
@@ -76,7 +83,7 @@ function login($email,$password,$usenickname = false)
     $sqlres;
     $userdata = null;
     $resultdata = array(false,'');
-    if( $usenickname )
+    if( checknickname($email) )
     {
         $nick = $email;
         if($nick !== addslashes($nick))
@@ -109,9 +116,7 @@ function login($email,$password,$usenickname = false)
         $resultdata[1] = '無此帳號';
         return $resultdata;
     }
-    //$password = passwordHash($password);
     if( passwordHash($password)!=$userdata['passhash'] )
-    //if( !password_verify($password, $userdata['passhash']) )
     {
         $resultdata[1] = '密碼錯誤';
         return $resultdata;
@@ -277,10 +282,21 @@ class UserInfo
     
     private function _load_data_view()
     {
-        $res = array();
+        $res = DB::getuserdata('profile',$this->uid);
+        if( isset($res[$this->uid]) )
+        {
+            $res = $res[$this->uid];
+        }
+        else
+        {
+            $res = array();
+            $res['quote'] =  htmlspecialchars("Sylveon (Japanese: ニンフィア Nymphia) is a Fairy-type Pokémon.It evolves from Eevee when leveled up knowing a Fairy-type move and having at least two Affection hearts in Pokémon-Amie. It is one of Eevee's final forms, the others being Vaporeon, Jolteon, Flareon, Espeon, Umbreon, Leafeon, and Glaceon.");
+            $res['quote_ref'] = htmlspecialchars('By Pokemon');
+        }
+        
         $res['avaterurl'] = getgravatarlink($this->data['account']['email']);
         $res['nickname'] = $this->data['account']['nickname'];
-        $res['quote'] =  htmlspecialchars("Sylveon (Japanese: ニンフィア Nymphia) is a Fairy-type Pokémon.It evolves from Eevee when leveled up knowing a Fairy-type move and having at least two Affection hearts in Pokémon-Amie. It is one of Eevee's final forms, the others being Vaporeon, Jolteon, Flareon, Espeon, Umbreon, Leafeon, and Glaceon.");
+        
         return $res;
     }
     

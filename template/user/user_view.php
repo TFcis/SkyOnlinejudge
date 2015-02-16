@@ -8,24 +8,23 @@ if(!defined('IN_TEMPLATE'))
 	var CONT;
 	var old;
 	$(document).ready(function(){
-        CONT = document.getElementById('content');
-        var curTemplate = location.hash.slice(1);
-        if(curTemplate=="")	{ curTemplate = "setting"; }
-        $("[navpage='"+curTemplate+"']").addClass('active');
-        old = curTemplate;
-        loadTemplate(curTemplate);
-        $( "[navpage]" ).click(function(){loadTemplate($(this).attr('navpage'));});
+	    CONT = document.getElementById('content');
+	    $( "[navpage]" ).click(function(){loadTemplate($(this).attr('navpage'));});
+	    
+	    var defaultpage = '<?=$tmpl['view']['defaultpage']?>' ;
+        old = defaultpage;
+        $("[navpage='"+defaultpage+"']").addClass('active');
+        loadTemplate(defaultpage);
 	});
+	
 	function loadTemplate(template){
-        location.hash = template;
         $("[navpage='"+old+"']").removeClass();
         $("[navpage='"+template+"']").addClass('active');
         old = template;
-        $(CONT).load("<?=$_E['SITEROOT']?>user.php?mod=view&page="+template+"&id=<?=$tmpl['showid']?>",function(){
+        $(CONT).load("<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/"+template+"?token=tmpl",function(){
             $(CONT).hide();
             $(CONT).fadeIn();
         });
-        
 	}
 </script>
 
@@ -40,7 +39,9 @@ if(!defined('IN_TEMPLATE'))
             <h1><?=$tmpl['nickname']?><h1>
             <blockquote style = "font-size: 14px">
                 <p><?=$tmpl['quote']?></p>
-                <footer>By Pokemon</footer>
+                <?php if(!empty($tmpl['quote_ref'])): ?>
+                <footer><?=$tmpl['quote_ref']?></footer>
+                <?php endif;?>
             </blockquote>
         </div>
         

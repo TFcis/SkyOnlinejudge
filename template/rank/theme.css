@@ -1,14 +1,4 @@
-.icon-bttn{
-    font-size: 14px;
-    margin: 0 2px;
-    
-    color: #999999;
-    transition: 0.2s;
-}
-.icon-bttn:hover{
-    cursor: pointer;
-    color: #ffffff;
-}
+
 .AC {
     width: 50px;
 	color: #00cc00;
@@ -27,7 +17,6 @@
 }
 
 table {
-    
     border-collapse: collapse;
 }
 #cbtable{

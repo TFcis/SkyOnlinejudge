@@ -44,7 +44,7 @@ if(!defined('IN_TEMPLATE'))
                 </ul>
             <ul class="nav navbar-nav navbar-right">
                 <?php if( !$_G['uid']): ?>
-                <li><a href="<?=$_E['SITEROOT']?>user.php?mod=login">LOGIN</a></li>
+                <li><a href="<?=$_E['SITEROOT']?>user.php/login">LOGIN</a></li>
                 <?php else: ?>
                     <?php if(userControl::isAdmin()):?>
                 <li><a href="<?=$_E['SITEROOT']?>admin.php">Admin</a></li>

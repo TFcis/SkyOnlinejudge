@@ -20,8 +20,7 @@ else // API CALL
 {
     $email = safe_post('email');
     $password = safe_post('password');
-    $usenickname = ( safe_post('usenickname') === "1" );
-    $user = login($email,$password,$usenickname);
+    $user = login($email,$password);
     if( !$user[0]  )
     {
         $_E['template']['alert'] = $user[1];

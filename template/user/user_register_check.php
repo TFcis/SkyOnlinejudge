@@ -18,7 +18,7 @@ if(!defined('IN_TEMPLATE'))
                     </div>
                     
                     <div style = "text-align: right">
-                        <button type="button" class="btn-grn btn-large" onclick="location.href='<?=$_E['SITEROOT']?>user.php?mod=register&accept=accept'">
+                        <button type="button" class="btn-grn btn-large" onclick="location.href='<?=$_E['SITEROOT']?>user.php/register?accept=accept'">
                         I accept these terms
                         </button>
                         <button type="button" class="btn-red btn-large" onclick="location.href='<?=$_E['SITEROOT']?>index.php'">

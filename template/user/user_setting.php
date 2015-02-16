@@ -6,12 +6,12 @@ if(!defined('IN_TEMPLATE'))
 ?>
 <script>
 	var SCONT;
-	var sold = 'account';
+	var sold = '<?=$tmpl['setting']['defaultpage']?>';
 	function SubloadTemplate(template){
         $("[settingpage = '"+sold+"']").removeClass();
         $("[settingpage = '"+template+"']").addClass('active');
         sold = template;
-        $(SCONT).load("<?=$_E['SITEROOT']?>user.php?mod=view&page="+template+"&id=<?=$tmpl['showid']?>",function(){
+        $(SCONT).load("<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/setting/"+template+"?token=tmpl",function(){
             $(SCONT).hide();
             $(SCONT).fadeIn();
         });

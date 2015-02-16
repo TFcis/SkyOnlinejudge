@@ -23,7 +23,7 @@ $(document).ready(function()
                 {
                     $("#display").css('color','Lime');
                     $("#display").html('Welcome!');
-                    location.href = res.data;
+                    location.href = "<?=$_E['SITEROOT']?>"+res.data;
                 }
         },"json");
         return true;
@@ -59,11 +59,11 @@ $(document).ready(function()
                     <div>
                         <small><span id="display"></span></small>
                     </div>
-                    <div class="checkbox">
+                    <!--<div class="checkbox">
                         <label class="login_lable_text">
                             <input type="checkbox" name="usenickname" value="1" checked > Login By Nickname
                         </label>
-                    </div>
+                    </div>-->
                     <div class="form-group">
                         <button type="submit" class= "btn-grn btn-large btn-wide" style = "width:168px">
                         <b>Login</b>
@@ -73,7 +73,7 @@ $(document).ready(function()
                 </form>
                 <small>OR</small>
             
-                <div class = 'link-like' onclick="location.href='<?=$_E['SITEROOT']?>user.php?mod=register'">
+                <div class = 'link-like' onclick="location.href='<?=$_E['SITEROOT']?>user.php/register'">
                 <u><b>Register</b></u>
                 </div>
             </center>

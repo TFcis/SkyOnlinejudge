@@ -13,7 +13,9 @@ $storgepath = $_E['ROOT'].'/data/codepad/';
 
 if( empty($code) )
     throwjson('error','Empty!');
-    
+if( ($s=strlen($code)) > 15000 )
+    throwjson('error','Too LONG! :'.$s);
+
 do{
     $name = md5(uniqid(uniqid(),true)).".code";
 }while( file_exists($storgepath.$name) );

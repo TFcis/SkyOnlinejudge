@@ -18,6 +18,11 @@ $(document).ready(function()
         <div class="col-lg-8 col-md-8">
         <?php Render::renderSingleTemplate('common_codepanel'); ?>
         </div>
+        <div class="col-lg-4 col-md-4">
+        <h1>Information</h1>
+        <p>Owner : <a href='<?=$_E['SITEROOT']."user.php/view/".$tmpl['owner']?>'><?=htmlspecialchars($_E['nickname'][$tmpl['owner']])?></a></p>
+        <p>Submit : <?=$tmpl['timestamp']?></p>
+        </div>
     </div>
     <div class="row" style = "margin-top:15px;">
         <div class="col-lg-offset-6 col-md-offset-6 col-lg-2 col-md-2">
