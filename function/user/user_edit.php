@@ -5,10 +5,12 @@ if( !defined('IN_SKYOJSYSTEM') )
     exit('Access denied');
 }
 //Only By Post Login Token
+if(!isset($_POST['mod']))DB::syslog('mod');
+if(!userControl::checktoken('EDIT'))DB::syslog('token');
 if(!isset($_POST['mod']) || !$_G['uid'] || !userControl::checktoken('EDIT'))
     throwjson('error','Access denied');
 
-$allowpage = array('ojacct','acct','authacct');
+$allowpage = array('ojacct','acct','authacct','quote');
 
 $editpage = safe_post('page');
 if(!in_array($editpage ,$allowpage))
@@ -24,6 +26,23 @@ if( !userControl::getpermission($euid) )
     throwjson('error','not admin or owner');
 switch($editpage)
 {
+    case 'quote':
+        $user = new UserInfo($euid);
+        $olddata = $user->load_data('view');
+        
+        $quote = safe_post('quote');
+        $quote_ref = safe_post('quote_ref');
+        if( $quote===false || $quote_ref===false )
+            throwjson('error','data missing');
+        if(($s=strlen($quote))>350)throwjson('error',"Quote too long!($s)");
+        if(($s=strlen($quote_ref))>80)throwjson('error',"Quote ref too long!($s)");
+        $olddata['quote'] = $quote;
+        $olddata['quote_ref'] = $quote_ref;
+        if( $user->save_data('view',$olddata) )
+            throwjson('SUCC','SUCC');
+        else
+            throwjson('error','Something error...');
+        break;
     case 'ojacct':
         if( !isset($_E['ojlist']) )
         {

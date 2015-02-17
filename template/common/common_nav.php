@@ -30,17 +30,19 @@ if(!defined('IN_TEMPLATE'))
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="<?=$_E['SITEROOT']?>rank.php">Stats</a></li>
+                    <li><a href="<?=$_E['SITEROOT']?>index.php">Problems</a></li>
+                    <li><a href="<?=$_E['SITEROOT']?>index.php">Submission</a></li>
                     <li><a href="<?=$_E['SITEROOT']?>index.php?old">Dev Message</a></li>
                     <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li class="dropdown-header">Coder</li>
+                            <li><a href="<?=$_E['SITEROOT']?>rank.php">Stats</a></li>
                             <li><a href="<?=$_E['SITEROOT']?>code.php">Codepad</a></li>
                             <li class="divider"></li>
+                            <li><a href="http://forum.tfcis.org/forum.php?mod=group&fid=107" target="_new">Discuss</a></li>
                         </ul>
                     </li>
-                    <li><a href="http://forum.tfcis.org/forum.php?mod=group&fid=107" target="_new">Discuss</a></li>
                 </ul>
             <ul class="nav navbar-nav navbar-right">
                 <?php if( !$_G['uid']): ?>

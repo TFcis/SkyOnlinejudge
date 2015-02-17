@@ -289,15 +289,66 @@ class UserInfo
         }
         else
         {
+            
             $res = array();
-            $res['quote'] =  htmlspecialchars("Sylveon (Japanese: ニンフィア Nymphia) is a Fairy-type Pokémon.It evolves from Eevee when leveled up knowing a Fairy-type move and having at least two Affection hearts in Pokémon-Amie. It is one of Eevee's final forms, the others being Vaporeon, Jolteon, Flareon, Espeon, Umbreon, Leafeon, and Glaceon.");
-            $res['quote_ref'] = htmlspecialchars('By Pokemon');
+            $p = rand(1,5);
+            switch($p)
+            {
+                case 1:
+                    $res['quote'] = 'The value of a man resides in what he gives and not in what he is capable of receiving.';
+                    $res['quote_ref'] =  'Albert Einstein';
+                    break;
+                case 2:
+                    $res['quote'] = 'In the End, we will remember not the words of our enemies, but the silence of our friends.';
+                    $res['quote_ref'] = 'Martin Luther King, Jr.';
+                    break;
+                case 3:
+                    $res['quote'] = 'If you shed tears when you miss the sun, you also miss the stars.';
+                    $res['quote_ref'] = 'Robíndronath Thakur';
+                    break;
+                case 4:
+                    $res['quote'] = 'Histories make men wise ; poems witty; the mathematics subtle; natural philosophy deep ; moral grave ; logic and rhetoric able to contend.';
+                    $res['quote_ref'] = 'Francis Bacon';
+                    break;
+                default:
+                    $res['quote'] =  "A man provided with paper, pencil, and rubber, and subject to strict discipline, is in effect a universal Turing Machine.";
+                    $res['quote_ref'] = 'Alan Mathison Turing';
+                    break;
+            }
+            $res['avaterurl'] = '';
+            $res['backgroundurl'] = 'http://i.imgur.com/n2EOWhO.jpg';
+            $this->_save_data_view($res);
         }
-        
-        $res['avaterurl'] = getgravatarlink($this->data['account']['email']);
+        $res['quote'] = htmlspecialchars($res['quote']);
+        $res['quote_ref'] = htmlspecialchars($res['quote_ref']);
         $res['nickname'] = $this->data['account']['nickname'];
         
         return $res;
+    }
+    private function _save_data_view( $viewdata , $cg = null)
+    {
+        $tprofile = DB::tname('profile');
+        if( !isset($viewdata['quote']) ) $viewdata['quote'] = '';
+        if( !isset($viewdata['quote_ref']))$viewdata['quote_ref'] = '';
+        if( !isset($viewdata['backgroundurl'])) $viewdata['backgroundurl'] = '';
+        if( !isset($viewdata['avatarurl'])) $viewdata['avatarurl'] = '';
+        
+        $quote = DB::real_escape_string($viewdata['quote']);
+        $quote_ref = DB::real_escape_string($viewdata['quote_ref']);
+        $backgroundurl = DB::real_escape_string($viewdata['backgroundurl']);
+        $avatarurl = DB::real_escape_string($viewdata['avatarurl']);
+        
+        $uid = $this->uid;
+        $res = DB::query("INSERT INTO `$tprofile` (`uid`, `quote`, `quote_ref`, `avatarurl`, `backgroundurl`)
+                                    VALUES ($uid,'$quote','$quote_ref','$avatarurl','$backgroundurl')
+                                    ON DUPLICATE KEY
+                                    UPDATE  `quote` = '$quote',
+                                            `quote_ref` = '$quote_ref',
+                                            `avatarurl`='$avatarurl',
+                                            `backgroundurl`='$backgroundurl'");
+        if( $res === false )
+            throw new Exception('error');
+        return true;
     }
     
     private function _load_data_ojacct()
@@ -385,15 +436,26 @@ class UserInfo
     
     function save_data($dataname,$value, $args = null )
     {
-        $available_argvs = array('ojacct');
+        $available_argvs = array('ojacct','view');
         
         if(!in_array($dataname,$available_argvs))
             return false;
-
-        $method = "_save_data_$dataname";
-        if( method_exists(get_class(),$method) )
-            if( $this->$method($value,$args) )
-                return true;
-        return false;
+        try
+        {
+            $method = "_save_data_$dataname";
+            if( method_exists(get_class(),$method) )
+            {
+                $this->$method($value,$args);
+            }
+        }
+        catch (Exception $e)
+        {
+            return false;
+        }
+        return true;
+    }
+    function account($s)
+    {
+        return $this->data['account'][$s];
     }
 }

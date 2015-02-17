@@ -28,7 +28,7 @@ if(!defined('IN_TEMPLATE'))
 	}
 </script>
 
-<div class="jumbotron" id="jumbotron" style="background-image: url(http://i.imgur.com/n2EOWhO.jpg); background-size: cover">
+<div class="jumbotron" id="jumbotron" style="background-image: url(<?=$tmpl['backgroundurl']?>); background-size: cover">
     <div class="container">
         
         <div class = "col-xs-5 col-sm-4 col-md-3">
@@ -37,12 +37,14 @@ if(!defined('IN_TEMPLATE'))
         
         <div style = "width: 70%; float: left" class = "col-md-7">
             <h1><?=$tmpl['nickname']?><h1>
+            <?php if(!empty($tmpl['quote'])): ?>
             <blockquote style = "font-size: 14px">
                 <p><?=$tmpl['quote']?></p>
                 <?php if(!empty($tmpl['quote_ref'])): ?>
                 <footer><?=$tmpl['quote_ref']?></footer>
                 <?php endif;?>
             </blockquote>
+            <?php endif;?>
         </div>
         
     </div>

@@ -34,6 +34,7 @@ $statsboard= tname('statsboard');
 $syslog    = tname('syslog');
 $userojacct= tname('userojacct');
 $codepad   = tname('codepad');
+$profile   = tname('profile');
 //CREATE TABLE 
 $conn = mysql_connect($_config['db']['dbhost'],$_config['db']['dbuser'],$_config['db']['dbpw']);
 if(!$conn){
@@ -165,6 +166,14 @@ case 3:
   UNIQUE KEY `filename` (`filename`),
   UNIQUE KEY `hash` (`hash`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
+    run("CREATE TABLE IF NOT EXISTS `$profile` (
+  `uid` int(11) NOT NULL,
+  `quote` text COLLATE utf8_bin,
+  `quote_ref` text COLLATE utf8_bin,
+  `avatarurl` text COLLATE utf8_bin,
+  `backgroundurl` text COLLATE utf8_bin,
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 }
 
     

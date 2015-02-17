@@ -14,14 +14,14 @@ class userControl
     //this must call before use $_G[uid]
     static function registertoken($namespace,$timeleft)
     {
-        global $_G;
+        global $_G,$_E;
         $table = DB::tname('usertoken');
         $token = md5(uniqid($namespace,true));
         $timeout = time() + $timeleft;
         
         $_SESSION[$namespace][$token]['timeout'] = $timeout;
         $_SESSION[$namespace][$token]['uid'] = $_G['uid'];
-        setcookie($namespace,$token,$timeout);
+        setcookie($namespace,$token,$timeout,$_E['SITEDIR']);
         if($_G['uid'])
         {
             $id = $_G['uid'];
@@ -37,10 +37,10 @@ class userControl
     
     static function deletetoken($namespace)
     {
-        global $_G;
+        global $_G,$_E;
         $table = DB::tname('usertoken');
         
-        setcookie($namespace,'',0);
+        setcookie($namespace,'',0,$_E['SITEDIR']);
         if( isset( $_SESSION[$namespace] ) )
         {
             unset($_SESSION[$namespace]);

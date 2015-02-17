@@ -9,6 +9,21 @@ if(!defined('IN_TEMPLATE'))
     <div class="row">
         <h1>更新日誌</h1>
         <div>
+            <time>2015-2-17</time>更新
+            <ol>
+                <li>更新了標題列</li>
+                <li>更新了部分網址呈現方式</li>
+                <li>修種Cookie的路徑問題</li>
+                <li>增加Codepad功能</li>
+                <li>User Setting頁面新增了My board,My Code,Profile</li>
+                <li>計分板移入選單中</li>
+                <li>可以自定義引言了</code></li>
+                <li>新增了參數 <code>$_E['SITEDIR'] = '/';</code> 設定OJ在Web端的目錄，以符合目前網址格式設計，安裝時請依實際狀況在<code>LocalSetting.php</code>修改</li>
+                <li>語言在有人來統整一下，整理現在有點混亂的用語</code></li>
+            </ol>
+        </div>
+        <br>
+        <div>
             <time>2015-2-3</time>更新
             <ol>
                 <li>在大家的努力下增加了很多OJ~ XD</li>

@@ -60,7 +60,10 @@ if( $templateAsk === false ) // Print ALL PAGE
     {
         $_E['template'] = array_merge( $_E['template'] , $opt );
         #if use gravatar
-        $_E['template']['avaterurl'] .= "s=400&";
+        if( empty($opt['avaterurl']) ){
+            $_E['template']['avaterurl'] = getgravatarlink($userInfo->account('email')) ."s=400&";
+        }
+        //$_E['template']['avaterurl'] .= "s=400&";
         $_E['template']['view']['defaultpage'] = 'setting';
         $view_allowpage = array('setting','summary','solve');
         if( in_array($QUEST[2],$view_allowpage) ){
@@ -103,8 +106,8 @@ switch($QUEST[2])
             else{
                 $QUEST[3] = '';
             }
-            $setting_allowpage = array('account','ojacct','myboard','mycodepad');
-            $_E['template']['setting']['defaultpage'] = 'account';
+            $setting_allowpage = array('account','ojacct','myboard','mycodepad','profile');
+            $_E['template']['setting']['defaultpage'] = 'profile';
             if( in_array($QUEST[3],$setting_allowpage ) )
                 $_E['template']['setting']['defaultpage'] = $QUEST[3];
             Render::renderSingleTemplate('user_setting','user');
@@ -113,6 +116,13 @@ switch($QUEST[2])
 
         switch( $QUEST[3] ) //Sub page of setting
         {
+            case 'profile':
+                $viewdata = $userInfo->load_data('view');
+                $_E['template'] = array_merge( $_E['template'] , $viewdata );
+                userControl::registertoken('EDIT',3600);
+                Render::renderSingleTemplate('user_data_modify_profile','user');
+                exit(0);
+                break;
             case 'account':
                 userControl::registertoken('EDIT',3600);
                 Render::renderSingleTemplate('user_data_modify_account','user');

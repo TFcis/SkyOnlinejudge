@@ -4,7 +4,10 @@ if(!defined('IN_SKYOJSYSTEM'))
   exit('Access denied');
 }
 define('IN_TEMPLATE',1);
-
+function lang($str)
+{
+    return $str;
+}
 class Render
 {
     private $head_css;
