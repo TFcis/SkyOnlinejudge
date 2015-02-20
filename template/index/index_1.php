@@ -13,7 +13,7 @@ if(!defined('IN_TEMPLATE'))
             <ol>
                 <li>更新了標題列</li>
                 <li>更新了部分網址呈現方式</li>
-                <li>修種Cookie的路徑問題</li>
+                <li>修正Cookie的路徑問題</li>
                 <li>增加Codepad功能</li>
                 <li>User Setting頁面新增了My board,My Code,Profile</li>
                 <li>計分板移入選單中</li>

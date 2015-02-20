@@ -26,7 +26,7 @@ class class_hoj{
 	    $tb = DB::tname('ojlist');
 	    DB::query("INSERT INTO `$tb`
 	            (`id`, `class`, `name`, `description`, `available`) VALUES
-	            (NULL,'class_hoj','師大附中HOJ','Account Name',1)");
+	            (NULL,'class_hoj','師大附中HOJ','HOJ uid',1)");
 	}
 	
 	function checkid($id)
