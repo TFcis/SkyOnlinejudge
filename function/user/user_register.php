@@ -45,7 +45,7 @@ if( userControl::checktoken('register') )
 }
 else //First visit register page. Give him a taken.
 {
-    setcookie('uid','0',time()+300);
+    setcookie('uid','0',time()+300,$_E['SITEDIR']);
     userControl::registertoken('register',300);
     Render::setbodyclass('registerbody');
     Render::render('user_register_check','user');

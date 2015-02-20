@@ -10,7 +10,9 @@ if(!defined('IN_TEMPLATE'))
 	function SubloadTemplate(template){
         $("[settingpage = '"+sold+"']").removeClass();
         $("[settingpage = '"+template+"']").addClass('active');
+        var data = {tmpl:sold,call:'SubloadTemplate'};
         sold = template;
+        history.pushState(data,"Setting "+template,'<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/setting/'+template);
         $(SCONT).load("<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/setting/"+template+"?token=tmpl",function(){
             $(SCONT).hide();
             $(SCONT).fadeIn();

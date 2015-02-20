@@ -20,7 +20,9 @@ if(!defined('IN_TEMPLATE'))
 	function loadTemplate(template){
         $("[navpage='"+old+"']").removeClass();
         $("[navpage='"+template+"']").addClass('active');
+        var data = {tmpl:old,call:'loadTemplate'};
         old = template;
+        history.pushState(data,"Setting "+template,'<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/'+template);
         $(CONT).load("<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/"+template+"?token=tmpl",function(){
             $(CONT).hide();
             $(CONT).fadeIn();

@@ -289,6 +289,7 @@ function nickname( $uid )
         if(isset($res[$u]))
             $_E['nickname'][$u] = $res[$u]['nickname'];
     }
+    $_E['nickname']['0'] = 'anonymous';
     return $res;
 }
 

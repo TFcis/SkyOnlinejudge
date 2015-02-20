@@ -5,7 +5,13 @@ if( !defined('IN_SKYOJSYSTEM') )
 }
 
 
-if(!userControl::checktoken('CODEPAD_EDIT') || !isset($_POST['code']) || !$_G['uid'])
+if(!userControl::checktoken('CODEPAD_EDIT') || !isset($_POST['code']) )
+{
+    var_dump($_COOKIE);
+    throwjson('error','Access denied');
+}
+    
+if( $_G['uid']==0 && $_E['Codepad']['allowguestsubmit'] == false )
     throwjson('error','Access denied');
     
 $code = $_POST['code'];

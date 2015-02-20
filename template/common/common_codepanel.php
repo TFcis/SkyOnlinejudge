@@ -7,7 +7,15 @@
 <style type="text/css" media="screen">
     #editor { 
         width : 100%;
+        height : 100%;
         font-size:14px;
+    }
+    body .ace_scrollbar-v {
+        overflow-y: hidden;
+    }
+    
+    body .ace_scrollbar-h {
+        overflow-x: auto;
     }
 </style>
 <script>

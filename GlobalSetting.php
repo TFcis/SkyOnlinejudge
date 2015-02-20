@@ -28,7 +28,8 @@ $_E['template']['alert'] ='';
 $_E['EnableMathJax'] = 0;
 $_E['uesLocalMathJaxFile'] = 0;
 
-
+#Codepad
+$_E['Codepad']['allowguestsubmit'] = false ;
 if( file_exists('LocalSetting.php') )
 {
     require_once('LocalSetting.php');

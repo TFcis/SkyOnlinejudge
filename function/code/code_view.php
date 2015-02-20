@@ -36,5 +36,15 @@ $_E['template']['owner'] = $res['owner'];
 nickname($res['owner']);
 $_E['template']['defaultcode'] = file_get_contents($fullname);
 $_E['template']['timestamp'] = $res['timestamp'];
-Render::render('code_view','code');
+$_E['template']['hash'] = $hash;
+
+if( isset($QUEST[2]) && $QUEST[2]=='iframe' )
+{
+    Render::renderSingleTemplate('code_view_iframe','code');
+}
+else
+{
+    Render::render('code_view','code');
+}
+
 //Render::ShowMessage('?!?x');
