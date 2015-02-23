@@ -4,7 +4,9 @@ if(!defined('IN_TEMPLATE'))
     exit('Access denied');
 }
 ?>
+<?php $tmpl['disablejQuery'] = true; ?>
 <?php Render::renderSingleTemplate('common_header'); ?>
+<?php unset($tmpl['disablejQuery']); ?>
 <script>
 $(document).ready(function()
 {

@@ -30,7 +30,9 @@
         <?php endif;?>
     <?php endif;?>
     <!-- Latest compiled and minified JavaScript -->
+    <?php if( !isset( $tmpl['disablejQuery'] ) ): ?>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <?php endif;?>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script>

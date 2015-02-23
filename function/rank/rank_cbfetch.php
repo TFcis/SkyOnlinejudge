@@ -57,7 +57,8 @@ elseif( $_G['uid'] && $refresh_user == $_G['uid'] ){
 else{
     throwjson('error','No permissions');
 }
-
+#close session
+session_write_close();
 #check and create cache if not avaibile
 $cachefile = DB::loadcache("cache_board_$BID");
 if( $refresh_user === 'all' || $cachefile === false ){
