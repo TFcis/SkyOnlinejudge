@@ -48,8 +48,8 @@ class class_hoj{
 	    $pid = preg_replace('/[^0-9]+/','',$pid);
 	    $response = $this->html[$uid];
 	    if(!$response)return 0;
-	    $start=strpos($response,'http://hoj.twbbs.org/judge/problem/view/'.$pid)+40;
-	    $end  =strpos($response,">".$pid."</");
+		$start=strpos($response,'hoj.twbbs.org/judge/problem/view/'.$pid.'"');
+		$end  =strpos($response,">".$pid."</");
 	    $html =substr($response,$start,$end-$start);
 		
 	    $HOJ_stats = 0;
