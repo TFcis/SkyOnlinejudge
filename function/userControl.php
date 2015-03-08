@@ -160,7 +160,7 @@ class userControl
     
     static function SetLoginToken($uid)
     {
-        global $_G;
+        global $_G,$_E;
         $acctable = DB::tname('account');
         
         $sqlres=DB::query("SELECT * FROM  `$acctable` ".
@@ -171,7 +171,7 @@ class userControl
             userControl::registertoken('login',864000);
             // save $sqldata in cache
             DB::putcache('login', $sqldata ,10 ,$uid);
-            setcookie('uid',$uid,time()+864000);
+            setcookie('uid',$uid,time()+864000,$_E['SITEDIR']);
             return true;
         }
         else

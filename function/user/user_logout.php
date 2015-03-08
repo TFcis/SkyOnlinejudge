@@ -6,6 +6,6 @@ if( !defined('IN_SKYOJSYSTEM') )
 if($_G['uid'])
 {
     userControl::DelLoginToken();
-    setcookie('uid','',0);
+    setcookie('uid','',0,$_E['SITEDIR']);
 }
 header("Location:".$_E['SITEROOT']."index.php");
