@@ -9,7 +9,7 @@ class class_tioj{
     public $name = 'TIOJ capturer';
 	public $description = 'TIOJ capturer';
 	public $copyright = 'by ECHO_STATS';
-	public $pattern = "/^tioj[0-9]+$/";
+	public $pattern = "/^tioj[0-9]+$/i";
 	private $zjcore;
 	private $html;
 
