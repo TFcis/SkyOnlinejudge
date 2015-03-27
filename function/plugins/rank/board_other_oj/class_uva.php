@@ -14,7 +14,7 @@ class class_uva{
 	function install()
 	{
 	    $tb = DB::tname('ojlist');
-	    DB::query("INSERT INTO `tojtest_ojlist`
+	    DB::query("INSERT INTO `$tb`
 	            (`id`, `class`, `name`, `description`, `available`) VALUES
 	            (NULL,'class_uva','UVa Online Judge','UVa user name',1)");
 	    //set SQL
