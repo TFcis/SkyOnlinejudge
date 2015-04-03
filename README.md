@@ -8,13 +8,13 @@ PHP 5.3.0 +
 
 Install
 -------------
-###On Koding
+###On Ubuntu Linux
 1. Clone SKY Online Judge Repository to yout website
-2. Build your MySQL with `sudo apt-get install mysql-server mysql-common mysql-client php5-mysql`
-3. Restart your apache2 with  `sudo service apache2 restart`
-4. Open folder `config` and you will find a file named `config.example.php`
-5. Fill out your MySQL setting and rename file to `config.php`
-6. Run `install/setMySQL.php` in command line to set table. If everything is fine, it will show `SUCC`
+2. Make sure you have installed PHP and MySQL
+3. Copy `config/config.example.php` to `config/config.php`
+4. Fill out your MySQL setting in `config.php`
+5. Run `install/setMySQL.php` in command line to set table. If everything is fine, it will show `SUCC`
+<br>`cd install`
+<br>`php setMySQL.php`
+6. Copy `LocalSetting.example.php` to `LocalSetting.php`, then set its starting directory at `$_E['SITEDIR']`
 7. start your SKY Online Judge ~
-
-
