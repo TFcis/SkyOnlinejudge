@@ -63,7 +63,7 @@ function register($email,$nickname,$password,$repeat)
         $_E['template']['reg'] = '帳號已被註冊';
         return false;
     }
-    if(!DB::query("INSERT INTO `".$_config['db']['dbname']."`.`$acctable` ".
+    if(!DB::query("INSERT INTO `$acctable` ".
                     "(`uid`, `email`, `passhash`, `nickname`, `timestamp`) ".
                     "VALUES (NULL, '$email', '$password', '$nickname', '$timestamp')"))
     {

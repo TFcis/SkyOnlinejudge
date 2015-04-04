@@ -5,7 +5,6 @@ if(!defined('IN_TEMPLATE'))
 }
 ?>
 <script>
-	var SCONT;
 	var sold = '<?=$tmpl['setting']['defaultpage']?>';
 	function SubloadTemplate(template){
         $("[settingpage = '"+sold+"']").removeClass();
@@ -13,13 +12,10 @@ if(!defined('IN_TEMPLATE'))
         var data = {tmpl:sold,call:'SubloadTemplate'};
         sold = template;
         history.pushState(data,"Setting "+template,'<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/setting/'+template);
-        $(SCONT).load("<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/setting/"+template+"?token=tmpl",function(){
-            $(SCONT).hide();
-            $(SCONT).fadeIn();
-        });
+        loadTemplateToBlock("/setting/"+template,'setting-main','tmpl');
+        return ;
 	}
 	$(document).ready(function(){
-        SCONT = document.getElementById('setting-main');
         $( "[settingpage]" ).click(function(){SubloadTemplate($(this).attr('settingpage'));});
         SubloadTemplate(sold);
 	});

@@ -33,6 +33,8 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<?=$_E['SITEROOT']?>js/common.js"></script>
     <script>
     $(".alert").alert();
+    siteroot('<?=$_E['SITEROOT']?>');
     </script>

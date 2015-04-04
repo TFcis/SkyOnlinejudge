@@ -6,15 +6,13 @@ if(!defined('IN_TEMPLATE'))
 ?>
 <script>
 	var CONT;
-	var old;
+	var old = '<?=$tmpl['view']['defaultpage']?>' ;
 	$(document).ready(function(){
 	    CONT = document.getElementById('content');
 	    $( "[navpage]" ).click(function(){loadTemplate($(this).attr('navpage'));});
-	    
-	    var defaultpage = '<?=$tmpl['view']['defaultpage']?>' ;
-        old = defaultpage;
-        $("[navpage='"+defaultpage+"']").addClass('active');
-        loadTemplate(defaultpage);
+
+        $("[navpage='"+old+"']").addClass('active');
+        loadTemplate(old);
 	});
 	
 	function loadTemplate(template){
@@ -23,9 +21,16 @@ if(!defined('IN_TEMPLATE'))
         var data = {tmpl:old,call:'loadTemplate'};
         old = template;
         history.pushState(data,"Setting "+template,'<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/'+template);
-        $(CONT).load("<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/"+template+"?token=tmpl",function(){
-            $(CONT).hide();
-            $(CONT).fadeIn();
+        loadTemplateToBlock(template,'content','tmpl');
+        return ;
+	}
+	function loadTemplateToBlock( template , bid , token ){
+	    if (typeof(token)==='undefined') token = '';
+	    var content = document.getElementById(bid);
+	    if( content === null )return false;
+	    $(content).load("<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/"+template+"?token="+token,function(){
+            $(content).hide();
+            $(content).fadeIn();
         });
 	}
 </script>
