@@ -4,7 +4,7 @@ if(!defined('IN_SKYOJSYSTEM'))
   exit('Access denied');
 }
 //no login
-if(!$_G['uid'] || !userControl::isAdmin())
+if(!$_G['uid'])
 {
     Render::errormessage("權限不足");
     include('rank_list.php');
