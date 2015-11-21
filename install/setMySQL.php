@@ -174,12 +174,15 @@ case 3:
   `backgroundurl` text COLLATE utf8_bin,
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
+case 4:
+    run("ALTER TABLE `$codepad`  DROP `filename`;");
+    run("ALTER TABLE `$codepad` ADD `content` TEXT NULL AFTER `timestamp`;");
 }
 
     
 
 
-$version = 3;
+$version = 4;
 run("INSERT INTO `$skysystem`
     (`name`, `var`) VALUES
     ('sqlversion',$version)

@@ -42,6 +42,10 @@ if( isset($cgUseHTTPS) && $cgUseHTTPS === true)
 }
 require_once('function/Skyoj.lib.php');
 require_once('function/mysqlCore.php');
+require_once('function/sqlCore.php');
+SQL::connect();
+SQL::query('SET NAMES UTF8');
+
 require_once('function/userControl.php');
 require_once('function/renderCore.php');
 require_once('function/pluginsCore.php');
