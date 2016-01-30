@@ -49,15 +49,16 @@ class class_poj{
 	    $pid = preg_replace('/[^0-9]+/','',$pid);
 	    $response = $this->html[$uid];
 	    if(!$response)return 0;
-	    $start=strpos($response,'document.write("<a href=problem?id="+id+">"+id+" </a>")')+57;
-	    $end  =strpos($response,"</script></td></tr>");
-	    $html =substr($response,$start,$end-$start);
+	    $html = str_replace("\n", "", $response);
 		
 	    $POJ_stats = 0;
-	    if(strpos($html,$pid)!==false){
-			$POJ_stats = 90;
-		} else {
-			$POJ_stats = 0;
+		preg_match('/Problems both.*?accepted(.+?)Problems only.*?tried but failed/', $html, $match);
+		if (strpos($match[1], $pid)!=false) {
+			return 90;
+		}
+		preg_match('/Problems both.*?tried but failed(.+?)Home Page/', $html, $match);
+		if (strpos($match[1], $pid)!=false) {
+			return 70;
 		}
 		return $POJ_stats;
 	}
