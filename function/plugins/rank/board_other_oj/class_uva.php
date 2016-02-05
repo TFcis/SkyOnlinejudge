@@ -140,7 +140,7 @@ class class_uva{
 	function showname($str)
 	{
 	    $pnum = preg_replace('/[^0-9]*/','',$str);
-		$url =  "http://domen.heliohost.org/uva/?$pnum";
+		$url =  "http://domen.twbbs.org/uva/?$pnum";
 	    $str="<a href='$url' target='_blank'>UVa $pnum</a>";
 	    return $str;
 	}
