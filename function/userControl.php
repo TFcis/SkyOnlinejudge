@@ -14,14 +14,14 @@ class userControl
     //this must call before use $_G[uid]
     static function registertoken($namespace,$timeleft)
     {
-        global $_G,$_E;
+        global $_G,$_E,$_config;
         $table = DB::tname('usertoken');
         $token = md5(uniqid($namespace,true));
         $timeout = time() + $timeleft;
         
         $_SESSION[$namespace][$token]['timeout'] = $timeout;
         $_SESSION[$namespace][$token]['uid'] = $_G['uid'];
-        setcookie($namespace,$token,$timeout,$_E['SITEDIR']);
+        setcookie($_config['cookie']['namepre'].'_'.$namespace,$token,$timeout,$_E['SITEDIR']);
         if($_G['uid'])
         {
             $id = $_G['uid'];
@@ -37,10 +37,10 @@ class userControl
     
     static function deletetoken($namespace)
     {
-        global $_G,$_E;
+        global $_G,$_E,$_config;
         $table = DB::tname('usertoken');
         
-        setcookie($namespace,'',0,$_E['SITEDIR']);
+        setcookie($_config['cookie']['namepre'].'_'.$namespace,'',0,$_E['SITEDIR']);
         if( isset( $_SESSION[$namespace] ) )
         {
             unset($_SESSION[$namespace]);
@@ -58,19 +58,19 @@ class userControl
     }
     #bool userControl::checktoken(namespace)
     #if function return true ,it mean two things:
-    #1.$_COOKIE['uid'] is leagl
+    #1.$_COOKIE[$_config['cookie']['namepre'].'_uid'] is leagl
     #2.token $namespace is leagl
     static function checktoken($namespace)
     {
-        global $_G;
+        global $_G,$_config;
         $table = DB::tname('usertoken');
-        if( !isset($_COOKIE[$namespace]) || !isset($_COOKIE['uid']) )
+        if( !isset($_COOKIE[$_config['cookie']['namepre'].'_'.$namespace]) || !isset($_COOKIE[$_config['cookie']['namepre'].'_uid']) )
         {
             return false;
         }
         
-        $token = isset($_COOKIE[$namespace])?$_COOKIE[$namespace]:'';
-        $uid   = isset($_COOKIE['uid'])?$_COOKIE['uid']:'';
+        $token = isset($_COOKIE[$_config['cookie']['namepre'].'_'.$namespace])?$_COOKIE[$_config['cookie']['namepre'].'_'.$namespace]:'';
+        $uid   = isset($_COOKIE[$_config['cookie']['namepre'].'_uid'])?$_COOKIE[$_config['cookie']['namepre'].'_uid']:'';
         
         if( !preg_match('/^[a-z0-9]+$/',$token) ||
             !preg_match('/^[0-9]+$/',$uid))
@@ -123,13 +123,13 @@ class userControl
     #this function must call first to check if user has logined and set var $_G
     static function intro()
     {
-        global $_G,$permission;
+        global $_G,$permission,$_config;
         $acctable = DB::tname('account');
         if( userControl::checktoken('login') )
         {
             //load user data
-            //$_COOKIE['uid'] is checked in userControl::checktoken
-            $loginuid = $_COOKIE['uid'];
+            //$_COOKIE[$_config['cookie']['namepre'].'_uid'] is checked in userControl::checktoken
+            $loginuid = $_COOKIE[$_config['cookie']['namepre'].'_uid'];
             if( $cache = DB::loadcache('login',$loginuid) )
             {
                 //Load form cache
@@ -160,7 +160,7 @@ class userControl
     
     static function SetLoginToken($uid)
     {
-        global $_G,$_E;
+        global $_G,$_E,$_config;
         $acctable = DB::tname('account');
         
         $sqlres=DB::query("SELECT * FROM  `$acctable` ".
@@ -171,7 +171,7 @@ class userControl
             userControl::registertoken('login',864000);
             // save $sqldata in cache
             DB::putcache('login', $sqldata ,10 ,$uid);
-            setcookie('uid',$uid,time()+864000,$_E['SITEDIR']);
+            setcookie($_config['cookie']['namepre'].'_uid',$uid,time()+864000,$_E['SITEDIR']);
             return true;
         }
         else
@@ -194,7 +194,7 @@ class userControl
     
     static function getpermission($uid)
     {
-        global $_G,$_E;
+        global $_G,$_E,$_config;
         if( $uid == -1 )
             return false;
         if( $uid == $_G['uid'])
@@ -205,7 +205,7 @@ class userControl
     }
     static function isAdmin( $uid = null )
     {
-        global $_G,$_E;
+        global $_G,$_E,$_config;
         if($uid === null)
             return in_array($_G['uid'],$_E['site']['admin']);
         return in_array($uid,$_E['site']['admin']);

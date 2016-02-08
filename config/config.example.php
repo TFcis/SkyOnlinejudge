@@ -7,4 +7,5 @@ $_config['db']['dbpw'] = '';
 $_config['db']['dbcharset'] = 'utf8';
 $_config['db']['dbname'] = 'test';
 $_config['db']['tablepre'] = 'tojtest';
+$_config['cookie']['namepre'] = 'tojtest';
 ?>
