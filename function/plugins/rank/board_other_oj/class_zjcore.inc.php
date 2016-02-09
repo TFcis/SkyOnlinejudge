@@ -13,7 +13,7 @@ class zjcore{
 
 	function checkid($id)
 	{
-	    return preg_match('/^[0-9a-zA-Z_]+$/',$id);
+	    return preg_match('/^[0-9a-zA-Z_\-]+$/',$id);
 	}
 
     function preprocess($userlist,$problems)
