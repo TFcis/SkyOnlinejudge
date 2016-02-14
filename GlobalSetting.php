@@ -21,6 +21,12 @@ $_E['SITEDIR'] = '/';
 $_E['site']['admin']=array(1);
 $_E['site']['name'] ='Sky Online Judge';
 
+#Log System Setting
+$_E['logsys']['logfile'] = $_E['ROOT'].'\\data\\log.txt';
+$_E['logsys']['msgshower']['enabled'] = true;
+$_E['logsys']['msgshower']['ip'] = 'localhost';
+$_E['logsys']['msgshower']['port'] = '19620';
+
 #Error Message
 $_E['template']['alert'] ='';
 
@@ -40,6 +46,7 @@ if( isset($cgUseHTTPS) && $cgUseHTTPS === true)
 {
     $_E['SITEROOT'] = 'https:'.$_E['SITEROOT'];
 }
+/*
 require_once('function/Skyoj.lib.php');
 require_once('function/mysqlCore.php');
 require_once('function/sqlCore.php');
@@ -58,3 +65,4 @@ if( isset($_SERVER['PATH_INFO']) )
 if( !empty($QUEST) ) //remoce first '/'
     $QUEST = substr($QUEST,1);
 $QUEST = explode('/',$QUEST);
+*/

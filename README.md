@@ -4,7 +4,8 @@ SKY Online Judge (Developing)
 
 Required
 -------------
-PHP 5.3.0 +
+PHP 7.0.0 +
+MySQL
 
 Install
 -------------
