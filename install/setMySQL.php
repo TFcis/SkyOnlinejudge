@@ -5,7 +5,7 @@ if(!$isCLI)
     die("Please run me from the console - not from a web-browser!");
 }
 require_once('../config/config.php');
-
+exit("Old Function!");
 function run($str,$abort = true)
 {
     if(!mysql_query($str))

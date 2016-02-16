@@ -8,13 +8,13 @@ if(!defined('IN_TEMPLATE'))
 
     <div>
         <div class="page-header">
-                <h1>System Logs</h1>
+                <h1>System Logs<small>Debug只會紀錄在MsgShower</small></h1>
         </div>
         <table class = "table">
         <thead>
             <tr>
                 <th style = "width: 180px" >TIME</th>
-                <th style = "width: 180px" class = "hidden-xs">NAMESPACE</th>
+                <th style = "width: 120px" class = "hidden-xs">LEVEL</th>
                 <th>DESC</th>
             </tr>
         </thead>
@@ -22,8 +22,8 @@ if(!defined('IN_TEMPLATE'))
         <?php foreach($tmpl['syslog'] as $row){ ?>
             <tr>
                 <td><?=htmlentities($row['timestamp'])?></td>
-                <td><?=htmlentities($row['namespace'])?></td>
-                <td><?=htmlentities($row['description'])?></td>
+                <td><?=htmlentities(LevelName($row['level']))?></td>
+                <td><?=htmlentities($row['message'])?></td>
             </tr>
         <?php }?>
         </tbody>

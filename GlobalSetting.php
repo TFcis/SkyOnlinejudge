@@ -21,6 +21,12 @@ $_E['SITEDIR'] = '/';
 $_E['site']['admin']=array(1);
 $_E['site']['name'] ='Sky Online Judge';
 
+#Permission
+$permission = array();
+$permission['guest']['uid'] = "0";
+
+$_G = $permission['guest'];
+
 #Log System Setting
 $_E['logsys']['logfile'] = $_E['ROOT'].'\\data\\log.txt';
 $_E['logsys']['msgshower']['enabled'] = true;
@@ -41,28 +47,18 @@ if( file_exists('LocalSetting.php') )
     require_once('LocalSetting.php');
 }
 
+
+#Set Constant Strings
 $_E['SITEROOT'] = "//".$_SERVER['SERVER_NAME'].$_E['SITEDIR'];
 if( isset($cgUseHTTPS) && $cgUseHTTPS === true)
 {
     $_E['SITEROOT'] = 'https:'.$_E['SITEROOT'];
 }
-/*
-require_once('function/Skyoj.lib.php');
-require_once('function/mysqlCore.php');
-require_once('function/sqlCore.php');
-SQL::connect();
-SQL::query('SET NAMES UTF8');
-
-require_once('function/userControl.php');
-require_once('function/renderCore.php');
-require_once('function/pluginsCore.php');
-userControl::intro();
 
 //test
 $QUEST = '';
 if( isset($_SERVER['PATH_INFO']) )
     $QUEST = $_SERVER['PATH_INFO'];
-if( !empty($QUEST) ) //remoce first '/'
+if( !empty($QUEST) ) //remove first '/'
     $QUEST = substr($QUEST,1);
 $QUEST = explode('/',$QUEST);
-*/

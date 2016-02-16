@@ -4,118 +4,86 @@ if(!defined('IN_SKYOJSYSTEM'))
   exit('Access denied');
 }
 
-$permission = array();
-$permission['guest']['uid'] = "0";
-
-$_G = $permission['guest'];
-
 class userControl
 {
-    //this must call before use $_G[uid]
-    static function registertoken($namespace,$timeleft)
+    //Cookie Functions
+    static function SetCookie(string $name,string $value,int $expire = 0)
+    {
+        global $_config,$_E;     
+        return setcookie($_config['cookie']['namepre'].'_'.$name,$value,$expire,$_E['SITEDIR'],'',false,true);
+    }
+    
+    static function RemoveCookie(string $name)
+    {
+        return userControl::SetCookie($name,'');
+    }
+    
+    static function isCookieSet(string $name)
+    {
+        global $_config;
+        return isset($_COOKIE[$_config['cookie']['namepre'].'_'.$name]);
+    }
+    
+    static function GetCookie(string $name)
+    {
+        global $_config;
+        if( userControl::isCookieSet($name) )
+            return $_COOKIE[$_config['cookie']['namepre'].'_'.$name];
+        return false;
+    }
+    //Set a Token to Cookie and return Token
+    static function RegisterToken(string $namespace,int $timeleft)
     {
         global $_G,$_E,$_config;
-        $table = DB::tname('usertoken');
-        $token = md5(uniqid($namespace,true));
+        $token = GenerateRandomString(TOKEN_LEN);
         $timeout = time() + $timeleft;
         
-        $_SESSION[$namespace][$token]['timeout'] = $timeout;
-        $_SESSION[$namespace][$token]['uid'] = $_G['uid'];
-        setcookie($_config['cookie']['namepre'].'_'.$namespace,$token,$timeout,$_E['SITEDIR']);
-        if($_G['uid'])
-        {
-            $id = $_G['uid'];
-            if(!DB::query("INSERT INTO `$table`".
-                        "(`uid`, `timeout`, `type`, `token`)".
-                        "VALUES ($id,$timeout,'$namespace','$token')"))
-            {
-                return false;
-            }
-        }
+        $_SESSION[$namespace]['token']      = $token;
+        $_SESSION[$namespace]['timeout']    = $timeout;
+        $_SESSION[$namespace]['uid']        = $_G['uid'];
+        userControl::SetCookie($namespace,$token,$timeout);
+        LOG::msg(Level::Debug,"Reg Token [$namespace]$token");
         return $token;
     }
     
-    static function deletetoken($namespace)
+    static function DeleteToken(string $namespace)
     {
-        global $_G,$_E,$_config;
-        $table = DB::tname('usertoken');
-        
-        setcookie($_config['cookie']['namepre'].'_'.$namespace,'',0,$_E['SITEDIR']);
-        if( isset( $_SESSION[$namespace] ) )
+        if( userControl::isCookieSet($namespace) )
+            userControl::RemoveCookie($namespace);
+        if( isset($_SESSION[$namespace]) )
         {
             unset($_SESSION[$namespace]);
         }
-        if($_G['uid'])
-        {
-            $id = $_G['uid'];
-            DB::query("DELETE FROM  `$table` ".
-                        " WHERE  `uid` = $id ".
-                        " AND  `type` = '$namespace'");
-        }
-        $time = time();
-        DB::query("DELETE FROM  `$table` ".
-                    " WHERE  `timeout` < $time ");
     }
+    
     #bool userControl::checktoken(namespace)
     #if function return true ,it mean two things:
     #1.$_COOKIE[$_config['cookie']['namepre'].'_uid'] is leagl
     #2.token $namespace is leagl
-    static function checktoken($namespace)
+    static function CheckToken(string $namespace)
     {
         global $_G,$_config;
-        $table = DB::tname('usertoken');
-        if( !isset($_COOKIE[$_config['cookie']['namepre'].'_'.$namespace]) || !isset($_COOKIE[$_config['cookie']['namepre'].'_uid']) )
+        if( !userControl::isCookieSet($namespace) || !userControl::isCookieSet('uid') )
         {
             return false;
         }
         
-        $token = isset($_COOKIE[$_config['cookie']['namepre'].'_'.$namespace])?$_COOKIE[$_config['cookie']['namepre'].'_'.$namespace]:'';
-        $uid   = isset($_COOKIE[$_config['cookie']['namepre'].'_uid'])?$_COOKIE[$_config['cookie']['namepre'].'_uid']:'';
+        $token = userControl::GetCookie($namespace);
+        $uid   = userControl::GetCookie('uid');
         
-        if( !preg_match('/^[a-z0-9]+$/',$token) ||
+        if( !preg_match('/^[a-zA-Z0-9]+$/',$token) ||
             !preg_match('/^[0-9]+$/',$uid))
         {
             return false;
         }
         
-        if( isset($_SESSION[$namespace][$token]) )
+        if( isset($_SESSION[$namespace]) )
         {
-            if( $_SESSION[$namespace][$token]['uid'] == $uid )
+            if( $_SESSION[$namespace]['uid']  == $uid && 
+                $_SESSION[$namespace]['token']== $token &&
+                time() < $_SESSION[$namespace]['timeout'] )
                 return true;
-            else
-                return false;
         }
-        else{
-            //Load form SQL
-            if($sqlres = DB::query("SELECT * FROM  `$table` ".
-                                   " WHERE  `uid` = $uid ".
-                                   " AND  `token` ='$token'"))
-            {
-                if( $sqldata = DB::fetch($sqlres) )
-                {
-                    if( $sqldata['timeout']>time() )
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        DB::query("DELETE FROM  `$table` ".
-                                     " WHERE  `uid` = $uid".
-                                     " AND  `token` ='$token'");
-                        return false;
-                    }
-                }
-                else //No data stroe in MYSQL
-                {
-                    return false;
-                }
-            }
-            else // SQL error
-            {
-                return false;
-            }
-        }
-        //protect
         return false;
     }
     
@@ -125,35 +93,26 @@ class userControl
     {
         global $_G,$permission,$_config;
         $acctable = DB::tname('account');
-        if( userControl::checktoken('login') )
+        if( userControl::CheckToken('login') )
         {
             //load user data
             //$_COOKIE[$_config['cookie']['namepre'].'_uid'] is checked in userControl::checktoken
-            $loginuid = $_COOKIE[$_config['cookie']['namepre'].'_uid'];
-            if( $cache = DB::loadcache('login',$loginuid) )
+            $loginuid = userControl::GetCookie('uid');
+
+            if( $sqldata = DB::fetch("SELECT * FROM  `$acctable` ".
+                                     "WHERE `uid` = ?",array($loginuid)) )
             {
-                //Load form cache
-                $_G = $cache;
+                $_G = $sqldata;
             }
             else
             {
-                //reload from SQL
-                $sqlres=DB::query("SELECT * FROM  `$acctable`".
-                                    " WHERE  `uid` =  $loginuid");
-                if( $sqldata = DB::fetch($sqlres) )
-                {
-                    $_G = $sqldata;
-                    DB::putcache('login',$_G,5,$loginuid);
-                }
-                else //sql error
-                {
-                    #may be someone drop DB... It will lost the data of users.
-                    $_G = $permission['guest'];
-                }
+                LOG::msg(Level::Error,"Caonnot Load login info from DB",$loginuid);
+                $_G = $permission['guest'];
             }
         }
         else // guest
         {
+            userControl::DeleteToken('login');
             $_G = $permission['guest'];
         }
     }
@@ -163,15 +122,12 @@ class userControl
         global $_G,$_E,$_config;
         $acctable = DB::tname('account');
         
-        $sqlres=DB::query("SELECT * FROM  `$acctable` ".
-                            " WHERE  `uid` =  $uid ");
-        if( $sqldata = DB::fetch($sqlres) )
+        if( $sqldata = DB::fetchEx("SELECT * FROM  `$acctable` ".
+                                    "WHERE `uid` = ? ",$uid) )
         {
             $_G['uid'] = $uid;
-            userControl::registertoken('login',864000);
-            // save $sqldata in cache
-            DB::putcache('login', $sqldata ,10 ,$uid);
-            setcookie($_config['cookie']['namepre'].'_uid',$uid,time()+864000,$_E['SITEDIR']);
+            userControl::RegisterToken('login',864000);
+            userControl::SetCookie('uid',$uid,time()+864000);
             return true;
         }
         else
@@ -183,8 +139,7 @@ class userControl
     static function DelLoginToken()
     {
         global $_G;
-        DB::deletecache('login',$_G['uid']);
-        userControl::deletetoken('login');
+        userControl::DeleteToken('login');
     }
     
     static function getuserdata( $table ,$uid = null )

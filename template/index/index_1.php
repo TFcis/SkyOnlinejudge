@@ -9,6 +9,16 @@ if(!defined('IN_TEMPLATE'))
     <div class="row">
         <h1>更新日誌</h1>
         <div>
+            <time>2016-2-16</time>睽違一年更新
+            <ol>
+                <li>重構所有架構</li>
+                <li>修正了一些不安全的設計</li>
+                <li>登入/註冊已完成</li>
+                <li>檢視紀錄已完成</li>
+            </ol>
+        </div>
+        <br>
+        <div>
             <time>2015-2-17</time>更新
             <ol>
                 <li>更新了標題列</li>

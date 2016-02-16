@@ -25,7 +25,9 @@ $(document).ready(function()
                     $("#display").html('Welcome!');
                     location.href = "<?=$_E['SITEROOT']?>"+res.data;
                 }
-        },"json");
+        },"json").error(function(e){
+            console.log(e);
+        });
         return true;
     });
 })

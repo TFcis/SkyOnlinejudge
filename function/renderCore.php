@@ -1,13 +1,16 @@
 <?php
 if(!defined('IN_SKYOJSYSTEM'))
 {
-  exit('Access denied');
+    exit('Access denied');
 }
+
 define('IN_TEMPLATE',1);
+
 function lang($str)
 {
     return $str;
 }
+
 class Render
 {
     private $head_css;
@@ -74,7 +77,6 @@ class Render
     static function render($pagename , $namespace = 'common')
     {
         Render::renderSingleTemplate('common_header');
-        //Render::renderStylesheetLink($namespace, 'light');
         Render::renderStylesheetLink($namespace);
         
         Render::renderSingleTemplate('common_nav');

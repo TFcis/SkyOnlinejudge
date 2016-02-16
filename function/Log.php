@@ -3,8 +3,40 @@
  * Log Core
  * 2016 Sky Online Judge Project
  */
+if(!defined('IN_SKYOJSYSTEM'))
+{
+    exit('Access denied');
+}
 
-include("../GlobalSetting.php");
+final class Level
+{
+    const SQLERROR  = -1;
+    const Critical  = 0;
+    const Error     = 1;
+    const Waring    = 2;
+    const Notice    = 3;
+    const Debug     = 4;
+};
+
+function LevelName(int $level)
+{
+    static $LevelName = array();
+    if( empty($LevelName) )
+    {
+        $classinfo = new ReflectionClass('Level');
+        $cnt = $classinfo->getConstants();
+        foreach( $cnt as $str => $val )
+        {
+            $LevelName[$val] = $str;
+        }
+    }
+    if( !array_key_exists($level,$LevelName) )
+    {
+        die("No Such Level Name!");
+    }
+    return $LevelName[$level];
+    
+}
 
 class LOG
 {
@@ -47,13 +79,17 @@ class LOG
     //Uh... function log() is considered a constructor of class LOG
     //So we use msg() to instead of it
     ///no return value with this function
-    static function msg($level,$message,...$dumpvals)
+    static function msg(int $level,string $message,...$dumpvals)
     {
         LOG::CheckIntro();
-        $debug_info = debug_backtrace();
-        $called_info = array_shift($debug_info);
+        $check_sended = false;
+        $timestamp  = LOG::TimeStamp();
         
-        $str_output = "[". LOG::TimeStamp() ."][{$called_info['file']}:{$called_info['line']}] ".$message.PHP_EOL;
+        $debug_info = debug_backtrace();
+        $called_info = &$debug_info[0];
+        
+        $str_info   = "[{$timestamp}][".LevelName($level)."]";
+        $str_output = "[{$called_info['file']}:{$called_info['line']}] ".$message.PHP_EOL;
         if( !empty($dumpvals) )
         {
              $str_output.= 
@@ -66,6 +102,20 @@ class LOG
             }
         }
         
+        if( $level != Level::Debug )
+        {
+            $syslog = DB::tname('syslog');
+            if( DB::query("INSERT INTO `{$syslog}`(`id`, `timestamp`, `level`, `message`)
+                           VALUES(NULL,?,?,?)",array($timestamp,$level,$str_output)) )
+            {
+                $check_sended = true;
+            }
+        }
+        else
+        {
+            $check_sended = true;
+        }
+        
         if( self::$log_setting['msgshower']['enabled'] ) 
         {
             $ip  = self::$log_setting['msgshower']['ip'];
@@ -73,7 +123,7 @@ class LOG
             $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
             if( @socket_connect($socket,$ip,$port) )
             {
-                $sendstr     = $str_output;
+                $sendstr     = $str_info.$str_output;
                 $real_strlen = strlen($sendstr);
                 while(true)
                 {
@@ -89,6 +139,7 @@ class LOG
                         break;
                     }
                 }
+                $check_sended = true;
             }
             else
             {
@@ -96,14 +147,13 @@ class LOG
             }
             socket_close($socket);
         }
-        //DEBUG
-        $str_output = str_replace("\t","    ",$str_output);
-        $str_output = str_replace(" ","&nbsp;",$str_output);
-        echo nl2br($str_output);
+        
+        if( !$check_sended )
+        {
+            die("Log Core Error! Cannot Save Log information");
+            //$str_output = str_replace("\t","    ",$str_output);
+            //$str_output = str_replace(" ","&nbsp;",$str_output);
+            //echo nl2br($str_output);
+        }
     }
 }
-
-LOG::intro();
-LOG::msg("LEVEL","Test Info",array(1,"test dump"),15);
-LOG::msg("LEVEL","Test Info");
-LOG::msg("LEVEL","Test Info2");

@@ -4,14 +4,19 @@ if( !defined('IN_SKYOJSYSTEM') )
     exit('Access denied');
 }
 
-function passwordHash($resoure)
+#TODO Common Crash Page
+function GetPasswordHash(string $password)
 {
-    $re = md5("ncid".md5($resoure));
-    //$re = password_hash($resoure, PASSWORD_BCRYPT);
+    $re = password_hash($password,PASSWORD_BCRYPT);
+    if( $re === false ) {
+        LOG::msg(Level::Critical,"passwordHash Fail!",$password);
+        //Crash!
+    }
     return $re;
 }
 function getTimestamp()
 {
+    LOG::msg(Level::Notice,"getTimestamp() is Old Function!");
     return date('Y-m-d G:i:s');
 }
 
@@ -19,104 +24,103 @@ define('NOE_FAIL',0);
 define('NOE_IS_NICKNAMEL',1);
 define('NOE_IS_EMAI',2);
 
-function checkpassword($pass)
+function CheckPasswordFormat(string $password)
 {
     $pattern  = '/^[._@a-zA-Z0-9]{3,30}$/';
-    if( !is_string($pass) )
-        return false;
-    return preg_match($pattern,$pass);
+    return preg_match($pattern,$password);
 }
+
+function CheckEmailFormat(string $email)
+{
+    $pattern  = '/^[A-z0-9_.]{1,30}@[A-z0-9_.]{1,20}$/';
+    return preg_match($pattern,$email);
+}
+
 function checknickname($name)
 {
+    LOG::msg(Level::Notice,"checknickname() is Old Function!");
     if( $name !== addslashes($name) )
         return false;
     if( strpos($name,'@') !== false )
         return false;
     return true;
 }
-function register($email,$nickname,$password,$repeat)
+//function register
+//return : array( bool res , mixed des )
+// res : True Register Successful
+//        des = empty string
+//     : False
+//        des = Error Information
+//TODO : Use Common Error Id To Replace Const-Strings
+function register(string $email,string $nickname,string $password,string $repeat)
 {
-    global $_E;
-    global $_config;
-    $pattern  = '/^[._@a-zA-Z0-9]{3,30}$/';
-    
-    $_E['template']['reg'] = array();
     $acctable = DB::tname('account');
-    $timestamp = getTimestamp();
-    $sqlres;
+    $resultdata = array(false,'');
     
-    if( !preg_match($pattern,$email) || !checkpassword($password) || $password!= $repeat ||
+    if( !CheckEmailFormat($email) || !CheckPasswordFormat($password) || $password!= $repeat ||
         !checknickname($nickname))
     {
         //use language!
-        $_E['template']['reg'] = '格式錯誤';
-        return false;
+        $resultdata[1] = '格式錯誤';
+        return $resultdata;
     }
     
-    $nickname = addslashes($nickname);
-    $password = passwordHash($password);
-
-    $sqlres = DB::query(  "SELECT * FROM  `$acctable`".
-                            "WHERE  `email` =  '$email'");
-    if(DB::fetch($sqlres))
-    {
-        $_E['template']['reg'] = '帳號已被註冊';
-        return false;
-    }
-    if(!DB::query("INSERT INTO `$acctable` ".
+    //$nickname = addslashes($nickname);
+    $password = GetPasswordHash($password);
+    if(!DB::queryEx("INSERT INTO `$acctable` ".
                     "(`uid`, `email`, `passhash`, `nickname`, `timestamp`) ".
-                    "VALUES (NULL, '$email', '$password', '$nickname', '$timestamp')"))
+                    "VALUES (NULL,?,?,?,CURRENT_TIMESTAMP)",$email,$password,$nickname))
     {
-        $_E['template']['reg'] = 'SQL error';
-        return false;
+        $resultdata[1] = '帳號已被註冊';
+        return $resultdata;
     }
-    return true;
+    $resultdata[0]=true;
+    return $resultdata;
 }
 
-function login($email,$password)
+//function login
+//return : array( bool res , mixed des )
+// res : True Login Successful
+//        des = $userdata
+//     : False
+//        des = Error Information
+//TODO : Use Common Error Id To Replace Const-Strings
+function login(string $userinput,string $password)
 {
     global $_E;
-    $pattern  = '/^[._@a-zA-Z0-9]{3,30}$/';
     
     $_E['template']['login'] = array();
     $acctable = DB::tname('account');
     $sqlres;
     $userdata = null;
     $resultdata = array(false,'');
-    if( checknickname($email) )
+    
+    $email = $userinput;
+    if( !CheckEmailFormat($email) )
     {
-        $nick = $email;
-        if($nick !== addslashes($nick))
+        $res = DB::fetchEx("SELECT `email` FROM `$acctable` WHERE `nickname`=?",$userinput);
+        if( $res === false )
         {
-            $resultdata[1] = '格式錯誤';
+            $resultdata[1] = '暱稱錯誤';
             return $resultdata;
         }
-        $sqlres=DB::query("SELECT `email` FROM  `$acctable` ".
-                            "WHERE  `nickname` =  '$nick' ");
-        if($res = DB::fetch($sqlres) )
-        {
-            $email = $res['email'];
-        }
-        else
-        {
-            $resultdata[1] = '無此暱稱';
-            return $resultdata;
-        }
+        $email = $res['email'];
     }
-    if( !preg_match($pattern,$email) || !checkpassword($password) )
+    
+    if( !CheckPasswordFormat($password) )
     {
         $resultdata[1] = '帳密錯誤';
         return $resultdata;
     }
 
-    $sqlres=DB::query("SELECT * FROM  `$acctable`".
-                        "WHERE  `email` =  '$email'");
-    if(! ($userdata = DB::fetch($sqlres)) )
+    $userdata=DB::fetch("SELECT * FROM  `$acctable`".
+                        "WHERE  `email` = ?",array($email));
+    if( $userdata === false )
     {
         $resultdata[1] = '無此帳號';
         return $resultdata;
     }
-    if( passwordHash($password)!=$userdata['passhash'] )
+    if( !password_verify($password,$userdata['passhash']) )
     {
         $resultdata[1] = '密碼錯誤';
         return $resultdata;
