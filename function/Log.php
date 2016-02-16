@@ -18,7 +18,7 @@ final class Level
     const Debug     = 4;
 };
 
-function LevelName(int $level)
+function LevelName(int $level):string
 {
     static $LevelName = array();
     if( empty($LevelName) )

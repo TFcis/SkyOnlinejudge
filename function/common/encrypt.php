@@ -13,7 +13,10 @@ if(!defined('IN_SKYOJSYSTEM'))
 //http://stackoverflow.com/questions/4356289/php-random-string-generator/31107425#31107425
 //Get a Random String
 define('TOKEN_LEN',64);
-function GenerateRandomString(int $len,string $charset="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+define('SET_NUM',"0123456789");
+define('SET_LOWER',"abcdefghijklmnopqrstuvwxyz");
+define('SET_UPPER',"ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+function GenerateRandomString(int $len,string $charset=SET_NUM.SET_LOWER.SET_UPPER)
 {
     $setsize = mb_strlen($charset,'8bit');
     $gen = '';

@@ -41,7 +41,10 @@ $_E['EnableMathJax'] = 0;
 $_E['uesLocalMathJaxFile'] = 0;
 
 #Codepad
-$_E['Codepad']['allowguestsubmit'] = false ;
+$_E['Codepad']['enabled'] = true;
+$_E['Codepad']['allowguestsubmit'] = false;
+$_E['Codepad']['maxcodelen'] = 15000;
+
 if( file_exists('LocalSetting.php') )
 {
     require_once('LocalSetting.php');

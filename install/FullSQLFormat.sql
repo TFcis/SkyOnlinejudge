@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主機: localhost
--- 產生時間： 2016-02-16 10:29:14
+-- 產生時間： 2016-02-16 14:41:15
 -- 伺服器版本: 10.1.10-MariaDB
 -- PHP 版本： 7.0.2
 
@@ -59,8 +59,8 @@ CREATE TABLE IF NOT EXISTS `tojtest_codepad` (
   `id` int(11) NOT NULL,
   `owner` int(11) NOT NULL,
   `hash` char(30) COLLATE utf8_bin NOT NULL,
-  `filename` char(64) COLLATE utf8_bin NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `content` text COLLATE utf8_bin
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -207,7 +207,6 @@ ALTER TABLE `tojtest_cache`
 --
 ALTER TABLE `tojtest_codepad`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `filename` (`filename`),
   ADD UNIQUE KEY `hash` (`hash`);
 
 --

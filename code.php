@@ -1,14 +1,19 @@
 <?php
 require_once('GlobalSetting.php');
-$allowmod =array('codepad','view','submit');
+require_once('function/SkyOJ.php');
 
+$allowmod =array('codepad','view','submit');
 
 if( empty($QUEST[0]) )
 {
     header("Location:".$_E['SITEROOT']."code.php/codepad");
     exit(0);
 }
-
+if( $_E['Codepad']['enabled'] == false )
+{
+    Render::ShowMessage("Codepad Closed QQ");
+    exit(0);
+}
 //set Default mod
 if( !in_array($QUEST[0],$allowmod) )
 {
