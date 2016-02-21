@@ -43,6 +43,16 @@ class Render
         return false;
     }
     
+    //Genformat : it will use sprintf($url,pid) to gen url!
+    //care of any type of injection
+    static function renderPagination(PageList $p,string $url,int $now)
+    {
+        global $_E;
+        $_E['template']['_pagelist'] = $p;
+        $_E['template']['_pagelist_now'] = $now;
+        $_E['template']['_pagelist_url'] = $url;
+        Render::renderSingleTemplate('common_pagination');
+    }
     //work in progress
     static function renderStylesheetLink($namespace = 'common', $options = '') {
         global $_E,$_G;

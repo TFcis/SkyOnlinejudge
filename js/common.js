@@ -29,3 +29,22 @@ function siteroot(url){
     }
     return siteroot.url;
 }
+
+function api_submit(url,fmid,showid,succ,err)
+{
+    $.post(url,$(fmid).serialize(),function(res){
+        if(res.status == 'error'){
+            $(showid).html(res.data);
+            $(showid).css('color','Red');
+            if (typeof err != 'undefined')
+                err();
+        }else{
+            $(showid).css('color','Lime');
+            $(showid).html('Success!');
+            if (typeof succ != 'undefined')
+                succ();
+        }
+    },"json").error(function(e){
+        console.log(e);
+    });
+}

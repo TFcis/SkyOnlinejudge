@@ -34,6 +34,13 @@ function safe_post($key,$usearray = false)
     return false;
 }
 
+function make_int($var,int $fail=0)
+{
+    if( is_int($var) )return $var;
+    if( preg_match("/^\d+$/",$var) )
+        return intval($var);
+    return $fail;
+}
 function extend_userlist($string)
 {
     $tmp = explode(',',$string);

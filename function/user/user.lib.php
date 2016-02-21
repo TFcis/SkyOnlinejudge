@@ -14,6 +14,7 @@ function GetPasswordHash(string $password)
     }
     return $re;
 }
+
 function getTimestamp()
 {
     LOG::msg(Level::Notice,"getTimestamp() is Old Function!");
@@ -227,42 +228,56 @@ class UserInfo
 {
     private $uid;
     private $data;
-    function __construct( $_uid = 0 , $debug = false )
+    
+    public static function GetUserData(string $table,$uids,string $qdata ='*')
     {
-        if( is_numeric($_uid) )
-        {
-            $acceptflag = true;
-            $uid = (int)$_uid;
-            
-            #guest
-            if( $uid ===0 ){
-                $acceptflag = false;
-            }
-            #registed user
-            $acctdata = DB::getuserdata( 'account',$uid );
-            if( $acctdata === false || !isset( $acctdata[$uid]) ){
-                $acceptflag = false;
-            }
+        $table = DB::tname($table);
+        $resdata = array();
+        
+        if( empty($uids) )
+            return array();
+        
+        if( !is_array($uids) )
+            $uids = array($uids);
 
-            if($acceptflag)
-            {
-                $this->uid = $uid;
-                $this->data['account'] = $acctdata[$uid];
-            }
-            else
-            {
-                $this->data['account'] = null;
-                if( $uid === 0)
-                    $this->uid = 0;
-                else
-                    $this->uid = -1;
-            }
+        $uids =  implode(',', array_map('intval', $uids) );
+        
+        $res = DB::fetchAll("SELECT $qdata FROM `$table` WHERE `uid` IN($uids);");
+        if( $res===false )
+            return false;
+
+        foreach($res as $r)
+            $resdata[$r['uid']]=$r;
+        LOG::msg(Level::Debug,"GetUserData",$resdata);
+        return $resdata;
+    }
+    function __construct( int $uid=0 ,bool $debug=false )
+    {
+        $acceptflag = true;
+        
+        #guest
+        if( $uid==0 ){
+            $acceptflag = false;
+        }
+        #registed user
+        $acctdata = UserInfo::GetUserData( 'account',$uid );
+        //LOG::msg(Level::Debug,"acctdata",$acctdata,$uid);
+        if( $acctdata === false || !isset( $acctdata[$uid]) ){
+            $acceptflag = false;
+        }
+
+        if($acceptflag)
+        {
+            $this->uid = $uid;
+            $this->data['account'] = $acctdata[$uid];
         }
         else
         {
-            if( $debug )
-                die('construct error : type error');
-            $this->uid = -1;
+            $this->data['account'] = null;
+            if( $uid === 0)
+                $this->uid = 0;
+            else
+                $this->uid = -1;
         }
     }
     function is_registed(){
@@ -286,7 +301,7 @@ class UserInfo
     
     private function _load_data_view()
     {
-        $res = DB::getuserdata('profile',$this->uid);
+        $res = UserInfo::GetUserData('profile',$this->uid);
         if( isset($res[$this->uid]) )
         {
             $res = $res[$this->uid];
@@ -337,19 +352,21 @@ class UserInfo
         if( !isset($viewdata['backgroundurl'])) $viewdata['backgroundurl'] = '';
         if( !isset($viewdata['avatarurl'])) $viewdata['avatarurl'] = '';
         
-        $quote = DB::real_escape_string($viewdata['quote']);
-        $quote_ref = DB::real_escape_string($viewdata['quote_ref']);
-        $backgroundurl = DB::real_escape_string($viewdata['backgroundurl']);
-        $avatarurl = DB::real_escape_string($viewdata['avatarurl']);
+        $quote = $viewdata['quote'];
+        $quote_ref = $viewdata['quote_ref'];
+        $backgroundurl = $viewdata['backgroundurl'];
+        $avatarurl = $viewdata['avatarurl'];
         
         $uid = $this->uid;
-        $res = DB::query("INSERT INTO `$tprofile` (`uid`, `quote`, `quote_ref`, `avatarurl`, `backgroundurl`)
-                                    VALUES ($uid,'$quote','$quote_ref','$avatarurl','$backgroundurl')
+        $res = DB::queryEx("INSERT INTO `$tprofile` (`uid`, `quote`, `quote_ref`, `avatarurl`, `backgroundurl`)
+                                    VALUES (?,?,?,?,?)
                                     ON DUPLICATE KEY
-                                    UPDATE  `quote` = '$quote',
-                                            `quote_ref` = '$quote_ref',
-                                            `avatarurl`='$avatarurl',
-                                            `backgroundurl`='$backgroundurl'");
+                                    UPDATE  `quote` = ?,
+                                            `quote_ref` = ?,
+                                            `avatarurl`=?,
+                                            `backgroundurl`=?"
+                                            ,$uid,$quote,$quote_ref,$avatarurl,$backgroundurl,
+                                                  $quote,$quote_ref,$avatarurl,$backgroundurl);
         if( $res === false )
             throw new Exception('error');
         return true;
@@ -438,7 +455,7 @@ class UserInfo
         return $this->data[$dataname];
     }
     
-    function save_data($dataname,$value, $args = null )
+    function save_data($dataname,$value,$args = null )
     {
         $available_argvs = array('ojacct','view');
         

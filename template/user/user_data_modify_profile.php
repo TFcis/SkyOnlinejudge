@@ -10,7 +10,12 @@ $(document).ready(function()
     $("#quote").submit(function(e)
     {
         e.preventDefault();
-        $.post("<?=$_E['SITEROOT']?>user.php/edit",
+        api_submit("<?=$_E['SITEROOT']?>user.php/edit","#quote","#quote-show",function(){
+            setTimeout(function(){
+                location.href="<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/setting/profile";
+            }, 500);
+        });
+        /*$.post("<?=$_E['SITEROOT']?>user.php/edit",
             $("#quote").serialize(),
             function(res){
                 if(res.status == 'error')
@@ -26,7 +31,9 @@ $(document).ready(function()
                         location.href="<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/setting/profile";
                     }, 500);
                 }
-        },"json");
+        },"json").error(function(e){
+            console.log(e);
+        });*/
         return true;
     });
 })

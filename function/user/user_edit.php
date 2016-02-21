@@ -4,10 +4,8 @@ if( !defined('IN_SKYOJSYSTEM') )
 {
     exit('Access denied');
 }
-//Only By Post Login Token
-if(!isset($_POST['mod']))DB::syslog('mod');
-if(!userControl::checktoken('EDIT'))DB::syslog('token');
-if(!isset($_POST['mod']) || !$_G['uid'] || !userControl::checktoken('EDIT'))
+//Only By Post & Token
+if(!isset($_POST['mod']) || !$_G['uid'] || !userControl::CheckToken('EDIT'))
     throwjson('error','Access denied');
 
 $allowpage = array('ojacct','acct','authacct','quote');

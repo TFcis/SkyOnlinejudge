@@ -2,7 +2,7 @@
 require_once('GlobalSetting.php');
 require_once('function/SkyOJ.php');
 
-$allowmod =array('login','register','logout'/*,'view','edit'*/);
+$allowmod =array('login','register','logout','view','edit');
 
 //set Default mod
 $mod = $_G['uid']?'view':'login';
