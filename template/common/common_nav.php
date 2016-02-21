@@ -30,7 +30,7 @@ if(!defined('IN_TEMPLATE'))
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="<?=$_E['SITEROOT']?>index.php">Problems</a></li>
+                    <li><a href="<?=$_E['SITEROOT']?>problem.php">Problems</a></li>
                     <li><a href="<?=$_E['SITEROOT']?>index.php">Submission</a></li>
                     <li><a href="<?=$_E['SITEROOT']?>index.php?old">Dev Message</a></li>
                     <li class="dropdown">
