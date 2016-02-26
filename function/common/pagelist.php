@@ -9,11 +9,12 @@ if( !defined('IN_SKYOJSYSTEM') )
 class PageList{
     private $table;
     private $allrow;
+    private $quest;
     const ROW_PER_PAGE = 20;
     const PAGE_RANGE   = 3; //> it will show +-PAGE_RANGE, if now at 5, it shiw 234 5 678
     private function update()
     {
-        $res = DB::fetch("SELECT COUNT(*) FROM `{$this->table}`");
+        $res = DB::fetch("SELECT COUNT(*) FROM `{$this->table}` WHERE {$this->quest}");
         if( $res===false ){
             throw new Exception("SQL Error");
         }
@@ -25,8 +26,10 @@ class PageList{
         if( $this->allrow==0 )return 1;
         return ceil($this->allrow/PageList::ROW_PER_PAGE);
     }
-    function __construct(string $t)
+    
+    function __construct(string $t,string $quest='1')
     {
+        $this->quest = $quest;
         $this->table = DB::tname($t);
         $this->update();
     }

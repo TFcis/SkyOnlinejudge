@@ -40,11 +40,11 @@ $(document).ready(function()
             </tr>
         </thead>
         <tbody>
-        <?php foreach($_E['template']['row'] as $row){ ?>
+        <?php foreach($_E['template']['problem_info'] as $row){ ?>
             <tr style = "height: 40px">
                 <td>AC</td>
-                <td><?=$row['id'];?></td>
-                <td><a href="<?=$_E['SITEROOT']?>rank.php?mod=commonboard&id=<?=$row['id'];?>"><?=htmlspecialchars($row['name']);?></a></td>
+                <td><?=$row['pid'];?></td>
+                <td><a href="<?=$_E['SITEROOT']?>problem.php/problem/<?=$row['pid'];?>"><?=htmlspecialchars($row['title']);?></a></td>
                 <td class="hidden-xs">
                     <?php if($_G['uid']): ?>
                         <!--<span class="icon-bttn glyphicon glyphicon-plus-sign" title="加入"></span>
@@ -60,23 +60,9 @@ $(document).ready(function()
                         <?php endif;?>
                     <?php endif;?>
                 </td>
-                <td class="hidden-xs"><?=htmlspecialchars($_E['nickname'][$row['owner']])?></td>
-                <td>
-                    <span class = 'jointoggle-on'>
-                        <?php if($row['userstatus']):?>
-                            <?php if($row['userstatusinfo'] === true):?>
-                            <span class = 'AC'>●</span>
-                            <span>Finish!</span>
-                            <?php else:?>
-                            <span class = 'WA'>●</span>
-                            <span>完成<?=$row['userstatusinfo']?></span>
-                            <?php endif;?>
-                        <?php else:?>
-                        <span class = 'NO'>●</span>
-                        <span></span>
-                        <?php endif;?>
-                    </span>
-                </td>
+                <td></td>
+                <td class="hidden-xs"></td>
+                <td></td>
             </tr>
         <?php }?>
         </tbody>

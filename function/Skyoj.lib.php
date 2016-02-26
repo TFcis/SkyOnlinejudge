@@ -284,6 +284,7 @@ function ojacct_reg($rel , $uid , &$change = null)
     }
     return $oj2;
 }
+
 function nickname( $uid )
 {
     global $_E;

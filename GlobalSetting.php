@@ -17,6 +17,7 @@ $_E = array();
 
 $_E['ROOT'] = __DIR__;
 $_E['SITEDIR'] = '/';
+
 #Site Setting
 $_E['site']['admin']=array(1);
 $_E['site']['name'] ='Sky Online Judge';
@@ -28,13 +29,16 @@ $permission['guest']['uid'] = "0";
 $_G = $permission['guest'];
 
 #Log System Setting
-$_E['logsys']['logfile'] = $_E['ROOT'].'\\data\\log.txt';
+$_E['logsys']['logfile'] = $_E['ROOT'].'/data/log.txt';
 $_E['logsys']['msgshower']['enabled'] = true;
 $_E['logsys']['msgshower']['ip'] = 'localhost';
 $_E['logsys']['msgshower']['port'] = '19620';
 
 #Error Message
-$_E['template']['alert'] ='';
+$_E['template']['alert'] = '';
+
+#Problem
+$_E['problem']['path'] = '/data/problem/';
 
 #MathJax
 $_E['EnableMathJax'] = 0;
@@ -53,7 +57,7 @@ if( file_exists('LocalSetting.php') )
 
 #Set Constant Strings
 $_E['SITEROOT'] = "//".$_SERVER['SERVER_NAME'].$_E['SITEDIR'];
-if( isset($cgUseHTTPS) && $cgUseHTTPS === true)
+if( isset($cgUseHTTPS) && $cgUseHTTPS === true )//is needed?
 {
     $_E['SITEROOT'] = 'https:'.$_E['SITEROOT'];
 }

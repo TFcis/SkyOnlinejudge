@@ -40,7 +40,7 @@ class DB{
         self::$pdo = DB::getpdo();
     }
     
-    private static function prepare(string $string)
+    static function prepare(string $string)
     {
         try {
             $res = self::$pdo->prepare($string);
@@ -51,19 +51,7 @@ class DB{
         return $res;
     }
     
-    
-    private static function log(string $description)
-    {
-        $table = DB::tname('syslog');
-        $res = DB::prepare("INSERT INTO `$table`(`id`, `timestamp`, `level`, `message`) VALUES (NULL,NULL,?,?)");
-        if( !$res->execute( array(-1,$description) ) )
-        {
-            die('System crash! Please call admin to fix');
-        }
-        return true;
-    }
-    
-    private static function execute( $object,$array=array() )
+    static function execute( $object,$array=array() )
     {
         try{
             if( !$object->execute( $array ) )
@@ -75,6 +63,17 @@ class DB{
         } catch (PDOException $e) {
             DB::log( 'DB Exception :'.$e->getMessage().",\nString :".$object->queryString );
             return false;
+        }
+        return true;
+    }
+    
+    private static function log(string $description)
+    {
+        $table = DB::tname('syslog');
+        $res = DB::prepare("INSERT INTO `$table`(`id`, `timestamp`, `level`, `message`) VALUES (NULL,NULL,?,?)");
+        if( !$res->execute( array(-1,$description) ) )
+        {
+            die('System crash! Please call admin to fix');
         }
         return true;
     }
