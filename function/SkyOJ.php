@@ -13,6 +13,7 @@ require_once('DB.php');
 
 require_once('userControl.php');
 require_once('renderCore.php');
+require_once('pluginsCore.php');
 //Load Library
 require_once('function/common/encrypt.php');
 require_once('Skyoj.lib.php');
