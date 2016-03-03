@@ -8,7 +8,7 @@ if(!defined('IN_TEMPLATE'))
 
     <div>
         <div class="page-header">
-                <h1>System Logs<small>Debug只會紀錄在MsgShower</small></h1>
+            <h1>System Logs<small>Debug只會紀錄在MsgShower</small></h1>
         </div>
         <table class = "table">
         <thead>

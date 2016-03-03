@@ -28,7 +28,7 @@ $(document).ready(function()
                 <?php if($_G['uid']): ?>
                 <!--<button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新增記分板" id="b_add" onclick="location.href='rank.php?mod=cbedit'">-->
                     TOOLS
-                    <a class = "icon-bttn" title = "Create New" href="rank.php?mod=cbedit">
+                    <a class = "icon-bttn" title = "Create New" href="<?=$_E['SITEROOT']?>problem.php/new">
                         <span class="glyphicon glyphicon-plus"></span>
                     </a>
                 <!--</button>-->

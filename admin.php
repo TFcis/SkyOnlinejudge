@@ -7,6 +7,17 @@ if( !userControl::isAdmin() )
     header("Location: index.php");
     exit(0);
 }
+//plugins
+$_E['template']['sysplugins'] = [];
+$_E['template']['syspluginsstats'] = [];
+$path = ["rank/board_other_oj","user/login"];
+foreach($path as $p)
+{
+    $classes = Plugin::loadClassFileByFolder($p);
+    $data = Plugin::checkInstall($classes);
+    $_E['template']['sysplugins'][$p] = $data?$data:[];
+}
+
 
 $_E['template']['syslog'] = array();
 $tsyslog = DB::tname('syslog');
@@ -16,4 +27,4 @@ if( $d !== false )
     $_E['template']['syslog'] = $d;
 }
 
-Render::render('admin_log','admin');
+Render::render('admin_main','admin');

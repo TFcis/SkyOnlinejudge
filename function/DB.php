@@ -32,7 +32,16 @@ class DB{
         global $_config;
         return $_config['db']['tablepre'].$table;
     }
-    
+    static public function genQuestListSign(int $num):string
+    {
+        if( $num < 0 )
+        {
+            DB::log("genQuestListSign num<0");
+            $num = 0;
+        }
+        return implode(',',array_fill(0,$num,'?'));
+    }
+
     //初始化PDO
     static function intro()
     {
