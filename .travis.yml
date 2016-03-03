@@ -7,3 +7,11 @@ php:
   - 7.0
   - hhvm
   - nightly
+
+  
+script: phpunit --configuration phpunit.xml --coverage-text
+
+notifications:
+  slack:
+    rooms:
+      - nymphia:5jkzibGrfkkC1DPa1E7Rpj8K#general
