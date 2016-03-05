@@ -13,11 +13,13 @@ require_once('config/config.php');
 
 #Environment
 $_E = array();
-
+#LanguageData
+$_LG = [];
 
 $_E['ROOT'] = __DIR__;
 $_E['SITEDIR'] = '/';
 
+$_E['language'] = 'zh-tw';
 #Site Setting
 $_E['site']['admin']=array(1);
 $_E['site']['name'] ='Sky Online Judge';
