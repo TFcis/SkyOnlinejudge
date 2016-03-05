@@ -211,13 +211,13 @@ function getgravatarlink($email,$size = null)
     if( !is_string($email) || !is_numeric($size) && $size !== null )
         return '';
     $email = md5( strtolower( trim( $email ) ) );
-    $res = "http://www.gravatar.com/avatar/$email?";
+    $res = "//www.gravatar.com/avatar/$email?";
     
     #check
     $check = $res."d=404";
-    $header = get_headers($check);
+    $header = get_headers("http:".$check);
     if( $header[0] == "HTTP/1.0 404 Not Found" )
-        $res = "http://www.gravatar.com/avatar/$email?d=identicon&";
+        $res = "//www.gravatar.com/avatar/$email?d=identicon&";
 
     if( isset($size) )
         $res .= "?s=$size";
@@ -239,10 +239,11 @@ class UserInfo
         
         if( !is_array($uids) )
             $uids = array($uids);
-
-        $uids =  implode(',', array_map('intval', $uids) );
         
-        $res = DB::fetchAll("SELECT $qdata FROM `$table` WHERE `uid` IN($uids);");
+        $q = DB::genQuestListSign(count($uids));
+        //$uids =  implode(',', array_map('intval', $uids) );
+        
+        $res = DB::fetchAll("SELECT $qdata FROM `$table` WHERE `uid` IN($q)",$uids);
         if( $res===false )
             return false;
 
@@ -298,7 +299,15 @@ class UserInfo
                 return $this->data[$name]=$data;
         return false;
     }
-    
+    private function _save_data_account($data,$cg=null)
+    {
+        $taccount = DB::tname('account');
+        $info = DB::ArrayToQueryString($data);
+        Log::msg(Level::Debug,"UPDATE `{$taccount}` SET {$info['update']} WHERE `uid`={$this->uid}",$info);
+        if( !DB::query("UPDATE {$taccount} SET {$info['update']} WHERE `uid`={$this->uid}",$info['data']) )
+            return false;
+        return true;
+    }
     private function _load_data_view()
     {
         $res = UserInfo::GetUserData('profile',$this->uid);
@@ -335,7 +344,7 @@ class UserInfo
                     break;
             }
             $res['avaterurl'] = '';
-            $res['backgroundurl'] = 'http://i.imgur.com/n2EOWhO.jpg';
+            $res['backgroundurl'] = '//i.imgur.com/n2EOWhO.jpg';
             $this->_save_data_view($res);
         }
         $res['quote'] = htmlspecialchars($res['quote']);
@@ -457,7 +466,7 @@ class UserInfo
     
     function save_data($dataname,$value,$args = null )
     {
-        $available_argvs = array('ojacct','view');
+        $available_argvs = array('account','ojacct','view');
         
         if(!in_array($dataname,$available_argvs))
             return false;

@@ -124,6 +124,8 @@ switch($QUEST[2])
                 exit(0);
                 break;
             case 'account':
+                $viewdata = $userInfo->load_data('account');
+                $_E['template']['acct'] = $viewdata;
                 userControl::registertoken('EDIT',3600);
                 Render::renderSingleTemplate('user_data_modify_account','user');
                 exit(0);

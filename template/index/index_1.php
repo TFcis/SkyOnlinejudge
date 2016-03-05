@@ -9,6 +9,16 @@ if(!defined('IN_TEMPLATE'))
     <div class="row">
         <h1>更新日誌</h1>
         <div>
+            <time>2016-3-5</time>
+            <ol>
+                <li>重構架構</li>
+                <li>增加了realname (與TFcis login兼容)</li>
+                <li>增加了簡單的語言處理流程</li>
+                <li>處理了HTTPS中，混用非安全資源的問題</li>
+                <li>增加了<code>DB::ArrayToQueryString()</code>快捷處理函數</li>
+            </ol>
+        </div>
+        <div>
             <time>2016-2-16</time>睽違一年更新
             <ol>
                 <li>重構所有架構</li>
@@ -27,7 +37,7 @@ if(!defined('IN_TEMPLATE'))
                 <li>增加Codepad功能</li>
                 <li>User Setting頁面新增了My board,My Code,Profile</li>
                 <li>計分板移入選單中</li>
-                <li>可以自定義引言了</code></li>
+                <li>可以自定義引言了</li>
                 <li>新增了參數 <code>$_E['SITEDIR'] = '/';</code> 設定OJ在Web端的目錄，以符合目前網址格式設計，安裝時請依實際狀況在<code>LocalSetting.php</code>修改</li>
                 <li>語言需要有人來統整一下，整理現在有點混亂的用語</code></li>
             </ol>
