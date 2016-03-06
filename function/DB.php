@@ -135,4 +135,40 @@ class DB{
     {
         return self::$pdo->lastInsertId();
     }
+    
+    /**
+     *  ArrayToQueryString
+     *  Make data like
+     *  [
+     *      'account' => 'aa',
+     *      0 => 'aa',  //will be remove
+     *      'data'    => 'lala'
+     *      1 => 'lala',//will be remove
+     *  ]
+     *  to : 
+     *  [
+     *      'column' => "`account`,`data`"
+     *      'query'  => ":account,:data"
+     *      'update' => "`account`=:account,`data`=:data"
+     *      'data'   => [':account'=>'aa',':data' => 'lala']
+     *  ]
+     */
+    static function ArrayToQueryString(array $d)
+    {
+        $res = ['column'=>'','query'=>'','update'=>'','data'=>[]];
+        foreach( $d as $i =>$v )
+        {
+            if( !is_int($i) )
+            {
+                $res['column'].= "`$i`,";
+                $res['query'] .= ":$i,";
+                $res['update'].= "`$i`=:$i,";
+                $res['data'][":$i"] = $v;
+            }
+        }
+        $res['column'] = rtrim($res['column'],",");
+        $res['query']  = rtrim($res['query'],",");
+        $res['update'] = rtrim($res['update'],",");
+        return $res;
+    }
 }

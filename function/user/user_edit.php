@@ -63,29 +63,39 @@ switch($editpage)
         break;
         
     case 'acct' :
-        $data = DB::getuserdata('account',$euid);
-        if( empty($data) )
+        $user = new UserInfo($euid);
+        if( !$user->is_load() || !$user->is_registed() )
             throwjson('error','Cannot get user data');
-            
+        $data = $user->load_data('account');
+        
         $oldpass = safe_post('oldpasswd');
+        if( !password_verify($oldpass,$data['passhash']) )
+            throwjson('error','Worng Old Password');
+        
+        #Change Old Password
         $newpass = safe_post('newpasswd');
-        
-        if( !$oldpass || !$newpass )
-            throwjson('error','Empty Password!');
-        if( !checkpassword($oldpass) || !checkpassword($newpass) )
-            throwjson('error','Password format error!');
-            
-        $oldpass = passwordHash($oldpass);
-        $newpass = passwordHash($newpass);
-
-        if( $data[$euid]['passhash'] !== $oldpass )
-            throwjson('error','Worng Old Password!');
-        
-        $table = DB::tname('account');
-        if(!DB::query("UPDATE  `$table` SET  `passhash` = '$newpass' 
-                    WHERE  `uid` =$euid;"))
+        if( !empty($newpass) )
         {
-            throwjson('error','SQL Error!');
+            if( !CheckPasswordFormat($newpass) )
+                throwjson('error','Password format error!');
+            $data['passhash'] = GetPasswordHash($newpass);
+        }
+        
+        #change Realname
+        $realname = safe_post('realname');
+        if( $realname != '' )
+        {
+            $realname = trim($realname);
+            if( strlen($realname) > 9 )
+            {
+                throwjson('error','Realname 太長');
+            }
+            $data['realname'] = $realname;
+        }
+        
+        if( !$user->save_data('account',$data) )
+        {
+            throwjson('error','Server error. Cannot save data!');
         }
         throwjson('SUCC','modify');
         break;

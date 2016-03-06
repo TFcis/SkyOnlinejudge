@@ -6,8 +6,18 @@ if(!defined('IN_SKYOJSYSTEM'))
 
 define('IN_TEMPLATE',1);
 
-function lang($str)
+function getLangDirBase():string
 {
+    global $_E;
+    return $_E['ROOT']."/language/".$_E['language']."/";
+}
+require_once( getLangDirBase()."common_lang.php" );
+
+function lang(string $str):string
+{
+    global $_LG;
+    if( array_key_exists($str,$_LG) )
+        return $_LG[$str];
     return $str;
 }
 
@@ -35,6 +45,11 @@ class Render
             $tmpl = &$_E['template'];
         }
         $path = $_E['ROOT']."/template/$namespace/$pagename.php";
+        $lang = getLangDirBase()."$namespace/$pagename.php";
+        if( file_exists($lang) )
+        {
+            require_once($lang);
+        }
         if( file_exists($path) )
         {
             require($path);

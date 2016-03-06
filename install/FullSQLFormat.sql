@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- 主機: localhost
--- 產生時間： 2016-02-16 14:41:15
+-- 產生時間： 2016-03-05 10:35:34
 -- 伺服器版本: 10.1.10-MariaDB
--- PHP 版本： 7.0.2
+-- PHP 版本： 7.0.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS `tojtest_account` (
   `email` varchar(64) COLLATE utf8_bin NOT NULL,
   `passhash` varchar(200) COLLATE utf8_bin NOT NULL,
   `nickname` varchar(64) COLLATE utf8_bin NOT NULL,
-  `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `realname` varchar(30) COLLATE utf8_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -91,6 +92,21 @@ CREATE TABLE IF NOT EXISTS `tojtest_plugin` (
   `version` text COLLATE utf8_bin NOT NULL,
   `author` text COLLATE utf8_bin NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `tojtest_problem`
+--
+
+DROP TABLE IF EXISTS `tojtest_problem`;
+CREATE TABLE IF NOT EXISTS `tojtest_problem` (
+  `pid` int(11) NOT NULL,
+  `owner` int(11) NOT NULL,
+  `title` text COLLATE utf8_bin NOT NULL,
+  `skey` char(255) COLLATE utf8_bin NOT NULL,
+  `contents` text COLLATE utf8_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -194,7 +210,8 @@ ALTER TABLE `tojtest_account`
   ADD UNIQUE KEY `nickname_2` (`nickname`),
   ADD UNIQUE KEY `nickname_3` (`nickname`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `uid` (`uid`);
+  ADD KEY `uid` (`uid`),
+  ADD KEY `uid_2` (`uid`);
 
 --
 -- 資料表索引 `tojtest_cache`
@@ -225,6 +242,12 @@ ALTER TABLE `tojtest_ojlist`
 ALTER TABLE `tojtest_plugin`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `class` (`class`);
+
+--
+-- 資料表索引 `tojtest_problem`
+--
+ALTER TABLE `tojtest_problem`
+  ADD PRIMARY KEY (`pid`);
 
 --
 -- 資料表索引 `tojtest_profile`
@@ -281,6 +304,11 @@ ALTER TABLE `tojtest_ojlist`
 --
 ALTER TABLE `tojtest_plugin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- 使用資料表 AUTO_INCREMENT `tojtest_problem`
+--
+ALTER TABLE `tojtest_problem`
+  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- 使用資料表 AUTO_INCREMENT `tojtest_statsboard`
 --
