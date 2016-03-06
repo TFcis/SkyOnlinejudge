@@ -3,7 +3,7 @@ if(!defined('IN_SKYOJSYSTEM'))
 {
   exit('Access denied');
 }
-
+require_once('function/plugins/pluguns.base.php');
 class Plugin{
     static function install($name,$class)
     {
