@@ -21,7 +21,7 @@ if( !isset($_POST['mod']) )
     $_E['template']['dh_prime'] = DiffieHellman::PublicPrime;
     $_E['template']['dh_g'] = DiffieHellman::PublicG;
     $_E['template']['iv'] = $_SESSION['iv'];
-    Log::msg(Level::Debug,"DH",$_E['template']);
+    
     Render::setbodyclass('loginbody');
     Render::render('user_login_box','user');
     exit(0);
@@ -41,7 +41,7 @@ else // API CALL
     
     $decode = mcrypt_decrypt(MCRYPT_RIJNDAEL_128,$key,base64_decode($AESenpass),MCRYPT_MODE_CBC,$iv);
     $password = rtrim($decode,"\0");
-    Log::msg(Level::Debug,"password",$password);
+    
     $user = login($email,$password);
     if( !$user[0]  )
     {
