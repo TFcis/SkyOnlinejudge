@@ -4,33 +4,57 @@ if(!defined('IN_TEMPLATE'))
     exit('Access denied');
 }
 ?>
+<script src="<?=$_E['SITEROOT']?>js/bignumber.min.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+<script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+<script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pad-zeropadding.js"></script>
 <script>
+GA = new BigNumber('<?=$tmpl['dh_ga']?>');
+PublicPrime = new BigNumber('<?=$tmpl['dh_prime']?>');
+PublicG = new BigNumber('<?=$tmpl['dh_g']?>');
+
+function PowMod(a,e,m)
+{
+    //a!=0 always
+    res = new BigNumber(1);
+    while( !e.eq(0) )
+    {
+        if( e.mod(2).eq(1) )
+            res = res.mul(a).mod(m);
+        a = a.mul(a).mod(m);
+        e = e.div(2).floor();
+    }
+    return res;
+}
+
 $(document).ready(function()
 {
     $("#loginform").submit(function(e)
     {
-        $("#display").html('...');
         e.preventDefault();
-        $.post("<?=$_E['SITEROOT']?>user.php",
-            $("#loginform").serialize(),
-            function(res){
-                if(res.status == 'error')
-                {
-                    $("#display").html(res.data);
-                    $("#display").css('color','Red');
-                }
-                else
-                {
-                    $("#display").css('color','Lime');
-                    $("#display").html('Welcome!');
-                    location.href = "<?=$_E['SITEROOT']?>"+res.data;
-                }
-        },"json").error(function(e){
-            console.log(e);
+        B = BigNumber.random(40).mul(new BigNumber(10).pow(40)).ceil();
+        GB = PowMod(PublicG,B,PublicPrime);
+        GAB = PowMod(GA,B,PublicPrime);
+        $("#GB").val(GB.toString(10));
+        
+        keyhash = CryptoJS.MD5(GAB.toString(10));
+        key = CryptoJS.enc.Utf8.parse(keyhash);
+        iv  = CryptoJS.enc.Utf8.parse('<?=$tmpl['iv']?>');
+        msg = $("#password").val();
+
+        encrypted = CryptoJS.AES.encrypt(msg,key,{
+                iv:iv,
+                mode:CryptoJS.mode.CBC,
+                padding:CryptoJS.pad.ZeroPadding});
+        $("#password").val(encrypted);
+        
+        $("#display").html('...');
+        api_submit("<?=$_E['SITEROOT']?>user.php","#loginform","#display",function(res){
+            location.href = "<?=$_E['SITEROOT']?>"+res.data;
         });
         return true;
     });
-})
+});
 </script>
 <div class="container">
     <div class= "row">
@@ -44,7 +68,7 @@ $(document).ready(function()
                 <form role="form" action="user.php" method="post" id="loginform">
                 
                     <input type="hidden" value="login" name="mod">
-                        
+                    <input type="hidden" value="" name="GB" id="GB">
                     <br>
                     
                     <div class="form-group">
