@@ -9,6 +9,16 @@ if(!defined('IN_TEMPLATE'))
     <div class="row">
         <h1>更新日誌</h1>
         <div>
+            <time>2016-3-8</time>
+            <ol>
+                <li>使用<code>Diffie–Hellman key exchange</code>以及<code>AES</code>加密來保護在無SSL下時的密碼傳輸</li>
+                <li>增加了EncryptTest的自動測試</li>
+                <li>修復了沒有登入時，<code>userControl::CheckToken</code>失效的Bug</li>
+                <li>增加了javascript的大數處理(<a href='https://github.com/MikeMcl/bignumber.js'>github</a>)</li>
+                <li>javascript api_submit()的call back function支援傳入參數，為server回傳的json object</li>
+            </ol>
+        </div>
+        <div>
             <time>2016-3-5</time>
             <ol>
                 <li>重構架構</li>
