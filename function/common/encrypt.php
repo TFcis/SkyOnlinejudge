@@ -52,12 +52,12 @@ class DiffieHellman
     private $keyA;
     function __construct(){
         $this->keyA = gmp_random(5);
-        $this->GA = gmp_powm(DiffieHellman::PublicG,$this->keyA,DiffieHellman::PublicPrime);
+        $this->GA = gmp_strval(gmp_powm(DiffieHellman::PublicG,$this->keyA,DiffieHellman::PublicPrime));
     }
-    public function getGA(){
-        return gmp_strval($this->GA);
+    public function getGA():string{
+        return $this->GA;
     }
-    public function decode(string $GB){
+    public function decode(string $GB):string{
         return gmp_strval( gmp_powm($GB,$this->keyA,DiffieHellman::PublicPrime) );
     }
 }

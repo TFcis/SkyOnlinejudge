@@ -13,10 +13,15 @@ class EncryptTest extends PHPUnit_Framework_TestCase
     
     public function testDiffieHellman()
     {
+        //Constant Test
+        $this->assertNotEquals( 0 , gmp_prob_prime(DiffieHellman::PublicPrime,100) );
+        
+        //Function test
         $dh = new DiffieHellman();
         $B = "41965498";
         $GB = gmp_strval(gmp_powm(DiffieHellman::PublicG,$B,DiffieHellman::PublicPrime));
         $GAB = gmp_strval(gmp_powm($dh->getGA(),$B,DiffieHellman::PublicPrime));
         $this->assertEquals( $dh->decode($GB) , $GAB );
+        
     }
 }
