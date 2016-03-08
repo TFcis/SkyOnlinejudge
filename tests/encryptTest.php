@@ -19,8 +19,8 @@ class EncryptTest extends PHPUnit_Framework_TestCase
         //Function test
         $dh = new DiffieHellman();
         $B = "41965498";
-        $GB = gmp_strval(gmp_powm(DiffieHellman::DefaultPublicG,$B,DiffieHellman::DefaultPublicPrime));
-        $GAB = gmp_strval(gmp_powm($dh->getGA(),$B,DiffieHellman::DefaultPublicPrime));
+        $GB = gmp_strval(gmp_powm($dh->GetG(),$B,$dh->GetPrime()));
+        $GAB = gmp_strval(gmp_powm($dh->getGA(),$B,$dh->GetPrime()));
         $this->assertEquals( $dh->decode($GB) , $GAB );
         
     }
