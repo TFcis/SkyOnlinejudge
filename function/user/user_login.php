@@ -18,8 +18,8 @@ if( !isset($_POST['mod']) )
     $_SESSION['dhkey'] = serialize($exkey);
     $_SESSION['iv'] = GenerateRandomString(16,SET_HEX);
     $_E['template']['dh_ga'] = $exkey->getGA();
-    $_E['template']['dh_prime'] = DiffieHellman::PublicPrime;
-    $_E['template']['dh_g'] = DiffieHellman::PublicG;
+    $_E['template']['dh_prime'] = $exkey->getPrime();
+    $_E['template']['dh_g'] = $exkey->getG();
     $_E['template']['iv'] = $_SESSION['iv'];
     
     Render::setbodyclass('loginbody');

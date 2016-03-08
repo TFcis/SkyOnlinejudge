@@ -1,16 +1,16 @@
 <?php
-/**
- * encrypt
- * 2016 Sky Online Judge Project
- * By LFsWang
- * This file support some encrypt function
- */
 if(!defined('IN_SKYOJSYSTEM'))
 {
     exit('Access denied');
 }
+/**
+ * @file encrypt.php
+ * @brief Support some encrypt function
+ *
+ * @author LFsWang
+ * @copyright 2016 Sky Online Judge Project
+ */
 
-//Get a Random String
 define('TOKEN_LEN',64);
 define('SET_NUM',"0123456789");
 define('SET_HEX',"0123456789abcdef");
@@ -18,9 +18,10 @@ define('SET_LOWER',"abcdefghijklmnopqrstuvwxyz");
 define('SET_UPPER',"ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 /**
- * Get a Random String.
- * @link http://stackoverflow.com/questions/4356289/php-random-string-generator/31107425#31107425 source of this function.
- * 
+ * @brief Get a Random String.
+ * <a href="http://stackoverflow.com/questions/4356289/php-random-string-generator/31107425#31107425">
+ * source of this function.
+ * </a>
  * @param int $len length of random string.
  * @param string $charset=SET_NUM.SET_LOWER.SET_UPPER charset of random string.
  *
@@ -43,22 +44,43 @@ function GenerateRandomString(int $len,string $charset=SET_NUM.SET_LOWER.SET_UPP
 
 /**
  * Diffie-Hellman key exchange algorithm
+ * @todo Move DefaultPublicPrime/DefaultPublicG to functions
  */
 class DiffieHellman
 {
-    const PublicPrime = "439351292910452432574786963588089477522344331"; //For test
-    const PublicG = "2";
-    private $GA;
-    private $keyA;
-    function __construct(){
+    const DefaultPublicPrime = "439351292910452432574786963588089477522344331"; //For test
+    const DefaultPublicG = "2";
+    private $Prime; ///< prime for Diffie-Hellman algorithm
+    private $G;     ///< exp base for Diffie-Hellman algorithm
+    private $keyA;  ///< private key
+    private $GA;    ///< the value of G^keyA mod Prime
+
+    function __construct(string $prime=DiffieHellman::DefaultPublicPrime,
+                         string $G    =DiffieHellman::DefaultPublicG)
+    {
+        $this->Prime = $prime;
+        $this->G = $G;
         $this->keyA = gmp_random(5);
-        $this->GA = gmp_strval(gmp_powm(DiffieHellman::PublicG,$this->keyA,DiffieHellman::PublicPrime));
+        $this->GA = gmp_strval(gmp_powm($this->G,$this->keyA,$this->Prime));
     }
-    public function getGA():string{
+
+    public function getPrime():string
+    {
+        return $this->Prime;
+    }
+
+    public function getG():string
+    {
+        return $this->G;
+    }
+
+    public function getGA():string
+    {
         return $this->GA;
     }
-    public function decode(string $GB):string{
-        return gmp_strval( gmp_powm($GB,$this->keyA,DiffieHellman::PublicPrime) );
+
+    public function decode(string $GB):string
+    {
+        return gmp_strval( gmp_powm($GB,$this->keyA,$this->Prime) );
     }
 }
-

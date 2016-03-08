@@ -40,8 +40,8 @@ $(document).ready(function()
         keyhash = CryptoJS.MD5(GAB.toString(10));
         key = CryptoJS.enc.Utf8.parse(keyhash);
         iv  = CryptoJS.enc.Utf8.parse('<?=$tmpl['iv']?>');
-        msg = $("#password").val();
-
+        msg = $("#passwordreal").val();
+        this.passwordreal.disabled = true;
         encrypted = CryptoJS.AES.encrypt(msg,key,{
                 iv:iv,
                 mode:CryptoJS.mode.CBC,
@@ -52,6 +52,7 @@ $(document).ready(function()
         api_submit("<?=$_E['SITEROOT']?>user.php","#loginform","#display",function(res){
             location.href = "<?=$_E['SITEROOT']?>"+res.data;
         });
+        this.passwordreal.disabled = false;
         return true;
     });
 });
@@ -69,6 +70,7 @@ $(document).ready(function()
                 
                     <input type="hidden" value="login" name="mod">
                     <input type="hidden" value="" name="GB" id="GB">
+                    <input type="hidden" value="" name="password" id="password">
                     <br>
                     
                     <div class="form-group">
@@ -78,7 +80,7 @@ $(document).ready(function()
                     
                     <div class="form-group">
                     <label for="password" style = "display: block" class="login_lable_text">PASSWORD</label>
-                    <input type="password" class="textinput" id="password" name="password" placeholder="Password" required>
+                    <input type="password" class="textinput" id="passwordreal" placeholder="Password" required>
                     </div>
                     
                     <br>
