@@ -35,6 +35,12 @@ class userControl
     static function RegisterToken(string $namespace,int $timeleft)
     {
         global $_G,$_E,$_config;
+        
+        if( $_G['uid']==0 )
+        {
+            userControl::SetCookie('uid','0',time()+3600);
+        }
+        
         $token = GenerateRandomString(TOKEN_LEN);
         $timeout = time() + $timeleft;
         

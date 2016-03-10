@@ -5,7 +5,7 @@ language: php
 php:
   # using major version aliases
   - 7.0
-  - hhvm
+# - hhvm
   - nightly
 
   

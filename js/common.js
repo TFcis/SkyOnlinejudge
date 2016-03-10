@@ -37,12 +37,12 @@ function api_submit(url,fmid,showid,succ,err)
             $(showid).html(res.data);
             $(showid).css('color','Red');
             if (typeof err != 'undefined')
-                err();
+                err(res);
         }else{
             $(showid).css('color','Lime');
             $(showid).html('Success!');
             if (typeof succ != 'undefined')
-                succ();
+                succ(res);
         }
     },"json").error(function(e){
         console.log(e);
