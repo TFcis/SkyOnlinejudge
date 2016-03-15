@@ -140,13 +140,13 @@ class class_uva{
 	function showname($str)
 	{
 	    $pnum = preg_replace('/[^0-9]*/','',$str);
-		$url =  "http://domen.twbbs.org/uva/?$pnum";
+		$url =  "http://domen111.github.io/UVa-Easy-Viewer/?$pnum";
 	    $str="<a href='$url' target='_blank'>UVa $pnum</a>";
 	    return $str;
 	}
 
 	function challink($uid,$pid){
 		$uid = $this->uname2id($uid);
-	    return "http://uhunt.felix-halim.net/id/$uid";
+	    return "http://domen111.github.io/UVa-Easy-Viewer/?$pid/$uid";
 	}
 }
