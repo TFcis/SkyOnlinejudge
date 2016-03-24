@@ -6,8 +6,8 @@ if(!defined('IN_SKYOJSYSTEM'))
 require_once('class_zjcore.inc.php');
 class class_tnfshzj{
     public $version = '1.0';
-    public $name = 'TNFSJ ZJ capturer';
-	public $description = 'TNFSJ Zerojudge capturer';
+    public $name = 'TNFSH ZJ capturer';
+	public $description = 'TNFSH Zerojudge capturer';
 	public $copyright = 'by Sylveon';
 	public $pattern = "/^tnfshzj:[a-z]{1}[0-9]+$/";
 	private $zjcore;
