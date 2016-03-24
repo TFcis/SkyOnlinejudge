@@ -3,6 +3,14 @@ if( !defined('IN_SKYOJSYSTEM') )
 {
     exit('Access denied');
 }
+/**
+ * @file pluguns.base.php
+ * @brief define plugun base classes
+ *
+ * @author LFsWang
+ * @copyright 2016 Sky Online Judge Project
+ */
+
 //http://stackoverflow.com/questions/10368620/abstract-constants-in-php-force-a-child-class-to-define-a-constant
 class Enforcer {
     public static function __add($class, $c) {
@@ -34,7 +42,15 @@ abstract class PlugunBase{
      *      like : ['strlen','md5']
      *      it support SKY OJ SYSTEM to check env for install this Plugun.
      */
-    abstract public function requiredFunctions():array;   
+    abstract public function requiredFunctions():array;
+
+    /**
+     * @return location of pair of licence tmpl file
+     */
+    public function licence_tmpl():array
+    {
+        return ['common','plugun_default_licence'];
+    }
 };
 
 abstract class OnlineJudgeCapture extends PlugunBase{
