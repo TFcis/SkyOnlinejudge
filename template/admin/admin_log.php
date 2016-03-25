@@ -23,7 +23,7 @@ if(!defined('IN_TEMPLATE'))
             <tr>
                 <td><?=htmlentities($row['timestamp'])?></td>
                 <td><?=htmlentities(LevelName($row['level']))?></td>
-                <td><?=htmlentities($row['message'])?></td>
+                <td><?=nl2br(htmlentities($row['message']))?></td>
             </tr>
         <?php }?>
         </tbody>
