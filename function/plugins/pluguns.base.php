@@ -54,7 +54,12 @@ abstract class PlugunBase{
 };
 
 abstract class OnlineJudgeCapture extends PlugunBase{
-    
+    const PATTERN       = 'abstract';
+    function __construct()
+	{
+        parent::__construct();
+        Enforcer::__add(__CLASS__, get_called_class());
+	}
 };
 
 abstract class ThirdPartySign extends PlugunBase{

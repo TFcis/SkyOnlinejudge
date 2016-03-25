@@ -3,6 +3,13 @@ if(!defined('IN_SKYOJSYSTEM'))
 {
   exit('Access denied');
 }
+/**
+ * @file
+ * @brief
+ *
+ * @author LFsWang
+ * @copyright 2016 Sky Online Judge Project
+ */
 require_once('function/plugins/pluguns.base.php');
 class Plugin{
     static function install($name,$class)
@@ -51,7 +58,11 @@ class Plugin{
         
         return false;
     }
-    //path base on ROOT/function/plugins/
+
+    /**
+     * @note path base on ROOT/function/plugins/
+     * @return All class_[name].file on $path
+     */
     static public function listClassFileByFolder(string $path)
     {
         global $_E;
@@ -65,6 +76,10 @@ class Plugin{
         return $classfile;
     }
     
+    /**
+     * @param string $fullpath The path of class file
+     * @return stdand class name, return False if failed.
+     */
     static public function getClassName(string $fullpath)
     {
         static $pname = "/\/(class_[^.\/]*)\.php/";
@@ -75,6 +90,20 @@ class Plugin{
         return false;
     }
     
+    /**
+     * isStdClass will check $class is extend from std plugin class
+     * @return true false
+     */
+    static public function isStdClass(string $class):bool
+    {
+        if( !class_exists($class) ){
+            return false;
+        }
+        //TODO : Remove $test and new if available
+        $test = new $class();
+        return $test instanceof OnlineJudgeCapture;
+    }
+
     /**
      * return value
      * false : some error
@@ -109,7 +138,7 @@ class Plugin{
 
     /**
      * return value
-     * array of classname(string)
+     * array of std classname(string)
      * false : fail to load class
      */
     static public function loadClassFileByFolder(string $path)
@@ -124,7 +153,7 @@ class Plugin{
             {
                 require_once($file);
                 $classname = Plugin::getClassName($file);
-                if( class_exists($classname) )
+                if( Plugin::isStdClass($classname) )
                 {
                     $classes[] = $classname;
                 }
@@ -134,30 +163,5 @@ class Plugin{
             return false;
         }
         return $classes;
-    }
-    
-    // path base on ROOT/function/plugins/
-    static function loadClassByPluginsFolder($path)
-    {
-        Log::msg(Level::Notice,"loadClassByPluginsFolder() is an old function!");
-        global $_E;
-        $loadedClass = array();
-        $pattern = $_E['ROOT'].'/function/plugins/'.$path.'/class_*.php';
-        $pname = "/\/(class_[^.\/]*)\.php/";
-        $classfile = glob($pattern);
-        foreach($classfile as $str)
-        {
-            require_once($str);
-            if( preg_match($pname,$str,$matches) )
-            {
-                $matches = $matches[1];
-                if(class_exists($matches))
-                {
-                    $loadedClass[$matches] = new $matches;
-                    Plugin::install($matches,$loadedClass[$matches]);
-                }
-            }
-        }
-        return $loadedClass;
     }
 }

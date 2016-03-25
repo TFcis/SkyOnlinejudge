@@ -31,7 +31,7 @@ if(!defined('IN_TEMPLATE'))
                         <?php endif; ?>
                     </td>
                     <td><?=htmlentities($classname)?></td>
-                    <td></td>
+                    <td><?=htmlentities($classname::DESCRIPTION)?></td>
                 </tr>
             <?php }?>
             </tbody>
