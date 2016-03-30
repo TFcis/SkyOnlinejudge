@@ -42,7 +42,7 @@ abstract class PlugunBase{
      *      like : ['strlen','md5']
      *      it support SKY OJ SYSTEM to check env for install this Plugun.
      */
-    abstract public function requiredFunctions():array;
+    abstract static public function requiredFunctions():array;
 
     /**
      * @return location of pair of licence tmpl file

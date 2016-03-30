@@ -58,7 +58,10 @@ class Plugin{
         
         return false;
     }
-
+    static public function getAllFolders()
+    {
+        return ["rank/board_other_oj","user/login"];
+    }
     /**
      * @note path base on ROOT/function/plugins/
      * @return All class_[name].file on $path
@@ -90,6 +93,12 @@ class Plugin{
         return false;
     }
     
+    static public function isClassName(string $class)
+    {
+        static $p = "/^class_[a-zA-Z0-9_]{1,30}$/";
+        return preg_match($p,$class);
+    }
+
     /**
      * isStdClass will check $class is extend from std plugin class
      * @return true false
@@ -138,6 +147,31 @@ class Plugin{
 
     /**
      * return value
+     * classname(string)
+     * false : fail to load class
+     */
+    static public function loadClassFile(string $folder,string $class)
+    {
+        global $_E;
+        if(!in_array($folder,Plugin::getAllFolders()))return false;
+        if(!Plugin::isClassName($class))return false;
+
+        $path = $_E['ROOT'].'/function/plugins/'.$folder.'/'.$class.'.php';
+
+        try{
+            require_once($path);
+        } catch (Exception $e) {
+            Log::msg(Level::Error,"loadClassFile Exception:",$e->getMessage());
+            return false;
+        }
+
+        if( Plugin::isStdClass($class) )
+            return $class;
+        return false;
+    }
+
+    /**
+     * return value
      * array of std classname(string)
      * false : fail to load class
      */
@@ -147,20 +181,16 @@ class Plugin{
         
         $files = Plugin::listClassFileByFolder($path);
         if( $files === false )return false;
-        
-        try{
-            foreach( $files as $file )
+
+        foreach( $files as $file )
+        {
+            $classname = Plugin::getClassName($file);
+            $classname = Plugin::loadClassFile($path,$classname);
+
+            if( $classname!==false )
             {
-                require_once($file);
-                $classname = Plugin::getClassName($file);
-                if( Plugin::isStdClass($classname) )
-                {
-                    $classes[] = $classname;
-                }
+                $classes[] = $classname;
             }
-        } catch (Exception $e) {
-            Log::msg(Level::Error,"loadClassByFolder Exception:",$e->getMessage());
-            return false;
         }
         return $classes;
     }
