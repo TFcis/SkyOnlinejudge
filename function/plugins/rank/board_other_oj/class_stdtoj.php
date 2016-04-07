@@ -21,7 +21,7 @@ class class_stdtoj extends OnlineJudgeCapture {
     
     static function requiredFunctions():array
     {
-        return ['preg_match','axbnilas','nxoushx79asxhas','md5','safe_get'];
+        return ['preg_match','md5','safe_get'];
     }
     
 	function install()

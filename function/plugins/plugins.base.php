@@ -4,8 +4,8 @@ if( !defined('IN_SKYOJSYSTEM') )
     exit('Access denied');
 }
 /**
- * @file pluguns.base.php
- * @brief define plugun base classes
+ * @file plugins.base.php
+ * @brief define plugin base classes
  *
  * @author LFsWang
  * @copyright 2016 Sky Online Judge Project
@@ -24,7 +24,7 @@ class Enforcer {
     }
 }
 
-abstract class PlugunBase{
+abstract class PluginBase{
     /**
      * some constant subclass should set.
      */
@@ -35,7 +35,7 @@ abstract class PlugunBase{
     public function __construct(){
         Enforcer::__add(__CLASS__, get_called_class());
     }
-    
+
     /**
      * function requiredFunctions():array;
      * @return array of strings
@@ -47,13 +47,26 @@ abstract class PlugunBase{
     /**
      * @return location of pair of licence tmpl file
      */
-    public function licence_tmpl():array
+    static public function licence_tmpl():array
     {
-        return ['common','plugun_default_licence'];
+        return ['plugin_default_licence','common'];
+    }
+
+    /**
+     * function installForm():array
+     * @return Render::Form Gen format array
+     */
+    static public function installForm():array
+    {
+        return [
+            "data" => [
+                ['type'=>'text','name'=>"A",'title'=>'URL'],
+            ]
+        ];
     }
 };
 
-abstract class OnlineJudgeCapture extends PlugunBase{
+abstract class OnlineJudgeCapture extends PluginBase{
     const PATTERN       = 'abstract';
     function __construct()
 	{
@@ -62,6 +75,6 @@ abstract class OnlineJudgeCapture extends PlugunBase{
 	}
 };
 
-abstract class ThirdPartySign extends PlugunBase{
-    
+abstract class ThirdPartySign extends PluginBase{
+
 };

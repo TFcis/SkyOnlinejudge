@@ -10,7 +10,7 @@ if(!defined('IN_SKYOJSYSTEM'))
  * @author LFsWang
  * @copyright 2016 Sky Online Judge Project
  */
-require_once('function/plugins/pluguns.base.php');
+require_once('function/plugins/plugins.base.php');
 class Plugin{
     static function install($name,$class)
     {
@@ -110,7 +110,7 @@ class Plugin{
         }
         //TODO : Remove $test and new if available
         $test = new $class();
-        return $test instanceof OnlineJudgeCapture;
+        return $test instanceof PluginBase;
     }
 
     /**

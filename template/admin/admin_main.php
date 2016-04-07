@@ -60,11 +60,6 @@ if(!defined('IN_TEMPLATE'))
             </li>
         </ul>
       </div>
-      <div class="col-sm-10 col-md-10" id="main-page">$_E['template']['pluginfolders']</div>
+      <div class="col-sm-10 col-md-10" id="main-page"></div>
     </div>
 </div>
-<!--
-<?php Render::renderSingleTemplate('admin_plugins','admin'); ?>
-<br>
-<?php Render::renderSingleTemplate('admin_log','admin'); ?>
--->

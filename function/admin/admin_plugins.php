@@ -3,9 +3,10 @@ if( !defined('IN_SKYOJSYSTEM') )
 {
     exit('Access denied');
 }
+require_once($_E['ROOT'].'/function/common/forminfo.php');
 //URL Format
 // /plugin/list?folder=
-// /plugin/install/forder/name/
+// /plugin/install/base64(forder)/base64(name)?= stats
 $function = Quest(1) or $function = '';
 switch($function)
 {
@@ -40,7 +41,9 @@ switch($function)
             $_E['template']['message'] = "無法載入，請檢查系統紀錄";
             break;
         }
-        
+        $_E['template']['folder'] = $folder;
+        $_E['template']['class'] = $class;
+
         //Check Required functions
         $fail = [];
         foreach( $class::requiredFunctions() as $func )
@@ -53,14 +56,41 @@ switch($function)
         if( !empty($fail) )
         {
             $_E['template']['fail_func'] = $fail;
-            $_E['template']['folder'] = $folder;
-            $_E['template']['class'] = $class;
             Render::renderSingleTemplate('admin_plugins_funccheckfail','admin');
             exit(0);
         }
-            
         
+        //Licence
+        $tokenname = 'admin_pi_'.md5($folder."#".$class);
+        if( !userControl::CheckToken($tokenname) ||
+            !userControl::isToeknSet($tokenname."#key") ||
+            safe_get('key') !== userControl::getSavedToken( $tokenname."#key" ) )
+        {
+            userControl::RegisterToken( $tokenname,900 );
+            $key = userControl::RegisterToken( $tokenname."#key",900,false );
+            $_E['template']['licence'] = $class::licence_tmpl();
+            $_E['template']['key'] = $key;
+            Render::renderSingleTemplate('admin_plugins_licence','admin');
+            exit(0);
+        }
+
+
+        //Form
+        $tokenname = 'admin_pif_'.md5($folder."#".$class);
+        $formInfo = $class::installForm();
+        if( !empty($formInfo) )
+        {
+            $_E['template']['pif_install'] = new FormInfo($formInfo);
+            Render::renderSingleTemplate('admin_plugins_install_form','admin');
+            exit(0);
+        }
+        else
+        {
+        }
+        //install();
         $_E['template']['message'] = 'On Working~';
+        #userControl::DeleteToken($tokenname);
+        #userControl::DeleteToken($tokenname."#key");
     default:
         break;
 }
