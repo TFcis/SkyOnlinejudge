@@ -206,13 +206,13 @@ function getgravatarlink($email,$size = null)
     if( !is_string($email) || !is_numeric($size) && $size !== null )
         return '';
     $email = md5( strtolower( trim( $email ) ) );
-    $res = "http://www.gravatar.com/avatar/$email?";
+    $res = "https://www.gravatar.com/avatar/$email?";
     
     #check
     $check = $res."d=404";
     $header = get_headers($check);
     if( $header[0] == "HTTP/1.0 404 Not Found" )
-        $res = "http://www.gravatar.com/avatar/$email?d=identicon&";
+        $res = "https://www.gravatar.com/avatar/$email?d=identicon&";
 
     if( isset($size) )
         $res .= "?s=$size";
@@ -316,7 +316,7 @@ class UserInfo
                     break;
             }
             $res['avaterurl'] = '';
-            $res['backgroundurl'] = 'http://i.imgur.com/n2EOWhO.jpg';
+            $res['backgroundurl'] = 'https://i.imgur.com/n2EOWhO.jpg';
             $this->_save_data_view($res);
         }
         $res['quote'] = htmlspecialchars($res['quote']);
