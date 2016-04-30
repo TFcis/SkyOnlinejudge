@@ -13,10 +13,10 @@ if(!defined('IN_TEMPLATE'))
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>時間</th>
-						<th>題目</th>
 						<th>使用者</th>
+						<th>題目</th>
 						<th>結果</th>
+						<th>時間</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -29,4 +29,10 @@ if(!defined('IN_TEMPLATE'))
 					</tr>
 				</tbody>
 			</table>
+			<center>
+        <?php Render::renderPagination(
+        $_E['template']['challenge_list_pagelist'],
+        $_E['SITEROOT']."challenge.php/list/%d",
+        $_E['template']['challenge_list_now']) ?>
+        </center>
 </div>

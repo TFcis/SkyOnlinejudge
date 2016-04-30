@@ -14,7 +14,8 @@ if( !in_array($mod,$allowmod) )
 }
 else
 {
-    $funcpath =  $_E['ROOT']."/function/challenge/challenge_$mod.php";
+    require_once($_E['ROOT']."/function/challenge/challenge.lib.php");
+	$funcpath =  $_E['ROOT']."/function/challenge/challenge_$mod.php";
     if(file_exists($funcpath))
     {
         require($funcpath);
