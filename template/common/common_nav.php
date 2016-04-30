@@ -32,6 +32,7 @@ if(!defined('IN_TEMPLATE'))
                 <ul class="nav navbar-nav">
                     <li><a href="<?=$_E['SITEROOT']?>problem.php">Problems</a></li>
                     <li><a href="<?=$_E['SITEROOT']?>index.php">Submission</a></li>
+					<li><a href="<?=$_E['SITEROOT']?>challenge.php">Challenge</a></li>
                     <li><a href="<?=$_E['SITEROOT']?>index.php?old">Dev Message</a></li>
                     <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools<span class="caret"></span></a>
