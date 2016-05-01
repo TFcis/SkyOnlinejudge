@@ -1,7 +1,6 @@
 <?php
-	if(!defined('IN_TEMPLATE'))
-    {
-      exit('Access denied');
+    if (!defined('IN_TEMPLATE')) {
+        exit('Access denied');
     }
 ?>
 <style type="text/css" media="screen">
@@ -30,5 +29,5 @@ $(document).ready( function()
     });
 })
 </script>
-<div id="editor"><?php if(isset($tmpl['defaultcode'])): ?><?= htmlspecialchars($tmpl['defaultcode']) ?><?php endif;?></div>
+<div id="editor"><?php if (isset($tmpl['defaultcode'])): ?><?= htmlspecialchars($tmpl['defaultcode']) ?><?php endif; ?></div>
 

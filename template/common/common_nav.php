@@ -1,18 +1,16 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
-  exit('Access denied');
+if (!defined('IN_TEMPLATE')) {
+    exit('Access denied');
 }
 ?>
 </head>
 <?php
-    if( isset($tmpl['_body_class']) )
-    {
-        $classtmp = implode(' ',$_E['template']['_body_class']);
+    if (isset($tmpl['_body_class'])) {
+        $classtmp = implode(' ', $_E['template']['_body_class']);
         $classtmp = "class='$classtmp'";
-    }
-    else
+    } else {
         $classtmp = '';
+    }
 ?>
 <body <?=$classtmp?>>
 <div id="wrap"> 
@@ -26,7 +24,7 @@ if(!defined('IN_TEMPLATE'))
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?=$_E['SITEROOT']?>index.php"><?php echo($_E['site']['name']);?></a>
+                <a class="navbar-brand" href="<?=$_E['SITEROOT']?>index.php"><?php echo $_E['site']['name']; ?></a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -45,26 +43,28 @@ if(!defined('IN_TEMPLATE'))
                     </li>
                 </ul>
             <ul class="nav navbar-nav navbar-right">
-                <?php if( !$_G['uid']): ?>
+                <?php if (!$_G['uid']): ?>
                 <li><a href="<?=$_E['SITEROOT']?>user.php/login">LOGIN</a></li>
                 <?php else: ?>
-                    <?php if(userControl::isAdmin()):?>
+                    <?php if (userControl::isAdmin()):?>
                 <li><a href="<?=$_E['SITEROOT']?>admin.php">Admin</a></li>
                     <?php endif; ?>
-                <li><a href="<?=$_E['SITEROOT']."user.php/view/".$_G['uid']?>"><?php echo(htmlspecialchars($_G['nickname']));?></a></li>
+                <li><a href="<?=$_E['SITEROOT'].'user.php/view/'.$_G['uid']?>"><?php echo htmlspecialchars($_G['nickname']); ?></a></li>
                 <li><a href="<?=$_E['SITEROOT']?>user.php/logout">LOGOUT</a></li>
-                <?php endif;?>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>
-    <?php if($_E['template']['error']):?>
+    <?php if ($_E['template']['error']):?>
     <div class="alert alert-danger fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
         <strong>Oh! System error</strong>
         <ul>
-        <?php foreach($_E['template']['error'] as $list){ ?>
+        <?php foreach ($_E['template']['error'] as $list) {
+    ?>
             <li>(<?=$list['namespace']?>)<?=$list['msg']?></li>
-        <?php }?>
+        <?php 
+}?>
         </ul>
     </div>
-    <?php endif;?>
+    <?php endif; ?>

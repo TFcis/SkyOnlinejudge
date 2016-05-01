@@ -1,7 +1,6 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
-  exit('Access denied');
+if (!defined('IN_TEMPLATE')) {
+    exit('Access denied');
 }
 ?>
 <div class="container">
@@ -10,7 +9,8 @@ if(!defined('IN_TEMPLATE'))
         <div class="page-header">
             <h1>Plugins<small>List All Plugins</small></h1>
         </div>
-        <?php foreach($_E['template']['sysplugins'] as $folder => $classes){ ?>
+        <?php foreach ($_E['template']['sysplugins'] as $folder => $classes) {
+    ?>
         <h3><?=$folder?></h3>
         <table class = "table">
             <thead>
@@ -21,22 +21,27 @@ if(!defined('IN_TEMPLATE'))
                 </tr>
             </thead>
             <tbody>
-            <?php foreach($classes as $classname => $data){ ?>
+            <?php foreach ($classes as $classname => $data) {
+    ?>
                 <tr>
                     <td>
-                        <?php if( $data === false ): ?>
+                        <?php if ($data === false): ?>
                             not install
                         <?php else: ?>
                             installed
-                        <?php endif; ?>
+                        <?php endif;
+    ?>
                     </td>
                     <td><?=htmlentities($classname)?></td>
                     <td></td>
                 </tr>
-            <?php }?>
+            <?php 
+}
+    ?>
             </tbody>
         </table>
         <br>
-        <?php }?>
+        <?php 
+}?>
     </div>
 </div>
