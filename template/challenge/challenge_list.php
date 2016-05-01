@@ -20,13 +20,19 @@ if(!defined('IN_TEMPLATE'))
 					</tr>
 				</thead>
 				<tbody>
+				<?php foreach($_E['template']['challenge_info'] as $row){ ?>
 					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td><?=$row['id'];?></td>
+						<?php 
+						$row['user']=(string)$row['user'];
+						$nickname=nickname($row['user']);
+						?>
+						<td><a href="<?=$_E['SITEROOT']."user.php/view/".$row['user']?>"><?=$nickname[$row['user']]['nickname']?></a></td>
+						<td><a href="<?=$_E['SITEROOT']?>problem.php/problem/<?=$row['problem'];?>"><?=$row['problem'];?></a></td>
+						<td><?=getresulttext($row['result']);?></td>
+						<td><?=$row['time'];?></td>
 					</tr>
+				<?php }?>
 				</tbody>
 			</table>
 			<center>

@@ -291,7 +291,7 @@ function nickname( $uid )
     if(!is_array($uid))
         $uid = array($uid);
 
-    $res =  DB::getuserdata('account',$uid,'uid,nickname');
+    $res =  usercontrol::getuserdata('account',$uid);
     foreach( $uid as $u )
     {
         $u=(string)$u;

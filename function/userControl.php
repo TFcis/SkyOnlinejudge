@@ -148,9 +148,24 @@ class userControl
         userControl::DeleteToken('login');
     }
     
-    static function getuserdata( $table ,$uid = null )
+    static function getuserdata( $table ,$uid = array() )
     {
         $table = DB::tname($table);
+		$userdata=array();
+		foreach($uid as $u)
+		{
+			$u=(string)$u;
+			$pdo=DB::prepare("SELECT * FROM `$table` WHERE `uid` = ?");
+			if(DB::execute($pdo,array($u)))
+			{
+				$data=$pdo->fetchAll();
+				$userdata[$u]=$data[0];
+			}
+			
+		}
+		LOG::msg(Level::Debug,"",$userdata);
+		return $userdata;
+		
     }
     
     static function getpermission($uid)

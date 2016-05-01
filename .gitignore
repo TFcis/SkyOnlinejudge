@@ -8,7 +8,6 @@
 function/plugins/rank/board_other_oj/cf_api_key.php
 /tools/*.txt
 /install/sky.sql
-/css/bootstrap
 /tools/start.bat
 /data/problem
 /function/externals
