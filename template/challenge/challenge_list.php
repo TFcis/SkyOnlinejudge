@@ -22,7 +22,7 @@ if(!defined('IN_TEMPLATE'))
 				<tbody>
 				<?php foreach($_E['template']['challenge_info'] as $row){ ?>
 					<tr>
-						<td><?=$row['id'];?></td>
+						<td><a href="<?=$_E['SITEROOT']?>challenge.php/result/<?=$row['id']?>"><?=$row['id'];?></a></td>
 						<?php 
 						$row['user']=(string)$row['user'];
 						$nickname=nickname($row['user']);

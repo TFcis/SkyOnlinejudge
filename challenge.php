@@ -2,7 +2,7 @@
 require_once('GlobalSetting.php');
 require_once('function/SkyOJ.php');
 
-$allowmod =array('list');
+$allowmod =array('list','result');
 
 //set Default mod
 $mod = empty($QUEST[0])?'list':$QUEST[0];
