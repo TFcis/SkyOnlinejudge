@@ -1,6 +1,5 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
+if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
@@ -66,12 +65,12 @@ $(document).ready(function()
             <div class="panel-heading">Account Information</div>
             <div class="panel-body">
                 <p>SOJ ID : <?=$tmpl['showid']?></p>
-                <?php if(userControl::isAdmin($tmpl['showid'])):?>
+                <?php if (userControl::isAdmin($tmpl['showid'])):?>
                 <p>WOW ADMIN!</p>
-                <?php endif;?>
-                <?php if(!empty($_E['template']['acct']['realname'])):?>
+                <?php endif; ?>
+                <?php if (!empty($_E['template']['acct']['realname'])):?>
                 <p>我的名子：<?=htmlentities($_E['template']['acct']['realname'])?></p>
-                <?php endif;?>
+                <?php endif; ?>
                 <p>avatar via <a href="https://gravatar.com/" class="btn btn-primary active" target="_blank">gravatar</a></p>
             </div>
         </div>

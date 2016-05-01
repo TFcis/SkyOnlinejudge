@@ -1,7 +1,6 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
-  exit('Access denied');
+if (!defined('IN_TEMPLATE')) {
+    exit('Access denied');
 }
 ?>
 <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
@@ -75,11 +74,11 @@ $(document).ready(function()
     <div class="row">
         <div class="page-header">
           <h1>編輯記分板 <small><?=htmlspecialchars($tmpl['title'])?>
-          <?php if($_E['template']['form']['id']):?>
+          <?php if ($_E['template']['form']['id']):?>
             <a class = "icon-bttn" href = "<?=$_E['SITEROOT']?>rank.php?mod=commonboard&id=<?=$tmpl['form']['id']?>">
                 <span class="pointer glyphicon glyphicon-arrow-left" title="回到記分板"></span>
             </a>
-          <?php endif;?>
+          <?php endif; ?>
           </small></h1>
         </div>
     </div>
@@ -124,18 +123,18 @@ $(document).ready(function()
         </div><!--Main end-->
         <div class="col-lg-4">
             <h1>Advance&nbsp;<small><span id="adv-act-info"></span></small></h1>
-            <?php if($tmpl['form']['id'] != 0): ?>
+            <?php if ($tmpl['form']['id'] != 0): ?>
                 <p>
                     <buttom class="btn btn-primary" adv-act="freeze">Freeze</buttom>
                     凍結記分板 <small><span id="adv-act-freeze">重建並鎖定</span></small>
                 </p>
-                <?php if($tmpl['form']['state'] != 0): ?>
+                <?php if ($tmpl['form']['state'] != 0): ?>
                 <p>
                     <buttom class="btn btn-danger" adv-act="close">Close</buttom>
                     關閉記分板 <small><span id="adv-act-close">關閉記分板</span></small>
                 </p>
                 <?php endif; ?>
-                <?php if($tmpl['form']['state'] != 1): ?>
+                <?php if ($tmpl['form']['state'] != 1): ?>
                 <p>
                     <buttom class="btn btn-success" adv-act="open">Open</buttom>
                     開啟記分板 <small><span id="adv-act-open">開啟記分板</span></small>
@@ -158,7 +157,8 @@ $(document).ready(function()
                     </tr>
                 </thead>
                 </tbody>
-                    <?php foreach($_E['template']['rank_site'] as $site => $data){?>
+                    <?php foreach ($_E['template']['rank_site'] as $site => $data) {
+    ?>
                     <tr>
                         <td><?=$data['name']?></td>
                         <td><?=$data['author']?></td>
@@ -166,7 +166,8 @@ $(document).ready(function()
                         <td><?=$data['desc']?></td>
                         <td><?=$data['format']?></td>
                     </tr>
-                    <?php }?>
+                    <?php 
+}?>
                 </tbody>
             </table>
         </div>

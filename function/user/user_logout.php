@@ -1,11 +1,10 @@
 <?php
-if( !defined('IN_SKYOJSYSTEM') )
-{
+
+if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
-if($_G['uid'])
-{
+if ($_G['uid']) {
     userControl::DelLoginToken();
-    setcookie($_config['cookie']['namepre'].'_uid','',0,$_E['SITEDIR']);
+    setcookie($_config['cookie']['namepre'].'_uid', '', 0, $_E['SITEDIR']);
 }
-header("Location:".$_E['SITEROOT']."index.php");
+header('Location:'.$_E['SITEROOT'].'index.php');
