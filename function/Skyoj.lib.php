@@ -296,10 +296,12 @@ function nickname( $uid )
     {
         $u=(string)$u;
         if(isset($res[$u]))
-            $_E['nickname'][$u] = $res[$u]['nickname'];
+		{
+			$_E['nickname'][$u] = $res[$u]['nickname'];
+		}
     }
     $_E['nickname']['0'] = 'anonymous';
-    return $res;
+    return $_E['nickname'];
 }
 
 class privatedata

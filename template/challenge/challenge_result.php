@@ -28,7 +28,7 @@ $data=$_E['template']['challenge_result_info'][0];
 						$user=(string)$data['user'];
 						$nickname=nickname($user);
 						?>
-						<td><?=$nickname[$user]['nickname']?></td>
+						<td><?=$nickname[$user]?></td>
 					</tr>
 					<tr>
 						<td>總得分</td>
