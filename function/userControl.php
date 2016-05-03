@@ -148,10 +148,10 @@ class userControl
         userControl::DeleteToken('login');
     }
     
-    static function getuserdata( $table ,$uid = array() )
+    static function getuserdata( $table ,$uid = [] )
     {
         $table = DB::tname($table);
-		$userdata=array();
+		$userdata=[];
 		foreach($uid as $u)
 		{
 			$u=(string)$u;

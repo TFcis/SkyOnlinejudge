@@ -3,7 +3,7 @@ if( !defined('IN_SKYOJSYSTEM') )
 {
     exit('Access denied');
 }
-
+/*
 function getresulttext($resultid)
 {
 	$res = 'NO';
@@ -19,6 +19,6 @@ function getresulttext($resultid)
 		case 7 : $res='ERR'; break;
 	}
 	return $res;
-}
+}*/
 
 ?>
