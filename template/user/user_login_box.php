@@ -5,9 +5,9 @@ if(!defined('IN_TEMPLATE'))
 }
 ?>
 <script src="<?=$_E['SITEROOT']?>js/bignumber.min.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
-<script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
-<script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pad-zeropadding.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-zeropadding.js"></script>
 <script>
 GA = new BigNumber('<?=$tmpl['dh_ga']?>');
 PublicPrime = new BigNumber('<?=$tmpl['dh_prime']?>');
