@@ -97,5 +97,5 @@ switch($function)
     default:
         break;
 }
-Log::msg(Level::Waring,"[admin][plugins]Error dump",$QUEST);
+Log::msg(Level::Warning,"[admin][plugins]Error dump",$QUEST);
 Render::renderSingleTemplate('common_message');

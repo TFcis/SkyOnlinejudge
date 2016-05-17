@@ -12,7 +12,7 @@ if( Quest(0) )
 {
     if( !userControl::CheckToken('ADMIN_CSRF',safe_post('_t')) )
     {
-        Log::msg(Level::Waring,"ADMIN CSRF Token error!");
+        Log::msg(Level::Warning,"ADMIN CSRF Token error!");
         Render::renderSingleTemplate('nonedefined');
         exit(0);
     }

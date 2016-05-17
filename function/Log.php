@@ -13,7 +13,7 @@ final class Level
     const SQLERROR  = -1;
     const Critical  = 0;
     const Error     = 1;
-    const Waring    = 2;
+    const Warning   = 2;
     const Notice    = 3;
     const Debug     = 4;
 };
