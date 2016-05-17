@@ -12,20 +12,26 @@ class FormInput
     private $_id;
     private $_type;
     private $_title;
+    private $_option;
     function __construct(array $info)
     {
-        $this->_name  = isset($info['name']) ?$info['name']:'';
-        $this->_id    = isset($info['id'])   ?$info['id']  :$this->_name;
-        $this->_type  = isset($info['type']) ?$info['type']:'text';
-        $this->_title = isset($info['title'])?$info['title']:'';
+        $this->_name  = isset($info['name'])  ?$info['name']:'';
+        $this->_id    = isset($info['id'])    ?$info['id']  :$this->_name;
+        $this->_type  = isset($info['type'])  ?$info['type']:'text';
+        $this->_title = isset($info['title']) ?$info['title']:'';
+        $this->_option= isset($info['option'])?$info['option']:[];
     }
 
     static private function html5_form_type(string $t)
     {
         switch($t)
         {
+            case 'hr':
+                return 'hr';
+            case 'submit':
+                return 'submit';
             default:
-                return "text";
+                return 'text';
         }
     }
 
@@ -33,6 +39,7 @@ class FormInput
     public function id()  {return $this->_id;  }
     public function type(){return FormInput::html5_form_type($this->_type);}
     public function title() {return $this->_title;}
+    public function option() {return $this->_option;}
 }
 
 class FormInfo

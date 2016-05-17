@@ -61,6 +61,10 @@ abstract class PluginBase{
         return [
             "data" => [
                 ['type'=>'text','name'=>"A",'title'=>'URL'],
+                ['type'=>'hr'],
+                ['type'=>'text','name'=>"A",'title'=>'URL'],
+                ['type'=>'text','name'=>"A",'title'=>'URL'],
+                ['type'=>'submit','id'=>'install','option'=>['info'=>'']],
             ]
         ];
     }

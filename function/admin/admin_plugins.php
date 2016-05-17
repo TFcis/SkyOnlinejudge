@@ -74,7 +74,8 @@ switch($function)
             exit(0);
         }
 
-
+        #TODO
+        break;
         //Form
         $tokenname = 'admin_pif_'.md5($folder."#".$class);
         $formInfo = $class::installForm();
@@ -88,7 +89,9 @@ switch($function)
         {
         }
         //install();
-        $_E['template']['message'] = 'On Working~';
+        Log::msg(Level::Debug,"",$_POST);
+        Render::renderSingleTemplate('admin_plugins_info','admin');
+        exit(0);
         #userControl::DeleteToken($tokenname);
         #userControl::DeleteToken($tokenname."#key");
     default:
