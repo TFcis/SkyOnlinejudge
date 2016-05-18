@@ -1,160 +1,161 @@
 <?php
-if(!defined('IN_SKYOJSYSTEM'))
-{
-  exit('Access denied');
+
+if (!defined('IN_SKYOJSYSTEM')) {
+    exit('Access denied');
 }
 
-class class_stdtoj extends OnlineJudgeCapture {
-    const VERSION       = '1.1';
-    const NAME          = 'Toj capturer';
-    const DESCRIPTION   = 'TOJ capturer';
-    const COPYRIGHT     = 'TFcis';
-    const PATTERN       = "/^toj[0-9]+$/i";
-    
-	private $api = 'http://210.70.137.215/oj/be/api';
-	private $useraclist = array();
-	private $usernalist = array();
-	function __construct()
-	{
-        parent::__construct();
-	}
-    
-    static function requiredFunctions():array
+class class_stdtoj extends OnlineJudgeCapture
+{
+    const VERSION = '1.1';
+    const NAME = 'Toj capturer';
+    const DESCRIPTION = 'TOJ capturer';
+    const COPYRIGHT = 'TFcis';
+    const PATTERN = '/^toj[0-9]+$/i';
+
+    private $api = 'http://210.70.137.215/oj/be/api';
+    private $useraclist = [];
+    private $usernalist = [];
+
+    public function __construct()
     {
-        return ['preg_match','md5','safe_get'];
+        parent::__construct();
     }
-    
-	function install()
-	{
-	    $tb = DB::tname('ojlist');
-	    DB::query("INSERT INTO `$tb`
+
+    public static function requiredFunctions():array
+    {
+        return ['preg_match', 'md5', 'safe_get'];
+    }
+
+    public function install()
+    {
+        $tb = DB::tname('ojlist');
+        DB::query("INSERT INTO `$tb`
 	            (`id`, `class`, `name`, `description`, `available`) VALUES
 	            (NULL,'class_toj','TNFSH Online Judge','TOJ uid',1)");
-	    //set SQL
-	}
-	
-	function checkid($id)
-	{
-	    $id = (string)$id;
-	    return preg_match('/^[1-9]+[0-9]*$/',$id);
-	}
-	
-	function post($data)
-	{
-	    $context['http'] = array (
-			'timeout'   => 60,
-			'method'	=> 'POST',
-			'content'   => http_build_query($data, '', '&'),
-		);
-		$response = @file_get_contents('http://210.70.137.215/oj/be/api', false, stream_context_create($context));
-		return $response;
-	}
-	
-	function preprocess($userlist,$problist)
-	{
+        //set SQL
+    }
+
+    public function checkid($id)
+    {
+        $id = (string) $id;
+
+        return preg_match('/^[1-9]+[0-9]*$/', $id);
+    }
+
+    public function post($data)
+    {
+        $context['http'] =  [
+            'timeout'   => 60,
+            'method'    => 'POST',
+            'content'   => http_build_query($data, '', '&'),
+        ];
+        $response = @file_get_contents('http://210.70.137.215/oj/be/api', false, stream_context_create($context));
+
+        return $response;
+    }
+
+    public function preprocess($userlist, $problist)
+    {
         global $_E;
-        $reqtype = array();
-        foreach($userlist as $uid)
-        {
-            if(!$this->checkid($uid))
+        $reqtype = [];
+        foreach ($userlist as $uid) {
+            if (!$this->checkid($uid)) {
                 continue;
-            $this->useraclist[$uid] = array();
-            $this->usernalist[$uid] = array();
-            $query['acct_id'] = $uid;
-            
-            
-            $query['reqtype'] = 'AC';
-            if( $aclist = $this->post($query) )
-            {
-                $this->useraclist[$uid]  = json_decode($aclist)->ac;
             }
-            
+            $this->useraclist[$uid] = [];
+            $this->usernalist[$uid] = [];
+            $query['acct_id'] = $uid;
+
+            $query['reqtype'] = 'AC';
+            if ($aclist = $this->post($query)) {
+                $this->useraclist[$uid] = json_decode($aclist)->ac;
+            }
+
             $query['reqtype'] = 'NA';
-            if( $nalist = $this->post($query) )
-            {
-                $this->usernalist[$uid]  = json_decode($nalist)->na;
+            if ($nalist = $this->post($query)) {
+                $this->usernalist[$uid] = json_decode($nalist)->na;
             }
         }
     }
-	
-    function query($uid,$pid)
+
+    public function query($uid, $pid)
     {
-        $pid = preg_replace('/[^0-9]*/','',$pid);
-        if(in_array($pid,$this->useraclist[$uid]))
-        {
+        $pid = preg_replace('/[^0-9]*/', '', $pid);
+        if (in_array($pid, $this->useraclist[$uid])) {
             return 90;
-        }
-        elseif(in_array($pid,$this->usernalist[$uid]))
-        {
+        } elseif (in_array($pid, $this->usernalist[$uid])) {
             return 70;
-        }
-        else
-        {
+        } else {
             return 0;
         }
     }
-	
-    function showname($str)
+
+    public function showname($str)
     {
-        $pid = preg_replace('/[^0-9]*/','',$str);
-        $str="<a href='http://toj.tfcis.org/oj/pro/$pid/' target='_blank'>TOJ $pid</a>";
+        $pid = preg_replace('/[^0-9]*/', '', $str);
+        $str = "<a href='http://toj.tfcis.org/oj/pro/$pid/' target='_blank'>TOJ $pid</a>";
+
         return $str;
     }
-	
-	function challink($uid,$pid){
-		$pid = preg_replace('/[^0-9]*/','',$pid);
-		return "http://toj.tfcis.org/oj/chal/?proid=".$pid."&acctid=".$uid;
-	}
-    
-    function getuserinfo($uid)
+
+    public function challink($uid, $pid)
+    {
+        $pid = preg_replace('/[^0-9]*/', '', $pid);
+
+        return 'http://toj.tfcis.org/oj/chal/?proid='.$pid.'&acctid='.$uid;
+    }
+
+    public function getuserinfo($uid)
     {
         $query['reqtype'] = 'INFO';
         $query['acct_id'] = $uid;
         $json = $this->post($query);
-        if( $data = json_decode($json) )
+        if ($data = json_decode($json)) {
             return $data;
+        }
+
         return false;
     }
-    
-    function account_detail($uid)
+
+    public function account_detail($uid)
     {
         $data = $this->getuserinfo($uid);
-        if( $data )
-        {
-            return "Your Nickname : <strong>".htmlspecialchars($data->nick)."</strong>";
-        }
-        else
+        if ($data) {
+            return 'Your Nickname : <strong>'.htmlspecialchars($data->nick).'</strong>';
+        } else {
             return false;
+        }
     }
-    
-    function authenticate_message( $uid , $tojid )
+
+    public function authenticate_message($uid, $tojid)
     {
-        $token= DB::loadcache( 'class_toj_authtoken' , $uid );
-        if( !$token )
-        {
-            $token = substr(md5(uniqid(uniqid(),true)),1,8);
-            DB::putcache('class_toj_authtoken',$token,10,$uid);
+        $token = DB::loadcache('class_toj_authtoken', $uid);
+        if (!$token) {
+            $token = substr(md5(uniqid(uniqid(), true)), 1, 8);
+            DB::putcache('class_toj_authtoken', $token, 10, $uid);
         }
         $msg = "請將TOJ的暱稱改為<b>$token</b>後，點擊驗證繼續操作。<br>驗證完畢後您可以修改回原暱稱";
+
         return $msg;
     }
-    
-    function authenticate( $uid , $tojid )
+
+    public function authenticate($uid, $tojid)
     {
-        $res = array(false,'unknown');
-        $token = DB::loadcache( 'class_toj_authtoken' , $uid );
-        if( $token === false )
-        {
+        $res = [false, 'unknown'];
+        $token = DB::loadcache('class_toj_authtoken', $uid);
+        if ($token === false) {
             $res[1] = 'No TOKEN . Please reload page';
+
             return $res;
         }
         $data = $this->getuserinfo($tojid);
-        if( $data && $data->nick == $token )
-        {
-            DB::deletecache( 'class_toj_authtoken' , $uid );
+        if ($data && $data->nick == $token) {
+            DB::deletecache('class_toj_authtoken', $uid);
+
             return true;
         }
         $res[1] = '驗證錯誤，請重新嘗試 ('.htmlspecialchars($data->nick).')';
+
         return $res;
     }
 }

@@ -1,6 +1,5 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
+if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
@@ -8,12 +7,12 @@ if(!defined('IN_TEMPLATE'))
     <div class="row">
         <div class="col-lg-offset-4 col-lg-4 login_form">
             <center>
-                <h3><?php echo($_E['site']['name']);?><br><small class="login_sub_title">Terms & Conditions</small></h3>
+                <h3><?php echo $_E['site']['name']; ?><br><small class="login_sub_title">Terms & Conditions</small></h3>
                 <div class=".container-fluid">
                 
                     <div>
                         <div id="license">
-                        <?php Render::renderSingleTemplate('mit_license','user'); ?>
+                        <?php Render::renderSingleTemplate('mit_license', 'user'); ?>
                         </div>
                     </div>
                     

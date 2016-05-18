@@ -1,7 +1,6 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
-  exit('Access denied');
+if (!defined('IN_TEMPLATE')) {
+    exit('Access denied');
 }
 ?>
 <div class = "container" >
@@ -147,7 +146,7 @@ if(!defined('IN_TEMPLATE'))
     </div>
     <div class="row">
         <h1>MUSIC LOGIN ONLY~</h1>
-        <?php if($_G['uid']): ?>
+        <?php if ($_G['uid']): ?>
         <div class="col-md-5">
             <audio controls>
                 <source src="http://pc2.tfcis.org/lfs/20140830/egg.mp3">

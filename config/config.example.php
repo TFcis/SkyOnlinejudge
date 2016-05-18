@@ -1,5 +1,6 @@
 <?php
-$_config = array();
+
+$_config = [];
 // ----------------------------  CONFIG DB  ----------------------------- //
 $_config['db']['dbhost'] = 'localhost';
 $_config['db']['dbuser'] = 'root';
@@ -8,4 +9,3 @@ $_config['db']['dbcharset'] = 'utf8';
 $_config['db']['dbname'] = 'test';
 $_config['db']['tablepre'] = 'tojtest';
 $_config['cookie']['namepre'] = 'tojtest';
-?>

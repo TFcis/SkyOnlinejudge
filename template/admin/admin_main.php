@@ -1,7 +1,6 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
-  exit('Access denied');
+if (!defined('IN_TEMPLATE')) {
+    exit('Access denied');
 }
 ?>
 <script>
@@ -53,9 +52,11 @@ if(!defined('IN_TEMPLATE'))
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="plugindb">插件<span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="plugindb">
-                    <?php foreach($_E['template']['pluginfolders'] as $folder){ ?>
+                    <?php foreach ($_E['template']['pluginfolders'] as $folder) {
+    ?>
                     <li navpage="plugins/list/?folder=<?=urlencode($folder)?>"><a href="#"><?=htmlentities($folder)?></a></li>
-                    <?php }?>
+                    <?php 
+}?>
                 </ul>
             </li>
         </ul>
