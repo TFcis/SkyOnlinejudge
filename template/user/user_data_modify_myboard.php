@@ -1,6 +1,5 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
+if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
@@ -15,12 +14,17 @@ if(!defined('IN_TEMPLATE'))
             </tr>
         </thead>
         <tbody>
-        <?php foreach($_E['template']['row'] as $row){ ?>
+        <?php foreach ($_E['template']['row'] as $row) {
+    ?>
             <tr style = "height: 40px">
-                <td><?=$row['id'];?></td>
-                <td><a href="<?=$_E['SITEROOT']?>rank.php?mod=cbedit&id=<?=$row['id'];?>"><?=htmlspecialchars($row['name']);?></a></td>
+                <td><?=$row['id'];
+    ?></td>
+                <td><a href="<?=$_E['SITEROOT']?>rank.php?mod=cbedit&id=<?=$row['id'];
+    ?>"><?=htmlspecialchars($row['name']);
+    ?></a></td>
             </tr>
-        <?php }?>
+        <?php 
+}?>
         </tbody>
         </table>
     </div>

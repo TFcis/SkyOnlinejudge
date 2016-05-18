@@ -1,6 +1,5 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
+if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
@@ -72,14 +71,21 @@ $(document).ready(function()
                 <input type='hidden' name='page' value='ojacct'>
                 <input type='hidden' name='id' value='<?=$tmpl['showid']?>'>
                 
-                <?php foreach($tmpl['oj'] as $oj){ ?>
+                <?php foreach ($tmpl['oj'] as $oj) {
+    ?>
                 <div class="form-group">
                     <label class="col-md-3 control-label"><?=$oj['name']?></label>
-                    <div class="col-md-4"><?php if($oj['user']['approve']==1)$disabled='disabled';else $disabled='';?>
+                    <div class="col-md-4"><?php if ($oj['user']['approve'] == 1) {
+    $disabled = 'disabled';
+} else {
+    $disabled = '';
+}
+    ?>
                         <input type="text" class="form-control" name="<?=$oj['class']?>" placeholder="<?=$oj['description']?>" value="<?=$oj['user']['account']?>" <?=$disabled?>>
                     </div>
-                    <div class="col-md-5"><?=$oj['info'];?>
-                    <?php if( $oj['user']['account'] && $oj['user']['approve'] == 0 && method_exists($oj['c'],'authenticate_message') ) : ?>
+                    <div class="col-md-5"><?=$oj['info'];
+    ?>
+                    <?php if ($oj['user']['account'] && $oj['user']['approve'] == 0 && method_exists($oj['c'], 'authenticate_message')) : ?>
                         <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal-<?=$oj['class']?>">
                             立即驗證帳號
                         </button>
@@ -92,7 +98,8 @@ $(document).ready(function()
                                     </div>
                                     
                                     <div class="modal-body">
-                                    <?= $oj['c']->authenticate_message($tmpl['showid'],$oj['user']['account']); ?>
+                                    <?= $oj['c']->authenticate_message($tmpl['showid'], $oj['user']['account']);
+    ?>
                                     </div>
                                     
                                     <div class="modal-footer">
@@ -103,10 +110,12 @@ $(document).ready(function()
                                 </div>
                             </div>
                         </div>
-                    <?php endif;?>
+                    <?php endif;
+    ?>
                     </div>
                 </div>
-                <?php } ?>
+                <?php 
+} ?>
                 
                 <div class="form-group">
                     <div class="col-sm-offset-7 col-md-5">

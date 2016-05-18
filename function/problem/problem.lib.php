@@ -1,6 +1,6 @@
 <?php
-if( !defined('IN_SKYOJSYSTEM') )
-{
+
+if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
-require_once($_E['ROOT'].'/function/common/problem.php');
+require_once $_E['ROOT'].'/function/common/problem.php';

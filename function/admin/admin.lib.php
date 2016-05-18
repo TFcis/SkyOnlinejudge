@@ -1,5 +1,5 @@
 <?php
-if( !defined('IN_SKYOJSYSTEM') )
-{
+
+if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }

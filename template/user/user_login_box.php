@@ -1,6 +1,5 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
+if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
@@ -61,7 +60,7 @@ $(document).ready(function()
     <div class= "row">
         <div class="col-lg-offset-4 col-lg-4 login_form"><!--mask-->
             <center>
-                <h3><?php echo($_E['site']['name']);?><br><small class="login_sub_title">User Login</small></h3>
+                <h3><?php echo $_E['site']['name']; ?><br><small class="login_sub_title">User Login</small></h3>
                 <div class="text-right">
                     <p><i><small class="login_comment">-Programming Is the New Literacy</small></i></p>
                 </div>

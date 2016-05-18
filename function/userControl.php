@@ -1,201 +1,200 @@
 <?php
-if(!defined('IN_SKYOJSYSTEM'))
-{
-  exit('Access denied');
+
+if (!defined('IN_SKYOJSYSTEM')) {
+    exit('Access denied');
 }
 
 class userControl
 {
     //Cookie Functions
-    static function SetCookie(string $name,string $value,int $expire = 0)
+    public static function SetCookie(string $name, string $value, int $expire = 0)
     {
-        global $_config,$_E;     
-        return setcookie($_config['cookie']['namepre'].'_'.$name,$value,$expire,$_E['SITEDIR'],'',false,true);
-    }
-    
-    static function RemoveCookie(string $name)
-    {
-        return userControl::SetCookie($name,'');
+        global $_config,$_E;
+
+        return setcookie($_config['cookie']['namepre'].'_'.$name, $value, $expire, $_E['SITEDIR'], '', false, true);
     }
 
-    static function isCookieSet(string $name)
+    public static function RemoveCookie(string $name)
+    {
+        return self::SetCookie($name, '');
+    }
+
+    public static function isCookieSet(string $name)
     {
         global $_config;
+
         return isset($_COOKIE[$_config['cookie']['namepre'].'_'.$name]);
     }
 
-    static function GetCookie(string $name)
+    public static function GetCookie(string $name)
     {
         global $_config;
-        if( userControl::isCookieSet($name) )
+        if (self::isCookieSet($name)) {
             return $_COOKIE[$_config['cookie']['namepre'].'_'.$name];
+        }
+
         return false;
     }
 
     //Set a Token to Cookie and return Token
-    static function RegisterToken(string $namespace,int $timeleft,bool $usecookie = true)
+    public static function RegisterToken(string $namespace, int $timeleft, bool $usecookie = true)
     {
         global $_G,$_E,$_config;
-        
-        if( $_G['uid']==0 )
-        {
-            userControl::SetCookie('uid','0',time()+3600);
+
+        if ($_G['uid'] == 0) {
+            self::SetCookie('uid', '0', time() + 3600);
         }
-        
+
         $token = GenerateRandomString(TOKEN_LEN);
         $timeout = time() + $timeleft;
-        
-        $_SESSION[$namespace]['token']      = $token;
-        $_SESSION[$namespace]['timeout']    = $timeout;
-        $_SESSION[$namespace]['uid']        = $_G['uid'];
-        if( $usecookie )
-        {
-            userControl::SetCookie($namespace,$token,$timeout);
+
+        $_SESSION[$namespace]['token'] = $token;
+        $_SESSION[$namespace]['timeout'] = $timeout;
+        $_SESSION[$namespace]['uid'] = $_G['uid'];
+        if ($usecookie) {
+            self::SetCookie($namespace, $token, $timeout);
         }
-        LOG::msg(Level::Debug,"Reg Token [$namespace]$token");
+        LOG::msg(Level::Debug, "Reg Token [$namespace]$token");
+
         return $token;
     }
 
-    static function DeleteToken(string $namespace,bool $usecookie = true)
+    public static function DeleteToken(string $namespace, bool $usecookie = true)
     {
-        if( $usecookie && userControl::isCookieSet($namespace) )
-            userControl::RemoveCookie($namespace);
-        if( isset($_SESSION[$namespace]) )
-        {
+        if ($usecookie && self::isCookieSet($namespace)) {
+            self::RemoveCookie($namespace);
+        }
+        if (isset($_SESSION[$namespace])) {
             unset($_SESSION[$namespace]);
         }
     }
 
-    static function isToeknSet(string $namespace)
+    public static function isToeknSet(string $namespace)
     {
         return isset($_SESSION[$namespace]);
     }
-    
-    static function getSavedToken(string $namespace)
+
+    public static function getSavedToken(string $namespace)
     {
-        if( !userControl::isToeknSet($namespace) )
+        if (!self::isToeknSet($namespace)) {
             return false;
+        }
+
         return $_SESSION[$namespace]['token'];
     }
 
-    #bool userControl::checktoken(namespace)
-    #if function return true ,it mean two things:
-    #1.$_COOKIE[$_config['cookie']['namepre'].'_uid'] is leagl
-    #2.token $namespace is leagl
-    static function CheckToken(string $namespace,string $rowstring = null)
+    //bool userControl::checktoken(namespace)
+    //if function return true ,it mean two things:
+    //1.$_COOKIE[$_config['cookie']['namepre'].'_uid'] is leagl
+    //2.token $namespace is leagl
+    public static function CheckToken(string $namespace, string $rowstring = null)
     {
         global $_G,$_config;
-        if( isset($rowstring) )
-        {
+        if (isset($rowstring)) {
             $token = $rowstring;
-        }
-        else
-        {
-            if( !userControl::isCookieSet($namespace) || !userControl::isCookieSet('uid') )
-            {
+        } else {
+            if (!self::isCookieSet($namespace) || !self::isCookieSet('uid')) {
                 return false;
-            }
-            else
-            {
-                $token = userControl::GetCookie($namespace);
+            } else {
+                $token = self::GetCookie($namespace);
             }
         }
 
-        $uid   = userControl::GetCookie('uid');
+        $uid = self::GetCookie('uid');
 
-        if( !preg_match('/^[a-zA-Z0-9]+$/',$token) ||
-            !preg_match('/^[0-9]+$/',$uid))
-        {
+        if (!preg_match('/^[a-zA-Z0-9]+$/', $token) ||
+            !preg_match('/^[0-9]+$/', $uid)) {
             return false;
         }
 
-        if( isset($_SESSION[$namespace]) )
-        {
-            if( $_SESSION[$namespace]['uid']  == $uid && 
-                $_SESSION[$namespace]['token']== $token &&
-                time() < $_SESSION[$namespace]['timeout'] )
+        if (isset($_SESSION[$namespace])) {
+            if ($_SESSION[$namespace]['uid']  == $uid &&
+                $_SESSION[$namespace]['token'] == $token &&
+                time() < $_SESSION[$namespace]['timeout']) {
                 return true;
+            }
         }
+
         return false;
     }
 
-    #userControl::intro()
-    #this function must call first to check if user has logined and set var $_G
-    static function intro()
+    //userControl::intro()
+    //this function must call first to check if user has logined and set var $_G
+    public static function intro()
     {
         global $_G,$permission,$_config;
         $acctable = DB::tname('account');
-        if( userControl::CheckToken('login') )
-        {
+        if (self::CheckToken('login')) {
             //load user data
             //$_COOKIE[$_config['cookie']['namepre'].'_uid'] is checked in userControl::checktoken
-            $loginuid = userControl::GetCookie('uid');
+            $loginuid = self::GetCookie('uid');
 
-            if( $sqldata = DB::fetch("SELECT * FROM  `$acctable` ".
-                                     "WHERE `uid` = ?",array($loginuid)) )
-            {
+            if ($sqldata = DB::fetch("SELECT * FROM  `$acctable` ".
+                                     'WHERE `uid` = ?', [$loginuid])) {
                 $_G = $sqldata;
-            }
-            else
-            {
-                LOG::msg(Level::Error,"Caonnot Load login info from DB",$loginuid);
+            } else {
+                LOG::msg(Level::Error, 'Caonnot Load login info from DB', $loginuid);
                 $_G = $permission['guest'];
             }
-        }
-        else // guest
-        {
-            userControl::DeleteToken('login');
+        } else {
+            // guest
+
+            self::DeleteToken('login');
             $_G = $permission['guest'];
         }
     }
 
-    static function SetLoginToken($uid)
+    public static function SetLoginToken($uid)
     {
         global $_G,$_E,$_config;
         $acctable = DB::tname('account');
-        
-        if( $sqldata = DB::fetchEx("SELECT * FROM  `$acctable` ".
-                                    "WHERE `uid` = ? ",$uid) )
-        {
+
+        if ($sqldata = DB::fetchEx("SELECT * FROM  `$acctable` ".
+                                    'WHERE `uid` = ? ', $uid)) {
             $_G['uid'] = $uid;
-            userControl::RegisterToken('login',864000);
-            userControl::SetCookie('uid',$uid,time()+864000);
+            self::RegisterToken('login', 864000);
+            self::SetCookie('uid', $uid, time() + 864000);
+
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    static function DelLoginToken()
+    public static function DelLoginToken()
     {
         global $_G;
-        userControl::DeleteToken('login');
+        self::DeleteToken('login');
     }
 
-    static function getuserdata( $table ,$uid = null )
+    public static function getuserdata($table, $uid = null)
     {
         $table = DB::tname($table);
     }
 
-    static function getpermission($uid)
+    public static function getpermission($uid)
     {
         global $_G,$_E,$_config;
-        if( $uid == -1 )
+        if ($uid == -1) {
             return false;
-        if( $uid == $_G['uid'])
+        }
+        if ($uid == $_G['uid']) {
             return true;
-        if(in_array($_G['uid'],$_E['site']['admin']))
+        }
+        if (in_array($_G['uid'], $_E['site']['admin'])) {
             return true;
+        }
+
         return false;
     }
 
-    static function isAdmin( $uid = null )
+    public static function isAdmin($uid = null)
     {
         global $_G,$_E,$_config;
-        if($uid === null)
-            return in_array($_G['uid'],$_E['site']['admin']);
-        return in_array($uid,$_E['site']['admin']);
+        if ($uid === null) {
+            return in_array($_G['uid'], $_E['site']['admin']);
+        }
+
+        return in_array($uid, $_E['site']['admin']);
     }
 }

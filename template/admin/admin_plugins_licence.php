@@ -1,6 +1,5 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
+if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
@@ -12,7 +11,7 @@ if(!defined('IN_TEMPLATE'))
                 <div class="container-fluid">
                     <div>
                         <div id="license">
-                        <?php Render::renderSingleTemplate($tmpl['licence'][0],$tmpl['licence'][1]); ?>
+                        <?php Render::renderSingleTemplate($tmpl['licence'][0], $tmpl['licence'][1]); ?>
                         </div>
                     </div>
                     <div style = "text-align: right">

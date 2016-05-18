@@ -1,7 +1,6 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
-  exit('Access denied');
+if (!defined('IN_TEMPLATE')) {
+    exit('Access denied');
 }
 ?>
 
@@ -51,9 +50,9 @@ if(!defined('IN_TEMPLATE'))
     $(document).ready(function()
     {
         //$("#display").html("SUBMIT...");
-        <?php if($tmpl['cbrebuild']):?>
+        <?php if ($tmpl['cbrebuild']):?>
         build_cb_data('all','<?=$tmpl['cbrebuildkey']?>');
-        <?php endif;?>
+        <?php endif; ?>
         //$(".problemname").popover({trigger : 'hover'});
     })
 </script>
@@ -62,11 +61,11 @@ if(!defined('IN_TEMPLATE'))
     <div>
         <div class="page-header">
             <h1><?=htmlspecialchars($tmpl['title'])?> <small>Statistics
-            <?php if(userControl::getpermission($tmpl['owner'])): ?>
-            <a class = "icon-bttn" href='<?=$_E['SITEROOT']?>rank.php?mod=cbedit&id=<?=$tmpl['id'];?>'>
+            <?php if (userControl::getpermission($tmpl['owner'])): ?>
+            <a class = "icon-bttn" href='<?=$_E['SITEROOT']?>rank.php?mod=cbedit&id=<?=$tmpl['id']; ?>'>
                 <span class="pointer glyphicon glyphicon-pencil"  title="編輯"></span>
             </a>
-                <?php if( $tmpl['state']==1 ) : ?>
+                <?php if ($tmpl['state'] == 1) : ?>
             <a class = "icon-bttn" onclick="build_cb_data('all')">
                 <span class="pointer glyphicon glyphicon-refresh"  title="重新擷取"></span>
             </a>
@@ -77,7 +76,9 @@ if(!defined('IN_TEMPLATE'))
             <div class='container-fluid'>
                 <div class="row">
                     <div class="col-xs-4 col-md-4 text-left">
-                        <a href="<?=$_E['SITEROOT']?>rank.php?mod=commonboard&id=<?=$tmpl['leftid']?>" class="btn btn-primary btn-sm active" <?php if(!$tmpl['leftid'])echo('disabled="disabled"');?>>
+                        <a href="<?=$_E['SITEROOT']?>rank.php?mod=commonboard&id=<?=$tmpl['leftid']?>" class="btn btn-primary btn-sm active" <?php if (!$tmpl['leftid']) {
+    echo 'disabled="disabled"';
+} ?>>
                         <span class="glyphicon glyphicon-arrow-left"></span>
                         </a>
                     </div>
@@ -87,7 +88,9 @@ if(!defined('IN_TEMPLATE'))
                         </a>
                     </div>
                     <div class="col-xs-4 col-md-4 text-right">
-                        <a href="<?=$_E['SITEROOT']?>rank.php?mod=commonboard&id=<?=$tmpl['rightid']?>" class="btn btn-primary btn-sm active" <?php if(!$tmpl['rightid'])echo('disabled="disabled"');?>>
+                        <a href="<?=$_E['SITEROOT']?>rank.php?mod=commonboard&id=<?=$tmpl['rightid']?>" class="btn btn-primary btn-sm active" <?php if (!$tmpl['rightid']) {
+    echo 'disabled="disabled"';
+} ?>>
                         <span class="glyphicon glyphicon-arrow-right"></span>
                         </a>
                     </div>
@@ -97,10 +100,10 @@ if(!defined('IN_TEMPLATE'))
         </div>
     </div>
     <!--table-->
-    <?php if($tmpl['state']==1): ?>
-        <?php Render::renderSingleTemplate('rank_statboard_cmtable','rank'); ?>
-    <?php elseif($tmpl['state']==2): ?>
-        <?php if($tmpl['rank_cb_fzboard']): ?>
+    <?php if ($tmpl['state'] == 1): ?>
+        <?php Render::renderSingleTemplate('rank_statboard_cmtable', 'rank'); ?>
+    <?php elseif ($tmpl['state'] == 2): ?>
+        <?php if ($tmpl['rank_cb_fzboard']): ?>
             <?php Render::rendercachehtml($tmpl['rank_cb_fzboard']); ?>
         <?php else:?>
             <?php Render::renderSingleTemplate('nonedefined'); ?>
@@ -114,8 +117,8 @@ if(!defined('IN_TEMPLATE'))
     <div class="row">
         <h1>Announcement </h1>
         <div class="well" style="background-color:#565656">
-            <?php if( empty($tmpl['announce']) ): ?>No Announcement...
-            <?php else: ?><?=$tmpl['announce']?><?php endif;?>
+            <?php if (empty($tmpl['announce'])): ?>No Announcement...
+            <?php else: ?><?=$tmpl['announce']?><?php endif; ?>
         </div>
     </div>
     

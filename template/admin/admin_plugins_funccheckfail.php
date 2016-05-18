@@ -1,7 +1,6 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
-  exit('Access denied');
+if (!defined('IN_TEMPLATE')) {
+    exit('Access denied');
 }
 ?>
 <div class="container">
@@ -19,12 +18,14 @@ if(!defined('IN_TEMPLATE'))
                 </tr>
             </thead>
             <tbody>
-            <?php $i=1;foreach($tmpl['fail_func'] as $func){ ?>
+            <?php $i = 1; foreach ($tmpl['fail_func'] as $func) {
+     ?>
                 <tr>
                     <td><?=$i++?></td>
                     <td><?=htmlentities($func)?></td>
                 </tr>
-            <?php }?>
+            <?php 
+ }?>
             </tbody>
         </table>
         <br>
