@@ -17,13 +17,13 @@ class userControl
     {
         return userControl::SetCookie($name,'');
     }
-    
+
     static function isCookieSet(string $name)
     {
         global $_config;
         return isset($_COOKIE[$_config['cookie']['namepre'].'_'.$name]);
     }
-    
+
     static function GetCookie(string $name)
     {
         global $_config;
@@ -31,8 +31,9 @@ class userControl
             return $_COOKIE[$_config['cookie']['namepre'].'_'.$name];
         return false;
     }
+
     //Set a Token to Cookie and return Token
-    static function RegisterToken(string $namespace,int $timeleft)
+    static function RegisterToken(string $namespace,int $timeleft,bool $usecookie = true)
     {
         global $_G,$_E,$_config;
         
@@ -47,42 +48,67 @@ class userControl
         $_SESSION[$namespace]['token']      = $token;
         $_SESSION[$namespace]['timeout']    = $timeout;
         $_SESSION[$namespace]['uid']        = $_G['uid'];
-        userControl::SetCookie($namespace,$token,$timeout);
+        if( $usecookie )
+        {
+            userControl::SetCookie($namespace,$token,$timeout);
+        }
         LOG::msg(Level::Debug,"Reg Token [$namespace]$token");
         return $token;
     }
-    
-    static function DeleteToken(string $namespace)
+
+    static function DeleteToken(string $namespace,bool $usecookie = true)
     {
-        if( userControl::isCookieSet($namespace) )
+        if( $usecookie && userControl::isCookieSet($namespace) )
             userControl::RemoveCookie($namespace);
         if( isset($_SESSION[$namespace]) )
         {
             unset($_SESSION[$namespace]);
         }
     }
+
+    static function isToeknSet(string $namespace)
+    {
+        return isset($_SESSION[$namespace]);
+    }
     
+    static function getSavedToken(string $namespace)
+    {
+        if( !userControl::isToeknSet($namespace) )
+            return false;
+        return $_SESSION[$namespace]['token'];
+    }
+
     #bool userControl::checktoken(namespace)
     #if function return true ,it mean two things:
     #1.$_COOKIE[$_config['cookie']['namepre'].'_uid'] is leagl
     #2.token $namespace is leagl
-    static function CheckToken(string $namespace)
+    static function CheckToken(string $namespace,string $rowstring = null)
     {
         global $_G,$_config;
-        if( !userControl::isCookieSet($namespace) || !userControl::isCookieSet('uid') )
+        if( isset($rowstring) )
         {
-            return false;
+            $token = $rowstring;
         }
-        
-        $token = userControl::GetCookie($namespace);
+        else
+        {
+            if( !userControl::isCookieSet($namespace) || !userControl::isCookieSet('uid') )
+            {
+                return false;
+            }
+            else
+            {
+                $token = userControl::GetCookie($namespace);
+            }
+        }
+
         $uid   = userControl::GetCookie('uid');
-        
+
         if( !preg_match('/^[a-zA-Z0-9]+$/',$token) ||
             !preg_match('/^[0-9]+$/',$uid))
         {
             return false;
         }
-        
+
         if( isset($_SESSION[$namespace]) )
         {
             if( $_SESSION[$namespace]['uid']  == $uid && 
@@ -92,7 +118,7 @@ class userControl
         }
         return false;
     }
-    
+
     #userControl::intro()
     #this function must call first to check if user has logined and set var $_G
     static function intro()
@@ -122,7 +148,7 @@ class userControl
             $_G = $permission['guest'];
         }
     }
-    
+
     static function SetLoginToken($uid)
     {
         global $_G,$_E,$_config;
@@ -141,18 +167,18 @@ class userControl
             return false;
         }
     }
-    
+
     static function DelLoginToken()
     {
         global $_G;
         userControl::DeleteToken('login');
     }
-    
+
     static function getuserdata( $table ,$uid = null )
     {
         $table = DB::tname($table);
     }
-    
+
     static function getpermission($uid)
     {
         global $_G,$_E,$_config;
@@ -164,6 +190,7 @@ class userControl
             return true;
         return false;
     }
+
     static function isAdmin( $uid = null )
     {
         global $_G,$_E,$_config;

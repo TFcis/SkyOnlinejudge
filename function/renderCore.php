@@ -34,30 +34,50 @@ class Render
     
     static function renderSingleTemplate( $pagename , $namespace = 'common' )
     {
-        global $_E,$_G;
-        if( !isset($_E['template']) )
-        {
-            $_E['template'] = array();
-            $tmpl = array();
+        try{
+            global $_E,$_G;
+            if( !isset($_E['template']) )
+            {
+                $_E['template'] = array();
+                $tmpl = array();
+            }
+            else
+            {
+                $tmpl = &$_E['template'];
+            }
+            $path = $_E['ROOT']."/template/$namespace/$pagename.php";
+            $lang = getLangDirBase()."$namespace/$pagename.php";
+            if( file_exists($lang) )
+            {
+                require_once($lang);
+            }
+            if( file_exists($path) )
+            {
+                require($path);
+            }else
+            {
+                return false;
+            }
         }
-        else
+        catch(Exception $e)
         {
-            $tmpl = &$_E['template'];
+            echo "Render Exception. Please call admin. Logged";
+            Log::msg(Level::Error,"Render Exception",$pagename,$namespace,$e);
+            die(0);
         }
-        $path = $_E['ROOT']."/template/$namespace/$pagename.php";
-        $lang = getLangDirBase()."$namespace/$pagename.php";
-        if( file_exists($lang) )
-        {
-            require_once($lang);
-        }
-        if( file_exists($path) )
-        {
-            require($path);
-            return true;
-        }
-        return false;
+        return true;
     }
     
+    //Genformat : it will use sprintf($url,pid) to gen url!
+    //care of any type of injection
+    static function renderForm(FormInfo $formInfo,string $id)
+    {
+        global $_E;
+        $_E['template']['_formInfo'] = $formInfo;
+        $_E['template']['_id'] = $id;
+        Render::renderSingleTemplate('common_form');
+    }
+
     //Genformat : it will use sprintf($url,pid) to gen url!
     //care of any type of injection
     static function renderPagination(PageList $p,string $url,int $now)
@@ -68,6 +88,7 @@ class Render
         $_E['template']['_pagelist_url'] = $url;
         Render::renderSingleTemplate('common_pagination');
     }
+
     //work in progress
     static function renderStylesheetLink($namespace = 'common', $options = '') {
         global $_E,$_G;
@@ -111,7 +132,7 @@ class Render
         }
         Render::renderSingleTemplate('common_footer');
     }
-    
+
     static function ShowMessage($cont)
     {
         global $_E;

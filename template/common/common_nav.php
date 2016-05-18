@@ -40,21 +40,22 @@ if(!defined('IN_TEMPLATE'))
                             <li><a href="<?=$_E['SITEROOT']?>rank.php">Stats</a></li>
                             <li><a href="<?=$_E['SITEROOT']?>code.php">Codepad</a></li>
                             <li class="divider"></li>
-                            <li><a href="http://forum.tfcis.org/forum.php?mod=group&fid=107" target="_new">Discuss</a></li>
+                            <li><a href="http://forum.tfcis.org/forum.php?mod=group&fid=107" target="_blank">Discuss</a></li>
                         </ul>
                     </li>
                 </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <?php if( !$_G['uid']): ?>
-                <li><a href="<?=$_E['SITEROOT']?>user.php/login">LOGIN</a></li>
-                <?php else: ?>
-                    <?php if(userControl::isAdmin()):?>
-                <li><a href="<?=$_E['SITEROOT']?>admin.php">Admin</a></li>
-                    <?php endif; ?>
-                <li><a href="<?=$_E['SITEROOT']."user.php/view/".$_G['uid']?>"><?php echo(htmlspecialchars($_G['nickname']));?></a></li>
-                <li><a href="<?=$_E['SITEROOT']?>user.php/logout">LOGOUT</a></li>
-                <?php endif;?>
-            </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <?php if( !$_G['uid']): ?>
+                    <li><a href="<?=$_E['SITEROOT']?>user.php/login">LOGIN</a></li>
+                    <?php else: ?>
+                        <?php if(userControl::isAdmin()):?>
+                    <li><a href="<?=$_E['SITEROOT']?>admin.php">Admin</a></li>
+                        <?php endif; ?>
+                    <li><a href="<?=$_E['SITEROOT']."user.php/view/".$_G['uid']?>"><?php echo(htmlspecialchars($_G['nickname']));?></a></li>
+                    <li><a href="<?=$_E['SITEROOT']?>user.php/logout">LOGOUT</a></li>
+                    <?php endif;?>
+                </ul>
+            </div>
         </div>
     </nav>
     <?php if($_E['template']['error']):?>
