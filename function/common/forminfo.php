@@ -8,14 +8,31 @@ if (!defined('IN_SKYOJSYSTEM')) {
 //todo : add confoser
 class FormInput
 {
-    private $_name;
-    private $_id;
-    private $_type;
-    private $_title;
-    private $_option;
+    const BLOCK_INVALID = "invalid";
+    
+    ///html_gen_type
+    private $type = "";
+    
+    ///html tags
+    private $tags = [];
 
     public function __construct(array $info)
     {
+        if( !isset($info['block']) ) {
+            Log::msg(Level::Error,'FormInput build missing block',$info);
+            $this->type = FormInput::TYPE_INVALID;
+            return;
+        }
+        
+        $info = strtolower($info);
+        switch( $info['block'] ) {
+            case 'inputs':
+            case 'hr':
+            default:
+                $this->type = FormInput::TYPE_INVALID;
+                Log::msg(Level::Error,'No such block case!',$info);
+                return;
+        }
         $this->_name = isset($info['name'])  ? $info['name'] : '';
         $this->_id = isset($info['id'])    ? $info['id']  : $this->_name;
         $this->_type = isset($info['type'])  ? $info['type'] : 'text';
