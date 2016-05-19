@@ -1,7 +1,6 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
-  exit('Access denied');
+if (!defined('IN_TEMPLATE')) {
+    exit('Access denied');
 }
 ?>
 <div class="container">
@@ -19,13 +18,15 @@ if(!defined('IN_TEMPLATE'))
             </tr>
         </thead>
         <tbody>
-        <?php foreach($tmpl['syslog'] as $row){ ?>
+        <?php foreach ($tmpl['syslog'] as $row) {
+    ?>
             <tr>
                 <td><?=htmlentities($row['timestamp'])?></td>
                 <td><?=htmlentities(LevelName($row['level']))?></td>
                 <td><?=nl2br(htmlentities($row['message']))?></td>
             </tr>
-        <?php }?>
+        <?php 
+}?>
         </tbody>
         
         </table>

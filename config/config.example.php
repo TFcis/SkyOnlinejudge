@@ -1,5 +1,6 @@
 <?php
-$_config = array();
+
+$_config = [];
 // ----------------------------  CONFIG DB  ----------------------------- //
 $_config['db']['query_string']  = 'mysql:host=localhost;dbname=sky';
 $_config['db']['dbuser']        = '';

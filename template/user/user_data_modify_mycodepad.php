@@ -1,6 +1,5 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
+if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
@@ -17,10 +16,14 @@ if(!defined('IN_TEMPLATE'))
             </tr>
         </thead>
         <tbody>
-        <?php foreach($_E['template']['row'] as $row){ ?>
+        <?php foreach ($_E['template']['row'] as $row) {
+    ?>
             <tr style = "height: 40px">
-                <td><?=$row['id'];?></td>
-                <td><a href="<?=$_E['SITEROOT']?>code.php/view/<?=$row['hash'];?>"><?=htmlspecialchars($row['hash']);?></a></td>
+                <td><?=$row['id'];
+    ?></td>
+                <td><a href="<?=$_E['SITEROOT']?>code.php/view/<?=$row['hash'];
+    ?>"><?=htmlspecialchars($row['hash']);
+    ?></a></td>
                 <td>
                     <a class="icon-bttn">
                         <span class="glyphicon glyphicon-pencil" title="編輯"></span>
@@ -29,9 +32,11 @@ if(!defined('IN_TEMPLATE'))
                         <span class="glyphicon glyphicon-trash" title="移除"></span>
                     </a>
                 </td>
-                <td><?=$row['timestamp'];?></td>
+                <td><?=$row['timestamp'];
+    ?></td>
             </tr>
-        <?php }?>
+        <?php 
+}?>
         </tbody>
         </table>
     </div>

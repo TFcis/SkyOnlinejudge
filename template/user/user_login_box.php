@@ -1,13 +1,12 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
+if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
 <script src="<?=$_E['SITEROOT']?>js/bignumber.min.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
-<script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
-<script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/components/pad-zeropadding.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-zeropadding.js"></script>
 <script>
 GA = new BigNumber('<?=$tmpl['dh_ga']?>');
 PublicPrime = new BigNumber('<?=$tmpl['dh_prime']?>');
@@ -61,7 +60,7 @@ $(document).ready(function()
     <div class= "row">
         <div class="col-lg-offset-4 col-lg-4 login_form"><!--mask-->
             <center>
-                <h3><?php echo($_E['site']['name']);?><br><small class="login_sub_title">User Login</small></h3>
+                <h3><?php echo $_E['site']['name']; ?><br><small class="login_sub_title">User Login</small></h3>
                 <div class="text-right">
                     <p><i><small class="login_comment">-Programming Is the New Literacy</small></i></p>
                 </div>

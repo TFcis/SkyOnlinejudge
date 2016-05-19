@@ -1,6 +1,5 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
+if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
@@ -44,14 +43,14 @@ if(!defined('IN_TEMPLATE'))
         
         <div style = "width: 70%; float: left" class = "col-md-7">
             <h1><?=$tmpl['nickname']?><h1>
-            <?php if(!empty($tmpl['quote'])): ?>
+            <?php if (!empty($tmpl['quote'])): ?>
             <blockquote style = "font-size: 14px">
                 <p><?=$tmpl['quote']?></p>
-                <?php if(!empty($tmpl['quote_ref'])): ?>
+                <?php if (!empty($tmpl['quote_ref'])): ?>
                 <footer><?=$tmpl['quote_ref']?></footer>
-                <?php endif;?>
+                <?php endif; ?>
             </blockquote>
-            <?php endif;?>
+            <?php endif; ?>
         </div>
         
     </div>

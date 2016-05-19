@@ -1,43 +1,42 @@
 <?php
-$isCLI = ( php_sapi_name() == 'cli' );
-if(!$isCLI)
-{
-    die("Please run me from the console - not from a web-browser!");
+
+$isCLI = (php_sapi_name() == 'cli');
+if (!$isCLI) {
+    die('Please run me from the console - not from a web-browser!');
 }
-require_once('../config/config.php');
-exit("Old Function!");
-function run($str,$abort = true)
+require_once '../config/config.php';
+exit('Old Function!');
+function run($str, $abort = true)
 {
-    if(!mysql_query($str))
-    {
-        if($abort)
+    if (!mysql_query($str)) {
+        if ($abort) {
             exit(mysql_error()."\n".$str);
-        else
+        } else {
             echo mysql_error()."\n".$str."\n";
-    }
-    else
-    {
-        echo("succ\n");
+        }
+    } else {
+        echo "succ\n";
     }
 }
 function tname($table)
 {
     global $_config;
+
     return $_config['db']['tablepre']."_$table";
 }
 $skysystem = tname('skysystem');
-$account   = tname('account');
+$account = tname('account');
 $usertoken = tname('usertoken');
-$cache     = tname('cache');
-$ojlist    = tname('ojlist');
-$statsboard= tname('statsboard');
-$syslog    = tname('syslog');
-$userojacct= tname('userojacct');
-$codepad   = tname('codepad');
-$profile   = tname('profile');
-//CREATE TABLE 
-$conn = mysql_connect($_config['db']['dbhost'],$_config['db']['dbuser'],$_config['db']['dbpw']);
-if(!$conn){
+$cache = tname('cache');
+$ojlist = tname('ojlist');
+$statsboard = tname('statsboard');
+$syslog = tname('syslog');
+$userojacct = tname('userojacct');
+$codepad = tname('codepad');
+$profile = tname('profile');
+//CREATE TABLE
+$conn = mysql_connect($_config['db']['dbhost'], $_config['db']['dbuser'], $_config['db']['dbpw']);
+if (!$conn) {
     die('ERROR:'.mysql_error());
 }
 echo "MySQL Connect!\n";
@@ -53,19 +52,15 @@ run("CREATE TABLE IF NOT EXISTS `$skysystem` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
 $res = mysql_query("SELECT `var` FROM `$skysystem` WHERE `name` LIKE 'sqlversion'");
-if( $res &&  $data = mysql_fetch_array($res) )
-{
+if ($res &&  $data = mysql_fetch_array($res)) {
     $var = intval($data['var']);
-}
-else
-{
+} else {
     echo mysql_error()."\n";
     $var = 0;
 }
 
 echo "Your Version : $var \n";
-switch($var)
-{
+switch ($var) {
 case 0:
 run("CREATE TABLE IF NOT EXISTS `$account` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
@@ -100,7 +95,6 @@ run("CREATE TABLE IF NOT EXISTS `$ojlist` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
 
-
 /*run("CREATE TABLE IF NOT EXISTS `".tname('userojlist')."` (
   `uid` int(11) NOT NULL,
   `data` text COLLATE utf8_bin NOT NULL,
@@ -108,7 +102,7 @@ run("CREATE TABLE IF NOT EXISTS `$ojlist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 ");*/
 
-run("CREATE TABLE IF NOT EXISTS `".tname('plugin')."` (
+run('CREATE TABLE IF NOT EXISTS `'.tname('plugin').'` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `class` char(64) COLLATE utf8_bin NOT NULL,
   `version` text COLLATE utf8_bin NOT NULL,
@@ -116,7 +110,7 @@ run("CREATE TABLE IF NOT EXISTS `".tname('plugin')."` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `class` (`class`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;");
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;');
 
 run("CREATE TABLE IF NOT EXISTS `$statsboard` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -137,7 +131,7 @@ case 1:
     run("ALTER TABLE  `$account` ADD UNIQUE (`nickname`);");
 //nothing
 case 2:
-    run("ALTER TABLE  `$statsboard` ADD  `announce` TEXT NULL AFTER  `problems` ;",false);
+    run("ALTER TABLE  `$statsboard` ADD  `announce` TEXT NULL AFTER  `problems` ;", false);
 case 3:
     run("CREATE TABLE IF NOT EXISTS `$syslog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -155,7 +149,7 @@ case 3:
   `approve` int(11) NOT NULL,
   PRIMARY KEY (`indexid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
-    run("DROP TABLE  ".tname('userojlist'),false);
+    run('DROP TABLE  '.tname('userojlist'), false);
     run("CREATE TABLE IF NOT EXISTS `$codepad` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `owner` int(11) NOT NULL,
@@ -178,9 +172,6 @@ case 4:
     run("ALTER TABLE `$codepad`  DROP `filename`;");
     run("ALTER TABLE `$codepad` ADD `content` TEXT NULL AFTER `timestamp`;");
 }
-
-    
-
 
 $version = 4;
 run("INSERT INTO `$skysystem`

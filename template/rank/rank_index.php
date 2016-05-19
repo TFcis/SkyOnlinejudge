@@ -1,7 +1,6 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
-  exit('Access denied');
+if (!defined('IN_TEMPLATE')) {
+    exit('Access denied');
 }
 ?>
 <!-- show all load plugins -->
@@ -20,7 +19,8 @@ if(!defined('IN_TEMPLATE'))
                     </tr>
                 </thead>
                 </tbody>
-                    <?php foreach($_E['template']['rank_site'] as $site => $data){?>
+                    <?php foreach ($_E['template']['rank_site'] as $site => $data) {
+    ?>
                     <tr>
                         <td><?=$data['name']?></td>
                         <td><?=$data['author']?></td>
@@ -28,7 +28,8 @@ if(!defined('IN_TEMPLATE'))
                         <td><?=$data['desc']?></td>
                         <td><?=$data['format']?></td>
                     </tr>
-                    <?php }?>
+                    <?php 
+}?>
                 </tbody>
             </table>
         </div>
@@ -39,20 +40,27 @@ if(!defined('IN_TEMPLATE'))
                 <thead>
                     <tr>
                         <th style="padding: 4px;width: 40px;"></th>
-                        <?php foreach($_E['template']['plist'] as $pname ){?>
+                        <?php foreach ($_E['template']['plist'] as $pname) {
+    ?>
                             <th style="padding: 4px;width: 40px;"><?=$pname?></th>
-                        <?php }?>
+                        <?php 
+}?>
                     </tr>
                 </thead>
                 </tbody>
-                    <?php foreach($_E['template']['id'] as $uid => $name){?>
+                    <?php foreach ($_E['template']['id'] as $uid => $name) {
+    ?>
                     <tr>
                         <td><?=$name['nickname']?></td>
-                        <?php foreach($_E['template']['plist'] as $pname ){?>
+                        <?php foreach ($_E['template']['plist'] as $pname) {
+    ?>
                             <td class="<?=$_E['template']['s'][$uid][$pname]?>">●</td>
-                        <?php }?>
+                        <?php 
+}
+    ?>
                     </tr>
-                    <?php }?>
+                    <?php 
+}?>
                 </tbody>
             </table>
         </div>
