@@ -151,21 +151,19 @@ class userControl
     static function getuserdata( $table ,$uid = [] )
     {
         $table = DB::tname($table);
-		$userdata=[];
-		foreach($uid as $u)
-		{
-			$u=(string)$u;
-			$pdo=DB::prepare("SELECT * FROM `$table` WHERE `uid` = ?");
-			if(DB::execute($pdo,array($u)))
-			{
-				$data=$pdo->fetchAll();
-				$userdata[$u]=$data[0];
-			}
-			
-		}
-		LOG::msg(Level::Debug,"",$userdata);
-		return $userdata;
-		
+        $userdata=[];
+        foreach($uid as $u)
+        {
+            $u=(string)$u;
+            $pdo=DB::prepare("SELECT * FROM `$table` WHERE `uid` = ?");
+            if(DB::execute($pdo,array($u)))
+            {
+                $data=$pdo->fetchAll();
+                $userdata[$u]=$data[0];
+           }	
+        }
+        LOG::msg(Level::Debug,"",$userdata);
+        return $userdata;
     }
     
     static function getpermission($uid)
