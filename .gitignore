@@ -13,3 +13,6 @@ function/plugins/rank/board_other_oj/cf_api_key.php
 /function/externals
 /js/vue
 /css/bootstrap
+/js/aes.js
+/js/md5.js
+/js/pad-zeropadding.js
