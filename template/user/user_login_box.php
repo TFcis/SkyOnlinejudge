@@ -3,7 +3,7 @@ if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
-<script src="<?=$_E['SITEROOT']?>js/bignumber.min.js"></script>
+<script src="<?=$_E['SITEROOT']?>js/third/bignumber.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-zeropadding.js"></script>
