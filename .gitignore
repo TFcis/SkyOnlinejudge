@@ -9,7 +9,6 @@ function/plugins/rank/board_other_oj/cf_api_key.php
 /tools/*.txt
 /install/sky.sql
 /tools/start.bat
-/data/problem
 /function/externals
 /js/vue
 /css/bootstrap
@@ -17,4 +16,3 @@ function/plugins/rank/board_other_oj/cf_api_key.php
 /js/md5.js
 /js/pad-zeropadding.js
 .vscode
-/data/challenge
