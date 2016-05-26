@@ -8,7 +8,7 @@ class json_main
     public $comp_type;
     public $check_type;
     public $metadata;
-    public $test=[];
+    public $test = [];
 }
 
 class json_test
@@ -21,7 +21,7 @@ class json_test
 
 class json_testdata
 {
-    public $data=[];
+    public $data = [];
 }
 
 class json_chalmeta
@@ -63,5 +63,3 @@ class json_resultdata
     public $peakmem;
     public $verdict;
 }
-
-?>

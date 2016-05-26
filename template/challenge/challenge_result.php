@@ -1,9 +1,8 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
+if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
-$data=$_E['template']['challenge_result_info'][0];
+$data = $_E['template']['challenge_result_info'][0];
 ?>
 <div class="container">
 	<div class="row">
@@ -25,9 +24,9 @@ $data=$_E['template']['challenge_result_info'][0];
 					<tr>
 						<td>使用者</td>
 						<?php
-						$user=(string)$data['user'];
-						$nickname=nickname($user);
-						?>
+                        $user = (string) $data['user'];
+                        $nickname = nickname($user);
+                        ?>
 						<td><?=$nickname[$user]?></td>
 					</tr>
 					<tr>

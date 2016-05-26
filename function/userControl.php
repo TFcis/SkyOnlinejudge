@@ -42,11 +42,11 @@ class userControl
         global $_G,$_E,$_config;
 
         if ($_G['uid'] == 0) {
-            self::SetCookie('uid', '0', time() + 3600);
+            self::SetCookie('uid', '0', time()  3600);
         }
 
         $token = GenerateRandomString(TOKEN_LEN);
-        $timeout = time() + $timeleft;
+        $timeout = time()  $timeleft;
 
         $_SESSION[$namespace]['token'] = $token;
         $_SESSION[$namespace]['timeout'] = $timeout;
@@ -102,8 +102,8 @@ class userControl
 
         $uid = self::GetCookie('uid');
 
-        if (!preg_match('/^[a-zA-Z0-9]+$/', $token) ||
-            !preg_match('/^[0-9]+$/', $uid)) {
+        if (!preg_match('/^[a-zA-Z0-9]$/', $token) ||
+            !preg_match('/^[0-9]$/', $uid)) {
             return false;
         }
 
@@ -153,7 +153,7 @@ class userControl
                                     'WHERE `uid` = ? ', $uid)) {
             $_G['uid'] = $uid;
             self::RegisterToken('login', 864000);
-            self::SetCookie('uid', $uid, time() + 864000);
+            self::SetCookie('uid', $uid, time()  864000);
 
             return true;
         } else {
@@ -167,21 +167,20 @@ class userControl
         self::DeleteToken('login');
     }
 
-    static function getuserdata( $table ,$uid = [] )
+    public static function getuserdata($table, $uid = [])
     {
         $table = DB::tname($table);
-        $userdata=[];
-        foreach($uid as $u)
-        {
-            $u=(string)$u;
-            $pdo=DB::prepare("SELECT * FROM `$table` WHERE `uid` = ?");
-            if(DB::execute($pdo,array($u)))
-            {
-                $data=$pdo->fetchAll();
-                $userdata[$u]=$data[0];
-           }	
+        $userdata = [];
+        foreach ($uid as $u) {
+            $u = (string) $u;
+            $pdo = DB::prepare("SELECT * FROM `$table` WHERE `uid` = ?");
+            if (DB::execute($pdo, [$u])) {
+                $data = $pdo->fetchAll();
+                $userdata[$u] = $data[0];
+            }
         }
-        LOG::msg(Level::Debug,"",$userdata);
+        LOG::msg(Level::Debug, '', $userdata);
+
         return $userdata;
     }
 

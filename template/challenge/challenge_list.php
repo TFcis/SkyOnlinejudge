@@ -1,6 +1,5 @@
 <?php
-if(!defined('IN_TEMPLATE'))
-{
+if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
@@ -20,25 +19,32 @@ if(!defined('IN_TEMPLATE'))
 					</tr>
 				</thead>
 				<tbody>
-				<?php foreach($_E['template']['challenge_info'] as $row){ ?>
+               <?php foreach ($_E['template']['challenge_info'] as $row) {
+    ?>
 					<tr>
-						<td><a href="<?=$_E['SITEROOT']?>challenge.php/result/<?=$row['id']?>"><?=$row['id'];?></a></td>
+                       <td><a href="<?=$_E['SITEROOT']?>challenge.php/result/<?=$row['id']?>"><?=$row['id'];
+    ?></a></td>
 						<?php 
-						$row['user']=(string)$row['user'];
-						$nickname=nickname($row['user']);
-						?>
-						<td><a href="<?=$_E['SITEROOT']."user.php/view/".$row['user']?>"><?=$nickname[$row['user']]?></a></td>
-						<td><a href="<?=$_E['SITEROOT']?>problem.php/problem/<?=$row['problem'];?>"><?=$row['problem'];?></a></td>
-						<td><?=getresulttext($row['result']);?></td>
-						<td><?=$row['time'];?></td>
+                        $row['user'] = (string) $row['user'];
+    $nickname = nickname($row['user']);
+    ?>
+                       <td><a href="<?=$_E['SITEROOT'].'user.php/view/'.$row['user']?>"><?=$nickname[$row['user']]?></a></td>
+                       <td><a href="<?=$_E['SITEROOT']?>problem.php/problem/<?=$row['problem'];
+    ?>"><?=$row['problem'];
+    ?></a></td>
+                       <td><?=getresulttext($row['result']);
+    ?></td>
+                       <td><?=$row['time'];
+    ?></td>
 					</tr>
-				<?php }?>
+               <?php 
+}?>
 				</tbody>
 			</table>
 			<center>
         <?php Render::renderPagination(
         $_E['template']['challenge_list_pagelist'],
-        $_E['SITEROOT']."challenge.php/list/%d",
+        $_E['SITEROOT'].'challenge.php/list/%d',
         $_E['template']['challenge_list_now']) ?>
         </center>
 </div>
