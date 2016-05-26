@@ -10,5 +10,6 @@ $_config['db']['dbname']        = '';
 $_config['db']['tablepre']      = 'tojtest_';
 $_config['cookie']['namepre']   = 'tojtest';
 $_config['socket']['judgehost'] = '';
+$_config['socket']['bind'] = '/judge';
 $_config['socket']['judgeport'] = '2501';
 ?>

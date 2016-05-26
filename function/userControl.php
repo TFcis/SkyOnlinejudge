@@ -166,13 +166,8 @@ class userControl
         global $_G;
         self::DeleteToken('login');
     }
-<<<<<<< HEAD
-    
-    static function getuserdata( $table ,$uid = [] )
-=======
 
-    public static function getuserdata($table, $uid = null)
->>>>>>> ddb66f0620db988804f43700c5a962da7c47967d
+    static function getuserdata( $table ,$uid = [] )
     {
         $table = DB::tname($table);
         $userdata=[];

@@ -30,14 +30,14 @@ class challenge
     
     function __construct($uid, $pid, $code, $suffix)
     {
-        $this->$uid=$uid;
-        $this->$pid=$pid;
-        $this->$suffix=$suffix;
-        $create=create($uid, $pid, $code, $suffix);
+        $this->uid=$uid;
+        $this->pid=$pid;
+        $this->suffix=$suffix;
+        $create=$this->create($uid, $pid, $code, $suffix);
         if($create === false)return false;
         else
         {
-            $this->$id=$create;
+            $this->id=$create;
         }
         
     }
@@ -53,8 +53,9 @@ class challenge
             LOG::msg(Level::Warning,"mysql insert data error");
             return false;
         }
-        $id=$pdo->lastInsertId();
-        $codepath=$_E['challenge']['path'].$id.'.'.$suffix;
+        $id=DB::lastInsertId();
+        LOG::msg(Level::Debug,"$id");
+        $codepath=$_E['challenge']['path'].'code/'.$id.'.'.$suffix;
         $codefile=@fopen($codepath, 'x');
         if($codefile === false)
         {
@@ -66,24 +67,26 @@ class challenge
         return $id;
     }
     
+    
+    
     public function get_id()
     {
-        return $this->$id;
+        return $this->id;
     }
     
     public function get_uid()
     {
-        return $this->$uid;
+        return $this->uid;
     }
     
     public function get_pid()
     {
-        return $this->$pid;
+        return $this->pid;
     }
     
     public function get_suffix()
     {
-        return $this->$suffix;
+        return $this->suffix;
     }
 }
 

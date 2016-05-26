@@ -7,35 +7,39 @@ if( !defined('IN_SKYOJSYSTEM') )
 class socket
 {
     private $host;
+    private $bind;
     private $port;
     private $socket;
     //private $connection;
     
-    function __construct($host, $port)
+    function __construct($host, $port, $bind)
     {
-        $this->$host=$host;
-        $this->$port=$port;
-        $this->$socket=socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        $this->host=$host;
+        $this->bind=$bind;
+        $this->port=$port;
+        $this->socket=socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
         
     }
     
     public function send($txt)
     {
-        $connection=socket_connect($this->$socket,$this->$host,$this->$port);
+        //socket_bind($this->socket,$this->bind);
+        $connection=socket_connect($this->socket,$this->host,$this->port);
         if($connection === false){
             LOG::msg(Level::Warning,"can not connect to judgesystem");
             return false;
         }
         
-        if(!socket_write($socket, $txt, strlen($txt)))
+        if(!socket_write($this->socket, $txt, strlen($txt)))
         {
             LOG::msg(Level::Warning,"can not send data to judgesystem");
             return false;
         }
-        
-        while($result = socket_read($socket, 2048)) 
+        LOG::msg(Level::Debug,"wait judge!!!");
+        while($result = socket_read($this->socket, 2048)) 
         {
-            return $result;
+            echo 'debug';
+			return $result;
         }
     }
     
