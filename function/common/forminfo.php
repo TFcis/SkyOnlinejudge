@@ -6,75 +6,71 @@ if (!defined('IN_SKYOJSYSTEM')) {
 
 //Base on bootstrap 3
 //todo : add confoser
-class FormInput
+class HTML_Element
 {
     const BLOCK_INVALID = "invalid";
     
-    ///html_gen_type
-    private $type = "";
+    ///html_gen_block
+    private $block = "";
     
     ///html tags
     private $tags = [];
+    
+    ///html tags
+    private $option = [];
+    
+    private $id;
+    private $name;
 
     public function __construct(array $info)
     {
         if( !isset($info['block']) ) {
-            Log::msg(Level::Error,'FormInput build missing block',$info);
-            $this->type = FormInput::TYPE_INVALID;
+            Log::msg(Level::Error,'HTML_Element build missing block',$info);
+            $this->type = HTML_Element::BLOCK_INVALID;
             return;
         }
         
-        $info = strtolower($info);
+        $block = strtolower($info['block']);
         switch( $info['block'] ) {
             case 'inputs':
+                $this->option['title'] = isset($info['title'])?$info['title']:'';
+                break;
             case 'hr':
+                break;
             default:
-                $this->type = FormInput::TYPE_INVALID;
+                $this->type = HTML_Element::BLOCK_INVALID;
                 Log::msg(Level::Error,'No such block case!',$info);
                 return;
         }
-        $this->_name = isset($info['name'])  ? $info['name'] : '';
-        $this->_id = isset($info['id'])    ? $info['id']  : $this->_name;
-        $this->_type = isset($info['type'])  ? $info['type'] : 'text';
-        $this->_title = isset($info['title']) ? $info['title'] : '';
-        $this->_option = isset($info['option']) ? $info['option'] : [];
-    }
-
-    private static function html5_form_type(string $t)
-    {
-        switch ($t) {
-            case 'hr':
-                return 'hr';
-            case 'submit':
-                return 'submit';
-            default:
-                return 'text';
-        }
+        $this->block= $block;
+        $this->tags = $info['block'];
+        $this->name = isset($info['name'])?$info['name']:false;
+        $this->id   = isset($info['id'])?$info['id']:false;
     }
 
     public function name()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     public function id()
     {
-        return $this->_id;
+        return $this->id;
     }
 
-    public function type()
+    public function block()
     {
-        return self::html5_form_type($this->_type);
+        return $this->block;
     }
 
-    public function title()
+    public function tags()
     {
-        return $this->_title;
+        return $this->tags;
     }
 
     public function option()
     {
-        return $this->_option;
+        return $this->option;
     }
 }
 
@@ -84,28 +80,28 @@ class FormInfo
     const STYLE_NORMAL = 'form';
     const STYLE_HORZIONTAL = 'form-horizontal';
 
-    private $_style;
+    private $style;
 
-    private $_inputs = [];
+    private $elements = [];
 
     public function __construct(array $FromInfo)
     {
-        $this->_style = isset($FromInfo['style']) ? $FromInfo['style'] : self::STYLE_HORZIONTAL;
+        $this->style = isset($FromInfo['style']) ? $FromInfo['style'] : self::STYLE_HORZIONTAL;
         if (isset($FromInfo['data'])) {
             foreach ($FromInfo['data'] as $row) {
                 Log::msg(Level::Debug, '', $row);
-                $this->_inputs[] = new FormInput($row);
+                $this->elements[] = new HTML_Element($row);
             }
         }
     }
 
     public function style()
     {
-        return $this->_style;
+        return $this->style;
     }
 
-    public function inputs()
+    public function elements()
     {
-        return $this->_inputs;
+        return $this->elements;
     }
 }
