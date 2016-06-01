@@ -153,7 +153,7 @@ class userControl
                                     'WHERE `uid` = ? ', $uid)) {
             $_G['uid'] = $uid;
             self::RegisterToken('login', 864000);
-            self::SetCookie('uid', $uid, time()  864000);
+            self::SetCookie('uid', $uid, time() + 864000);
 
             return true;
         } else {

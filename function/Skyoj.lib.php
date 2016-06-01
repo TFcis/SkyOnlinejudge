@@ -290,7 +290,7 @@ function nickname($uid)
         }
     }
     $_E['nickname']['0'] = 'anonymous';
-	
+
     return $_E['nickname'];
 }
 
@@ -307,7 +307,7 @@ function getresulttext($resultid)
         case 6: $res = 'CE'; break;
         case 7: $res = 'ERR'; break;
     }
-	
+
     return $res;
 }
 

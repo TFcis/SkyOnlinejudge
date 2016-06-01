@@ -19,13 +19,13 @@ if (!defined('IN_TEMPLATE')) {
             </thead>
             <tbody>
             <?php $i = 1; foreach ($tmpl['fail_func'] as $func) {
-     ?>
+    ?>
                 <tr>
                     <td><?=$i++?></td>
                     <td><?=htmlentities($func)?></td>
                 </tr>
             <?php 
- }?>
+}?>
             </tbody>
         </table>
         <br>

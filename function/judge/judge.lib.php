@@ -72,7 +72,7 @@ class judge
                 $i;
             }
         }
-        $data->metadata= new json_chalmeta();
+        $data->metadata = new json_chalmeta();
 
         return json_encode($data);
     }

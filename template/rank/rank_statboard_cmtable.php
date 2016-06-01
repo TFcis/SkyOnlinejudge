@@ -44,10 +44,10 @@ if (!defined('IN_TEMPLATE')) {
     
             </td>
 <?php foreach ($tmpl['plist'] as $prob) {
-    $vid = $tmpl['s'][$uid][$prob['name']]['vid'];
-    $chal = $tmpl['s'][$uid][$prob['name']]['challink'];
+        $vid = $tmpl['s'][$uid][$prob['name']]['vid'];
+        $chal = $tmpl['s'][$uid][$prob['name']]['challink'];
 
-    ?><td class = "text-center <?=$vid?>"><?php
+        ?><td class = "text-center <?=$vid?>"><?php
     if ($chal == '') {
         ?>●<?php
 
@@ -56,9 +56,9 @@ if (!defined('IN_TEMPLATE')) {
 
     }
 
-    ?></td><?php
+        ?></td><?php
 
-}
+    }
     ?>
             <td>
             </td>
