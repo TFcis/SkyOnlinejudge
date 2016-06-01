@@ -22,7 +22,7 @@ function file_read($path)
             //echo "     data=".$data;
         }
         fclose($file);
-		
+
         return $data;
     }
 }

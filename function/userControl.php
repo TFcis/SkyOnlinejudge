@@ -42,11 +42,11 @@ class userControl
         global $_G,$_E,$_config;
 
         if ($_G['uid'] == 0) {
-            self::SetCookie('uid', '0', time()  3600);
+            self::SetCookie('uid', '0', time() + 3600);
         }
 
         $token = GenerateRandomString(TOKEN_LEN);
-        $timeout = time()  $timeleft;
+        $timeout = time() + $timeleft;
 
         $_SESSION[$namespace]['token'] = $token;
         $_SESSION[$namespace]['timeout'] = $timeout;

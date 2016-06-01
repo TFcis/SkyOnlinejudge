@@ -42,5 +42,4 @@ class socket
             return $result;
         }
     }
-
 }

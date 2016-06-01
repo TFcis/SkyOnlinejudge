@@ -1,4 +1,5 @@
 <?php
+
 require_once 'GlobalSetting.php';
 require_once 'function/SkyOJ.php';
 

@@ -23,7 +23,7 @@ class challenge
             $this->id = $create;
         }
     }
-	
+
     private function create($uid, $pid, $code, $suffix)
     {
         global $_E;

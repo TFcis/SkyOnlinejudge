@@ -286,7 +286,6 @@ function nickname($uid)
     foreach ($uid as $u) {
         $u = (string) $u;
         if (isset($res[$u])) {
-		{
             $_E['nickname'][$u] = $res[$u]['nickname'];
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 require_once 'GlobalSetting.php';
 require_once 'function/SkyOJ.php';
 require_once 'function/socket.php';
@@ -21,4 +22,3 @@ if (!in_array($mod, $allowmod)) {
         Render::render("judge_$mod", 'judge');
     }
 }
-?>

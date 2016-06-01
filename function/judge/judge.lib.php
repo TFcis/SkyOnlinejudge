@@ -67,12 +67,13 @@ class judge
                     $test->metadata[$j] = $id;
                     $j;
                 }
-        $data->metadata = new json_chalmeta();
+                $data->metadata = new json_chalmeta();
 
                 $i;
             }
         }
         $data->metadata= new json_chalmeta();
+
         return json_encode($data);
     }
 
@@ -94,7 +95,7 @@ class judge
         $result = new json_result();
         if (!$judge_result) {
             return false;
-                } else {
+        } else {
             $judge_result = json_decode($judge_result);
             $result->verdict = $judge_result->verdict;
             $result->chal_id = $judge_result->chal_id;
