@@ -64,7 +64,7 @@ class judge
                 $test->timelimit = $time;
                 $test->memlimit = $mem;
                 $j = 0;
-				$test->metadata = new json_testdata();
+                $test->metadata = new json_testdata();
                 foreach ($testdata->data as $id) {
                     $test->metadata->data[$j] = $id;
                     $j++;
@@ -75,7 +75,7 @@ class judge
             }
         }
         $data->metadata = new json_chalmeta();
-		LOG::msg(Level::Debug, '',$data);
+        LOG::msg(Level::Debug, '',$data);
 
         return json_encode($data);
     }
