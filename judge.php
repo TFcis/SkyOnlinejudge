@@ -2,7 +2,7 @@
 
 require_once 'GlobalSetting.php';
 require_once 'function/SkyOJ.php';
-require_once 'function/socket.php';
+require_once 'function/connect.php';
 require_once 'function/challenge/challenge.lib.php';
 
 $allowmod = ['test'];

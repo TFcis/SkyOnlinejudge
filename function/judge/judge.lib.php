@@ -8,7 +8,7 @@ require_once 'judge_json.php';
 
 class judge
 {
-    private $socket;
+    private $post;
     private $challenge;
     private $pjson;
 
@@ -16,7 +16,7 @@ class judge
     {
         global $_config;
         $this->challenge = $challenge;
-        $this->socket = new socket($_config['socket']['judgehost'], $_config['socket']['judgeport'], $_config['socket']['bind']);
+        $this->post = new post($_config['connect']['judgehost']);
         $this->pjson = $this->get_pjson($challenge->get_pid());
         LOG::msg(Level::Debug, '', $this->pjson->test[0]->data);
     }
@@ -42,7 +42,8 @@ class judge
         global $_E;
         $challenge = $this->challenge;
         $data = new json_main();
-        $data->chal_id = $challenge->get_id();
+        $data->chal_id = (int)$challenge->get_id();
+        //$data->chal_id = 573;
         /*$data['code_path'] = $_E['challenge']['path'].'code/'.$challenge->get_id().'.'.$challenge->get_suffix();
         $data['res_path'] = $_E['problem']['path'].$challenge->get_pid().'/res/';*/
         $data->code_path = 'tests/testdata/test.cpp';
@@ -63,30 +64,32 @@ class judge
                 $test->timelimit = $time;
                 $test->memlimit = $mem;
                 $j = 0;
+				$test->metadata = new json_testdata();
                 foreach ($testdata->data as $id) {
-                    $test->metadata[$j] = $id;
-                    $j;
+                    $test->metadata->data[$j] = $id;
+                    $j++;
                 }
-                $data->metadata = new json_chalmeta();
+                $data->test[$i] = $test;
 
-                $i;
+                $i++;
             }
         }
         $data->metadata = new json_chalmeta();
+		LOG::msg(Level::Debug, '',$data);
 
         return json_encode($data);
     }
 
     public function start()
     {
-        $judgesocket = $this->socket;
+        $judgeconnect = $this->post;
         if (!$json = $this->make_json()) {
             LOG::msg(Level::Warning, 'because make json error,cannot judge');
 
             return false;
         }
         LOG::msg(Level::Debug, 'judge now!!!');
-        $judge_result = $judgesocket->send($json); //judge
+        $judge_result = $judgeconnect->send($json); //judge
         $this->getresult($judge_result);
     }
 
