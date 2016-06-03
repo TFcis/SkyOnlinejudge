@@ -75,7 +75,7 @@ class judge
             }
         }
         $data->metadata = new json_chalmeta();
-        LOG::msg(Level::Debug, '',$data);
+        LOG::msg(Level::Debug, '', $data);
 
         return json_encode($data);
     }
