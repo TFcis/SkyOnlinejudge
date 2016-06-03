@@ -42,7 +42,7 @@ class judge
         global $_E;
         $challenge = $this->challenge;
         $data = new json_main();
-        $data->chal_id = (int)$challenge->get_id();
+        $data->chal_id = (int) $challenge->get_id();
         //$data->chal_id = 573;
         /*$data['code_path'] = $_E['challenge']['path'].'code/'.$challenge->get_id().'.'.$challenge->get_suffix();
         $data['res_path'] = $_E['problem']['path'].$challenge->get_pid().'/res/';*/

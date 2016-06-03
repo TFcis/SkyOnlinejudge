@@ -25,17 +25,14 @@ class socket
         //socket_bind($this->socket,$this->bind);
         $connection = socket_connect($this->socket, $this->host, $this->port);
         if ($connection === false) {
-
             return false;
         }
 
         if (!socket_write($this->socket, $txt, strlen($txt))) {
-
             return false;
         }
 
         while ($result = socket_read($this->socket, 2048)) {
-
             return $result;
         }
     }
@@ -55,10 +52,10 @@ class post
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->url);
         curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        $temp=curl_exec($ch);
+        $temp = curl_exec($ch);
         curl_close($ch);
 
         return $temp;
