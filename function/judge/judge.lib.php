@@ -99,22 +99,24 @@ class judge
         if (!$judge_result) {
             return false;
         } else {
+            //put result
             $judge_result = json_decode($judge_result);
             $result->verdict = $judge_result->verdict;
             $result->chal_id = $judge_result->chal_id;
             $result->result = $judge_result->result;
         }
-        $ac = 1;
+        //計分
+        $state = 1;
         foreach ($result->result as $resultdata) {
             if ($resultdata->state == 1) {
                 $result->score = $this->pjson->test[$resultdata->test_idx]->weight;
             } else {
-                if ($resultdata->state > $ac) {
-                    $ac = $resultdata->state;
+                if ($resultdata->state > $state) {
+                    $state = $resultdata->state;
                 }
             }
         }
-        $result->state = $ac;
+        $result->state = $state;
         $this->putdata($result);
     }
 

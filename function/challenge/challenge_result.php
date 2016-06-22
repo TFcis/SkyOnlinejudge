@@ -20,5 +20,12 @@ if (DB::execute($pdo, [$rid])) {
 if (isset($data)) {
     $_E['template']['challenge_result_info'] = $data ? $data : [];
 }
+
+$resultpath = $_E['challenge']['path'].'result/'.$rid.'.json';
+$resultdata = file_read($resultpath);
+$resultdata = json_decode($resultdata);
+
+$_E['template']['challenge_result_info']['result'] = $resultdata;
+
 LOG::msg(Level::Debug, '', $data);
 Render::render('challenge_result', 'challenge');

@@ -9,6 +9,4 @@ $_config['db']['dbcharset'] = 'utf8';
 $_config['db']['dbname'] = '';
 $_config['db']['tablepre'] = 'tojtest_';
 $_config['cookie']['namepre'] = 'tojtest';
-$_config['socket']['judgehost'] = '';
-$_config['socket']['bind'] = '/judge';
-$_config['socket']['judgeport'] = '2501';
+$_config['connect']['judgehost'] = '';
