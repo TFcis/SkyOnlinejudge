@@ -48,14 +48,16 @@ $result = $_E['template']['challenge_result_info']['result'];
 					</tr>
 				</thead>
 				<tbody>
-                <?php foreach($result as $i) {?>
+                <?php foreach ($result as $i) {
+                            ?>
 					<tr>
                         <td><?=$i->test_idx?></td>
 						<td><?=getresulttext($i->state)?></td>
 						<td><?=$i->runtime?></td>
                         <td><?=$i->peakmem?></td>
 					</tr>
-                    <?php } ?>
+                    <?php 
+                        } ?>
 				</tbody>
 			</table>
 		</div>
