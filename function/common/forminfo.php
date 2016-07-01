@@ -4,73 +4,58 @@ if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
 
-//Base on bootstrap 3
-//todo : add confoser
-class HTML_Element
+interface HTML_Element
 {
-    const BLOCK_INVALID = "invalid";
-    
-    ///html_gen_block
-    private $block = "";
-    
-    ///html tags
-    private $tags = [];
-    
-    ///html tags
-    private $option = [];
-    
-    private $id;
-    private $name;
+    public function make_html(array $style):string;
+    public function __construct(array $setting);
+}
 
-    public function __construct(array $info)
+abstract class HTML_INPUT_TEXT_HELPER
+{
+    static private function spilt_setting(string $tag,array &$real,array &$res,$default = null):bool
     {
-        if( !isset($info['block']) ) {
-            Log::msg(Level::Error,'HTML_Element build missing block',$info);
-            $this->type = HTML_Element::BLOCK_INVALID;
-            return;
+        if( isset($real[$tag]) ){
+            $res[$tag] = $real[$tag];
+            unset($res[$tag]);
+            return true;
+        } else {
+            $res[$tag] = $default;
+            return false;
         }
-        
-        $block = strtolower($info['block']);
-        switch( $info['block'] ) {
-            case 'inputs':
-                $this->option['title'] = isset($info['title'])?$info['title']:'';
-                break;
-            case 'hr':
-                break;
-            default:
-                $this->type = HTML_Element::BLOCK_INVALID;
-                Log::msg(Level::Error,'No such block case!',$info);
-                return;
-        }
-        $this->block= $block;
-        $this->tags = $info['block'];
-        $this->name = isset($info['name'])?$info['name']:false;
-        $this->id   = isset($info['id'])?$info['id']:false;
+    }
+    static protected function deal_common_setting(array &$setting):array
+    {
+        $res = [];
+        HTML_INPUT_TEXT_HELPER::spilt_setting('name',$setting,$res);
+        HTML_INPUT_TEXT_HELPER::spilt_setting('id'  ,$setting,$res);
+        return $res;
+    }
+}
+
+class HTML_INPUT_TEXT extends HTML_INPUT_TEXT_HELPER implements HTML_Element 
+{
+    /**
+     *  name / id 
+     */
+    private $setting;
+    function __construct(array $setting)
+    {
+        $this->setting = HTML_INPUT_TEXT::deal_common_setting($setting);
+        Log::msg(Level::Debug, '', $this->setting);
     }
 
-    public function name()
+    public function make_html(array $style):string
     {
-        return $this->name;
+        return "";
     }
+}
 
-    public function id()
+class HTML_HR implements HTML_Element 
+{
+    function __construct(array $setting=[]){}
+    public function make_html(array $style):string
     {
-        return $this->id;
-    }
-
-    public function block()
-    {
-        return $this->block;
-    }
-
-    public function tags()
-    {
-        return $this->tags;
-    }
-
-    public function option()
-    {
-        return $this->option;
+        return "<hr>";
     }
 }
 
@@ -86,11 +71,15 @@ class FormInfo
 
     public function __construct(array $FromInfo)
     {
-        $this->style = isset($FromInfo['style']) ? $FromInfo['style'] : self::STYLE_HORZIONTAL;
+        $this->style = $FromInfo['style'] ?? self::STYLE_HORZIONTAL;
         if (isset($FromInfo['data'])) {
             foreach ($FromInfo['data'] as $row) {
-                Log::msg(Level::Debug, '', $row);
-                $this->elements[] = new HTML_Element($row);
+                if( $row instanceof HTML_Element ) {
+                    Log::msg(Level::Debug, '', $row);
+                    $this->elements[] = $row;
+                } else {
+                    Log::msg(Level::Debug, 'FormInfo reject a object:', $row);
+                }
             }
         }
     }
