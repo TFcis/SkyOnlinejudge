@@ -16,6 +16,9 @@ if (!defined('IN_TEMPLATE')) {
                 </center>
                     <div id = "announce" style = "overflow-x:hidden; overflow-y:auto; overflow:hidden;">
                         <center class = "title"><?=$_E['template']['news_announce']['title']?></center>
+                        <a class = "icon-bttn" href = "<?=$_E['SITEROOT']?>news.php">
+                            <span class="pointer glyphicon glyphicon-arrow-left" title="回到公告"></span>
+                        </a>
                         <div style = "word-break: break-all;">
                             <?=$_E['template']['news_announce']['announce']?>
                         </div>
