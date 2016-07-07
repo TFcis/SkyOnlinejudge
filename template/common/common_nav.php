@@ -12,6 +12,23 @@ if (!defined('IN_TEMPLATE')) {
         $classtmp = '';
     }
 ?>
+<?php
+    if($_G['uid'])
+    {
+        $tnews = DB::tname('news');
+        $sql = "SELECT * FROM `$tnews` ORDER BY `id` DESC LIMIT 1";
+        $newsid = DB::fetchAll($sql);
+        $newsid = (int)$newsid[0]['id'];
+        //LOG::msg(Level::Debug, 'newsid:', $newsid);
+        $taccount = DB::tname('account');
+        $sql = "SELECT `seen_news` FROM `$taccount` WHERE `uid` = ?";
+        $userseen = DB::fetchAll($sql, [$_G['uid']]);
+        $userseen = (int)$userseen[0]['seen_news'];
+        //LOG::msg(Level::Debug, 'userseen:', $userseen);
+        $usernotseen = $newsid-$userseen;
+        //LOG::msg(Level::Debug, 'usernotseen:', $usernotseen);
+    }
+?>
 <body <?=$classtmp?>>
 <div id="wrap"> 
     <script>$('.dropdown-toggle').dropdown();</script>
@@ -28,6 +45,11 @@ if (!defined('IN_TEMPLATE')) {
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                <?php if($_G['uid'] && $usernotseen): ?>
+                    <li><a href="<?=$_E['SITEROOT']?>news.php">News(<?=$usernotseen?>)</a></li>
+                <?php else: ?>
+                    <li><a href="<?=$_E['SITEROOT']?>news.php">News</a></li>
+                <?php endif; ?>
                     <li><a href="<?=$_E['SITEROOT']?>problem.php">Problems</a></li>
                     <li><a href="<?=$_E['SITEROOT']?>index.php">Submission</a></li>
 					<li><a href="<?=$_E['SITEROOT']?>challenge.php">Challenge</a></li>
