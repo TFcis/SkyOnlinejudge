@@ -7,6 +7,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
 //Load All Core
+require_once 'File.php';
 require_once 'Log.php';
 require_once 'DB.php';
 

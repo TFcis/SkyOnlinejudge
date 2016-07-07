@@ -23,7 +23,7 @@ if (!defined('IN_TEMPLATE')) {
             </thead>
             <tbody>
             <?php foreach ($classes as $classname => $data) {
-    ?>
+        ?>
                 <tr>
                     <td>
                         <?php if ($data === false): ?>
@@ -31,7 +31,7 @@ if (!defined('IN_TEMPLATE')) {
                         <?php else: ?>
                             installed
                         <?php endif;
-    ?>
+        ?>
                     </td>
                     <td><?=htmlentities($classname)?></td>
                     <td><?=htmlentities($classname::DESCRIPTION)?></td>
@@ -41,11 +41,11 @@ if (!defined('IN_TEMPLATE')) {
                         <?php else: ?>
                             移除
                         <?php endif;
-    ?>
+        ?>
                     </td>
                 </tr>
             <?php 
-}
+    }
     ?>
             </tbody>
         </table>

@@ -24,6 +24,9 @@ $_E['language'] = 'zh-tw';
 $_E['site']['admin'] = [1];
 $_E['site']['name'] = 'Sky Online Judge';
 
+//Data storge
+$_E['DATAROOT'] = './data/';
+
 //Permission
 $permission = [];
 $permission['guest']['uid'] = '0';
@@ -40,7 +43,10 @@ $_E['logsys']['msgshower']['port'] = '19620';
 $_E['template']['alert'] = '';
 
 //Problem
-$_E['problem']['path'] = '/data/problem/';
+$_E['problem']['path'] = $_E['DATAROOT'].'problem/';
+
+//challenge
+$_E['challenge']['path'] = $_E['DATAROOT'].'challenge/';
 
 //MathJax
 $_E['EnableMathJax'] = 0;

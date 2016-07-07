@@ -53,10 +53,10 @@ if (!defined('IN_TEMPLATE')) {
                     <tr>
                         <td><?=$name['nickname']?></td>
                         <?php foreach ($_E['template']['plist'] as $pname) {
-    ?>
+        ?>
                             <td class="<?=$_E['template']['s'][$uid][$pname]?>">●</td>
                         <?php 
-}
+    }
     ?>
                     </tr>
                     <?php 
