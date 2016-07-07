@@ -76,10 +76,10 @@ $(document).ready(function()
                 <div class="form-group">
                     <label class="col-md-3 control-label"><?=$oj['name']?></label>
                     <div class="col-md-4"><?php if ($oj['user']['approve'] == 1) {
-    $disabled = 'disabled';
-} else {
-    $disabled = '';
-}
+        $disabled = 'disabled';
+    } else {
+        $disabled = '';
+    }
     ?>
                         <input type="text" class="form-control" name="<?=$oj['class']?>" placeholder="<?=$oj['description']?>" value="<?=$oj['user']['account']?>" <?=$disabled?>>
                     </div>

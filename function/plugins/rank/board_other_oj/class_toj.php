@@ -37,7 +37,7 @@ class class_toj
 
     public function post($data)
     {
-        $context['http'] =  [
+        $context['http'] = [
             'timeout'   => 60,
             'method'    => 'POST',
             'content'   => http_build_query($data, '', '&'),

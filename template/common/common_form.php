@@ -11,10 +11,10 @@ if (!defined('IN_TEMPLATE')) {
         <?php foreach ($_fi->inputs() as $e) {
     ?>
             <?php if ($e->type() == 'hr') {
-    ?>
+        ?>
                 <hr>
             <?php continue;
-}
+    }
     ?>
 
             <?php if ($_fi->style() === FormInfo::STYLE_HORZIONTAL): ?>

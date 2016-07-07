@@ -102,8 +102,11 @@ class userControl
 
         $uid = self::GetCookie('uid');
 
-        if (!preg_match('/^[a-zA-Z0-9]+$/', $token) ||
-            !preg_match('/^[0-9]+$/', $uid)) {
+        if (!$data['token_match'] = preg_match('/^[A-Za-z0-9]+$/', $token) ||
+            !$data['uid_match'] = preg_match('/^[0-9]+$/', $uid)) {
+            $data['token'] = $token;
+            $data['uid'] = $uid;
+            LOG::msg(Level::Debug, 'token error in match', $data);
             return false;
         }
 
@@ -167,9 +170,21 @@ class userControl
         self::DeleteToken('login');
     }
 
-    public static function getuserdata($table, $uid = null)
+    public static function getuserdata($table, $uid = [])
     {
         $table = DB::tname($table);
+        $userdata = [];
+        foreach ($uid as $u) {
+            $u = (string) $u;
+            $pdo = DB::prepare("SELECT * FROM `$table` WHERE `uid` = ?");
+            if (DB::execute($pdo, [$u])) {
+                $data = $pdo->fetchAll();
+                $userdata[$u] = $data[0];
+            }
+        }
+        //LOG::msg(Level::Debug, '', $userdata);
+
+        return $userdata;
     }
 
     public static function getpermission($uid)

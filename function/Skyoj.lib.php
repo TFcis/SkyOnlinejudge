@@ -282,7 +282,7 @@ function nickname($uid)
         $uid = [$uid];
     }
 
-    $res = DB::getuserdata('account', $uid, 'uid,nickname');
+    $res = usercontrol::getuserdata('account', $uid);
     foreach ($uid as $u) {
         $u = (string) $u;
         if (isset($res[$u])) {
@@ -290,6 +290,23 @@ function nickname($uid)
         }
     }
     $_E['nickname']['0'] = 'anonymous';
+
+    return $_E['nickname'];
+}
+
+function getresulttext($resultid)
+{
+    $res = 'NO';
+    switch ($resultid) {
+        case 0: $res = 'NONE'; break;
+        case 1: $res = 'AC'; break;
+        case 2: $res = 'WA'; break;
+        case 3: $res = 'RE'; break;
+        case 4: $res = 'TLE'; break;
+        case 5: $res = 'MLE'; break;
+        case 6: $res = 'CE'; break;
+        case 7: $res = 'ERR'; break;
+    }
 
     return $res;
 }

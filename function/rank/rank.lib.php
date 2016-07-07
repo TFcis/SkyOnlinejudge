@@ -57,7 +57,6 @@ function PrepareBoardData($cbdata, $build = false)
     if (!$build && $cache = DB::loadcache("cache_board_$id")) {
         //cached!
 
-
         $boarddata = $cache['data'];
         $buildtime = $cache['time'];
         if ($cache['time'] < time()) {

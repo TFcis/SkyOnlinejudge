@@ -102,15 +102,15 @@ $(document).ready(function()
             ?>
             <li><a href="rank.php?mod=list&page=<?=$_L ?>">&laquo;</a></li>
             <?php for ($i = $_E['template']['pagerange']['0']; $i <= $_E['template']['pagerange']['2']; $i++) {
-    ?>
+                ?>
                 <?php if ($i == $_E['template']['pagerange']['1']): ?>
                     <li class="active"><a href="#"><?=$i?></a></li>
                 <?php else:?>
                     <li><a href="rank.php?mod=list&page=<?=$i?>"><?=$i?></a></li>
                 <?php endif;
-    ?>
+                ?>
             <?php 
-}?>
+            }?>
             <li><a href="rank.php?mod=list&page=<?=$_R ?>">&raquo;</a></li>
         </ul>
     </center>
