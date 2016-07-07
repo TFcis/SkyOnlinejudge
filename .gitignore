@@ -17,3 +17,5 @@ function/plugins/rank/board_other_oj/cf_api_key.php
 /js/pad-zeropadding.js
 .vscode
 /data/problem
+/data/challenge
+/template/user/user_login_box.php

@@ -104,19 +104,12 @@ class judge
             $result->verdict = $judge_result->verdict;
             $result->chal_id = $judge_result->chal_id;
             $result->result = $judge_result->result;
+            $result->uid = $this->challenge->get_uid();
         }
-        //計分
-        $state = 1;
-        foreach ($result->result as $resultdata) {
-            if ($resultdata->state == 1) {
-                $result->score = $this->pjson->test[$resultdata->test_idx]->weight;
-            } else {
-                if ($resultdata->state > $state) {
-                    $state = $resultdata->state;
-                }
-            }
-        }
-        $result->state = $state;
+        //處理state與計分
+        $data = $this->score($this->pjson->score, $result->result);
+        $result->state = $data['state'];
+        $result->score = $data['score'];
         $this->putdata($result);
     }
 
@@ -124,12 +117,45 @@ class judge
     {
         global $_E;
         $tchal = DB::tname('challenge');
+        $tuser = DB::tname('account');
         $sql = "UPDATE `$tchal` SET `score`=? , `result`=?  WHERE `id`=?";
+        $sql_user_score = "UPDATE `$tchal` SET `score`=? WHERE `id`=?";
         $data = [];
         $data['score'] = $result->score;
         $data['state'] = $result->state;
         $data['chal_id'] = $result->chal_id;
+        $data['uid'] = $result->uid;
         DB::query($sql, [$data['score'], $data['state'], $data['chal_id']]);
+        DB::query($sql_user_score, [$data['score'], $data['uid']]);
         file_create($_E['challenge']['path'].'result/'.$this->challenge->get_id().'.json', json_encode($result->result));
     }
+
+    private function score($type, $result)
+    {
+        switch($type)
+        {
+            case "rate": return $this->score_rate($result);
+            //case "special": return ;
+        }
+    }
+
+    private function score_rate($result)
+    {
+        $state = 1;
+        $score = 0;
+        foreach ($result as $resultdata) {
+            if ($resultdata->state == 1) {
+                $score += $this->pjson->test[$resultdata->test_idx]->weight;
+            } else {
+                if ($resultdata->state > $state) {
+                    $state = $resultdata->state;
+                }
+            }
+        }
+        $data['score'] = $score;
+        $data['state'] = $state;
+        return $data;
+    }
+
+    //private function score_special($result)
 }

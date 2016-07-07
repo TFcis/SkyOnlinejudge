@@ -49,6 +49,7 @@ class json_redir_check
 class json_result
 {
     public $chal_id;
+    public $uid;
     public $verdict;
     public $state;
     public $result = [];

@@ -24,7 +24,7 @@ if (DB::execute($pdo, null)) {
     $data = [];
 }
 
-LOG::msg(Level::Debug, '', $data);
+//LOG::msg(Level::Debug, '', $data);
 $_E['template']['challenge_list_pagelist'] = $pl;
 $_E['template']['challenge_list_now'] = $page;
 $_E['template']['challenge_info'] = $data ? $data : [];
