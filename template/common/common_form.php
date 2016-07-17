@@ -5,67 +5,70 @@ if (!defined('IN_TEMPLATE')) {
 ?>
 <?php
     $_fi = $tmpl['_formInfo'];
-
-    function BT3_HORZIONTAL($setting,$info){
-        $rev = "";
-        if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
-            $rev.=<<<TAG
+    if( !function_exists('BT3_HORZIONTAL') ){
+        function BT3_HORZIONTAL($setting,$info){
+            $rev = "";
+            if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
+                $rev.=<<<TAG
 <div class="form-group">
     <label for="{$setting['name']}" class="col-md-3 control-label white-text">{$setting['option']['help_text']}</label>
     <div class="col-md-9">
 TAG;
-        }
-        $rev.='<input type=\''.$setting['type'].'\' class="form-control textinput"';
-
-        foreach( $setting as $tag => $key){
-            if( !is_string($tag) || !is_string($key) )continue;
-            if($tag == 'type')continue;
-            $rev .= ' '.htmlentities($tag);
-            if( !empty($key) ){
-                $rev .= '="'.htmlentities($key).'"';
             }
-        }
-        $rev.='>';
-        
-        if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
-            $rev.=<<<'TAG'
+            $rev.='<input type=\''.$setting['type'].'\' class="form-control textinput"';
+
+            foreach( $setting as $tag => $key){
+                if( !is_string($tag) || !is_string($key) )continue;
+                if($tag == 'type')continue;
+                $rev .= ' '.htmlentities($tag);
+                if( !empty($key) ){
+                    $rev .= '="'.htmlentities($key).'"';
+                }
+            }
+            $rev.='>';
+            
+            if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
+                $rev.=<<<'TAG'
     </div>
     <!--<div class="col-sm-1" id="e_repeat"></div>-->
 </div>
 TAG;
+            }
+            return $rev;
         }
-        return $rev;
     }
 
-    function BT3_HORZIONTAL_BTN($setting,$info){
-        $rev = "";
-        if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
-            $rev.=<<<TAG
+    if( !function_exists('BT3_HORZIONTAL_BTN') ){
+        function BT3_HORZIONTAL_BTN($setting,$info){
+            $rev = "";
+            if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
+                $rev.=<<<TAG
 <div class="form-group">
     <div class="col-md-offset-9 col-md-3 text-right">
 TAG;
-        }
-        $rev.='<button class="btn btn-success"';
-
-        foreach( $setting as $tag => $key){
-            if( !is_string($tag) || !is_string($key) )continue;
-            if($tag == 'title')continue;
-            $rev .= ' '.htmlentities($tag);
-            if( !empty($key) ){
-                $rev .= '="'.htmlentities($key).'"';
             }
-        }
-        $rev.='>'.htmlentities($setting['title']).'</button>';
-        if( $setting['option']['help_text']!=false ){
-            $rev.="<small><span id='{$setting['name']} show'></span></small>";
-        }
-        if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
-            $rev.=<<<'TAG'
+            $rev.='<button class="btn btn-success"';
+
+            foreach( $setting as $tag => $key){
+                if( !is_string($tag) || !is_string($key) )continue;
+                if($tag == 'title')continue;
+                $rev .= ' '.htmlentities($tag);
+                if( !empty($key) ){
+                    $rev .= '="'.htmlentities($key).'"';
+                }
+            }
+            $rev.='>'.htmlentities($setting['title']).'</button>';
+            if( $setting['option']['help_text']!=false ){
+                $rev.="<small><span id='{$setting['name']} show'></span></small>";
+            }
+            if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
+                $rev.=<<<'TAG'
     </div>
 </div>
 TAG;
+            }
+            return $rev;
         }
-        return $rev;
     }
 ?>
 <div clas="container-fluid">

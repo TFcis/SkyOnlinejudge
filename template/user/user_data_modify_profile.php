@@ -64,29 +64,18 @@ $(document).ready(function()
             <div class="panel-heading">Avatar & Background</div>
             <div class="panel-body">
                 <p>Avatar via <a href="https://gravatar.com/" class="btn btn-primary active" target="_blank">gravatar</a></p>
-                <form class="form-horizontal" role="form" id="avatar">
-                    <input type='hidden' name='mod' value='edit'>
-                    <input type='hidden' name='page' value='avatar'>
-                    <input type='hidden' name='id' value='<?=$tmpl['showid']?>'>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Avatar</label>
-                        <div class="col-md-8">
-                            <input type="url" class="form-control" name="avatarurl" placeholder="Avatar url" value='<?=$tmpl['avatarurl']?>'>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Background</label>
-                        <div class="col-md-8">
-                            <input type="url" class="form-control" name="backgroundurl" placeholder="Backgroundurl" value='<?=$tmpl['backgroundurl']?>'>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <button type="submit" class="btn btn-success text-right" disabled="disabled">送出</button>
-                            <small><span id="Avatar-show"></span>Comming Soon...</small>
-                        </div>
-                    </div>
-                </form>
+                <?php
+                Render::renderForm(new FormInfo([
+                    'data' => [
+                        new HTML_INPUT_HIDDEN(['name' => 'mod' ,'value'=>'edit']),
+                        new HTML_INPUT_HIDDEN(['name' => 'page','value'=>'avatar']),
+                        new HTML_INPUT_HIDDEN(['name' => 'id','value'=>$tmpl['showid']]),
+                        new HTML_INPUT_TEXT(  ['name' => '' ,'value'=>$tmpl['avatarurl'],'placeholder'=>'Avatar url' ,'option' => ['help_text' => 'Avatar']]),
+                        new HTML_INPUT_TEXT(  ['name' => '' ,'value'=>$tmpl['backgroundurl'] ,'option' => ['help_text' => 'Background']]),
+                        new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出Comming Soon...','disabled'=>'disabled']),
+                    ],
+                ]),"avatar");
+                ?>
             </div>
         </div>
         
