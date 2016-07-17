@@ -16,24 +16,24 @@ if (isset($_GET['id'])) {
     exit(0);
 }
 
-if (isset($QUEST[1])) {
-    $tid = $QUEST[1];
-    if (is_numeric($tid)) {
-        $showid = $tid;
-    } else {
-        Render::errormessage('WTF!?');
-        Render::render('nonedefined');
-        exit('');
+//Deal with showid and user info
+try{
+    $showid = (int)( $QUEST[1] ?? $_G['uid'] );
+    $userInfo = new UserInfo($showid);
+    if( !$userInfo->is_registed() ){
+        throw new Exception('QQ NO Such One.');
     }
-} else {
-    $showid = $_G['uid'];
+    $_E['template']['showid'] = $showid;
+}catch (Throwable $e){
+    LOG::msg(Level::Notice,'User view id error',$QUEST,$e);
+    Render::errormessage('ERROR : '.$e->getMessage(),'USER');
+    Render::render('nonedefined');
+    exit(0);
 }
 
 //page
 $templateAsk = false;
-if (!isset($QUEST[2]) || empty($QUEST[2])) {
-    $QUEST[2] = 'setting';
-}
+$page = $QUEST[2]??'setting';
 
 $token = safe_get('token');
 
@@ -41,14 +41,6 @@ $token = safe_get('token');
 if ($token == 'tmpl') {
     $templateAsk = true;
 }
-
-$userInfo = new UserInfo($showid);
-if (!$userInfo->is_registed()) {
-    Render::errormessage('QQ NO Such One.');
-    Render::render('nonedefined');
-    exit('');
-}
-$_E['template']['showid'] = $showid;
 
 if ($templateAsk === false) {
     // Print ALL PAGE
@@ -64,8 +56,8 @@ if ($templateAsk === false) {
         //$_E['template']['avaterurl'] .= "s=400&";
         $_E['template']['view']['defaultpage'] = 'setting';
         $view_allowpage = ['setting', 'summary', 'solve'];
-        if (in_array($QUEST[2], $view_allowpage)) {
-            $_E['template']['view']['defaultpage'] = $QUEST[2];
+        if (in_array($page, $view_allowpage)) {
+            $_E['template']['view']['defaultpage'] = $page;
         } else {
             Render::errormessage('No Such Page');
             Render::render('nonedefined');
@@ -84,7 +76,7 @@ if ($templateAsk === false) {
     exit(0);
 }
 //subpage
-switch ($QUEST[2]) {
+switch ($page) {
     case 'setting':
         if (!userControl::getpermission($showid)) {
             Render::renderSingleTemplate('nonedefined');
