@@ -3,6 +3,8 @@
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
+
+require_once $_E['ROOT'].'/function/common/forminfo.php';
 //          0   1    2     3
 // FORMAT /VIEW/id
 //                /page

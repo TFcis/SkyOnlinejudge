@@ -11,8 +11,8 @@ if (!defined('IN_TEMPLATE')) {
         if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
             $rev.=<<<TAG
 <div class="form-group">
-    <label for="{$setting['name']}" class="col-sm-3 control-label white-text">{$setting['option']['help_text']}</label>
-    <div class="col-sm-9">
+    <label for="{$setting['name']}" class="col-md-3 control-label white-text">{$setting['option']['help_text']}</label>
+    <div class="col-md-9">
 TAG;
         }
         $rev.='<input type=\''.$setting['type'].'\' class="form-control textinput"';
