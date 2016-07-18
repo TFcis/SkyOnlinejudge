@@ -39,7 +39,6 @@ TAG;
 
     if( !function_exists('BT3_HORZIONTAL_BTN') ){
         function BT3_HORZIONTAL_BTN($setting,$info){
-            Log::msg(Level::Debug,"",$setting);
             $rev = "";
             if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
                 $rev.=<<<TAG

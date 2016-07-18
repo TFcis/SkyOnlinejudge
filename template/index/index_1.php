@@ -4,12 +4,14 @@ if (!defined('IN_TEMPLATE')) {
 }
 ?>
 <div class = "container" >
-
-    <div class="row">
-        <?php Render::renderForm($tmpl['form'],"test"); ?>
-    </div>
     <div class="row">
         <h1>更新日誌</h1>
+        <div>
+            <time>2016-7-18</time>
+            <ol>
+                <li>新的表單基礎元件</li>
+            </ol>
+        </div>
         <div>
             <time>2016-3-8</time>
             <ol>
