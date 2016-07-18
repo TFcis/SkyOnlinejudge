@@ -104,6 +104,19 @@ class HTML_HR implements HTML_Element
     }
 }
 
+class HTML_ROW implements HTML_Element
+{
+    private $text = '';
+    function __construct(array $setting = [],callable $make_html_callback = null)
+    {
+        $this->text = $setting['html'] ?? '';
+    }
+    public function make_html($setting = null,callable $callback = null):string
+    {
+        return $this->text;
+    }
+}
+
 class FormInfo
 {
     //As same as class name

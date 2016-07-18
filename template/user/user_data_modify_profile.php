@@ -9,30 +9,11 @@ $(document).ready(function()
     $("#quote").submit(function(e)
     {
         e.preventDefault();
-        api_submit("<?=$_E['SITEROOT']?>user.php/edit","#quote","#quote-show",function(){
+        api_submit("<?=$_E['SITEROOT']?>user.php/edit","#quote","#btn-show",function(){
             setTimeout(function(){
                 location.href="<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/setting/profile";
             }, 500);
         });
-        /*$.post("<?=$_E['SITEROOT']?>user.php/edit",
-            $("#quote").serialize(),
-            function(res){
-                if(res.status == 'error')
-                {
-                    $("#quote-show").html(res.data);
-                    $("#quote-show").css('color','Red');
-                }
-                else
-                {
-                    $("#quote-show").css('color','Lime');
-                    $("#quote-show").html('Success!');
-                    setTimeout(function(){
-                        location.href="<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/setting/profile";
-                    }, 500);
-                }
-        },"json").error(function(e){
-            console.log(e);
-        });*/
         return true;
     });
 })
@@ -41,7 +22,7 @@ $(document).ready(function()
 <div class="container">
 
     <div class="row">
-        <div><h2>Account</h2></div>
+        <div><h2>Profile</h2></div>
         <div class="panel panel-default">
             <div class="panel-heading">Quote</div>
             <div class="panel-body">
@@ -53,7 +34,7 @@ $(document).ready(function()
                         new HTML_INPUT_HIDDEN(['name' => 'id','value'=>$tmpl['showid']]),
                         new HTML_INPUT_TEXT(  ['name' => 'quote' ,'value'=>$tmpl['quote'] ,'option' => ['help_text' => 'Quote']]),
                         new HTML_INPUT_TEXT(  ['name' => 'quote_ref' ,'value'=>$tmpl['quote_ref'] ,'option' => ['help_text' => 'Quote Reference']]),
-                        new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出']),
+                        new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出','option' => ['help_text' => 'true']]),
                     ],
                 ]),"quote");
                 ?>

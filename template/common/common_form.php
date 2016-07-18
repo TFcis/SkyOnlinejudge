@@ -15,10 +15,10 @@ if (!defined('IN_TEMPLATE')) {
     <div class="col-md-9">
 TAG;
             }
-            $rev.='<input type=\''.$setting['type'].'\' class="form-control textinput"';
+            $rev.='<input type=\''.htmlentities($setting['type']).'\' class="form-control textinput"';
 
             foreach( $setting as $tag => $key){
-                if( !is_string($tag) || !is_string($key) )continue;
+                if( !is_string($tag) || !is_scalar($key) )continue;
                 if($tag == 'type')continue;
                 $rev .= ' '.htmlentities($tag);
                 if( !empty($key) ){
@@ -30,7 +30,6 @@ TAG;
             if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
                 $rev.=<<<'TAG'
     </div>
-    <!--<div class="col-sm-1" id="e_repeat"></div>-->
 </div>
 TAG;
             }
@@ -40,12 +39,16 @@ TAG;
 
     if( !function_exists('BT3_HORZIONTAL_BTN') ){
         function BT3_HORZIONTAL_BTN($setting,$info){
+            Log::msg(Level::Debug,"",$setting);
             $rev = "";
             if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
                 $rev.=<<<TAG
 <div class="form-group">
-    <div class="col-md-offset-9 col-md-3 text-right">
+    <div class="col-md-12 text-right">
 TAG;
+            }
+            if( $setting['option']['help_text']!=false ){
+                $rev.="<small><span id='{$setting['name']}-show'></span></small>";
             }
             $rev.='<button class="btn btn-success"';
 
@@ -58,9 +61,7 @@ TAG;
                 }
             }
             $rev.='>'.htmlentities($setting['title']).'</button>';
-            if( $setting['option']['help_text']!=false ){
-                $rev.="<small><span id='{$setting['name']} show'></span></small>";
-            }
+            
             if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
                 $rev.=<<<'TAG'
     </div>
