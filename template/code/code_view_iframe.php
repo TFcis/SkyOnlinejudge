@@ -14,7 +14,7 @@ $(document).ready(function()
 </head>
 
 <div id="wrap">
-    <p><a href="<?=$_E['SITEROOT'].'code.php/view/'.$tmpl['hash']?>" target="_blank">View in original site</a></p>
+    <p><a href="<?=$SkyOJ->uri('code','view',$tmpl['hash'])?>" target="_blank">View in original site</a></p>
     <?php Render::renderSingleTemplate('common_codepanel'); ?>
     <div class="text-right">
         <p><?=$_E['site']['name']?></p>

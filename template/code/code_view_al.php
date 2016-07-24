@@ -3,13 +3,13 @@ if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
-<script src="https://cdn.rawgit.com/anliting/syntaxhighlighter/8ca43eeffa4d71d11bbbb16e2fc4d1bd4785ab94/highlighter.js">
+<script src="https://cdn.rawgit.com/anliting/syntaxhighlighter/1e054363558531c4fd9bea07344085ddcc314c02/highlighter.js">
 </script>
 <script>
-$(document).ready(function()
+/*$(document).ready(function()
 {
     syntaxHighlighter();
-})
+})*/
 </script>
 <div class="container">
     <div class="row">

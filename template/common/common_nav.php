@@ -30,7 +30,7 @@ if (!defined('IN_TEMPLATE')) {
                 <ul class="nav navbar-nav">
                     <li><a href="<?=$_E['SITEROOT']?>problem.php">Problems</a></li>
                     <li><a href="<?=$_E['SITEROOT']?>index.php">Submission</a></li>
-                    <li><a href="<?=$_E['SITEROOT']?>index.php?old">Dev Message</a></li>
+                    <li><a href="<?=$SkyOJ->uri('index','old')?>">Dev Message</a></li>
                     <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -47,7 +47,7 @@ if (!defined('IN_TEMPLATE')) {
                     <li><a href="<?=$_E['SITEROOT']?>user.php/login">LOGIN</a></li>
                     <?php else: ?>
                         <?php if (userControl::isAdmin()):?>
-                    <li><a href="<?=$_E['SITEROOT']?>admin.php">Admin</a></li>
+                    <li><a href="<?=$SkyOJ->uri('admin')?>">Admin</a></li>
                         <?php endif; ?>
                     <li><a href="<?=$_E['SITEROOT'].'user.php/view/'.$_G['uid']?>"><?php echo htmlspecialchars($_G['nickname']); ?></a></li>
                     <li><a href="<?=$_E['SITEROOT']?>user.php/logout">LOGOUT</a></li>
