@@ -19,7 +19,7 @@ function viewHandle(){
         exit(0);
     }
     $_E['template']['owner'] = $res['owner'];
-    //nickname($res['owner']);
+    \SKYOJ\nickname($res['owner']);
     $_E['template']['defaultcode'] = $res['content'];
     $_E['template']['timestamp'] = $res['timestamp'];
     $_E['template']['hash'] = $hash;

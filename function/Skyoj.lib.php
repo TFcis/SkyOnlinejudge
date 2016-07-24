@@ -1,4 +1,4 @@
-<?php
+<?php namespace SKYOJ;
 
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
@@ -281,8 +281,7 @@ function nickname($uid)
     if (!is_array($uid)) {
         $uid = [$uid];
     }
-
-    $res = DB::getuserdata('account', $uid, 'uid,nickname');
+    $res = \userControl::getuserdata('account',$uid,['uid','nickname']);
     foreach ($uid as $u) {
         $u = (string) $u;
         if (isset($res[$u])) {
@@ -290,8 +289,7 @@ function nickname($uid)
         }
     }
     $_E['nickname']['0'] = 'anonymous';
-
-    return $res;
+    return $_E['nickname'];
 }
 
 class privatedata

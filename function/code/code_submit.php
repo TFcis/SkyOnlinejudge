@@ -1,5 +1,4 @@
 <?php namespace SKYOJ\Code;
-
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
@@ -11,23 +10,23 @@ function submitHandle()//api
         \throwjson('error', 'Access denied');
     }*/
     if ( $_G['uid'] == 0 && $_E['Codepad']['allowguestsubmit'] == false ) {
-        \throwjson('error', 'Access denied');
+        \SKYOJ\throwjson('error', 'Access denied');
     }
 
-    $code = \safe_post('code');
+    $code = \SKYOJ\safe_post('code');
 
     if (empty($code)) {
         var_dump($code,$_POST);
-        \throwjson('error', 'Empty Code!');
+        \SKYOJ\throwjson('error', 'Empty Code!');
     }
     if (($s = strlen($code)) > $_E['Codepad']['maxcodelen']) {
-        \throwjson('error', 'Code Too LONG! :'.$s);
+        \SKYOJ\throwjson('error', 'Code Too LONG! :'.$s);
     }
 
     $hash=namespace\PutCode($code,namespace\CodeType::CODEPAD,$_G['uid']);
 
     if( $hash!== false)
-        \throwjson('SUCC', $hash);
+        \SKYOJ\throwjson('SUCC', $hash);
     else
-        \throwjson('error', 'DB FULL');
+        \SKYOJ\throwjson('error', 'DB FULL');
 }

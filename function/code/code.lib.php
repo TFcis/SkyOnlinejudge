@@ -46,12 +46,10 @@ function GetCode(string $hash,int $type,&$data):bool
     global $_G;
     $table = \DB::tname('codepad');
     if( !checkCodeHash($hash) ){
-        \Log::msg(\Level::Debug,'Code1',$hash);
         return false;
     }
     $res = \DB::fetchEx("SELECT `owner`,`type`,`timestamp`,`content` FROM `{$table}` WHERE hash =?", $hash);
     if( !$res || (int)$res['type']!==$type  ){
-        \Log::msg(\Level::Debug,'Code2',$res);
         return false;
     }
     $data = $res;
