@@ -8,7 +8,7 @@ function viewHandle(){
     global $SkyOJ,$_E;
     $hash = $SkyOJ->UriParam(2);
     $useiframe = $SkyOJ->UriParam(3)==='iframe';
-
+    $useal = $SkyOJ->UriParam(3)==='al';
     if( !isset($hash) ){
         \Render::ShowMessage('?!?');
         exit(0);
@@ -26,7 +26,7 @@ function viewHandle(){
 
     if ($useiframe) {
         \Render::renderSingleTemplate('code_view_iframe', 'code');
-    } elseif (false) {//???
+    } elseif ($useal) {
         \Render::render('code_view_al', 'code');
     } else {
         \Render::render('code_view', 'code');
