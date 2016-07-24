@@ -38,7 +38,7 @@ class Render
     public static function renderSingleTemplate($pagename, $namespace = 'common')
     {
         try {
-            global $_E,$_G;
+            global $_E,$_G,$SkyOJ;
             if (!isset($_E['template'])) {
                 $_E['template'] = [];
                 $tmpl = [];

@@ -36,7 +36,7 @@ if (!defined('IN_TEMPLATE')) {
                         <ul class="dropdown-menu" role="menu">
                             <li class="dropdown-header">Coder</li>
                             <li><a href="<?=$_E['SITEROOT']?>rank.php">Stats</a></li>
-                            <li><a href="<?=$_E['SITEROOT']?>code.php">Codepad</a></li>
+                            <li><a href="<?=$SkyOJ->uri('code')?>">Code</a></li>
                             <li class="divider"></li>
                             <li><a href="http://forum.tfcis.org/forum.php?mod=group&fid=107" target="_blank">Discuss</a></li>
                         </ul>

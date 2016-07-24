@@ -41,6 +41,15 @@ final class _SkyOJ
         $this->uri_param = explode('/', $path_info);
     }
 
+    public function uri(...$var):string
+    {
+        global $_E;
+        $uri = $_E['SITEROOT'].'index.php';
+        foreach($var as $data)
+            $uri .= '/'.$data;
+        return $uri;
+    }
+
     //SkyOJ Not deal with init time error
     public function __construct()
     {
@@ -54,7 +63,7 @@ final class _SkyOJ
 
     private $handle_list = [];
     private $default_handle = null;
-    public function RegisterHandle(string $name,Callable $function,$file,bool $default = false)
+    public function RegisterHandle(string $name,string $function,$file,bool $default = false)
     {
         $this->handle_list[$name] = [$function,$file];
         if( $default ){
@@ -77,14 +86,18 @@ final class _SkyOJ
 
             $param0 = $this->uri_param[0];
             if( !isset($this->handle_list[$param0]) ){
-                throw new \Exception('No such Handle!');
+                throw new \Exception('No such Handle!'.$param0);
             }
             if( !empty($this->handle_list[$param0][1]) ){
-                require_once($param0[1]);
+                require_once($this->handle_list[$param0][1]);
+            }
+            if( !is_callable($this->handle_list[$param0][0]) ){
+                throw new \Exception('No such Handle function!');
             }
             $this->handle_list[$param0][0]();
-        }catch(Throwable $e){
-            echo $e->message();
+        }catch(\Throwable $e){
+            echo $e->getMessage();
+            var_dump($e);
             exit(0);
         }
     }
