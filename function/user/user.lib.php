@@ -1,4 +1,4 @@
-<?php
+<?php namespace SKYOJ\User;
 
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
@@ -9,7 +9,7 @@ function GetPasswordHash(string $password)
 {
     $re = password_hash($password, PASSWORD_BCRYPT);
     if ($re === false) {
-        LOG::msg(Level::Critical, 'passwordHash Fail!', $password);
+        \LOG::msg(\Level::Critical, 'passwordHash Fail!', $password);
         //Crash!
     }
 
@@ -18,7 +18,7 @@ function GetPasswordHash(string $password)
 
 function getTimestamp()
 {
-    LOG::msg(Level::Notice, 'getTimestamp() is Old Function!');
+    \LOG::msg(\Level::Notice, 'getTimestamp() is Old Function!');
 
     return date('Y-m-d G:i:s');
 }
@@ -43,7 +43,7 @@ function CheckEmailFormat(string $email)
 
 function checknickname($name)
 {
-    LOG::msg(Level::Notice, 'checknickname() is Old Function!');
+    \LOG::msg(\Level::Notice, 'checknickname() is Old Function!');
     if ($name !== addslashes($name)) {
         return false;
     }
@@ -62,7 +62,7 @@ function checknickname($name)
 //TODO : Use Common Error Id To Replace Const-Strings
 function register(string $email, string $nickname, string $password, string $repeat)
 {
-    $acctable = DB::tname('account');
+    $acctable = \DB::tname('account');
     $resultdata = [false, ''];
 
     if (!CheckEmailFormat($email) || !CheckPasswordFormat($password) || $password != $repeat ||
@@ -75,7 +75,7 @@ function register(string $email, string $nickname, string $password, string $rep
 
     //$nickname = addslashes($nickname);
     $password = GetPasswordHash($password);
-    if (!DB::queryEx("INSERT INTO `$acctable` ".
+    if (!\DB::queryEx("INSERT INTO `$acctable` ".
                     '(`uid`, `email`, `passhash`, `nickname`, `timestamp`) '.
                     'VALUES (NULL,?,?,?,CURRENT_TIMESTAMP)', $email, $password, $nickname)) {
         $resultdata[1] = '帳號已被註冊';
@@ -99,14 +99,14 @@ function login(string $userinput, string $password)
     global $_E;
 
     $_E['template']['login'] = [];
-    $acctable = DB::tname('account');
+    $acctable = \DB::tname('account');
     $sqlres;
     $userdata = null;
     $resultdata = [false, ''];
 
     $email = $userinput;
     if (!CheckEmailFormat($email)) {
-        $res = DB::fetchEx("SELECT `email` FROM `$acctable` WHERE `nickname`=?", $userinput);
+        $res = \DB::fetchEx("SELECT `email` FROM `$acctable` WHERE `nickname`=?", $userinput);
         if ($res === false) {
             $resultdata[1] = '暱稱錯誤';
 
@@ -121,7 +121,7 @@ function login(string $userinput, string $password)
         return $resultdata;
     }
 
-    $userdata = DB::fetch("SELECT * FROM  `$acctable`".
+    $userdata = \DB::fetch("SELECT * FROM  `$acctable`".
                         'WHERE  `email` = ?', [$email]);
     if ($userdata === false) {
         $resultdata[1] = '無此帳號';
@@ -143,7 +143,7 @@ function page_ojacct($uid)
 {
     global $_E;
     $class = Plugin::loadClassByPluginsFolder('rank/board_other_oj');
-    $table_oj = DB::tname('ojlist');
+    $table_oj = \DB::tname('ojlist');
     $_E['template']['oj'] = [];
 
     if (!isset($_E['ojlist'])) {
@@ -184,7 +184,7 @@ function page_ojacct($uid)
 function modify_ojacct($argv, $euid)
 {
     global $_E;
-    $table = DB::tname('userojlist');
+    $table = \DB::tname('userojlist');
     if (!isset($_E['ojlist'])) {
         envadd('ojlist');
     }
@@ -239,7 +239,7 @@ class UserInfo
 
     public static function GetUserData(string $table, $uids, string $qdata = '*')
     {
-        $table = DB::tname($table);
+        $table = \DB::tname($table);
         $resdata = [];
 
         if (empty($uids)) {
@@ -250,10 +250,10 @@ class UserInfo
             $uids = [$uids];
         }
 
-        $q = DB::genQuestListSign(count($uids));
+        $q = \DB::genQuestListSign(count($uids));
         //$uids =  implode(',', array_map('intval', $uids) );
 
-        $res = DB::fetchAll("SELECT $qdata FROM `$table` WHERE `uid` IN($q)", $uids);
+        $res = \DB::fetchAll("SELECT $qdata FROM `$table` WHERE `uid` IN($q)", $uids);
         if ($res === false) {
             return false;
         }
@@ -261,7 +261,7 @@ class UserInfo
         foreach ($res as $r) {
             $resdata[$r['uid']] = $r;
         }
-        LOG::msg(Level::Debug, 'GetUserData', $resdata);
+        \LOG::msg(\Level::Debug, 'GetUserData', $resdata);
 
         return $resdata;
     }
@@ -294,6 +294,11 @@ class UserInfo
         }
     }
 
+    public function uid()
+    {
+        return $this->uid;
+    }
+    
     public function is_registed()
     {
         return $this->uid > 0;
@@ -323,10 +328,10 @@ class UserInfo
 
     private function _save_data_account($data, $cg = null)
     {
-        $taccount = DB::tname('account');
-        $info = DB::ArrayToQueryString($data);
-        Log::msg(Level::Debug, "UPDATE `{$taccount}` SET {$info['update']} WHERE `uid`={$this->uid}", $info);
-        if (!DB::query("UPDATE {$taccount} SET {$info['update']} WHERE `uid`={$this->uid}", $info['data'])) {
+        $taccount = \DB::tname('account');
+        $info = \DB::ArrayToQueryString($data);
+        \Log::msg(\Level::Debug, "UPDATE `{$taccount}` SET {$info['update']} WHERE `uid`={$this->uid}", $info);
+        if (!\DB::query("UPDATE {$taccount} SET {$info['update']} WHERE `uid`={$this->uid}", $info['data'])) {
             return false;
         }
 
@@ -376,7 +381,7 @@ class UserInfo
 
     private function _save_data_view($viewdata, $cg = null)
     {
-        $tprofile = DB::tname('profile');
+        $tprofile = \DB::tname('profile');
         if (!isset($viewdata['quote'])) {
             $viewdata['quote'] = '';
         }
@@ -396,7 +401,7 @@ class UserInfo
         $avatarurl = $viewdata['avatarurl'];
 
         $uid = $this->uid;
-        $res = DB::queryEx("INSERT INTO `$tprofile` (`uid`, `quote`, `quote_ref`, `avatarurl`, `backgroundurl`)
+        $res = \DB::queryEx("INSERT INTO `$tprofile` (`uid`, `quote`, `quote_ref`, `avatarurl`, `backgroundurl`)
                                     VALUES (?,?,?,?,?)
                                     ON DUPLICATE KEY
                                     UPDATE  `quote` = ?,
@@ -413,13 +418,13 @@ class UserInfo
 
     private function _load_data_ojacct()
     {
-        $userojaccttable = DB::tname('userojacct');
-        $res = DB::query("SELECT * FROM `$userojaccttable` WHERE `uid` = ".$this->uid);
+        $userojaccttable = \DB::tname('userojacct');
+        $res = \DB::query("SELECT * FROM `$userojaccttable` WHERE `uid` = ".$this->uid);
         if (!$res) {
             return false;
         }
         $val = [];
-        while ($tmp = DB::fetch($res)) {
+        while ($tmp = \DB::fetch($res)) {
             $val[] = $tmp;
         }
         $flag = false;
@@ -434,25 +439,25 @@ class UserInfo
 
     private function _save_data_ojacct($ojarray, $cg = null)
     {
-        $userojaccttable = DB::tname('userojacct');
+        $userojaccttable = \DB::tname('userojacct');
         //remove old data
         if (isset($cg)) {
             if (is_array($cg[0])) {
-                DB::syslog('RM'.$cg[0], 'ojacct');
+                \DB::syslog('RM'.$cg[0], 'ojacct');
                 foreach ($cg[0] as $indexid) {
-                    DB::query("DELETE FROM `$userojaccttable` WHERE `indexid` = '$indexid'");
+                    \DB::query("DELETE FROM `$userojaccttable` WHERE `indexid` = '$indexid'");
                 }
             }
             if (is_array($cg[1])) {
                 foreach ($ojarray as $row) {
                     if (in_array($row['indexid'], $cg[1])) {
-                        DB::syslog('ADD'.$row['indexid'], 'ojacct');
+                        \DB::syslog('ADD'.$row['indexid'], 'ojacct');
                         $uid = (int) $row['uid'];
                         $id = (int) $row['id'];
                         $indexid = "$uid+$id";
-                        $account = DB::real_escape_string($row['account']);
+                        $account = \DB::real_escape_string($row['account']);
                         $approve = (int) $row['approve'];
-                        DB::query("INSERT INTO `$userojaccttable` (`indexid`,`uid`,`id` ,`account`,`approve`)
+                        \DB::query("INSERT INTO `$userojaccttable` (`indexid`,`uid`,`id` ,`account`,`approve`)
                                     VALUES ('$indexid',  $uid,  $id,  '$account',  $approve)
                                     ON DUPLICATE KEY
                                     UPDATE `account` = '$account' , `approve` = $approve");
@@ -460,15 +465,15 @@ class UserInfo
                 }
             }
         } else {
-            DB::syslog('GLOBAL ADD'.$this->uid, 'ojacct');
-            DB::query("DELETE FROM `$userojaccttable` WHERE `uid` = ".$this->uid);
+            \DB::syslog('GLOBAL ADD'.$this->uid, 'ojacct');
+            \DB::query("DELETE FROM `$userojaccttable` WHERE `uid` = ".$this->uid);
             foreach ($ojarray as $row) {
                 $uid = (int) $row['uid'];
                 $id = (int) $row['id'];
                 $indexid = "$uid+$id";
-                $account = DB::real_escape_string($row['account']);
+                $account = \DB::real_escape_string($row['account']);
                 $approve = (int) $row['approve'];
-                DB::query("INSERT INTO `$userojaccttable` (`indexid`,`uid`,`id` ,`account`,`approve`)
+                \DB::query("INSERT INTO `$userojaccttable` (`indexid`,`uid`,`id` ,`account`,`approve`)
                             VALUES ('$indexid',  $uid,  $id,  '$account',  '$approve')");
             }
         }

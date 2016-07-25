@@ -9,7 +9,7 @@ $(document).ready(function()
     $("#quote").submit(function(e)
     {
         e.preventDefault();
-        api_submit("<?=$_E['SITEROOT']?>user.php/edit","#quote","#btn-show",function(){
+        api_submit("<?=$SkyOJ->uri('user','edit')?>","#quote","#btn-show",function(){
             setTimeout(function(){
                 location.href="<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/setting/profile";
             }, 500);

@@ -8,7 +8,7 @@ var pageid = '<?=$_E['template']['showid']?>' ;
 function authacct(c)
 {
     var disname = '#display-modal-' + c ;
-    $.post("<?=$_E['SITEROOT']?>user.php",{
+    $.post("<?=$SkyOJ->uri('user','edit')?>",{
             mod : 'edit',
             page: 'authacct',
             id  : pageid,
@@ -49,7 +49,7 @@ $(document).ready(function()
             }
         }
         
-        api_submit("<?=$_E['SITEROOT']?>user.php","#acct","#btn-show",function(){
+        api_submit("<?=$SkyOJ->uri('user','edit')?>","#acct","#btn-show",function(){
             setTimeout(function(){location.reload();},500);
         });
         return true;

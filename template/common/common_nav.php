@@ -84,14 +84,13 @@ $(document).ready(function()
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <?php if (!$_G['uid']): ?>
-                    <li><a href="<?=$_E['SITEROOT']?>user.php/login">LOGIN</a></li>
+                    <li><a href="<?=$SkyOJ->uri('user','login')?>">LOGIN</a></li>
                     <?php else: ?>
                         <?php if (userControl::isAdmin()):?>
                         <li><a href="#" id="admin-tab">Admin</a></li>
-                        <!--<li><a href="<?=$SkyOJ->uri('admin')?>" id="admin-tab">Admin</a></li>-->
                         <?php endif; ?>
-                    <li><a href="<?=$_E['SITEROOT'].'user.php/view/'.$_G['uid']?>"><?php echo htmlspecialchars($_G['nickname']); ?></a></li>
-                    <li><a href="<?=$_E['SITEROOT']?>user.php/logout">LOGOUT</a></li>
+                    <li><a href="<?=$SkyOJ->uri('user','view',$_G['uid'])?>"><?php echo htmlspecialchars($_G['nickname']); ?></a></li>
+                    <li><a href="<?=$SkyOJ->uri('user','logout')?>">LOGOUT</a></li>
                     <?php endif; ?>
                 </ul>
             </div>

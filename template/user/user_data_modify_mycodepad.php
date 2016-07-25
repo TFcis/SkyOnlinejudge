@@ -21,8 +21,7 @@ if (!defined('IN_TEMPLATE')) {
             <tr style = "height: 40px">
                 <td><?=$row['id'];
     ?></td>
-                <td><a href="<?=$_E['SITEROOT']?>code.php/view/<?=$row['hash'];
-    ?>"><?=htmlspecialchars($row['hash']);
+                <td><a href="<?=$SkyOJ->uri('code','view',$row['hash'])?>"><?=htmlspecialchars($row['hash']);
     ?></a></td>
                 <td>
                     <a class="icon-bttn">

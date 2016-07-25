@@ -48,7 +48,7 @@ $(document).ready(function()
         $("#password").val(encrypted);
         
         $("#display").html('...');
-        api_submit("<?=$_E['SITEROOT']?>user.php","#loginform","#display",function(res){
+        api_submit("<?=$SkyOJ->uri('user','login')?>","#loginform","#display",function(res){
             location.href = "<?=$_E['SITEROOT']?>"+res.data;
         });
         this.passwordreal.disabled = false;
@@ -100,7 +100,7 @@ $(document).ready(function()
                 </form>
                 <small>OR</small>
             
-                <div class = 'link-like' onclick="location.href='<?=$_E['SITEROOT']?>user.php/register'">
+                <div class = 'link-like' onclick="location.href='<?=$SkyOJ->uri('user','register')?>'">
                 <u><b>Register</b></u>
                 </div>
             </center>

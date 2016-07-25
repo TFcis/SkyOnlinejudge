@@ -1,4 +1,4 @@
-<?php
+<?php namespace SKYOJ;
 
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
