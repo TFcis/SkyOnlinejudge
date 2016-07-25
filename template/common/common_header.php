@@ -31,8 +31,11 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="<?=$_E['SITEROOT']?>js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<?=$_E['SITEROOT']?>js/ace/ace.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/common.js"></script>
+    <?php if (userControl::isAdmin()):?>
+    <script src="<?=$_E['SITEROOT']?>js/admin_check.js"></script>
+    <?php endif;?>
     <script>
     $(".alert").alert();
     siteroot('<?=$_E['SITEROOT']?>');

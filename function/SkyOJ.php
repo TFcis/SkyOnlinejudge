@@ -15,6 +15,7 @@ require_once 'renderCore.php';
 require_once 'pluginsCore.php';
 //Load Library
 require_once 'function/common/encrypt.php';
+require_once 'function/common/forminfo.php';
 require_once 'Skyoj.lib.php';
 
 final class _SkyOJ

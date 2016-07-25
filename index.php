@@ -5,6 +5,7 @@ require_once 'function/SkyOJ.php';
 
 $SkyOJ->RegisterHandle('index','\\SKYOJ\\Index',null,true);
 $SkyOJ->RegisterHandle('code' ,'\\SKYOJ\\Code\\CodeHandle',$_E['ROOT'].'/code.php');
+$SkyOJ->RegisterHandle('admin','\\SKYOJ\\Admin\\AdminHandle',$_E['ROOT'].'/admin.php');
 $SkyOJ->run();
 function Index(){
     global $SkyOJ;

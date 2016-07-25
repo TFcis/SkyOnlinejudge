@@ -3,7 +3,7 @@
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
-/*
+/**
  * @file encrypt.php
  * @brief Support some encrypt function
  *

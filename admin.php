@@ -1,43 +1,54 @@
-<?php
-
+<?php namespace SKYOJ\Admin;
 require_once 'GlobalSetting.php';
 require_once 'function/SkyOJ.php';
+require_once 'function/admin/admin.lib.php';
+function AdminHandle()
+{
+    global $_E,$SkyOJ;
+    if (!\userControl::isAdmin()) {
+        http_response_code(403);
+        header('Location: index.php');
+        exit(0);
+    }
 
-if (!userControl::isAdmin()) {
-    header('Location: index.php');
-    exit(0);
+    $param = $SkyOJ->UriParam(1)??'index';
+    switch( $param )
+    {
+        //api
+        case 'api':
+            break;
+        
+        //all left should check token!
+        case 'index':
+            checkToken();
+            break;
+
+        //Sub Page
+        case 'log':
+        case 'plugins':
+            checkToken();
+            break;
+
+        default:
+            \Render::render('nonedefined');
+            exit(0);
+    }
+
+    $funcpath = $_E['ROOT']."/function/admin/admin_$param.php";
+    $func     = __NAMESPACE__ ."\\{$param}Handle";
+    require_once($funcpath);
+    $func();
 }
-$allowmod = ['plugins', 'log'];
-if (Quest(0)) {
-    if (!userControl::CheckToken('ADMIN_CSRF', safe_post('_t'))) {
-        Log::msg(Level::Warning, 'ADMIN CSRF Token error!');
-        Render::renderSingleTemplate('nonedefined');
-        exit(0);
-    }
-    $mod = Quest(0);
-    if (!in_array($mod, $allowmod)) {
-        Render::renderSingleTemplate('nonedefined');
-        exit(0);
+
+function checkToken()
+{
+    global $_E;
+    $token = \SKYOJ\safe_post('token')??\SKYOJ\safe_get('token');
+    if ( \userControl::CheckToken('ADMIN_CSRF',$token)) {
+        assert( \userControl::getSavedToken('ADMIN_CSRF') === $token );
+        $_E['template']['ADMIN_CSRF'] = $token;
     } else {
-        require_once $_E['ROOT'].'/function/admin/admin.lib.php';
-        $funcpath = $_E['ROOT']."/function/admin/admin_$mod.php";
-        if (file_exists($funcpath)) {
-            require $funcpath;
-        } else {
-            Render::renderSingleTemplate("admin_$mod", 'admin');
-        }
+        \Render::ShowMessage('Token 已失效，請重新載入'.$token);
         exit(0);
     }
-} else {
-    $token = null;
-    if (userControl::isToeknSet('ADMIN_CSRF') &&
-        userControl::CheckToken('ADMIN_CSRF', userControl::getSavedToken('ADMIN_CSRF'))) {
-        $token = userControl::getSavedToken('ADMIN_CSRF');
-    } else {
-        $token = userControl::RegisterToken('ADMIN_CSRF', 3600, false);
-    }
-    $_E['template']['ADMIN_CSRF'] = $token;
-    $_E['template']['pluginfolders'] = Plugin::getAllFolders();
-    Render::render('admin_main', 'admin');
-    exit(0);
 }
