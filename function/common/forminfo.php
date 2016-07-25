@@ -4,60 +4,116 @@ if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
 
-//Base on bootstrap 3
-//todo : add confoser
-class FormInput
+interface HTML_Element
 {
-    private $_name;
-    private $_id;
-    private $_type;
-    private $_title;
-    private $_option;
+    //TODO: May be we need a class to store style
+    //Call Back Order
+    //$make_html_callback > $callback > default 
+    public function make_html($setting = null,callable $callback = null):string;
+    public function __construct(array $setting,callable $make_html_callback = null);
+}
 
-    public function __construct(array $info)
+abstract class HTML_INPUT_HELPER
+{
+    protected $setting;
+    protected $used_callback = null;
+    static protected function check_setting(string $tag,array &$real,$default = null):bool
     {
-        $this->_name = isset($info['name'])  ? $info['name'] : '';
-        $this->_id = isset($info['id'])    ? $info['id']  : $this->_name;
-        $this->_type = isset($info['type'])  ? $info['type'] : 'text';
-        $this->_title = isset($info['title']) ? $info['title'] : '';
-        $this->_option = isset($info['option']) ? $info['option'] : [];
-    }
-
-    private static function html5_form_type(string $t)
-    {
-        switch ($t) {
-            case 'hr':
-                return 'hr';
-            case 'submit':
-                return 'submit';
-            default:
-                return 'text';
+        if( !isset($real[$tag]) ){
+            $res[$tag] = $default;
+            return false;
         }
+        return true;
     }
 
-    public function name()
+    function __construct(array $setting,callable $make_html_callback = null)
     {
-        return $this->_name;
+        if( $make_html_callback !== null )
+            $this->used_callback = $make_html_callback;
+        $this->setting = HTML_INPUT_TEXT::deal_common_setting($setting);
+        
+        //Log::msg(Level::Debug, '', $this->setting);
     }
 
-    public function id()
+    static protected function deal_common_setting(array $setting):array
     {
-        return $this->_id;
+        HTML_INPUT_HELPER::check_setting('name',$setting);
+        HTML_INPUT_HELPER::check_setting('id'  ,$setting);
+        if( !isset($setting['option']) || !is_array($setting['option']) )
+            $setting['option'] = [];
+        if(!isset($setting['option']['help_text']))
+            $setting['option']['help_text'] = '';
+        return $setting;
     }
 
-    public function type()
+    public function make_html($info = null,callable $callback = null):string
     {
-        return self::html5_form_type($this->_type);
+        if( $this->used_callback !== null ){
+            return $callback($this->setting,$info);
+        }
+        if( $callback !== null ){
+            return $callback($this->setting,$info);
+        }
+        return "<!--INPUT NOT DEFINED-->";
     }
+}
 
-    public function title()
+class HTML_INPUT_TEXT extends HTML_INPUT_HELPER implements HTML_Element 
+{
+    function __construct(array $setting,callable $make_html_callback = null)
     {
-        return $this->_title;
+        parent::__construct($setting,$make_html_callback);
+        $this->setting['type'] = 'text';
     }
+}
 
-    public function option()
+class HTML_INPUT_PASSWORD extends HTML_INPUT_HELPER implements HTML_Element 
+{
+    function __construct(array $setting,callable $make_html_callback = null)
     {
-        return $this->_option;
+        parent::__construct($setting,$make_html_callback);
+        $this->setting['type'] = 'password';
+    }
+}
+
+class HTML_INPUT_HIDDEN extends HTML_INPUT_HELPER implements HTML_Element 
+{
+    function __construct(array $setting,callable $make_html_callback = null)
+    {
+        parent::__construct($setting,$make_html_callback);
+        $this->setting['type'] = 'hidden';
+    }
+}
+
+class HTML_INPUT_BUTTOM extends HTML_INPUT_HELPER implements HTML_Element 
+{
+    function __construct(array $setting,callable $make_html_callback = null)
+    {
+        HTML_INPUT_HELPER::check_setting('type',$setting,'submit');
+        HTML_INPUT_HELPER::check_setting('title',$setting);
+        parent::__construct($setting,$make_html_callback);
+    }
+}
+
+class HTML_HR implements HTML_Element 
+{
+    function __construct(array $setting = [],callable $make_html_callback = null){}
+    public function make_html($setting = null,callable $callback = null):string
+    {
+        return "<hr>";
+    }
+}
+
+class HTML_ROW implements HTML_Element
+{
+    private $text = '';
+    function __construct(array $setting = [],callable $make_html_callback = null)
+    {
+        $this->text = $setting['html'] ?? '';
+    }
+    public function make_html($setting = null,callable $callback = null):string
+    {
+        return $this->text;
     }
 }
 
@@ -67,28 +123,32 @@ class FormInfo
     const STYLE_NORMAL = 'form';
     const STYLE_HORZIONTAL = 'form-horizontal';
 
-    private $_style;
+    private $style;
 
-    private $_inputs = [];
+    private $elements = [];
 
     public function __construct(array $FromInfo)
     {
-        $this->_style = isset($FromInfo['style']) ? $FromInfo['style'] : self::STYLE_HORZIONTAL;
+        $this->style = $FromInfo['style'] ?? self::STYLE_HORZIONTAL;
         if (isset($FromInfo['data'])) {
             foreach ($FromInfo['data'] as $row) {
-                Log::msg(Level::Debug, '', $row);
-                $this->_inputs[] = new FormInput($row);
+                if( $row instanceof HTML_Element ) {
+                    //Log::msg(Level::Debug, '', $row);
+                    $this->elements[] = $row;
+                } else {
+                    Log::msg(Level::Debug, 'FormInfo reject a object:', $row);
+                }
             }
         }
     }
 
     public function style()
     {
-        return $this->_style;
+        return $this->style;
     }
 
-    public function inputs()
+    public function elements()
     {
-        return $this->_inputs;
+        return $this->elements;
     }
 }
