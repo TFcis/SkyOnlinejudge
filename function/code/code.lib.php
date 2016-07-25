@@ -14,7 +14,7 @@ final class CodeType{
 
 function genCodeHash():string
 {
-    return \GenerateRandomString(8);
+    return \SKYOJ\GenerateRandomString(8);
 }
 function checkCodeHash(string $hash):bool
 {

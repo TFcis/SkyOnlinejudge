@@ -56,8 +56,6 @@ function apiGetAdminToken()
             $passReal = $data[$_G['uid']]['passhash'];
             if( password_verify($password,$passReal) ){
                 $status = 'SUCC';
-            }else{
-                $msg.="?";
             }
         }
     }
@@ -65,6 +63,6 @@ function apiGetAdminToken()
         $token = \userControl::RegisterToken('ADMIN_CSRF', 3600, false);
         \SKYOJ\throwjson('SUCC',$token);
     }else{
-        \SKYOJ\throwjson('error',$msg.$password);
+        \SKYOJ\throwjson('error',$msg);
     }
 }
