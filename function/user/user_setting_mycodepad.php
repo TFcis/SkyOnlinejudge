@@ -17,9 +17,7 @@ function setting_mycodepadHandle(UserInfo $userInfo)
     }
 
     if (!$rowdata) {
-        $_E['template']['message'] = 'SQL Error...';
-        \Render::renderSingleTemplate('common_message', 'common');
-        exit(0);
+        $rowdata = [];
     }
 
     $_E['template']['row'] = $rowdata;
