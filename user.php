@@ -13,8 +13,8 @@ function UserHandle()
     {
         //api
         case 'edit':
-            \SKYOJ\throwjson('error','not yet'); 
             break;
+            
         case 'login':
         case 'logout':
         case 'view':

@@ -53,6 +53,14 @@ function checknickname($name)
 
     return true;
 }
+
+function CheckUidFormat($uid):bool
+{
+    if( !is_string($uid) && !is_integer($uid) )
+        return false;
+    return preg_match('/^([1-9]{1}[0-9]*$|0)$/',$uid);
+}
+
 //function register
 //return : array( bool res , mixed des )
 // res : True Register Successful

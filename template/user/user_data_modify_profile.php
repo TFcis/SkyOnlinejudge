@@ -9,9 +9,9 @@ $(document).ready(function()
     $("#quote").submit(function(e)
     {
         e.preventDefault();
-        api_submit("<?=$SkyOJ->uri('user','edit')?>","#quote","#btn-show",function(){
+        api_submit("<?=$SkyOJ->uri('user','edit','quote')?>","#quote","#btn-show",function(){
             setTimeout(function(){
-                location.href="<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/setting/profile";
+                location.href="<?=$SkyOJ->uri('user','view',$tmpl['showid'],'setting','profile')?>";
             }, 500);
         });
         return true;
@@ -29,8 +29,6 @@ $(document).ready(function()
                 <?php
                 Render::renderForm(new FormInfo([
                     'data' => [
-                        new HTML_INPUT_HIDDEN(['name' => 'mod' ,'value'=>'edit']),
-                        new HTML_INPUT_HIDDEN(['name' => 'page','value'=>'quote']),
                         new HTML_INPUT_HIDDEN(['name' => 'id','value'=>$tmpl['showid']]),
                         new HTML_INPUT_TEXT(  ['name' => 'quote' ,'value'=>$tmpl['quote'] ,'option' => ['help_text' => 'Quote']]),
                         new HTML_INPUT_TEXT(  ['name' => 'quote_ref' ,'value'=>$tmpl['quote_ref'] ,'option' => ['help_text' => 'Quote Reference']]),
