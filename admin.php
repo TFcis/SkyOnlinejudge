@@ -1,6 +1,9 @@
 <?php namespace SKYOJ\Admin;
-require_once 'GlobalSetting.php';
-require_once 'function/SkyOJ.php';
+
+if (!defined('IN_SKYOJSYSTEM')) {
+    exit('Access denied');
+}
+
 require_once 'function/admin/admin.lib.php';
 function AdminHandle()
 {
@@ -48,7 +51,7 @@ function checkToken()
         assert( \userControl::getSavedToken('ADMIN_CSRF') === $token );
         $_E['template']['ADMIN_CSRF'] = $token;
     } else {
-        \Render::ShowMessage('Token 已失效，請重新載入'.$token);
+        \Render::ShowMessage('Token 無效，請重新載入');
         exit(0);
     }
 }

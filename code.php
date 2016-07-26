@@ -1,9 +1,10 @@
 <?php namespace SKYOJ\Code;
 
-require_once 'GlobalSetting.php';
-require_once 'function/SkyOJ.php';
-require_once 'function/code/code.lib.php';
+if (!defined('IN_SKYOJSYSTEM')) {
+    exit('Access denied');
+}
 
+require_once 'function/code/code.lib.php';
 function CodeHandle()
 {
     global $SkyOJ,$_E;

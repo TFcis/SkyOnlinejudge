@@ -1,9 +1,11 @@
 <?php namespace SKYOJ\User;
 
-require_once 'GlobalSetting.php';
-require_once 'function/SkyOJ.php';
-require_once 'function/user/user.lib.php';
 
+if (!defined('IN_SKYOJSYSTEM')) {
+    exit('Access denied');
+}
+
+require_once 'function/user/user.lib.php';
 function UserHandle()
 {
     global $SkyOJ,$_E,$_G;
@@ -14,7 +16,7 @@ function UserHandle()
         //api
         case 'edit':
             break;
-            
+
         case 'login':
         case 'logout':
         case 'view':

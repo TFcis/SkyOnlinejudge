@@ -30,7 +30,6 @@ function apiCheckAdminToken()
     if( CheckAdminToken($token) ){
         \SKYOJ\throwjson('SUCC',$token);
     }else{
-        \Log::msg(\Level::Warning, 'ADMIN CSRF Token error!');
         \SKYOJ\throwjson('error','Access denied');
     }
 }
