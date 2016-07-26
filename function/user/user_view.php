@@ -24,8 +24,7 @@ function ViewHandle()
             throw new \Exception('QQ NO Such One.');
         }
         $_E['template']['showid'] = $showid;
-    }catch (Throwable $e){
-        \LOG::msg(\Level::Notice,'User view id error',$QUEST,$e);
+    }catch (\Throwable $e){
         \Render::errormessage('ERROR : '.$e->getMessage(),'USER');
         \Render::render('nonedefined');
         exit();
