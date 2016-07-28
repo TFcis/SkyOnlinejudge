@@ -45,7 +45,7 @@ class userControl
             self::SetCookie('uid', '0', time() + 3600);
         }
 
-        $token = GenerateRandomString(TOKEN_LEN);
+        $token = \SKYOJ\GenerateRandomString(TOKEN_LEN);
         $timeout = time() + $timeleft;
 
         $_SESSION[$namespace]['token'] = $token;
@@ -167,9 +167,28 @@ class userControl
         self::DeleteToken('login');
     }
 
-    public static function getuserdata($table, $uid = null)
+    //http://stackoverflow.com/questions/31500/do-indexes-work-with-in-clause
+    //Use Where in let SQL Server Decide how to optimize
+    public static function getuserdata(string $table,array $uid,array $column)
     {
         $table = DB::tname($table);
+        $userdata = [];
+
+        $tmp_column = ['uid'=>'x'];
+        foreach( $column as $c ) {
+            $tmp_column[$c] = 'x';
+        }
+        $column = DB::ArrayToQueryString($tmp_column)['column'];
+
+        $qstr = rtrim(str_repeat('?,',count($uid)),',');
+
+        $res = DB::fetchAll("SELECT {$column} FROM `$table` WHERE `uid`IN  ({$qstr})",$uid);
+        if( $res ) {
+            foreach($res as $u){
+                $userdata[$u['uid']] = $u;
+            }
+        }
+        return $userdata;
     }
 
     public static function getpermission($uid)

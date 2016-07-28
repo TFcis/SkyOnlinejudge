@@ -1,10 +1,15 @@
-<?php
+<?php namespace SKYOJ;
 
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
 
 //BASIC
+function NeverReach()
+{
+    throw new Exception('NeverReach Code!');
+}
+
 function throwjson($status, $data)
 {
     exit(json_encode(['status' => $status, 'data' => $data]));
@@ -16,11 +21,11 @@ function safe_get($key, $usearray = false)
         if (is_array($_GET[$key]) == $usearray) {
             return $_GET[$key];
         } else {
-            return false;
+            return null;
         }
     }
 
-    return false;
+    return null;
 }
 
 function safe_post($key, $usearray = false)
@@ -29,11 +34,11 @@ function safe_post($key, $usearray = false)
         if (is_array($_POST[$key]) == $usearray) {
             return $_POST[$key];
         } else {
-            return false;
+            return null;
         }
     }
 
-    return false;
+    return null;
 }
 
 function Quest(int $id)
@@ -281,8 +286,7 @@ function nickname($uid)
     if (!is_array($uid)) {
         $uid = [$uid];
     }
-
-    $res = DB::getuserdata('account', $uid, 'uid,nickname');
+    $res = \userControl::getuserdata('account',$uid,['uid','nickname']);
     foreach ($uid as $u) {
         $u = (string) $u;
         if (isset($res[$u])) {
@@ -290,8 +294,7 @@ function nickname($uid)
         }
     }
     $_E['nickname']['0'] = 'anonymous';
-
-    return $res;
+    return $_E['nickname'];
 }
 
 class privatedata

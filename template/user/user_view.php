@@ -19,15 +19,14 @@ if (!defined('IN_TEMPLATE')) {
         $("[navpage='"+template+"']").addClass('active');
         var data = {tmpl:old,call:'loadTemplate'};
         old = template;
-        history.pushState(data,"Setting "+template,'<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/'+template);
+        history.pushState(data,"Setting "+template,'<?=$SkyOJ->uri('user','view',$tmpl['showid'])?>/'+template);
         loadTemplateToBlock(template,'content','tmpl');
         return ;
 	}
-	function loadTemplateToBlock( template , bid , token ){
-	    if (typeof(token)==='undefined') token = '';
+	function loadTemplateToBlock( template , bid  ){
 	    var content = document.getElementById(bid);
 	    if( content === null )return false;
-	    $(content).load("<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/"+template+"?token="+token,function(){
+	    $(content).load("<?=$SkyOJ->uri('user','view',$tmpl['showid'])?>/"+template+"?subpage=yes",function(){
             $(content).hide();
             $(content).fadeIn();
         });
