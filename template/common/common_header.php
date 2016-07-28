@@ -33,7 +33,7 @@
     <script src="<?=$_E['SITEROOT']?>css/third/bootstrap/js/bootstrap.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/ace/ace.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/common.js"></script>
-    <?php if (userControl::isAdmin()):?>
+    <?php if (userControl::isAdmin($_G['uid'])):?>
     <script src="<?=$_E['SITEROOT']?>js/admin_check.js"></script>
     <?php endif;?>
     <script>

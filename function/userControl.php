@@ -207,10 +207,11 @@ class userControl
         return false;
     }
 
-    public static function isAdmin($uid = null)
+    public static function isAdmin($uid = null):bool
     {
-        global $_G,$_E,$_config;
+        global $_G,$_E;
         if ($uid === null) {
+            \Log::msg(\Level::Critical,'userControl : isAdmin with null param consider dangerous.',debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT,1));
             return in_array($_G['uid'], $_E['site']['admin']);
         }
 

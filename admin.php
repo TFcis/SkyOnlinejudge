@@ -7,8 +7,8 @@ if (!defined('IN_SKYOJSYSTEM')) {
 require_once 'function/admin/admin.lib.php';
 function AdminHandle()
 {
-    global $_E,$SkyOJ;
-    if (!\userControl::isAdmin()) {
+    global $_E,$_G,$SkyOJ;
+    if (!\userControl::isAdmin($_G['uid'])) {
         http_response_code(403);
         header('Location: index.php');
         exit(0);
