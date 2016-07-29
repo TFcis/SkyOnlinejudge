@@ -1,4 +1,4 @@
-<?php
+<?php namespace SKYOJ;
 /*
  * problem
  * 2016 Sky Online Judge Project
@@ -10,12 +10,19 @@ Storge format
 SQL : id,phash,status
 data/problem/prased.html
 */
-require_once $_E['ROOT'].'/function/externals/Parsedown.php';
+//require_once $_E['ROOT'].'/function/externals/Parsedown.php';
 
-class problem
+class Problem
 {
     private $pid;
     private $phash;
+
+    static public function CheckPIDFormat($pid):bool
+    {
+        if( !is_string($pid) )
+            return false;
+        return preg_match('/[0-9]+/', $pid);
+    }
 
     public static function CreateDefault(int $pid)
     {

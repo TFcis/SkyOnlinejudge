@@ -1,29 +1,43 @@
-<?php
+<?php namespace SKYOJ\Problem;
 
-require_once 'GlobalSetting.php';
-require_once 'function/SkyOJ.php';
+
+if (!defined('IN_SKYOJSYSTEM')) {
+    exit('Access denied');
+}
 
 //URI Format
 /*
     /problem/list/[page] ? quest str (default)
+    /problem/view/[PID] 
     /pboblem/new
-    /problem/[PID]
-    /problem/[PID]/modify
+    /problem/modify/[PID]
+    /problem/api/[method]
 */
-$allowmod = ['list'];
+require_once 'function/problem/problem.lib.php';
+function ProblemHandle()
+{
+    global $SkyOJ,$_E;
+    $param = $SkyOJ->UriParam(1)??('list');
 
-//set Default mod
-$mod = empty($QUEST[0]) ? 'list' : $QUEST[0];
+    switch( $param )
+    {
+        case 'list':
+        case 'new' :
+            break;
 
-if (!in_array($mod, $allowmod)) {
-    Render::render('nonedefined');
-    exit('');
-} else {
-    require_once $_E['ROOT'].'/function/problem/problem.lib.php';
-    $funcpath = $_E['ROOT']."/function/problem/problem_$mod.php";
-    if (file_exists($funcpath)) {
-        require $funcpath;
-    } else {
-        Render::render("problem_$mod", 'problem');
+        //api
+        case 'api':
+            \SKYOJ\throwjson('error','not yet');
+            break;
+
+        default:
+            \Render::render('nonedefined');
+            exit(0);
     }
+
+    $funcpath = $_E['ROOT']."/function/problem/problem_$param.php";
+    $func     = __NAMESPACE__ ."\\{$param}Handle";
+
+    require_once($funcpath);
+    $func();
 }

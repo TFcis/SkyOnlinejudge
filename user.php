@@ -34,5 +34,3 @@ function UserHandle()
     require_once($funcpath);
     $func();
 }
-
-$allowmod = ['login', 'register', 'logout', 'view', 'edit'];
