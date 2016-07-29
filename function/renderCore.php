@@ -66,7 +66,7 @@ class Render
 
     //Genformat : it will use sprintf($url,pid) to gen url!
     //care of any type of injection
-    public static function renderForm(FormInfo $formInfo, string $id)
+    public static function renderForm(\SKYOJ\FormInfo $formInfo, string $id)
     {
         global $_E;
         $_E['template']['_formInfo'] = $formInfo;

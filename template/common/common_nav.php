@@ -2,6 +2,8 @@
 if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
+use \SKYOJ\FormInfo;
+use \SKYOJ\HTML_INPUT_PASSWORD;
 ?>
 </head>
 <?php

@@ -2,6 +2,12 @@
 if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
+use \SKYOJ\FormInfo;
+use \SKYOJ\HTML_INPUT_HIDDEN;
+use \SKYOJ\HTML_INPUT_PASSWORD;
+use \SKYOJ\HTML_INPUT_TEXT;
+use \SKYOJ\HTML_ROW;
+use \SKYOJ\HTML_INPUT_BUTTOM;
 ?>
 <script>
 var pageid = '<?=$_E['template']['showid']?>' ;
