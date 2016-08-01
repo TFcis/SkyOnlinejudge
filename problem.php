@@ -23,11 +23,11 @@ function ProblemHandle()
     {
         case 'list':
         case 'new' :
+        case 'modify':
             break;
 
         //api
         case 'api':
-            \SKYOJ\throwjson('error','not yet');
             break;
 
         default:

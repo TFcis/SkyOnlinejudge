@@ -33,8 +33,8 @@ $(document).ready(function(){
                 Render::renderForm(new FormInfo([
                     'data'=>[
                         new HTML_INPUT_TEXT(['name'=>'title','required'=>'required','option' => ['help_text' => '題目名稱']]),
-                        new HTML_INPUT_SELECT(['name'=>'btn','key-pair'=>
-                            \SKYOJ\Problem\ProblemDescriptionEnum::getConstants()
+                        new HTML_INPUT_SELECT(['name'=>'default','key-pair'=>
+                            \SKYOJ\ProblemDescriptionEnum::getConstants()
                             ,'option' => ['help_text' => '題目類型']]),
                         new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出','option' => ['help_text' => 'true']]),
                     ]

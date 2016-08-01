@@ -104,6 +104,15 @@ class HTML_INPUT_SELECT extends HTML_INPUT_HELPER implements HTML_Element
     }
 }
 
+class HTML_INPUT_DIV extends HTML_INPUT_HELPER implements HTML_Element 
+{
+    function __construct(array $setting,callable $make_html_callback = null)
+    {
+        HTML_INPUT_HELPER::check_setting('html',$setting,'');
+        parent::__construct($setting,$make_html_callback);
+    }
+}
+
 class HTML_HR implements HTML_Element 
 {
     function __construct(array $setting = [],callable $make_html_callback = null){}

@@ -18,6 +18,7 @@ $_LG = [];
 
 $_E['ROOT'] = __DIR__;
 $_E['SITEDIR'] = '/';
+$_E['DATADIR'] = $_E['ROOT'].'/data/';
 
 $_E['language'] = 'zh-tw';
 //Site Setting
@@ -38,9 +39,6 @@ $_E['logsys']['msgshower']['port'] = '19620';
 
 //Error Message
 $_E['template']['alert'] = '';
-
-//Problem
-$_E['problem']['path'] = '/data/problem/';
 
 //MathJax
 $_E['EnableMathJax'] = 0;

@@ -18,6 +18,8 @@ TAG;
 
             if( $info['this'] instanceof \SKYOJ\HTML_INPUT_SELECT )
                 $rev.='<select class="form-control"';
+            elseif( $info['this'] instanceof \SKYOJ\HTML_INPUT_DIV )
+                $rev.='<div ';
             else
                 $rev.='<input type=\''.htmlentities($setting['type']).'\' class="form-control textinput"';
 
@@ -36,6 +38,9 @@ TAG;
                     $rev.="<option value='{$key}'>{$index}</option>";
                 }
                 $rev.="</select>";
+            }else if( $info['this'] instanceof \SKYOJ\HTML_INPUT_DIV ){
+                $rev.= $setting['option']['html']??'';
+                $rev.="</div>";
             }
             
             if( $info['style'] == \SKYOJ\FormInfo::STYLE_HORZIONTAL ){
@@ -91,6 +96,7 @@ TAG;
                     case $e instanceof \SKYOJ\HTML_INPUT_TEXT:
                     case $e instanceof \SKYOJ\HTML_INPUT_PASSWORD:
                     case $e instanceof \SKYOJ\HTML_INPUT_SELECT:
+                    case $e instanceof \SKYOJ\HTML_INPUT_DIV:
                         echo $e->make_html(['style'=>$_fi->style(),'this'=>$e],'BT3_HORZIONTAL');
                         break;
 

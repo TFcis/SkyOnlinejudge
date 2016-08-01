@@ -41,14 +41,13 @@ function safe_post($key, $usearray = false)
     return null;
 }
 
-function Quest(int $id)
+function CreateFolder(string $path,bool $rewrite = false,bool $recursive = false):bool
 {
-    global $QUEST;
-    if (isset($QUEST[$id])) {
-        return $QUEST[$id];
-    }
-
-    return false;
+    if( !$rewrite && file_exists($path) )
+        return false;
+    if( file_exists($path) && !is_dir($path) )
+        return false;
+    return mkdir($path,0644,$recursive);
 }
 
 function make_int($var, int $fail = 0)

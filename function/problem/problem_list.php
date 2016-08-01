@@ -31,7 +31,6 @@ function listHandle()
         $data = [];
     }
 
-    \Log::msg(\Level::Debug, 'Problem List', $data);
     $_E['template']['problem_list_pagelist'] = $pl;
     $_E['template']['problem_list_now'] = $page;
     $_E['template']['problem_info'] = $data ? $data : [];

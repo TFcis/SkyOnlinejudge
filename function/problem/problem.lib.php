@@ -5,9 +5,11 @@ if (!defined('IN_SKYOJSYSTEM')) {
 }
 require_once 'function/common/problem.php';
 
-class ProblemDescriptionEnum extends \SKYOJ\BasicEnum
+//TODO PHP7.1 use ?string
+function CreateNewProblemID(int $owner,string $title):int
 {
-    const MarkDown = 1;
-    const HTML = 2;
-    const PDF = 3;
+    $tproblem = \DB::tname('problem');
+    $res = \DB::queryEx("INSERT INTO `{$tproblem}` (`pid`, `owner`, `title`) 
+                         VALUES (NULL,?,?)",$owner,$title);
+    return $res?\DB::lastInsertId('pid'):null;
 }
