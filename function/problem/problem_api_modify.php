@@ -15,7 +15,7 @@ function problem_api_modifyHandle()
     $title   = \SKYOJ\safe_post('title');
     $content = \SKYOJ\safe_post('content');
     $contenttype = \SKYOJ\safe_post('contenttype');
-    \Log::msg(\Level::Debug,'',$_POST,$pid,$title,$content,$contenttype);
+
     if( !isset($pid,$title,$content,$contenttype) )
         \SKYOJ\throwjson('error','param error');
     try{
