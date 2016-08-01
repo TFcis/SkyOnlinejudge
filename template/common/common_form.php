@@ -39,7 +39,7 @@ TAG;
                 }
                 $rev.="</select>";
             }else if( $info['this'] instanceof \SKYOJ\HTML_INPUT_DIV ){
-                $rev.= $setting['option']['html']??'';
+                $rev.= htmlentities($setting['option']['html'])??'';
                 $rev.="</div>";
             }
             
