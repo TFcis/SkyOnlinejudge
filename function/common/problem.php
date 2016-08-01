@@ -178,7 +178,7 @@ class Problem
     public function GetRenderedContent()
     {
         $pid = $this->pid();
-        if( !file_exist(self::GetHttpFolder($pid).RENDERED_FILE) || $this->row_changed )
+        if( !file_exists(self::GetHttpFolder($pid).self::RENDERED_FILE) || $this->row_changed )
         {
             if( !$this->RenderRowContentToFile() )
             {

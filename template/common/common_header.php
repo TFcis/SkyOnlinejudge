@@ -10,7 +10,7 @@
     <title><?php echo $_E['site']['name']; ?></title>
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,700,600' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="<?=$_E['SITEROOT']?>css/third/bootstrap/css/bootstrap.min.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/github-gist.min.css">
     <link rel="stylesheet" type="text/css" href="<?=$_E['SITEROOT']?>css/index.css">
     <?php if ($_E['EnableMathJax']): ?>
       	<script type="text/x-mathjax-config">
@@ -29,6 +29,8 @@
         <?php endif; ?>
     <?php endif; ?>
     <!-- Latest compiled and minified JavaScript -->
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/third/jquery.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>css/third/bootstrap/js/bootstrap.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/ace/ace.js"></script>
@@ -39,4 +41,5 @@
     <script>
     $(".alert").alert();
     siteroot('<?=$_E['SITEROOT']?>');
+    hljs.initHighlightingOnLoad();
     </script>

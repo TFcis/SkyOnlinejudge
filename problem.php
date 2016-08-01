@@ -24,6 +24,7 @@ function ProblemHandle()
         case 'list':
         case 'new' :
         case 'modify':
+        case 'view':
             break;
 
         //api
