@@ -13,7 +13,7 @@ function viewHandle()
         $problem = new \SKYOJ\Problem($pid);
         $pid = $problem->pid();
 
-        if( $problem->pid()===null || !\userControl::getpermission($problem->owner()) )
+        if( $problem->pid()===null )
             throw new \Exception('Access denied');
     }catch(\Exception $e){
         \Render::errormessage($e->getMessage());
