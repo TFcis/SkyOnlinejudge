@@ -7,9 +7,9 @@
 <head>
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo $_E['site']['name']; ?></title>
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,700,600' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="<?=$_E['SITEROOT']?>css/bootstrap/css/bootstrap.min.css">
+    <title><?php echo($_E['site']['name']); ?></title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     
     <link rel="stylesheet" type="text/css" href="<?=$_E['SITEROOT']?>css/index.css">
     <?php if ($_E['EnableMathJax']): ?>
@@ -25,9 +25,15 @@
         <?php if ($_E['uesLocalMathJaxFile']):?>
         <script type="text/javascript" src=<?=$_E['SITEROOT']?>"js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <?php else:?>
+<<<<<<< HEAD
         <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <?php endif; ?>
     <?php endif; ?>
+=======
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <?php endif;?>
+    <?php endif;?>
+>>>>>>> refs/remotes/TFcis/master
     <!-- Latest compiled and minified JavaScript -->
     <script src="<?=$_E['SITEROOT']?>js/jquery.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>css/bootstrap/js/bootstrap.js"></script>

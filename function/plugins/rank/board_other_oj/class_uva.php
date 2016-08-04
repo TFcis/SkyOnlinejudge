@@ -78,88 +78,79 @@ class class_uva
             $pnum = json_decode($pnum, true);
             if ($pnum == false) {
                 return false;
-            }
-            $pnum = intval($pnum['num']);
-            $data[$pid] = $pnum;
-            DB::putcache('class_uva_probId2Num', $data, 'forever'); //todo forever
-        }
+			}
+			$pnum = intval($pnum["num"]);
+			$data[$pid]=$pnum;
+			DB::putcache("class_uva_probId2Num", $data, 'forever'); //todo forever
+		}
+		return $data[$pid];
+	}
+	
+	function preprocess($userlist,$problist)
+	{
+		foreach($userlist as &$user)
+			$user = $this->uname2id($user);
+		foreach($problist as &$pnum)
+			$pnum = $this->realpname($pnum);
 
-        return $data[$pid];
-    }
+		//fetch
+		$data = file_get_contents("http://uhunt.felix-halim.net/api/subs-nums/".implode(',', $userlist)."/".implode(',', $problist)."/0");
+		if($data === false) return ;
+		$data = json_decode($data, true);
 
-    public function preprocess($userlist, $problist)
-    {
-        foreach ($userlist as &$user) {
-            $user = $this->uname2id($user);
-        }
-        foreach ($problist as &$pnum) {
-            $pnum = $this->realpname($pnum);
-        }
+		foreach($userlist as $user)
+		{
+			$uid = intval($user);
+			$udata = $data[$uid]['subs'];
+			$verdict = array();
+			foreach($udata as $sub)
+			{
+				if($sub[2] != 20)
+				{
+				    $pnum = $this->probId2Num($sub[1]);
+				    if(!isset($verdict[$pnum])) 
+				        $verdict[$pnum] = 0;
+					$verdict[$pnum] = max($verdict[$pnum], $sub[2]);
+				}
+			}
+			if(! isset($this->rate[$uid]) )
+			    $this->rate[$uid] = array();
+			foreach($verdict as $p => $v){
+			    $this->rate[$uid][$p] = $v;
+			}
+		}
+	}
+	
+	function query($uid,$pnum)
+	{
+	    $pnum = preg_replace('/[^0-9]*/','',$pnum);
+	    $uid  = $this->uname2id($uid);
+	    $pnum = $this->realpname($pnum);
+	    
+	    
+	    if( !isset($this->rate[$uid]) )
+	        return 0;
 
-        //fetch
-        $data = file_get_contents('http://uhunt.felix-halim.net/api/subs-nums/'.implode(',', $userlist).'/'.implode(',', $problist).'/0');
-        if ($data === false) {
-            return;
-        }
-        $data = json_decode($data, true);
+	    if( !isset($this->rate[$uid][$pnum]) )
+	    	return 0;
+	    	
+	    $data = $this->rate[$uid][$pnum];
+	    if($data=="90")
+	        return 90;
+	    else
+	        return 70;
+	}
+	
+	function showname($str)
+	{
+	    $pnum = preg_replace('/[^0-9]*/','',$str);
+		$url =  "http://domen111.github.io/UVa-Easy-Viewer/?$pnum";
+	    $str="<a href='$url' target='_blank'>UVa $pnum</a>";
+	    return $str;
+	}
 
-        foreach ($userlist as $user) {
-            $uid = intval($user);
-            $udata = $data[$uid]['subs'];
-            $verdict = [];
-            foreach ($udata as $sub) {
-                if ($sub[2] != 20) {
-                    $pnum = $this->probId2Num($sub[1]);
-                    if (!isset($verdict[$pnum])) {
-                        $verdict[$pnum] = 0;
-                    }
-                    $verdict[$pnum] = max($verdict[$pnum], $sub[2]);
-                }
-            }
-            if (!isset($this->rate[$uid])) {
-                $this->rate[$uid] = [];
-            }
-            foreach ($verdict as $p => $v) {
-                $this->rate[$uid][$p] = $v;
-            }
-        }
-    }
-
-    public function query($uid, $pnum)
-    {
-        $pnum = preg_replace('/[^0-9]*/', '', $pnum);
-        $uid = $this->uname2id($uid);
-        $pnum = $this->realpname($pnum);
-
-        if (!isset($this->rate[$uid])) {
-            return 0;
-        }
-
-        if (!isset($this->rate[$uid][$pnum])) {
-            return 0;
-        }
-
-        $data = $this->rate[$uid][$pnum];
-        if ($data == '90') {
-            return 90;
-        } else {
-            return 70;
-        }
-    }
-
-    public function showname($str)
-    {
-        $pnum = preg_replace('/[^0-9]*/', '', $str);
-        $url = "http://domen.twbbs.org/uva/?$pnum";
-        $str = "<a href='$url' target='_blank'>UVa $pnum</a>";
-
-        return $str;
-    }
-
-    public function challink($uid, $pid)
-    {
-        $uid = $this->uname2id($uid);
-
-        return "http://uhunt.felix-halim.net/id/$uid";
-    }
+	function challink($uid,$pid){
+		$uid = $this->uname2id($uid);
+	    return "http://domen111.github.io/UVa-Easy-Viewer/?$pid/$uid";
+	}
 }
