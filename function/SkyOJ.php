@@ -58,8 +58,8 @@ final class _SkyOJ
         global $_E;
         \LOG::intro();
         \DB::intro();
-        \userControl::intro();
         \DB::query('SET NAMES UTF8');
+        \userControl::intro();
         $this->UriHandler();
     }
 
