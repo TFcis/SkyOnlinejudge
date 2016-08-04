@@ -47,7 +47,7 @@ function CreateFolder(string $path,bool $rewrite = false,bool $recursive = false
         return false;
     if( file_exists($path) && !is_dir($path) )
         return false;
-    return mkdir($path,0644,$recursive);
+    return mkdir($path,0777,$recursive);
 }
 
 function make_int($var, int $fail = 0)
