@@ -76,6 +76,25 @@ final class _SkyOJ
         }
     }
 
+    //Set HTML Title
+    //Example : SetTitle('Login')
+    //Show: Login - [Sitename]
+    private $site_title = '';
+    public function SetTitle(string $str)
+    {
+        $this->site_title = $str;
+    }
+
+    public function GetTitle():string
+    {
+        global $_E;
+        if( empty($this->site_title) )
+        {
+            return $_E['site']['name'];
+        }
+        return "{$this->site_title} - {$_E['site']['name']}";
+    }
+
     public function run()
     {
         try{
