@@ -40,14 +40,14 @@ use \SKYOJ\HTML_INPUT_HIDDEN;
                     </p>
                 </div>
                 <hr>
-                <div class="row hidden-xs">
                 <?php if( userControl::getpermission($tmpl['problem']->owner()) ):?>
+                <div class="row hidden-xs">
                     <p class="col-md-12 col-sm-3">
                         <a class="btn btn-warning btn-block" href="<?=$SkyOJ->uri('problem','modify',$tmpl['problem']->pid())?>">修改題目</a>
                     </p>
-                <?php endif;?>
                 </div>
                 <hr>
+                <?php endif;?>
             </div>
         </div>
         <div class="col-md-10">
