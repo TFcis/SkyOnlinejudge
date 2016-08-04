@@ -1,28 +1,38 @@
-<?php
+<?php namespace SKYOJ\User;
 
-require_once 'GlobalSetting.php';
-require_once 'function/SkyOJ.php';
+
+if (!defined('IN_SKYOJSYSTEM')) {
+    exit('Access denied');
+}
+
+require_once 'function/user/user.lib.php';
+function UserHandle()
+{
+    global $SkyOJ,$_E,$_G;
+    $param = $SkyOJ->UriParam(1)??($_G['uid']?'view':'login');
+
+    switch( $param )
+    {
+        //api
+        case 'edit':
+            break;
+
+        case 'login':
+        case 'logout':
+        case 'view':
+        case 'register':
+            break;
+
+        default:
+            \Render::render('nonedefined');
+            exit(0);
+    }
+
+    $funcpath = $_E['ROOT']."/function/user/user_$param.php";
+    $func     = __NAMESPACE__ ."\\{$param}Handle";
+
+    require_once($funcpath);
+    $func();
+}
 
 $allowmod = ['login', 'register', 'logout', 'view', 'edit'];
-
-//set Default mod
-$mod = $_G['uid'] ? 'view' : 'login';
-if (isset($_REQUEST['mod'])) {
-    $mod = @$_REQUEST['mod'];
-}
-if (!empty($QUEST[0])) {
-    $mod = $QUEST[0];
-}
-
-if (!in_array($mod, $allowmod)) {
-    Render::render('nonedefined');
-    exit('');
-} else {
-    require_once $_E['ROOT'].'/function/user/user.lib.php';
-    $funcpath = $_E['ROOT']."/function/user/user_$mod.php";
-    if (file_exists($funcpath)) {
-        require $funcpath;
-    } else {
-        Render::render("user_$mod", 'user');
-    }
-}

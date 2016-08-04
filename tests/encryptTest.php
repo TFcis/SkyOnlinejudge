@@ -15,10 +15,10 @@ class encryptTest extends PHPUnit_Framework_TestCase
     public function testDiffieHellman()
     {
         //Constant Test
-        $this->assertNotEquals(0, gmp_prob_prime(DiffieHellman::DefaultPublicPrime, 100));
+        $this->assertNotEquals(0, gmp_prob_prime(\SKYOJ\DiffieHellman::DefaultPublicPrime, 100));
 
         //Function test
-        $dh = new DiffieHellman();
+        $dh = new \SKYOJ\DiffieHellman();
         $B = '41965498';
         $GB = gmp_strval(gmp_powm($dh->GetG(), $B, $dh->GetPrime()));
         $GAB = gmp_strval(gmp_powm($dh->getGA(), $B, $dh->GetPrime()));

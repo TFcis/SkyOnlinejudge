@@ -5,29 +5,6 @@ if (!defined('IN_TEMPLATE')) {
 ?>
 <script>
 var pageid = '<?=$_E['template']['showid']?>' ;
-function authacct(c)
-{
-    var disname = '#display-modal-' + c ;
-    $.post("<?=$_E['SITEROOT']?>user.php",{
-            mod : 'edit',
-            page: 'authacct',
-            id  : pageid,
-            cls : c,
-        },
-        function(res){
-            if( res.status == 'error' )
-            {
-                $(disname).css('color','Red');
-                $(disname).html(res.data);
-            }
-            else
-            {
-                $(disname).css('color','Lime');
-                $(disname).html('Success! reload page');
-                setTimeout( function(){location.reload();},500);
-            }
-    });
-}
 $(document).ready(function()
 {
     $("#acct").submit(function(e)
@@ -49,7 +26,7 @@ $(document).ready(function()
             }
         }
         
-        api_submit("<?=$_E['SITEROOT']?>user.php","#acct","#btn-show",function(){
+        api_submit("<?=$SkyOJ->uri('user','edit','account')?>","#acct","#btn-show",function(){
             setTimeout(function(){location.reload();},500);
         });
         return true;
@@ -81,8 +58,6 @@ $(document).ready(function()
                 <?php
                 Render::renderForm(new FormInfo([
                     'data' => [
-                        new HTML_INPUT_HIDDEN(['name' => 'mod' ,'value'=>'edit']),
-                        new HTML_INPUT_HIDDEN(['name' => 'page','value'=>'acct']),
                         new HTML_INPUT_HIDDEN(['name' => 'id','value'=>$tmpl['showid']]),
                         new HTML_INPUT_PASSWORD(['name' => 'oldpasswd','required'=>'required','option' => ['help_text' => '舊密碼']]),
 

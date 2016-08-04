@@ -1,12 +1,40 @@
-<?php
+<?php namespace SKYOJ\Admin;
 
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
-require_once $_E['ROOT'].'/function/common/forminfo.php';
-//URL Format
-// /plugin/list?folder=
-// /plugin/install/base64(forder)/base64(name)?= stats
+
+function pluginsHandle()
+{
+    global $SkyOJ,$_G,$_E;
+    //URL Format
+    // /plugin/list?folder=
+    // /plugin/install/base64(forder)/base64(name)?= stats
+    $param = $SkyOJ->UriParam(3);
+    switch($param)
+    {
+        case 'list':
+            $all_folders = \Plugin::getAllFolders();
+            $folder = \SKYOJ\safe_get('folder');
+            $data = null;
+
+            if (in_array($folder, $all_folders)) {
+                $classes = \Plugin::loadClassFileByFolder($folder);
+                $data = \Plugin::checkInstall($classes);
+            } else {
+                $folder = '[No Such Folder]';
+            }
+            $_E['template']['sysplugins'][$folder] = $data ? $data : [];
+            \Render::renderSingleTemplate('admin_plugins', 'admin');
+            exit(0);
+        default:
+            break;
+    }
+    \Log::msg(\Level::Warning, '[admin][plugins]Error dump',$SkyOJ);
+    \Render::renderSingleTemplate('common_message');
+}
+
+/*
 $function = Quest(1) or $function = '';
 switch ($function) {
     case 'list':
@@ -86,3 +114,4 @@ switch ($function) {
 }
 Log::msg(Level::Warning, '[admin][plugins]Error dump', $QUEST);
 Render::renderSingleTemplate('common_message');
+*/

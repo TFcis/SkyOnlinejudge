@@ -29,13 +29,13 @@ $(document).ready(function()
             <hr>
             <div class="info">
                 <h4><span class="glyphicon glyphicon-share"></span>&nbsp;Share or Embed source code</h4>
-                <textarea class="form-control" rows="3"><iframe src='<?=$_E['SITEROOT'].'code.php/view/'.$tmpl['hash'].'/iframe'?>' width='100%' height='300px'></iframe></textarea>
+                <textarea class="form-control" rows="3"><iframe src='<?=$SkyOJ->uri('code','view',$tmpl['hash'],'iframe')?>'>' width='100%' height='300px'></iframe></textarea>
             </div>
         </div>
     </div>
     <div class="row" style = "margin-top:15px;">
         <div class="col-lg-offset-6 col-md-offset-6 col-lg-2 col-md-2">
-            <a href="<?=$_E['SITEROOT']?>code.php" class="btn btn-success active">Creat a new one</a>
+            <a href="<?=$SkyOJ->uri('code')?>" class="btn btn-success active">Creat a new one</a>
         </div>
     </div>
 </div>

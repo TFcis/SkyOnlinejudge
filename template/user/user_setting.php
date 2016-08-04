@@ -10,7 +10,7 @@ if (!defined('IN_TEMPLATE')) {
         $("[settingpage = '"+template+"']").addClass('active');
         var data = {tmpl:sold,call:'SubloadTemplate'};
         sold = template;
-        history.pushState(data,"Setting "+template,'<?=$_E['SITEROOT']?>user.php/view/<?=$tmpl['showid']?>/setting/'+template);
+        history.pushState(data,"Setting "+template,'<?=$SkyOJ->uri('user','view',$tmpl['showid'],'setting')?>/'+template);
         loadTemplateToBlock("/setting/"+template,'setting-main','tmpl');
         return ;
 	}

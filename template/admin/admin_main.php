@@ -29,7 +29,7 @@ if (!defined('IN_TEMPLATE')) {
         {
             adder = '&';
         }
-	    $(content).load("<?=$_E['SITEROOT']?>admin.php/"+template,{_t:'<?=$tmpl['ADMIN_CSRF']?>'},function(){
+	    $(content).load("<?=$SkyOJ->uri('admin','index')?>/"+template,{subpage:'yes',token:'<?=$tmpl['ADMIN_CSRF']?>'},function(){
             $(content).hide();
             $(content).fadeIn();
             $('#'+bid+' a[tmpl]').click(function(event){

@@ -4,9 +4,9 @@ if (!defined('IN_TEMPLATE')) {
 }
 ?>
 <script src="<?=$_E['SITEROOT']?>js/third/bignumber.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/pad-zeropadding.js"></script>
+<script src="<?=$_E['SITEROOT']?>js/third/crypto-js/rollups/aes.js"></script>
+<script src="<?=$_E['SITEROOT']?>js/third/crypto-js/rollups/md5.js"></script>
+<script src="<?=$_E['SITEROOT']?>js/third/crypto-js/components/pad-zeropadding.js"></script>
 <script>
 GA = new BigNumber('<?=$tmpl['dh_ga']?>');
 PublicPrime = new BigNumber('<?=$tmpl['dh_prime']?>');
@@ -48,7 +48,7 @@ $(document).ready(function()
         $("#password").val(encrypted);
         
         $("#display").html('...');
-        api_submit("<?=$_E['SITEROOT']?>user.php","#loginform","#display",function(res){
+        api_submit("<?=$SkyOJ->uri('user','login')?>","#loginform","#display",function(res){
             location.href = "<?=$_E['SITEROOT']?>"+res.data;
         });
         this.passwordreal.disabled = false;
@@ -100,7 +100,7 @@ $(document).ready(function()
                 </form>
                 <small>OR</small>
             
-                <div class = 'link-like' onclick="location.href='<?=$_E['SITEROOT']?>user.php/register'">
+                <div class = 'link-like' onclick="location.href='<?=$SkyOJ->uri('user','register')?>'">
                 <u><b>Register</b></u>
                 </div>
             </center>

@@ -15,10 +15,10 @@ $(document).ready(function()
             alert('Empty!');
             return ;
         }
-        $.post("<?=$_E['SITEROOT']?>code.php/submit",{code : code},function(res){
+        $.post("<?=$SkyOJ->uri('code','submit')?>",{code : code},function(res){
             if( res.status == 'SUCC' )
             {
-                location.href="<?=$_E['SITEROOT']?>code.php/view/"+res.data;
+                location.href="<?=$SkyOJ->uri('code','view')?>/"+res.data;
             }
             else
             {
