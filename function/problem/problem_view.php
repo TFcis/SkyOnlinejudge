@@ -21,5 +21,6 @@ function viewHandle()
     }
 
     $_E['template']['problem'] = $problem;
+    $SkyOJ->SetTitle($problem->GetTitle());
     \Render::render('problem_view','problem');
 }

@@ -13,16 +13,44 @@ use \SKYOJ\HTML_INPUT_HIDDEN;
 
 <div class="container">
     <div class="row">
-        <div class="col-lg-2">
+        <div class="col-md-9">
             <h3><?=$tmpl['problem']->pid()?>. <?=htmlentities($tmpl['problem']->GetTitle())?></h3>
-            <?php if( userControl::getpermission($tmpl['problem']->owner()) ):?>
-                <hr>
-                <p>
-                    <a class="btn btn-primary" href="<?=$SkyOJ->uri('problem','modify',$tmpl['problem']->pid())?>">修改題目</a>
-                </p>
-            <?php endif;?>
         </div>
-        <div class="col-lg-10">
+        <div class="col-md-3 text-right">
+            <p>Normal Judge(Judge Type)</p>
+            <p>Open(Stats)</p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="container-fluid">
+                <div class="row">
+                    <p class="col-md-12 col-sm-3">
+                        <a class="btn btn-success btn-block hidden-xs" href="<?=$SkyOJ->uri('problem','submit',$tmpl['problem']->pid())?>">送出</a>
+                    </p>
+                    <p class="col-md-12 col-sm-3">
+                        <a class="btn btn-primary btn-block" href="#">本題狀態</a>
+                    </p>
+                    <p class="col-md-12 col-sm-3">
+                        <a class="btn btn-primary btn-block" href="#">統計</a>
+                    </p>
+                    <p class="col-md-12 col-sm-3">
+                        <a class="btn btn-primary btn-block hidden-xs" href="#">列印</a>
+                    </p>
+                </div>
+                <hr>
+                <div class="row hidden-xs">
+                <?php if( userControl::getpermission($tmpl['problem']->owner()) ):?>
+                    <p class="col-md-12 col-sm-3">
+                        <a class="btn btn-warning btn-block" href="<?=$SkyOJ->uri('problem','modify',$tmpl['problem']->pid())?>">修改題目</a>
+                    </p>
+                <?php endif;?>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <div class="col-md-10">
             <?=$tmpl['problem']->GetRenderedContent()?>
         </div><!--Main end-->
     </div>
