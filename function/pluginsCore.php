@@ -150,7 +150,7 @@ class Plugin
             return false;
         }
         foreach ($data as $row) {
-            $rev[$data['class']] = $row;
+            $rev[$row['class']] = $row;
         }
 
         return $rev;

@@ -24,8 +24,16 @@ class class_Plaintext extends Judge
     {
         return [
             'data' => [
-
+                new \SKYOJ\HTML_INPUT_TEXT(['name' => 'dkey','option' => ['help_text' => '序號(Test)']]),
             ]
         ];
+    }
+
+    public static function install(&$msg):bool
+    {
+        $key = \SKYOJ\safe_post('dkey');
+        if( $key == 'GGGG' )return true;
+        $msg = "E:".$key;
+        return false;
     }
 }
