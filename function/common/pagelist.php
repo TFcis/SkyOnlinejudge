@@ -58,4 +58,24 @@ class PageList
     {
         return min($d + 1, $this->max($d));
     }
+
+
+    public function GetPageDataByPage(int $page,string $order,string $select = '*')
+    {
+        if( $page < 1 || $this->all() < $page ) {
+            $page = 1;
+        }
+
+        $pdo = \DB::prepare("SELECT {$select} FROM `{$this->table}` 
+                            ORDER BY `{$order}` 
+                            LIMIT :st,:num");
+        $pdo->bindValue(':st', ($page - 1) * PageList::ROW_PER_PAGE, \PDO::PARAM_INT);
+        $pdo->bindValue(':num', PageList::ROW_PER_PAGE, \PDO::PARAM_INT);
+        if (\DB::execute($pdo, null)) {
+            $data = $pdo->fetchAll();
+        } else {
+            $data = [];
+        }
+        return $data;
+    }
 }

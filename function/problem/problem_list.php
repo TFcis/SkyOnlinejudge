@@ -14,22 +14,8 @@ function listHandle()
     if( !preg_match('/^[1-9][0-9]*$/',$page) )
         $page = '1';
 
-    //TODO : It's very ugly. Make it perfect.
     $pl = new PageList('problem');
-    $tproblem = \DB::tname('problem');
-
-    $pdo = \DB::prepare("SELECT `pid`,`owner`,`title`
-                         FROM `{$tproblem}` 
-                         ORDER BY `pid` 
-                         LIMIT :st,:num");
-    $pdo->bindValue(':st', ($page - 1) * PageList::ROW_PER_PAGE, \PDO::PARAM_INT);
-    $pdo->bindValue(':num', PageList::ROW_PER_PAGE, \PDO::PARAM_INT);
-
-    if ( \DB::execute($pdo, null) ) {
-        $data = $pdo->fetchAll();
-    } else {
-        $data = [];
-    }
+    $data = $pl->GetPageDataByPage($page,'pid','`pid`,`owner`,`title`');
 
     $_E['template']['problem_list_pagelist'] = $pl;
     $_E['template']['problem_list_now'] = $page;
