@@ -122,5 +122,42 @@ final class _SkyOJ
             exit(0);
         }
     }
+
+    private $sysvalue_cache = [];
+    private $table_sysvalue = null;
+    private function SysValueFullName(string $name,string $prefix):string
+    {
+        return $prefix.'$'.$name;
+    }
+
+    public function GetSysValue(string $name,string $prefix):string
+    {
+        $index = $this->SysValueFullName($name,$prefix);
+        if( !isset($this->sysvalue_cache[$index]) )
+        {
+            if( !isset($this->table_sysvalue) )
+                $this->table_sysvalue = \DB::tname('sysvalue');
+        
+            $data = \DB::fetchEx("SELECT `name`, `var` 
+                                  FROM `{$this->table_sysvalue}`
+                                  WHERE `name` = ?",$index);
+            if( $data===false )
+                \Log::msg(\Level::Warning,'Cannot get Sysvalue:'.$index);
+            $this->sysvalue_cache[$index] = $data[$index];
+        }
+        return $this->sysvalue_cache[$index];
+    }
+
+    public function SetSysValue(string $name,string $prefix,string $value):bool
+    {
+        $index = $this->SysValueFullName($name,$prefix);
+        if( !isset($this->table_sysvalue) )
+            $this->table_sysvalue = \DB::tname('sysvalue');
+        $res = \DB::queryEx("INSERT INTO {$this->table_sysvalue} (`name`, `var`) 
+                             VALUES(?,?) 
+                             ON DUPLICATE KEY UPDATE `var`=?",$index,$value,$value);
+        if($res)$this->sysvalue_cache[$index] = $value;
+        return $res!=false;
+    }
 }
 $SkyOJ = new _SkyOJ();
