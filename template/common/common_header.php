@@ -7,10 +7,10 @@
 <head>
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo $_E['site']['name']; ?></title>
+    <title><?=htmlentities($SkyOJ->GetTitle())?></title>
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,700,600' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="<?=$_E['SITEROOT']?>css/third/bootstrap/css/bootstrap.min.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/github-gist.min.css">
     <link rel="stylesheet" type="text/css" href="<?=$_E['SITEROOT']?>css/index.css">
     <?php if ($_E['EnableMathJax']): ?>
       	<script type="text/x-mathjax-config">
@@ -29,14 +29,17 @@
         <?php endif; ?>
     <?php endif; ?>
     <!-- Latest compiled and minified JavaScript -->
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/third/jquery.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>css/third/bootstrap/js/bootstrap.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/ace/ace.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/common.js"></script>
-    <?php if (userControl::isAdmin()):?>
+    <?php if (userControl::isAdmin($_G['uid'])):?>
     <script src="<?=$_E['SITEROOT']?>js/admin_check.js"></script>
     <?php endif;?>
     <script>
     $(".alert").alert();
     siteroot('<?=$_E['SITEROOT']?>');
+    hljs.initHighlightingOnLoad();
     </script>

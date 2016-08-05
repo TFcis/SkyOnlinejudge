@@ -44,7 +44,7 @@ function api_submit(url,fmid,showid,succ,err)
             if (typeof succ != 'undefined')
                 succ(res);
         }
-    },"json").error(function(e){
+    },"json").fail(function(e){
         console.log(e);
     });
 }

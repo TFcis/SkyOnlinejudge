@@ -2,6 +2,8 @@
 /config/config.php
 /data/cache/*.cache
 /data/codepad/*.code
+/data/problem/*
+!/data/problem/.gitkeep
 /LocalSetting.php
 /data/private/*.tmp
 /data/cachehtml/*.html

@@ -8,14 +8,20 @@ if (!defined('IN_TEMPLATE')) {
     if( !function_exists('BT3_HORZIONTAL') ){
         function BT3_HORZIONTAL($setting,$info){
             $rev = "";
-            if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
+            if( $info['style'] == \SKYOJ\FormInfo::STYLE_HORZIONTAL ){
                 $rev.=<<<TAG
 <div class="form-group">
-    <label for="{$setting['name']}" class="col-md-3 control-label white-text">{$setting['option']['help_text']}</label>
+    <label for="{$setting['name']}" class="col-md-3 control-label">{$setting['option']['help_text']}</label>
     <div class="col-md-9">
 TAG;
             }
-            $rev.='<input type=\''.htmlentities($setting['type']).'\' class="form-control textinput"';
+
+            if( $info['this'] instanceof \SKYOJ\HTML_INPUT_SELECT )
+                $rev.='<select class="form-control"';
+            elseif( $info['this'] instanceof \SKYOJ\HTML_INPUT_DIV )
+                $rev.='<div ';
+            else
+                $rev.='<input type=\''.htmlentities($setting['type']).'\' class="form-control textinput"';
 
             foreach( $setting as $tag => $key){
                 if( !is_string($tag) || !is_scalar($key) )continue;
@@ -26,8 +32,18 @@ TAG;
                 }
             }
             $rev.='>';
+
+            if( $info['this'] instanceof \SKYOJ\HTML_INPUT_SELECT ){
+                foreach($setting['key-pair'] as $index => $key){
+                    $rev.="<option value='{$key}'>{$index}</option>";
+                }
+                $rev.="</select>";
+            }else if( $info['this'] instanceof \SKYOJ\HTML_INPUT_DIV ){
+                $rev.= htmlentities($setting['option']['html'])??'';
+                $rev.="</div>";
+            }
             
-            if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
+            if( $info['style'] == \SKYOJ\FormInfo::STYLE_HORZIONTAL ){
                 $rev.=<<<'TAG'
     </div>
 </div>
@@ -40,7 +56,7 @@ TAG;
     if( !function_exists('BT3_HORZIONTAL_BTN') ){
         function BT3_HORZIONTAL_BTN($setting,$info){
             $rev = "";
-            if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
+            if( $info['style'] == \SKYOJ\FormInfo::STYLE_HORZIONTAL ){
                 $rev.=<<<TAG
 <div class="form-group">
     <div class="col-md-12 text-right">
@@ -61,7 +77,7 @@ TAG;
             }
             $rev.='>'.htmlentities($setting['title']).'</button>';
             
-            if( $info['style'] == FormInfo::STYLE_HORZIONTAL ){
+            if( $info['style'] == \SKYOJ\FormInfo::STYLE_HORZIONTAL ){
                 $rev.=<<<'TAG'
     </div>
 </div>
@@ -71,23 +87,25 @@ TAG;
         }
     }
 ?>
-<div clas="container-fluid">
+<div class="container-fluid">
     <form class="<?=$_fi->style()?>" role="form" id="<?=$tmpl['_id']?>">
         <?php foreach ($_fi->elements() as $e) {
-            if( $e instanceof HTML_INPUT_HELPER ) {
+            if( $e instanceof \SKYOJ\HTML_INPUT_HELPER ) {
                 switch(true)
                 {
-                    case $e instanceof HTML_INPUT_TEXT:
-                    case $e instanceof HTML_INPUT_PASSWORD:
-                        echo $e->make_html(['style'=>$_fi->style()],'BT3_HORZIONTAL');
+                    case $e instanceof \SKYOJ\HTML_INPUT_TEXT:
+                    case $e instanceof \SKYOJ\HTML_INPUT_PASSWORD:
+                    case $e instanceof \SKYOJ\HTML_INPUT_SELECT:
+                    case $e instanceof \SKYOJ\HTML_INPUT_DIV:
+                        echo $e->make_html(['style'=>$_fi->style(),'this'=>$e],'BT3_HORZIONTAL');
                         break;
 
-                    case $e instanceof HTML_INPUT_BUTTOM:
-                        echo $e->make_html(['style'=>$_fi->style()],'BT3_HORZIONTAL_BTN');
+                    case $e instanceof \SKYOJ\HTML_INPUT_BUTTOM:
+                        echo $e->make_html(['style'=>$_fi->style(),'this'=>$e],'BT3_HORZIONTAL_BTN');
                         break;
 
-                    case $e instanceof HTML_INPUT_HIDDEN:
-                        echo $e->make_html(['style'=>''],'BT3_HORZIONTAL');
+                    case $e instanceof \SKYOJ\HTML_INPUT_HIDDEN:
+                        echo $e->make_html(['style'=>'','this'=>$e],'BT3_HORZIONTAL');
                         break;
 
                     default:

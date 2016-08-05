@@ -15,6 +15,7 @@ require_once 'renderCore.php';
 require_once 'pluginsCore.php';
 //Load Library
 require_once 'function/common/encrypt.php';
+require_once 'function/common/emnu.php';
 require_once 'function/common/forminfo.php';
 require_once 'Skyoj.lib.php';
 
@@ -57,8 +58,8 @@ final class _SkyOJ
         global $_E;
         \LOG::intro();
         \DB::intro();
-        \userControl::intro();
         \DB::query('SET NAMES UTF8');
+        \userControl::intro();
         $this->UriHandler();
     }
 
@@ -73,6 +74,25 @@ final class _SkyOJ
             }
             $this->default_handle = $name;
         }
+    }
+
+    //Set HTML Title
+    //Example : SetTitle('Login')
+    //Show: Login - [Sitename]
+    private $site_title = '';
+    public function SetTitle(string $str)
+    {
+        $this->site_title = $str;
+    }
+
+    public function GetTitle():string
+    {
+        global $_E;
+        if( empty($this->site_title) )
+        {
+            return $_E['site']['name'];
+        }
+        return "{$this->site_title} - {$_E['site']['name']}";
     }
 
     public function run()

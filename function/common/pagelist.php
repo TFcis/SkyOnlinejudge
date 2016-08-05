@@ -1,4 +1,4 @@
-<?php
+<?php namespace SKYOJ;
 
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
@@ -6,7 +6,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 //Get Max Page id
 //Get Min Page id (1)
 //show range +-3
-class pagelist
+class PageList
 {
     private $table;
     private $allrow;
@@ -16,9 +16,9 @@ class pagelist
 
     private function update()
     {
-        $res = DB::fetch("SELECT COUNT(*) FROM `{$this->table}` WHERE {$this->quest}");
+        $res = \DB::fetch("SELECT COUNT(*) FROM `{$this->table}` WHERE {$this->quest}");
         if ($res === false) {
-            throw new Exception('SQL Error');
+            throw new \Exception('SQL Error');
         }
         $this->allrow = (int) $res[0];
     }
@@ -35,7 +35,7 @@ class pagelist
     public function __construct(string $t, string $quest = '1')
     {
         $this->quest = $quest;
-        $this->table = DB::tname($t);
+        $this->table = \DB::tname($t);
         $this->update();
     }
 

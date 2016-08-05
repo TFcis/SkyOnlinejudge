@@ -207,13 +207,9 @@ class userControl
         return false;
     }
 
-    public static function isAdmin($uid = null)
+    public static function isAdmin(int $uid):bool
     {
-        global $_G,$_E,$_config;
-        if ($uid === null) {
-            return in_array($_G['uid'], $_E['site']['admin']);
-        }
-
+        global $_E;
         return in_array($uid, $_E['site']['admin']);
     }
 }

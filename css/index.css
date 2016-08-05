@@ -13,11 +13,13 @@ small {
     font-weight: normal;
 }
 
-a:link{ color: #a0a0a0; text-decoration: none; transition: 0.3s; }
-a:visited{ color: #a0a0a0;}
+a:visited{ color: #a0a0a0; }
+a.btn:visited{color: #dddddd; }
+a.btn:hover{ color: #ffffff; }
+a:link{ color: #dddddd; text-decoration: none; transition: 0.3s; }
 a:avtice{ color: #a0a0a0;}
 a:hover{ color: #ffffff;}
-.link-like{ color: #a0a0a0; text-decoration: none; transition: 0.3s; cursor: pointer;}
+.link-like{ color: #cccccc; text-decoration: none; transition: 0.3s; cursor: pointer;}
 .link-like:hover{ color: #ffffff; }
 
 h1 {
@@ -105,10 +107,12 @@ input[type = "text"]:focus{outline: none;}
 .textinput:focus{ outline: none; border-bottom: 4px solid #cccccc;}
 
 label {
-    font-size: 14px;
-    
-    color: #666666;
+    color: #FFF;
     font-weight: normal;
+    font-size: 14px;
+}
+.modal-body>div>form>.form-group>label {
+    color: #000;
 }
 
 button {

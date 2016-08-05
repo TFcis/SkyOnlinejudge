@@ -86,11 +86,6 @@ $(document).ready(function()
                     <div>
                         <small><span id="display"></span></small>
                     </div>
-                    <!--<div class="checkbox">
-                        <label class="login_lable_text">
-                            <input type="checkbox" name="usenickname" value="1" checked > Login By Nickname
-                        </label>
-                    </div>-->
                     <div class="form-group">
                         <button type="submit" class= "btn-grn btn-large btn-wide" style = "width:168px">
                         <b>Login</b>

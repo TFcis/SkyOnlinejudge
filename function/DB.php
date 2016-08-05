@@ -150,9 +150,11 @@ class DB
         return false;
     }
 
-    public static function lastInsertId()
+    public static function lastInsertId(string $name = null)
     {
-        return self::$pdo->lastInsertId();
+        if( $name===null )
+            \Log::msg(\Level::Warning,'DB::lastInsertId required a identity for cross SQL like PGSQL');
+        return self::$pdo->lastInsertId($name);
     }
 
     /**

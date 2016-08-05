@@ -2,6 +2,8 @@
 if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
+use \SKYOJ\FormInfo;
+use \SKYOJ\HTML_INPUT_PASSWORD;
 ?>
 </head>
 <?php
@@ -12,7 +14,7 @@ if (!defined('IN_TEMPLATE')) {
         $classtmp = '';
     }
 ?>
-<?php if(userControl::isAdmin()):?>
+<?php if(userControl::isAdmin($_G['uid'])):?>
 <script>
 function updateAdminToken(succ_callback,fail_callback){
     var token = getParameterByName('token');
@@ -68,7 +70,7 @@ $(document).ready(function()
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="<?=$_E['SITEROOT']?>problem.php">Problems</a></li>
+                    <li><a href="<?=$SkyOJ->uri('problem','list')?>">Problems</a></li>
                     <li><a href="<?=$_E['SITEROOT']?>index.php">Submission</a></li>
                     <li><a href="<?=$SkyOJ->uri('index','old')?>">Dev Message</a></li>
                     <li class="dropdown">
@@ -86,7 +88,7 @@ $(document).ready(function()
                     <?php if (!$_G['uid']): ?>
                     <li><a href="<?=$SkyOJ->uri('user','login')?>">LOGIN</a></li>
                     <?php else: ?>
-                        <?php if (userControl::isAdmin()):?>
+                        <?php if (userControl::isAdmin($_G['uid'])):?>
                         <li><a href="#" id="admin-tab">Admin</a></li>
                         <?php endif; ?>
                     <li><a href="<?=$SkyOJ->uri('user','view',$_G['uid'])?>"><?php echo htmlspecialchars($_G['nickname']); ?></a></li>
@@ -110,7 +112,7 @@ $(document).ready(function()
     </div>
     <?php endif; ?>
 
-    <?php if (userControl::isAdmin()):/*Admin Pass input*/?>
+    <?php if (userControl::isAdmin($_G['uid'])):/*Admin Pass input*/?>
     <div class="modal fade" id="adminPassInput" tabindex="-1" role="dialog" aria-labelledby="adminPassInputlb">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
