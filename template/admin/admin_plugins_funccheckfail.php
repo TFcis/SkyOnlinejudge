@@ -4,7 +4,6 @@ if (!defined('IN_TEMPLATE')) {
 }
 ?>
 <div class="container">
-    
     <div>
         <div class="page-header">
             <h1>Plugins<small>安裝失敗</small></h1>
@@ -18,14 +17,12 @@ if (!defined('IN_TEMPLATE')) {
                 </tr>
             </thead>
             <tbody>
-            <?php $i = 1; foreach ($tmpl['fail_func'] as $func) {
-     ?>
+            <?php $i = 1; foreach ($tmpl['fail_func'] as $func): ?>
                 <tr>
                     <td><?=$i++?></td>
                     <td><?=htmlentities($func)?></td>
                 </tr>
-            <?php 
- }?>
+            <?php endforeach; ?>
             </tbody>
         </table>
         <br>

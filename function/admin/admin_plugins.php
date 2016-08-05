@@ -27,11 +27,18 @@ function pluginsHandle()
             $_E['template']['sysplugins'][$folder] = $data ? $data : [];
             \Render::renderSingleTemplate('admin_plugins', 'admin');
             exit(0);
+        case 'install':
+                break;
         default:
+                \Render::renderSingleTemplate('nonedefined');
+                exit(0);
             break;
     }
-    \Log::msg(\Level::Warning, '[admin][plugins]Error dump',$SkyOJ);
-    \Render::renderSingleTemplate('common_message');
+    $funcpath = $_E['ROOT']."/function/admin/admin_plugins_$param.php";
+    $func     = __NAMESPACE__ ."\\admin_plugins_{$param}Handle";
+
+    require_once($funcpath);
+    $func();
 }
 
 /*
