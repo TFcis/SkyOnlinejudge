@@ -36,7 +36,7 @@ if (!defined('IN_TEMPLATE')) {
                         <?php if ($data === false): ?>
                             <a href="#" tmpl="plugins/install/<?=base64_encode($folder)?>/<?=base64_encode($classname)?>">安裝</a>
                         <?php else: ?>
-                            移除
+                            <a href="#" tmpl="plugins/uninstall/<?=base64_encode($folder)?>/<?=base64_encode($classname)?>">移除</a>
                         <?php endif; ?>
                     </td>
                 </tr>

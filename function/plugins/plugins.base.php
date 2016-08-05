@@ -78,6 +78,11 @@ abstract class PluginBase
      {
          return true;
      }
+
+     public static function uninstall(&$error_msg):bool
+     {
+         return true;
+     }
 }
 
 abstract class OnlineJudgeCapture extends PluginBase

@@ -28,6 +28,7 @@ function pluginsHandle()
             \Render::renderSingleTemplate('admin_plugins', 'admin');
             exit(0);
         case 'install':
+        case 'uninstall':
                 break;
         default:
                 \Render::renderSingleTemplate('nonedefined');

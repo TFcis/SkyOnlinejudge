@@ -172,6 +172,22 @@ class Plugin
         }
         return true;
     }
+
+    public static function uninstallClass(string $class)
+    {
+        global $_E;
+        $err_msg = 'Unknown';
+        $tplugin = DB::tname('plugin');
+
+        if( !$class::uninstall($err_msg) ){
+            throw new Exception($err_msg);
+        }else{
+            $res = DB::queryEx("DELETE FROM `tojtest_plugin` WHERE `class` = ?",$class);
+            if($res===false)
+                throw new Exception('SQL Error');
+        }
+        return true;
+    }
     /**
      * return value
      * classname(string)

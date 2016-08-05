@@ -24,6 +24,7 @@ $(document).ready(function()
             <h3><?=htmlentities($tmpl['class']::NAME)?><br><small class="login_sub_title">安裝設定</small></h3>
         </center>
     </div>
+    <hr>
     <div class="row">
         <div class="col-sm-offset-2 col-sm-8">
             <?php Render::renderForm($tmpl['pif_install'], 'install')?>

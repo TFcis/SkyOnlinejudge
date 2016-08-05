@@ -19,6 +19,7 @@ function apiHandle()
             break;
 
         case 'PluginInstall':
+        case 'PluginUninstall':
             checkToken(true);//use json
             break;
 
