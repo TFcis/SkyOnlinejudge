@@ -43,7 +43,7 @@ function AdminHandle()
     $func();
 }
 
-function checkToken()
+function checkToken(bool $json = false)
 {
     global $_E;
     $token = \SKYOJ\safe_post('token')??\SKYOJ\safe_get('token');
@@ -51,7 +51,10 @@ function checkToken()
         assert( \userControl::getSavedToken('ADMIN_CSRF') === $token );
         $_E['template']['ADMIN_CSRF'] = $token;
     } else {
-        \Render::ShowMessage('Token 無效，請重新載入');
+        if( $json )
+            \SKYOJ\throwjson('error', 'Token 無效，請重新載入');
+        else
+            \Render::ShowMessage('Token 無效，請重新載入');
         exit(0);
     }
 }

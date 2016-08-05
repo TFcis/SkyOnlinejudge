@@ -6,7 +6,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 
 function apiHandle()
 {
-    global $SkyOJ;
+    global $SkyOJ,$_E;
     $param = $SkyOJ->UriParam(2);
     
     switch( $param )
@@ -17,10 +17,20 @@ function apiHandle()
             (__NAMESPACE__.'\\api'.$param)();
             \SKYOJ\NeverReach();
             break;
+
+        case 'PluginInstall':
+            checkToken(true);//use json
+            break;
+
         default:
             \SKYOJ\throwjson('error', 'Access denied');
     }
-    
+
+    $funcpath = $_E['ROOT']."/function/admin/admin_api_$param.php";
+    $func     = __NAMESPACE__ ."\\admin_api_{$param}Handle";
+
+    require_once($funcpath);
+    $func();
 }
 
 function apiCheckAdminToken()

@@ -9,7 +9,11 @@ $(document).ready(function()
     $("#install").submit(function(e)
     {
         e.preventDefault();
-        api_submit("<?=$SkyOJ->uri('admin','api','install')?>","#install","#btn-show");
+        api_submit("<?=$SkyOJ->uri('admin','api','PluginInstall')?>","#install","#btn-show",function(){
+            setTimeout(function(){
+                loadTemplateToBlock('plugins/list/?folder=<?=urlencode($tmpl['folder'])?>','main-page');
+            }, 500);
+        });
         return true;
     });
 })

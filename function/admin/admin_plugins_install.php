@@ -46,7 +46,11 @@ function admin_plugins_installHandle()
             exit(0);
         }
         $formInfo = $class::installForm();
+        $formInfo['data'][] = new \SKYOJ\HTML_INPUT_HIDDEN(['name'=>'token','value'=>$_E['template']['ADMIN_CSRF']]);
+        $formInfo['data'][] = new \SKYOJ\HTML_INPUT_HIDDEN(['name'=>'class','value'=>$class]);
+        $formInfo['data'][] = new \SKYOJ\HTML_INPUT_HIDDEN(['name'=>'folder','value'=>$folder]);
         $formInfo['data'][] = new \SKYOJ\HTML_INPUT_BUTTOM(['name'=>'btn','title' => '送出','option'=>['help_text'=>'true']]);
+        
         $_E['template']['pif_install'] = new \SKYOJ\FormInfo($formInfo);
         \Render::renderSingleTemplate('admin_plugins_install_form', 'admin');
         exit(0);

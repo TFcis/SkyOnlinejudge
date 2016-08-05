@@ -156,6 +156,22 @@ class Plugin
         return $rev;
     }
 
+    public static function installClass(string $class)
+    {
+        global $_E;
+        $err_msg = 'Unknown';
+        $tplugin = DB::tname('plugin');
+
+        if( !$class::install($err_msg) ){
+            throw new Exception($err_msg);
+        }else{
+            $res = DB::queryEx("INSERT INTO `{$tplugin}` (`id`, `class`, `version`, `author`, `timestamp`)
+                              VALUES (NULL,?,?,?,NULL)",$class,$class::VERSION,$class::NAME);
+            if($res===false)
+                throw new Exception('SQL Error');
+        }
+        return true;
+    }
     /**
      * return value
      * classname(string)
