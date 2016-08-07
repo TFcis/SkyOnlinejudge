@@ -26,13 +26,13 @@ if (!defined('IN_TEMPLATE')) {
     ?></a></td>
 						<?php 
                         $row['user'] = (string) $row['user'];
-    $nickname = nickname($row['user']);
+    $nickname = \SKYOJ\nickname($row['user']);
     ?>
                        <td><a href="<?=$_E['SITEROOT'].'user.php/view/'.$row['user']?>"><?=$nickname[$row['user']]?></a></td>
                        <td><a href="<?=$_E['SITEROOT']?>problem.php/problem/<?=$row['problem'];
     ?>"><?=$row['problem'];
     ?></a></td>
-                       <td><?=getresulttext($row['result']);
+                       <td><?=\SKYOJ\getresulttext($row['result']);
     ?></td>
                        <td><?=$row['time'];
     ?></td>

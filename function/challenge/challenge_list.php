@@ -5,7 +5,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 }
 require_once $_E['ROOT'].'/function/common/pagelist.php';
 
-$page = isset($QUEST[1]) ? make_int($QUEST[1], 1) : '1';
+$page = isset($QUEST[1]) ? \SKYOJ\make_int($QUEST[1], 1) : '1';
 $pl = new PageList('challenge');
 if ($page < 1 || $pl->all() < $page) {
     $page = 1;

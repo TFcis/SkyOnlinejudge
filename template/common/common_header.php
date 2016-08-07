@@ -25,25 +25,13 @@
         <?php if ($_E['uesLocalMathJaxFile']):?>
         <script type="text/javascript" src=<?=$_E['SITEROOT']?>"js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <?php else:?>
-<<<<<<< HEAD
-        <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <?php endif; ?>
-    <?php endif; ?>
-=======
         <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <?php endif;?>
     <?php endif;?>
->>>>>>> refs/remotes/TFcis/master
     <!-- Latest compiled and minified JavaScript -->
-<<<<<<< HEAD
-    <script src="<?=$_E['SITEROOT']?>js/jquery.min.js"></script>
-    <script src="<?=$_E['SITEROOT']?>css/bootstrap/js/bootstrap.js"></script>
-    <script src="<?=$_E['SITEROOT']?>js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-=======
     <script src="<?=$_E['SITEROOT']?>js/third/jquery.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>css/third/bootstrap/js/bootstrap.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/ace/ace.js"></script>
->>>>>>> b2a53ecc87171492dad23a24fa231e56fe8a75a5
     <script src="<?=$_E['SITEROOT']?>js/common.js"></script>
     <?php if (userControl::isAdmin()):?>
     <script src="<?=$_E['SITEROOT']?>js/admin_check.js"></script>

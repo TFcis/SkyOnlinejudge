@@ -26,7 +26,7 @@ $result = $_E['template']['challenge_result_info']['result'];
 						<td>使用者</td>
 						<?php
                         $user = (string) $data['user'];
-                        $nickname = nickname($user);
+                        $nickname = \SKYOJ\nickname($user);
                         ?>
 						<td><?=$nickname[$user]?></td>
 					</tr>
@@ -52,7 +52,7 @@ $result = $_E['template']['challenge_result_info']['result'];
                             ?>
 					<tr>
                         <td><?=$i->test_idx?></td>
-						<td><?=getresulttext($i->state)?></td>
+						<td><?=\SKYOJ\getresulttext($i->state)?></td>
 						<td><?=$i->runtime?></td>
                         <td><?=$i->peakmem?></td>
 					</tr>
