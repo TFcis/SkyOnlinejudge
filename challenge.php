@@ -5,6 +5,11 @@ require_once 'function/SkyOJ.php';
 
 $allowmod = ['list', 'result'];
 
+/**
+ *QUEST:
+ *0-mod
+ *1-pageid
+ */
 //set Default mod
 $mod = empty($QUEST[0]) ? 'list' : $QUEST[0];
 
