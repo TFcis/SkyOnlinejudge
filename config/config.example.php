@@ -2,10 +2,9 @@
 
 $_config = [];
 // ----------------------------  CONFIG DB  ----------------------------- //
-$_config['db']['dbhost'] = 'localhost';
-$_config['db']['dbuser'] = 'root';
-$_config['db']['dbpw'] = '';
-$_config['db']['dbcharset'] = 'utf8';
-$_config['db']['dbname'] = 'test';
-$_config['db']['tablepre'] = 'tojtest';
-$_config['cookie']['namepre'] = 'tojtest';
+$_config['db']['query_string']  = 'mysql:host=localhost;dbname=sky';
+$_config['db']['dbuser']        = 'root';
+$_config['db']['dbpassword']    = '';
+$_config['db']['dbcharset']     = 'utf8';
+$_config['db']['tablepre']      = 'tojtest_';
+$_config['cookie']['namepre']   = 'tojtest';
