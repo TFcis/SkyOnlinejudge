@@ -14,7 +14,7 @@ Required
 
 Install
 -------------
-1. Clone SKY Online Judge Repository to yout website
+1. Clone SKY Online Judge Repository to yout website (Don't forget to fetch submodules)
 2. Copy `config/config.example.php` to `config/config.php`
 3. Fill out your MySQL setting in config.php
 4. Set up your database using `install/FullSQLFormat.sql`.
