@@ -14,8 +14,16 @@ data/problem/prased.html
 
 class ProblemDescriptionEnum extends BasicEnum
 {
+    const PDF       = '0';
     const MarkDown  = '1';
     const HTML      = '2';
+}
+
+class ProblemJudgeTypeEnum extends BasicEnum
+{
+    const Hidden    = 0; //< Not support
+    const Normal    = 1; //< STD IO
+    const FileIO    = 2; //< File IO
 }
 
 class Problem
@@ -131,6 +139,49 @@ class Problem
         return $this->SQLData['owner']??null;
     }
 
+    /**
+     * this function will not check $col
+     */
+    private function UpdateSQLLazy(string $col = null,$val = null)
+    {
+        static $host = [];
+        if( $col === null ){
+            $back = $host;
+            $host = [];
+            return $back;
+        }
+        $host[] = [$col,$val];
+    }
+
+    public function UpdateSQL():bool
+    {
+        $tproblem = \DB::tname('problem');
+        $data = $this->UpdateSQLLazy();
+        //TODO : Need report sql status
+        foreach( $data as $d )
+            \DB::queryEx("UPDATE `{$tproblem}` SET `{$d[0]}`= ? WHERE `pid`=?",$d[1],$this->pid());
+        return true;
+    }
+
+    public function GetJudge():string
+    {
+        return $this->SQLData['class']??null;
+    }
+
+    public function SetJudge(string $class):bool
+    {
+        if( $class != $this->SQLData['class'] && $class != '' )
+        {
+            //TODO : Check for installed
+            if( !\Plugin::isClassName($class) )
+            {
+                return false;
+            }
+        }
+        $this->UpdateSQLLazy('class',$class);
+        return true;
+    }
+
     //Get Problem Content
     public function GetTitle():string
     {
@@ -143,8 +194,23 @@ class Problem
         {
             return false;
         }
-        $tproblem = \DB::tname('problem');
-        return \DB::queryEx("UPDATE `{$tproblem}` SET `title`= ? WHERE `pid`=?",$title,$this->pid())!==false;
+        $this->UpdateSQLLazy('title',$title);
+        return true;
+    }
+
+    public function GetJudgeType():int
+    {
+        return $this->SQLData['judge_type'];
+    }
+
+    public function SetJudgeType(string $judge_type):bool
+    {
+        if( ProblemJudgeTypeEnum::isValidValue($judge_type) )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('judge_type',$judge_type);
+        return true;
     }
 
     static public function RenderString(string $str,int $type):string
@@ -205,12 +271,14 @@ class Problem
         $this->row_changed = true;
     }
 
-    public function Update()
+    public function Update():bool
     {
+        $this->UpdateSQL();
         if( $this->row_changed )
         {
             $this->RenderRowContentToFile();
             $this->row_changed = false;
         }
+        return true;
     }
 }

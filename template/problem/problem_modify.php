@@ -53,9 +53,21 @@ $(document).ready(function(){
                         new HTML_INPUT_HIDDEN(['name'=>'pid','value'=>$tmpl['problem']->pid()]),
                         new HTML_INPUT_HIDDEN(['name'=>'content','id'=>'content','value'=>'']),
                         new HTML_INPUT_TEXT(['name'=>'title','value'=>$tmpl['problem']->GetTitle(),'required'=>'required','option' => ['help_text' => '題目名稱']]),
-                        new HTML_INPUT_SELECT(['name'=>'contenttype','key-pair'=>
-                            \SKYOJ\ProblemDescriptionEnum::getConstants()
-                            ,'option' => ['help_text' => '題目類型']]),
+                        new HTML_INPUT_SELECT(['name'=>'contenttype'
+                            ,'key-pair'=> \SKYOJ\ProblemDescriptionEnum::getConstants()
+                            
+                            ,'option'  => ['help_text' => '題目格式']]),
+
+                        new HTML_INPUT_SELECT(['name'=>'judge'
+                            ,'key-pair'=> $tmpl['judges']
+                            ,'default' => $tmpl['problem']->GetJudge()
+                            ,'option'  => ['help_text' => 'Judge']]),
+
+                        new HTML_INPUT_SELECT(['name'=>'judge_type'
+                            ,'key-pair'=> \SKYOJ\ProblemJudgeTypeEnum::getConstants()
+                            ,'default' => $tmpl['problem']->GetJudgeType()
+                            ,'option'  => ['help_text' => '題目類型']]),
+
                         new HTML_INPUT_DIV(['name'=>'','id'=>'editor','option' =>
                             [
                                 'html'=>$tmpl['problem']->GetRowContent(),

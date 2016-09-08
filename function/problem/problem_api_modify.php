@@ -14,6 +14,8 @@ function problem_api_modifyHandle()
     $pid = \SKYOJ\safe_post('pid');
     $title   = \SKYOJ\safe_post('title');
     $content = \SKYOJ\safe_post('content');
+    $judge   = \SKYOJ\safe_post('judge')??'';
+    $judge_type   = \SKYOJ\safe_post('judge_type');
     $contenttype = \SKYOJ\safe_post('contenttype');
 
     if( !isset($pid,$title,$content,$contenttype) )
@@ -23,16 +25,19 @@ function problem_api_modifyHandle()
         $pid = $problem->pid();
         if( $problem->pid()===null || !\userControl::getpermission($problem->owner()) )
             throw new \Exception('Access denied');
+
+        if( !$problem->SetTitle($title) )
+            throw new \Exception('title length more than limit');
+        if( !$problem->SetJudge($judge) )
+            throw new \Exception('no such judge');
+        if( !$problem->SetJudgeType($judge_type) )
+            throw new \Exception('no such judge type');
+        $problem->SetRowContent($content);
+
+        $problem->Update();
+        \SKYOJ\throwjson('SUCC','succ');
+
     }catch(\Exception $e){
         \SKYOJ\throwjson('error',$e->getMessage());
     }
-
-    if( strlen($title) > \SKYOJ\Problem::TITLE_LENTH_MAX )
-        \SKYOJ\throwjson('error','title length more than limit');
-
-    $problem->SetTitle($title);
-    $problem->SetRowContent($content);
-    $problem->Update();
-
-    \SKYOJ\throwjson('SUCC','succ');
 }

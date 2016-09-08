@@ -156,6 +156,27 @@ class Plugin
         return $rev;
     }
 
+    /**
+     * @note path base on ROOT/function/plugins/
+     *
+     * @return All class_[name].file on $path
+     */
+    public static function listInstalledClassFileByFolder(string $path)
+    {
+        $data = self::listClassFileByFolder($path);
+        foreach($data as &$file)
+            $file = self::getClassName($file);
+        $res  = self::checkInstall($data);
+        if( $res === false )
+            return  [];
+        foreach( $res as $key => $info )
+        {
+            if( $info === false )
+                unset($res[$key]);
+        }
+        return $res;
+    }
+
     public static function installClass(string $class)
     {
         global $_E;
@@ -165,8 +186,8 @@ class Plugin
         if( !$class::install($err_msg) ){
             throw new Exception($err_msg);
         }else{
-            $res = DB::queryEx("INSERT INTO `{$tplugin}` (`id`, `class`, `version`, `author`, `timestamp`)
-                              VALUES (NULL,?,?,?,NULL)",$class,$class::VERSION,$class::NAME);
+            $res = DB::queryEx("INSERT INTO `{$tplugin}` (`id`, `class`, `version`, `name`, `description`, `copyright`, `timestamp`)
+                              VALUES (NULL,?,?,?,?,?,NULL)",$class,$class::VERSION,$class::NAME,$class::DESCRIPTION,$class::COPYRIGHT);
             if($res===false)
                 throw new Exception('SQL Error');
         }
