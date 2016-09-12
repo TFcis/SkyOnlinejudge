@@ -18,6 +18,7 @@ function ChallengeHandle()
     switch( $param )
     {
         case 'list':
+        case 'result':
             break;
         default:
             \Render::render('nonedefined');
