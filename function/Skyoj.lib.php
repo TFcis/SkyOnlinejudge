@@ -222,6 +222,7 @@ function envadd($table)
         return false;
     }
 }
+
 function ojacct_reg($rel, $uid, &$change = null)
 {
     if (isset($change)) {
@@ -322,4 +323,37 @@ class privatedata
             unlink($this->name);
         }
     }
+}
+
+function getresulttext($resultid)
+{
+    $res = 'NO';
+    switch ($resultid) {
+        case 0: $res = 'NONE'; break;
+        case 1: $res = 'AC'; break;
+        case 2: $res = 'WA'; break;
+        case 3: $res = 'RE'; break;
+        case 4: $res = 'TLE'; break;
+        case 5: $res = 'MLE'; break;
+        case 6: $res = 'CE'; break;
+        case 7: $res = 'ERR'; break;
+    }
+    return $res;
+}
+
+function getresulttexthtml($resultid)
+{
+    $res = 'NO';
+    switch ($resultid) {
+        case 0: $res = 'NONE'; break;
+        case 1: $res = 'AC'; break;
+        case 2: $res = 'WA'; break;
+        case 3: $res = 'RE'; break;
+        case 4: $res = 'TLE'; break;
+        case 5: $res = 'MLE'; break;
+        case 6: $res = 'CE'; break;
+        case 7: $res = 'ERR'; break;
+        default:$res = 'NO'; break;
+    }
+    return "<span class='{$res}'>{$res}</span>";
 }

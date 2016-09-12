@@ -179,3 +179,22 @@ th {
     cursor: pointer;
     color: #ffffff;
 }
+
+.AC {
+	color: #00cc00;
+}
+.WA {
+	color: #cc0000;
+}
+.RE {
+    color: #27fff6;
+}
+.TLE {
+    color: #70649a;
+}
+.MLE {
+    color: #e83015;
+}
+.CE {
+	color: #ffeb00;
+}
