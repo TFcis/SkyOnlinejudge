@@ -12,6 +12,8 @@ function apiHandle()
     {
         case 'new':
         case 'modify':
+        case 'submit':
+        case 'judge':
             break;
             
         default:

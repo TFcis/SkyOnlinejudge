@@ -116,6 +116,18 @@ class Problem
             throw new \Exception('Bad Config!');
     }
 
+    public static function get_title(int $pid)
+    {
+        static $t = [];
+        $tproblem = \DB::tname('problem');
+        if( isset($t[$pid]) )
+            return $t[$pid];
+        $data = \DB::fetchEx("SELECT `title` FROM `{$tproblem}` WHERE `pid`=?", $pid);
+        if( $data !== false )
+            return $t[$pid] = $data['title'];
+        return '(null)';
+    }
+
     public function __destruct()
     {
         $this->Update();

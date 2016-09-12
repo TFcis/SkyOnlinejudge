@@ -21,8 +21,11 @@ $(document).ready(function()
                 return ;
             }
         }
+        $("#s_code").val(code);
         api_submit("<?=$SkyOJ->uri('problem','api','submit')?>","#submit","#info",function(res){
-            location.href="<?=$SkyOJ->uri('chal','view')?>/"+res.data;
+            api_submit("<?=$SkyOJ->uri('problem','api','judge')?>?cid="+res.data,"#submit","#info",function(r){
+                location.href="<?=$SkyOJ->uri('chal','result')?>/"+res.data;
+            });
         });
     });
 })
@@ -36,7 +39,8 @@ $(document).ready(function()
     <div class="row">
         <div class="col-sm-12">
             <form id="submit">
-                <input type="hidden" value="<?=$tmpl['problem']->pid()?>">
+                <input type="hidden" name="code" id="s_code" value="">
+                <input type="hidden" name="pid" value="<?=$tmpl['problem']->pid()?>">
                 <div class="form-group">
                     <label for="language" class="col-sm-2 control-label">Compiler</label>
                     <select class="form-control" name="compiler">
