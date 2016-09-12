@@ -243,6 +243,22 @@ class Plugin
 
     /**
      * return value
+     * plugin info(string)
+     * false : fail to load class.
+     */
+    public static function loadClassFileInstalled(string $folder, string $class)
+    {
+        $info = self::checkInstall($class);
+        if( $info === false )
+            return false;
+        $classname = self::loadClassFile($folder,$class);
+        if( $classname===false )
+            return false;
+        return $info;
+    }
+
+    /**
+     * return value
      * array of std classname(string)
      * false : fail to load class.
      */
