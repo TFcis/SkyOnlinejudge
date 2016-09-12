@@ -15,7 +15,7 @@ function listHandle()
         $page = '1';
 
     $pl = new PageList('challenge');
-    $data = $pl->GetPageDataByPage($page,'cid');
+    $data = $pl->GetPageDataByPage($page,'cid','*','DESC');
 
     //LOG::msg(Level::Debug, '', $data);
     $_E['template']['challenge_list_pagelist'] = $pl;

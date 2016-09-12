@@ -21,12 +21,12 @@ if (!defined('IN_TEMPLATE')) {
         <tbody>
         <?php foreach ($_E['template']['challenge_info'] as $row): ?>
             <tr>
-                <td><a href="<?=$Skyoj->uri('challenge','result',$row['id'])?>"><?=$row['id'];?></a></td>
-                <?php $row['user'] = (string) $row['user'];  $nickname = nickname($row['user']); ?>
-                <td><a href="<?=$Skyoj->uri('user','view',$row['user'])?>"><?=$nickname[$row['user']]?></a></td>
-                <td><a href="<?=$Skyoj->uri('problem','view',$row['problem'])?>"><?=$row['problem']; ?></a></td>
-                <td><?=$row['result']?></td>
-                <td><?=$row['time'];?></td>
+                <td><a href="<?=$SkyOJ->uri('chal','result',$row['cid'])?>"><?=$row['cid'];?></a></td>
+                <?php $nickname = \SKYOJ\nickname($row['uid']); ?>
+                <td><a href="<?=$SkyOJ->uri('chal','result',$row['cid'])?>"><?=$nickname[$row['uid']]?></a></td>
+                <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'])?>"><?=\SKYOJ\Problem::get_title($row['pid'])?></a></td>
+                <td><?=\SKYOJ\getresulttexthtml($row['result'])?></td>
+                <td><?=$row['timestamp'];?></td>
             </tr>
             <?php endforeach; ?>
         </tbody>
@@ -34,7 +34,7 @@ if (!defined('IN_TEMPLATE')) {
     <center>
     <?php Render::renderPagination(
     $_E['template']['challenge_list_pagelist'],
-    $_E['SITEROOT'].'challenge.php/list/%d',
+    $_E['SITEROOT'].'index.php/chal/list/%d',
     $_E['template']['challenge_list_now']) ?>
     </center>
 </div>

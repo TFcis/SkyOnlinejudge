@@ -21,6 +21,10 @@ function submitHandle()
         }
         $_E['template']['problem'] = $problem;
 
+        $judge = null;
+        $judgename = $problem->GetJudge();
+        if( \Plugin::loadClassFileInstalled('judge',$judgename)!==false )
+            $judge = new $judgename;
         //Get Compiler info
          /*
             this is decided by judge plugin, and select which is availible in problem setting
@@ -28,8 +32,7 @@ function submitHandle()
             val : judge info support by judge plugin
         */
         $_E['template']['compiler'] = [
-            'cpp11' => 'c++11/gnu c++ compiler 4.8.4 | options: -O2 -std=c++11',
-            'cpp14' => 'c++14/gnu c++ compiler 6.1.0 | options: -O2 -std=c++14'
+            'cpp11' => 'c++14/gnu c++ compiler 5.4.0 | options: -O2 -std=c++11'
         ];
         \Render::render('problem_submit','problem');
     }catch(\Exception $e){

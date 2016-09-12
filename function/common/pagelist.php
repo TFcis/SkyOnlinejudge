@@ -60,14 +60,15 @@ class PageList
     }
 
 
-    public function GetPageDataByPage(int $page,string $order,string $select = '*')
+    public function GetPageDataByPage(int $page,string $order,string $select = '*',$ASC = 'ASC')
     {
         if( $page < 1 || $this->all() < $page ) {
             $page = 1;
         }
-
+        if( $ASC !== 'ASC' )$ASC  = 'DESC' ;
         $pdo = \DB::prepare("SELECT {$select} FROM `{$this->table}` 
-                            ORDER BY `{$order}` 
+                            WHERE {$this->quest}
+                            ORDER BY `{$order}` $ASC  
                             LIMIT :st,:num");
         $pdo->bindValue(':st', ($page - 1) * PageList::ROW_PER_PAGE, \PDO::PARAM_INT);
         $pdo->bindValue(':num', PageList::ROW_PER_PAGE, \PDO::PARAM_INT);
