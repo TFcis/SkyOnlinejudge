@@ -3,31 +3,17 @@
         exit('Access denied');
     }
 ?>
-<style type="text/css" media="screen">
-    #editor { 
-        width : 100%;
-        height : 100%;
-        font-size:14px;
-    }
-    body .ace_scrollbar-v {
-        overflow-y: hidden;
-    }
-    
-    body .ace_scrollbar-h {
-        overflow-x: auto;
-    }
-</style>
 <script>
 $(document).ready( function()
 {
-    var editor = ace.edit("editor");
+    var editor = ace.edit("<?=\SKYOJ\html($tmpl['_id'])?>");
     editor.setTheme("ace/theme/twilight");
-    editor.getSession().setMode("ace/mode/c_cpp");
+    editor.getSession().setMode("ace/mode/<?=$tmpl['_language']?>");
     editor.setOptions({
         minLines: 20,
         maxLines: Infinity
     });
 })
 </script>
-<div id="editor"><?php if (isset($tmpl['defaultcode'])): ?><?= htmlspecialchars($tmpl['defaultcode']) ?><?php endif; ?></div>
+<div class="code_editor" id="<?=\SKYOJ\html($tmpl['_id'])?>"><?=htmlspecialchars($tmpl['_defaultcode'],ENT_HTML5|ENT_COMPAT,"UTF-8")?></div>
 

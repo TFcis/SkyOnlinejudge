@@ -85,6 +85,15 @@ class Render
         self::renderSingleTemplate('common_pagination');
     }
 
+    public static function renderCode(string $code, string $language, string $id = '')
+    {
+        global $_E;
+        if( empty($id) )$id = uniqid("code");
+        $_E['template']['_defaultcode'] = $code;
+        $_E['template']['_language'] = $language;
+        $_E['template']['_id'] = $id;
+        self::renderSingleTemplate('common_codepanel');
+    }
     //work in progress
     public static function renderStylesheetLink($namespace = 'common', $options = '')
     {

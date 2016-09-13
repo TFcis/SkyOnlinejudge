@@ -198,3 +198,14 @@ th {
 .CE {
 	color: #ffeb00;
 }
+.code_editor { 
+    width : 100% !important; 
+    font-size:14px !important;
+}
+body .ace_scrollbar-v {
+    overflow-y: hidden;
+}
+
+body .ace_scrollbar-h {
+    overflow-x: auto;
+}

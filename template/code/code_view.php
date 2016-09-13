@@ -15,7 +15,7 @@ $(document).ready(function()
     </div>
     <div class="row">
         <div class="col-lg-8 col-md-8">
-            <?php Render::renderSingleTemplate('common_codepanel'); ?>
+            <?php Render::renderCode($tmpl['defaultcode']??'','c_cpp','editor'); ?>
         </div>
         <div class="col-lg-4 col-md-4">
             <h1>Information</h1>

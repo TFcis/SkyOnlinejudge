@@ -6,6 +6,13 @@ $data = $tmpl['challenge_result_info'];
 $result = json_decode($data['package'],true) ?? [];
 //$result = $_E['template']['challenge_result_info']['result'];
 ?>
+<script>
+$(document).ready(function()
+{
+    var editor = ace.edit("rcode");
+    editor.setReadOnly(true);
+})
+</script>
 <div class="container">
 	<div class="row">
 		<div class="col-md-4">
@@ -88,7 +95,7 @@ $result = json_decode($data['package'],true) ?? [];
 			<div class="col-md-12">
 				<?php 
 					$tmpl['defaultcode'] = $data['code'];
-					Render::renderSingleTemplate('common_codepanel'); 
+					Render::renderCode($data['code'],'c_cpp','rcode'); 
 				?>
 			</div>
 		</div>

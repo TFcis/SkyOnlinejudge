@@ -16,7 +16,7 @@ function resultHandle()
 
         $tchallenge = \DB::tname('challenge');
         $data = \DB::fetchEx("SELECT * FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
-        \LOG::msg(\Level::Debug, '', $data,$cid);
+
         if( $data===false )
         {
             throw new \Exception('cid error');

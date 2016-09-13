@@ -357,3 +357,8 @@ function getresulttexthtml($resultid)
     }
     return "<span class='{$res}'>{$res}</span>";
 }
+
+function html(string $str):string
+{
+    return htmlentities($str,ENT_HTML5|ENT_COMPAT,"UTF-8");
+}
