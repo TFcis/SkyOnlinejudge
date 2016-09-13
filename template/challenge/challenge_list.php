@@ -15,6 +15,7 @@ if (!defined('IN_TEMPLATE')) {
                 <th>使用者</th>
                 <th>題目</th>
                 <th>結果</th>
+                <th>分數</th>
                 <th>時間</th>
             </tr>
         </thead>
@@ -26,6 +27,7 @@ if (!defined('IN_TEMPLATE')) {
                 <td><a href="<?=$SkyOJ->uri('chal','result',$row['cid'])?>"><?=$nickname[$row['uid']]?></a></td>
                 <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'])?>"><?=\SKYOJ\Problem::get_title($row['pid'])?></a></td>
                 <td><?=\SKYOJ\getresulttexthtml($row['result'])?></td>
+                <td><?=$row['score']?></td>
                 <td><?=$row['timestamp'];?></td>
             </tr>
             <?php endforeach; ?>
