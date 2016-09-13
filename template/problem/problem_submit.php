@@ -56,7 +56,7 @@ $(document).ready(function()
 
     <div class="row">
         <div class="col-sm-12">
-        <?php Render::renderSingleTemplate('common_codepanel'); ?>
+        <?php Render::renderCode('','c_cpp','editor'); ?>
         </div>
     </div>
 

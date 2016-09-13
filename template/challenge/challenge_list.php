@@ -8,7 +8,7 @@ if (!defined('IN_TEMPLATE')) {
 	<div class="page-header">
         <h1>Challenge<small></small></h1>
     </div>
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>#</th>

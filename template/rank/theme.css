@@ -30,16 +30,7 @@ tr{
     border: 0;
     transition: 0.2s;
 }
-tr:nth-child(odd) {
-    background: #222222;
-}
 
-tr:nth-child(even) {
-    background: #282828;
-}
-tr:hover{
-    background-color:#317082;
-}
 tr .label{ width: 80px; }
 
 

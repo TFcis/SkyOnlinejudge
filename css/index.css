@@ -209,3 +209,15 @@ body .ace_scrollbar-v {
 body .ace_scrollbar-h {
     overflow-x: auto;
 }
+
+
+.table-striped tr:nth-child(odd) {
+    background: #222222 !important;
+}
+
+.table-striped tr:nth-child(even) {
+    background: #282828 !important;
+}
+.table-striped tr:hover{
+    background-color:#317082 !important;
+}
