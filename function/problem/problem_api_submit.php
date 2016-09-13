@@ -39,8 +39,8 @@ function problem_api_submitHandle()
         if( $cid===null )
             throw new \Exception('SQL Error');
 
-        $data = new \SKYOJ\Challenge\Challenge($cid);
-        $data->run_judge();
+        //$data = new \SKYOJ\Challenge\Challenge($cid);
+        //$data->run_judge();
         \SKYOJ\throwjson('SUCC',$cid);
     }catch(\Exception $e){
         \SKYOJ\throwjson('error',$e->getMessage());
