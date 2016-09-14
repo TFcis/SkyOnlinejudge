@@ -12,7 +12,7 @@ function problem_api_submitHandle()
     //TODO : 題目權限
     if( !$_G['uid'] )
         \SKYOJ\throwjson('error', 'Access denied');
-    
+
     $pid = \SKYOJ\safe_post('pid');
     $compiler = \SKYOJ\safe_post('compiler');
     $code = \SKYOJ\safe_post('code');
@@ -20,14 +20,17 @@ function problem_api_submitHandle()
 
     if( !isset($pid,$compiler,$code) )
         \SKYOJ\throwjson('error','param error');
-    
+
     try{
         $problem = new \SKYOJ\Problem($pid);
         $pid = $problem->pid();
 
         if( $problem->pid()===null )
+            throw new \Exception('Problem data load fail!');
+
+        #題目權限
+        if( !$problem->hasSubmitAccess($_G['uid']) )
             throw new \Exception('Access denied');
-        
         //TODO
         if( $compiler !== 'cpp11' )
             throw new \Exception('NoSuchJudge');
@@ -39,8 +42,6 @@ function problem_api_submitHandle()
         if( $cid===null )
             throw new \Exception('SQL Error');
 
-        //$data = new \SKYOJ\Challenge\Challenge($cid);
-        //$data->run_judge();
         \SKYOJ\throwjson('SUCC',$cid);
     }catch(\Exception $e){
         \SKYOJ\throwjson('error',$e->getMessage());

@@ -204,14 +204,19 @@ class Problem
         return true;
     }
 
-    public function hasContentAccess(int $uid):bool
+    public static function hasContentAccess_s(int $uid,int $owner,int $acccode):bool
     {
-        switch($this->GetContentAccess())
+        switch($acccode)
         {
-            case ProblemContentAccessEnum::Hidden: return $this->owner()===$uid || \userControl::isAdmin($uid);
-            case ProblemContentAccessEnum::Open:   return $uid!=0;
+            case ProblemContentAccessEnum::Hidden: return $owner===$uid || \userControl::isAdmin($uid);
+            case ProblemContentAccessEnum::Open:   return true;
             default: \SKYOJ\NeverReach();
         }
+    }
+
+    public function hasContentAccess(int $uid):bool
+    {
+        return self::hasContentAccess_s($uid,$this->owner(),$this->GetContentAccess());
     }
 
     public function GetSubmitAccess():int
@@ -229,15 +234,20 @@ class Problem
         return true;
     }
 
-    public function hasSubmitAccess(int $uid):bool
+    public static function hasSubmitAccess_s(int $uid,int $owner,int $acccode):bool
     {
-        switch($this->GetContentAccess())
+        switch($acccode)
         {
             case ProblemSubmitAccessEnum::Closed: return false;
-            case ProblemSubmitAccessEnum::Test:   return $this->owner()===$uid || \userControl::isAdmin($uid);
+            case ProblemSubmitAccessEnum::Test:   return $owner===$uid || \userControl::isAdmin($uid);
             case ProblemSubmitAccessEnum::Open:   return $uid!=0;
             default: \SKYOJ\NeverReach();
         }
+    }
+
+    public function hasSubmitAccess(int $uid):bool
+    {
+        return self::hasSubmitAccess_s($uid,$this->owner(),$this->GetSubmitAccess());
     }
 
     public function GetJudge():string

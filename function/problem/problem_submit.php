@@ -15,9 +15,11 @@ function submitHandle()
         if( $pid===null )
             throw new \Exception('Access denied');
 
-        if( /*problem is not open*/false || $_G['uid'] == 0 )
+        if( !$problem->hasSubmitAccess($_G['uid']) )
         {
-            throw new \Exception('Access denied');
+            if( $_G['uid'] == 0 )
+                throw new \Exception('請登入後再操作');
+            throw new \Exception('沒有權限');
         }
         $_E['template']['problem'] = $problem;
 

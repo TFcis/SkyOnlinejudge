@@ -15,7 +15,7 @@ function listHandle()
         $page = '1';
 
     $pl = new PageList('problem');
-    $data = $pl->GetPageDataByPage($page,'pid','`pid`,`owner`,`title`');
+    $data = $pl->GetPageDataByPage($page,'pid','`pid`,`owner`,`title`,`content_access`,`submit_access`');
 
     $_E['template']['problem_list_pagelist'] = $pl;
     $_E['template']['problem_list_now'] = $page;
