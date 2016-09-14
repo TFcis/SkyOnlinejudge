@@ -33,12 +33,14 @@ $(document).ready(function(){
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/markdown");
+    editor.getSession().setUseWrapMode(true);
     editor.setOptions({
         minLines: 20,
-        maxLines: Infinity
+        maxLines: 20
     });
 })
 </script>
+<style>body .ace_scrollbar-v{overflow-y: auto;}</style>
 <div class="container">
     <div class="row">
         <div class="page-header">
@@ -63,16 +65,46 @@ $(document).ready(function(){
                             ,'default' => $tmpl['problem']->GetJudge()
                             ,'option'  => ['help_text' => 'Judge']]),
 
-                        new HTML_INPUT_SELECT(['name'=>'judge_type'
-                            ,'key-pair'=> \SKYOJ\ProblemJudgeTypeEnum::getConstants()
-                            ,'default' => $tmpl['problem']->GetJudgeType()
-                            ,'option'  => ['help_text' => '題目類型']]),
-
                         new HTML_INPUT_DIV(['name'=>'','id'=>'editor','option' =>
                             [
                                 'html'=>$tmpl['problem']->GetRowContent(),
                                 'help_text' => '題目敘述'
                             ]]),
+
+                        new HTML_ROW(['html'=> <<<TAG
+<div class="panel-group col-md-offset-3" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <span class="h4" id="formtitle">權限設定</span>
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+TAG
+                        ]),
+                        new HTML_INPUT_SELECT(['name'=>'judge_type'
+                            ,'key-pair'=> \SKYOJ\ProblemJudgeTypeEnum::getConstants()
+                            ,'default' => $tmpl['problem']->GetJudgeType()
+                            ,'option'  => ['help_text' => '題目輸入類型']]),
+                        new HTML_INPUT_SELECT(['name'=>'content_access'
+                            ,'key-pair'=> \SKYOJ\ProblemContentAccessEnum::getConstants()
+                            ,'default' => $tmpl['problem']->GetContentAccess()
+                            ,'option'  => ['help_text' => '題目檢視權限']]),
+                        new HTML_INPUT_SELECT(['name'=>'submit_access'
+                            ,'key-pair'=> \SKYOJ\ProblemSubmitAccessEnum::getConstants()
+                            ,'default' => $tmpl['problem']->GetSubmitAccess()
+                            ,'option'  => ['help_text' => '上傳權限']]),
+                        new HTML_ROW(['html'=> <<<TAG
+            </div>
+        </div>
+    </div>
+</div>
+TAG
+                        ]),
                         new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出','option' => ['help_text' => 'true']]),
                     ]
                 ]),'modify-problem-from');

@@ -16,7 +16,9 @@ function problem_api_modifyHandle()
     $content = \SKYOJ\safe_post('content');
     $judge   = \SKYOJ\safe_post('judge')??'';
     $judge_type   = \SKYOJ\safe_post('judge_type');
-    $contenttype = \SKYOJ\safe_post('contenttype');
+    $contenttype  = \SKYOJ\safe_post('contenttype');
+    $content_access = \SKYOJ\safe_post('content_access');
+    $submit_access  = \SKYOJ\safe_post('submit_access');
 
     if( !isset($pid,$title,$content,$contenttype) )
         \SKYOJ\throwjson('error','param error');
@@ -32,6 +34,10 @@ function problem_api_modifyHandle()
             throw new \Exception('no such judge');
         if( !$problem->SetJudgeType($judge_type) )
             throw new \Exception('no such judge type');
+        if( !$problem->SetContentAccess($content_access) )
+            throw new \Exception('no such ContentAccess type');
+        if( !$problem->SetSubmitAccess($submit_access) )
+            throw new \Exception('no such SubmitAccess type');
         $problem->SetRowContent($content);
 
         $problem->Update();

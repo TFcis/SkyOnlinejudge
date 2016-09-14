@@ -26,6 +26,19 @@ class ProblemJudgeTypeEnum extends BasicEnum
     const FileIO    = 2; //< File IO
 }
 
+class ProblemContentAccessEnum extends BasicEnum
+{
+    const Hidden    = 0; //< Only Access >= can see problem
+    const Open      = 1; //< All users
+}
+
+class ProblemSubmitAccessEnum extends BasicEnum
+{
+    const Closed    = 0; //< All users cannot submit (it will not effct submited challenge)
+    const Test      = 1; //< Only Access >= can submit problem
+    const Open      = 2; //< All users can submit it
+}
+
 class Problem
 {
     private $SQLData = [];
@@ -162,6 +175,7 @@ class Problem
             $host = [];
             return $back;
         }
+        $this->SQLData[$col] = $val;
         $host[] = [$col,$val];
     }
 
@@ -173,6 +187,57 @@ class Problem
         foreach( $data as $d )
             \DB::queryEx("UPDATE `{$tproblem}` SET `{$d[0]}`= ? WHERE `pid`=?",$d[1],$this->pid());
         return true;
+    }
+
+    public function GetContentAccess():int
+    {
+        return $this->SQLData['content_access']??null;
+    }
+
+    public function SetContentAccess($val):bool
+    {
+        if( ProblemContentAccessEnum::isValidValue($val) )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('content_access',$val);
+        return true;
+    }
+
+    public function hasContentAccess(int $uid):bool
+    {
+        switch($this->GetContentAccess())
+        {
+            case ProblemContentAccessEnum::Hidden: return $this->owner()===$uid || \userControl::isAdmin($uid);
+            case ProblemContentAccessEnum::Open:   return $uid!=0;
+            default: \SKYOJ\NeverReach();
+        }
+    }
+
+    public function GetSubmitAccess():int
+    {
+        return $this->SQLData['submit_access']??null;
+    }
+
+    public function SetSubmitAccess($val):bool
+    {
+        if( ProblemSubmitAccessEnum::isValidValue($val) )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('submit_access',$val);
+        return true;
+    }
+
+    public function hasSubmitAccess(int $uid):bool
+    {
+        switch($this->GetContentAccess())
+        {
+            case ProblemSubmitAccessEnum::Closed: return false;
+            case ProblemSubmitAccessEnum::Test:   return $this->owner()===$uid || \userControl::isAdmin($uid);
+            case ProblemSubmitAccessEnum::Open:   return $uid!=0;
+            default: \SKYOJ\NeverReach();
+        }
     }
 
     public function GetJudge():string
