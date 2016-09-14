@@ -7,7 +7,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 //BASIC
 function NeverReach()
 {
-    throw new Exception('NeverReach Code!');
+    throw new \Exception('NeverReach Code!');
 }
 
 function throwjson($status, $data)
