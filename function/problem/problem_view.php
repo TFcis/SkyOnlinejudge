@@ -5,7 +5,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 
 function viewHandle()
 {
-    global $SkyOJ,$_E;
+    global $SkyOJ,$_E,$_G;
 
     $pid = $SkyOJ->UriParam(2);
 
@@ -14,13 +14,22 @@ function viewHandle()
         $pid = $problem->pid();
 
         if( $problem->pid()===null )
-            throw new \Exception('Access denied');
+            throw new \Exception('題目載入失敗');
+
+        if( !$problem->hasContentAccess($_G['uid']) )
+        {
+            if( $problem->hasSubmitAccess($_G['uid']) )
+            {
+                 header("Location:".$SkyOJ->uri('problem','submit',$pid));
+                 exit();
+            }
+            throw new \Exception('權限不足，不開放此題目');
+        }
+        $_E['template']['problem'] = $problem;
+        $SkyOJ->SetTitle($problem->GetTitle());
+        \Render::render('problem_view','problem');
     }catch(\Exception $e){
         \Render::errormessage($e->getMessage());
         \Render::render('nonedefined');
     }
-
-    $_E['template']['problem'] = $problem;
-    $SkyOJ->SetTitle($problem->GetTitle());
-    \Render::render('problem_view','problem');
 }
