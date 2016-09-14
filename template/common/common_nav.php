@@ -56,7 +56,6 @@ $(document).ready(function()
 <?php endif;?>
 <body <?=$classtmp?>>
 <div id="wrap"> 
-    <script>$('.dropdown-toggle').dropdown();</script>
     <nav class="navbar navbar-default navbar-static-top navbar-inverse" style="background-color:#101010">
         <div class="container-fluid">
             <div class="navbar-header">

@@ -30,16 +30,20 @@
     <?php endif; ?>
     <!-- Latest compiled and minified JavaScript -->
     
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/third/jquery.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>css/third/bootstrap/js/bootstrap.min.js"></script>
-    <script src="<?=$_E['SITEROOT']?>js/ace/ace.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/common.js"></script>
+    <script src="<?=$_E['SITEROOT']?>js/ace/ace.js"></script>
     <?php if (userControl::isAdmin($_G['uid'])):?>
     <script src="<?=$_E['SITEROOT']?>js/admin_check.js"></script>
     <?php endif;?>
     <script>
-    $(".alert").alert();
-    siteroot('<?=$_E['SITEROOT']?>');
-    hljs.initHighlightingOnLoad();
+    $(document).ready(function(){
+        $(".alert").alert();
+        siteroot('<?=$_E['SITEROOT']?>');
+        hljs.initHighlightingOnLoad();
+        $('.dropdown-toggle').dropdown();
+    })
+    
     </script>
