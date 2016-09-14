@@ -55,18 +55,17 @@ $(document).ready(function()
 </script>
 <?php endif;?>
 <body <?=$classtmp?>>
-<div id="wrap"> 
-    <script>$('.dropdown-toggle').dropdown();</script>
+<div id="wrap">
     <nav class="navbar navbar-default navbar-static-top navbar-inverse" style="background-color:#101010">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
+                    <span class="sr-only"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?=$_E['SITEROOT']?>index.php"><?php echo $_E['site']['name']; ?></a>
+                <a class="navbar-brand" href="<?=$_E['SITEROOT']?>index.php"><?=$_E['site']['name']; ?></a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -80,7 +79,7 @@ $(document).ready(function()
                             <li><a href="<?=$_E['SITEROOT']?>rank.php">Stats</a></li>
                             <li><a href="<?=$SkyOJ->uri('code')?>">Code</a></li>
                             <li class="divider"></li>
-                            <li><a href="http://forum.tfcis.org/forum.php?mod=group&fid=107" target="_blank">Discuss</a></li>
+                            <!--<li><a href="http://forum.tfcis.org/forum.php?mod=group&fid=107" target="_blank">Discuss</a></li>-->
                         </ul>
                     </li>
                 </ul>
@@ -91,7 +90,7 @@ $(document).ready(function()
                         <?php if (userControl::isAdmin($_G['uid'])):?>
                         <li><a href="#" id="admin-tab">Admin</a></li>
                         <?php endif; ?>
-                    <li><a href="<?=$SkyOJ->uri('user','view',$_G['uid'])?>"><?php echo htmlspecialchars($_G['nickname']); ?></a></li>
+                    <li><a href="<?=$SkyOJ->uri('user','view',$_G['uid'])?>"><?=htmlspecialchars($_G['nickname']);?></a></li>
                     <li><a href="<?=$SkyOJ->uri('user','logout')?>">LOGOUT</a></li>
                     <?php endif; ?>
                 </ul>
@@ -103,11 +102,9 @@ $(document).ready(function()
         <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
         <strong>Oh! System error</strong>
         <ul>
-        <?php foreach ($_E['template']['error'] as $list) {
-    ?>
+        <?php foreach ($_E['template']['error'] as $list): ?>
             <li>(<?=$list['namespace']?>)<?=$list['msg']?></li>
-        <?php 
-}?>
+        <?php endforeach;?>
         </ul>
     </div>
     <?php endif; ?>
