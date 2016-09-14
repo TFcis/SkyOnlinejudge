@@ -54,7 +54,6 @@ class userControl
         if ($usecookie) {
             self::SetCookie($namespace, $token, $timeout);
         }
-        LOG::msg(Level::Debug, "Reg Token [$namespace]$token");
 
         return $token;
     }
