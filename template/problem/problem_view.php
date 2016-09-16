@@ -14,7 +14,7 @@ use \SKYOJ\HTML_INPUT_HIDDEN;
 <div class="container">
     <div class="row">
         <div class="col-md-9">
-            <h3><?=$tmpl['problem']->pid()?>. <?=htmlentities($tmpl['problem']->GetTitle())?></h3>
+            <h3><?=$tmpl['problem']->pid()?>. <?=\SKYOJ\html($tmpl['problem']->GetTitle())?></h3>
         </div>
         <div class="col-md-3 text-right">
             <p><?=array_search($tmpl['problem']->GetJudgeType(),SKYOJ\ProblemJudgeTypeEnum::getConstants())?> Judge</p>

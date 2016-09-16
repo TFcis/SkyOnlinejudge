@@ -24,8 +24,8 @@ if (!defined('IN_TEMPLATE')) {
             <tr>
                 <td><a href="<?=$SkyOJ->uri('chal','result',$row['cid'])?>"><?=$row['cid'];?></a></td>
                 <?php $nickname = \SKYOJ\nickname($row['uid']); ?>
-                <td><a href="<?=$SkyOJ->uri('chal','result',$row['cid'])?>"><?=$nickname[$row['uid']]?></a></td>
-                <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'])?>"><?=\SKYOJ\Problem::get_title($row['pid'])?></a></td>
+                <td><a href="<?=$SkyOJ->uri('chal','result',$row['cid'])?>"><?=\SKYOJ\html($nickname[$row['uid']])?></a></td>
+                <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'])?>"><?=\SKYOJ\html(\SKYOJ\Problem::get_title($row['pid']))?></a></td>
                 <td><?=\SKYOJ\getresulttexthtml($row['result'])?></td>
                 <td><?=$row['score']?></td>
                 <td><?=$row['timestamp'];?></td>

@@ -30,7 +30,7 @@ $(document).ready(function()
 						<td>題目</td>
 						<td>
 							<a href="<?=$SkyOJ->uri('problem','view',$data['pid'])?>">
-								<?=\SKYOJ\Problem::get_title($data['pid'])?>
+								<?=\SKYOJ\html(\SKYOJ\Problem::get_title($data['pid']))?>
 							</a>
 						</td>
 					</tr>
@@ -39,7 +39,11 @@ $(document).ready(function()
 						<?php
                         $nickname = \SKYOJ\nickname($data['uid']);
                         ?>
-						<td><?=$nickname[$data['uid']]?></td>
+						<td>
+							<a href="<?=$SkyOJ->uri('user','view',$data['uid'])?>">
+								<?=\SKYOJ\html($nickname[$data['uid']])?>
+							</a>
+						</td>
 					</tr>
 					<tr>
 						<td>總得分</td>
@@ -84,7 +88,7 @@ $(document).ready(function()
 					<div class="panel-heading">Judge Information</div>
 					<div class="panel-body">
 						<div class="container-fluid">
-							<?= htmlentities($t) ?>
+							<tt><?=nl2br(htmlspecialchars($t))?></tt>
 						</div>
 					</div>
 				</div>
