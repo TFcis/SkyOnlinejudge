@@ -68,7 +68,7 @@ $(document).ready(function()
                     $ac  = \SKYOJ\Problem\ProblemStateNum($row['pid'],1);
                     $rate = round(($all==0&&$ac==0)?0:$ac*100/$all,2);
                 ?>
-                <td class="hidden-xs"><?=$rate?>% (<?=$ac?>/<?=$all?>)</td>
+                <td><?=$rate?>% (<?=$ac?>/<?=$all?>)</td>
             </tr>
         <?php endforeach;?>
         </tbody>
