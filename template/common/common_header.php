@@ -29,7 +29,7 @@
         <?php endif; ?>
     <?php endif; ?>
     <!-- Latest compiled and minified JavaScript -->
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/third/jquery.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>css/third/bootstrap/js/bootstrap.min.js"></script>

@@ -40,7 +40,42 @@ abstract class PluginBase
     {
         Enforcer::__add(__CLASS__, get_called_class());
     }
+    
+    static $_valtmp = [];
+    static private function _getSysValT()
+    {
+        static $t;
+        if(isset($t))return $t;
+        return $t = \DB::tname('sysvalue'); 
+    }
 
+    static protected function getval(string $name)
+    {
+        $t =self::_getSysValT();
+        $name = get_called_class()."$".$name;
+        
+        if( isset(self::$_valtmp[$name]) )
+        {
+            return self::$_valtmp[$name];
+        }
+
+        $data = \DB::fetchEx("SELECT `var` FROM `{$t}` WHERE `name` = ?",$name);
+        if( $data && isset($data['var']) )
+        {
+            return self::$_valtmp[$name] = $data['var'];
+        }
+        return null;
+    }
+    
+    static protected function setval(string $name,$val)
+    {
+        $t = self::_getSysValT();
+        $name = get_called_class()."$".$name;
+        return false!==\DB::queryEx("INSERT INTO `{$t}` (`name`,`var`)
+                                   VALUES (?,?)
+                                   ON DUPLICATE KEY UPDATE
+                                    `var` = VALUES(`var`)",$name,$val);
+    }
     /**
      * function requiredFunctions():array;.
      *

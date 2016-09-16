@@ -1,5 +1,4 @@
 <?php namespace SKYOJ\Problem;
-require 'Net/SFTP.php';
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
