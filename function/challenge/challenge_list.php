@@ -24,7 +24,7 @@ function listHandle()
     $_E['template']['challenge_list_pagelist'] = $pl;
     $_E['template']['challenge_list_now'] = $page;
     $_E['template']['challenge_info'] = $data ? $data : [];
-    $_E['template']['challenge_prob'] = \userControl::getuserdata('problem',$pids,['owner','submit_access'],'pid');
+    $_E['template']['challenge_prob'] = \userControl::getuserdata('problem',$pids,['owner','content_access'],'pid');
 
     \Render::render('challenge_list', 'challenge');
 }

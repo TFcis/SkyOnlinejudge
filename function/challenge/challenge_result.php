@@ -25,10 +25,10 @@ function resultHandle()
         {
             throw new \Exception('cid error');
         }
-        
-        if( !\SKYOJ\Problem::hasSubmitAccess_s($_G['uid'],$data['owner'],$data['submit_access']) )
+
+        if( !\SKYOJ\Problem::hasContentAccess_s($_G['uid'],$data['owner'],$data['content_access']) )
         {
-            throw new \Exception('不具有上傳權限，無法觀看');
+            throw new \Exception('不具有檢視權限，無法觀看');
         }
         
         $_E['template']['challenge_result_info'] = $data ? $data : [];
