@@ -16,11 +16,15 @@ function listHandle()
 
     $pl = new PageList('challenge');
     $data = $pl->GetPageDataByPage($page,'cid','*','DESC');
-
+    $pids = [];
+    foreach($data as $row)
+        $pids[] = $row['pid'];
+    
     //LOG::msg(Level::Debug, '', $data);
     $_E['template']['challenge_list_pagelist'] = $pl;
     $_E['template']['challenge_list_now'] = $page;
     $_E['template']['challenge_info'] = $data ? $data : [];
+    $_E['template']['challenge_prob'] = \userControl::getuserdata('problem',$pids,['owner','submit_access'],'pid');
 
     \Render::render('challenge_list', 'challenge');
 }

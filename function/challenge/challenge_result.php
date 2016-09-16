@@ -6,7 +6,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 
 function resultHandle()
 {
-    global $SkyOJ,$_E;
+    global $SkyOJ,$_E,$_G;
     $cid = $SkyOJ->UriParam(2);
     try{
         if( !preg_match('/^[1-9][0-9]*$/',$cid) )
@@ -15,11 +15,20 @@ function resultHandle()
         }
 
         $tchallenge = \DB::tname('challenge');
-        $data = \DB::fetchEx("SELECT * FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
+        $tproblem = \DB::tname('problem');
+        $data = \DB::fetchEx("SELECT * FROM `{$tchallenge}`
+                                LEFT JOIN `{$tproblem}`
+		                        ON `{$tchallenge}`.`pid` = `{$tproblem}`.`pid`
+                              WHERE `cid` = ?",$cid);
 
         if( $data===false )
         {
             throw new \Exception('cid error');
+        }
+        
+        if( !\SKYOJ\Problem::hasSubmitAccess_s($_G['uid'],$data['owner'],$data['submit_access']) )
+        {
+            throw new \Exception('不具有上傳權限，無法觀看');
         }
         
         $_E['template']['challenge_result_info'] = $data ? $data : [];

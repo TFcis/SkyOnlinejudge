@@ -2,6 +2,7 @@
 if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
+$cl_prob = $tmpl['challenge_prob'];
 ?>
 <div id = "image-bar"></div>
 <div class="container">
@@ -21,6 +22,7 @@ if (!defined('IN_TEMPLATE')) {
         </thead>
         <tbody>
         <?php foreach ($_E['template']['challenge_info'] as $row): ?>
+            <?php if( !\SKYOJ\Problem::hasSubmitAccess_s($_G['uid'],$cl_prob[$row['pid']]['owner'],$cl_prob[$row['pid']]['submit_access']) ) continue; ?>
             <tr>
                 <td><a href="<?=$SkyOJ->uri('chal','result',$row['cid'])?>"><?=$row['cid'];?></a></td>
                 <?php $nickname = \SKYOJ\nickname($row['uid']); ?>
