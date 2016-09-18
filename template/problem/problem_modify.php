@@ -4,6 +4,7 @@ if (!defined('IN_TEMPLATE')) {
 }
 use \SKYOJ\FormInfo;
 use \SKYOJ\HTML_ROW;
+use \SKYOJ\HTML_HR;
 use \SKYOJ\HTML_INPUT_TEXT;
 use \SKYOJ\HTML_INPUT_DIV;
 use \SKYOJ\HTML_INPUT_SELECT;
@@ -23,6 +24,10 @@ $(document).ready(function(){
         content = editor.getValue();
         $("#content").val(content);
 
+        var editor = ace.edit("_json_data");
+        json_data = editor.getValue();
+        $("#json_data").val(json_data);
+
         api_submit("<?=$SkyOJ->uri('problem','api','modify',$tmpl['problem']->pid())?>","#modify-problem-from","#btn-show",function(e){
             setTimeout(function(){
                 location.reload();
@@ -33,6 +38,15 @@ $(document).ready(function(){
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/markdown");
+    editor.getSession().setUseWrapMode(true);
+    editor.setOptions({
+        minLines: 20,
+        maxLines: 20
+    });
+
+    var editor = ace.edit("_json_data");
+    editor.setTheme("ace/theme/twilight");
+    editor.getSession().setMode("ace/mode/json");
     editor.getSession().setUseWrapMode(true);
     editor.setOptions({
         minLines: 20,
@@ -54,6 +68,7 @@ $(document).ready(function(){
                     'data'=>[
                         new HTML_INPUT_HIDDEN(['name'=>'pid','value'=>$tmpl['problem']->pid()]),
                         new HTML_INPUT_HIDDEN(['name'=>'content','id'=>'content','value'=>'']),
+                        new HTML_INPUT_HIDDEN(['name'=>'json_data','id'=>'json_data','value'=>'']),
                         new HTML_INPUT_TEXT(['name'=>'title','value'=>$tmpl['problem']->GetTitle(),'required'=>'required','option' => ['help_text' => '題目名稱']]),
                         new HTML_INPUT_SELECT(['name'=>'contenttype'
                             ,'key-pair'=> \SKYOJ\ProblemDescriptionEnum::getConstants()
@@ -98,6 +113,12 @@ TAG
                             ,'key-pair'=> \SKYOJ\ProblemSubmitAccessEnum::getConstants()
                             ,'default' => $tmpl['problem']->GetSubmitAccess()
                             ,'option'  => ['help_text' => '上傳權限']]),
+                        new HTML_HR(),
+                        new HTML_INPUT_DIV(['name'=>'','id'=>'_json_data','option' =>
+                            [
+                                'html'=>$tmpl['pjson'],
+                                'help_text' => 'JSON'
+                            ]]),
                         new HTML_ROW(['html'=> <<<TAG
             </div>
         </div>

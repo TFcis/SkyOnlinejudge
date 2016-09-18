@@ -19,7 +19,8 @@ function problem_api_modifyHandle()
     $contenttype  = \SKYOJ\safe_post('contenttype');
     $content_access = \SKYOJ\safe_post('content_access');
     $submit_access  = \SKYOJ\safe_post('submit_access');
-
+    $pjson = \SKYOJ\safe_post('json_data');
+    \Log::msg(\Level::Debug,"",$pjson);
     if( !isset($pid,$title,$content,$contenttype) )
         \SKYOJ\throwjson('error','param error');
     try{
@@ -40,6 +41,7 @@ function problem_api_modifyHandle()
             throw new \Exception('no such SubmitAccess type');
         $problem->SetRowContent($content);
 
+        file_put_contents($_E['DATADIR']."problem/{$pid}/{$pid}.json",$pjson);
         $problem->Update();
         \SKYOJ\throwjson('SUCC','succ');
 

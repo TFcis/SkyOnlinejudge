@@ -34,7 +34,7 @@ function modifyHandle()
         \Render::errormessage($e->getMessage());
         \Render::render('nonedefined');
     }
-
+    $_E['template']['pjson'] = @file_get_contents($_E['DATADIR']."problem/{$pid}/{$pid}.json");
     $_E['template']['problem'] = $problem;
     $_E['template']['judges'] = $judges;
     \Render::render('problem_modify','problem');
