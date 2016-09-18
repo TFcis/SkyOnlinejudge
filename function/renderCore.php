@@ -84,14 +84,17 @@ class Render
         $_E['template']['_pagelist_url'] = $url;
         self::renderSingleTemplate('common_pagination');
     }
+    CONST CODE_SETTING = ['minLines'=>20,'maxLines'=>1E9];
 
-    public static function renderCode(string $code, string $language, string $id = '')
+    public static function renderCode(string $code, string $language, string $id = '',array $set = null)
     {
         global $_E;
         if( empty($id) )$id = uniqid("code");
+        if( is_null($set) )$set = self::CODE_SETTING;
         $_E['template']['_defaultcode'] = $code;
         $_E['template']['_language'] = $language;
         $_E['template']['_id'] = $id;
+        $_E['template']['_set'] = $set;
         self::renderSingleTemplate('common_codepanel');
     }
     //work in progress

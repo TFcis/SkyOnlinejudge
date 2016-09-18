@@ -19,7 +19,7 @@ function listHandle()
     $pids = [];
     foreach($data as $row)
         $pids[] = $row['pid'];
-    
+
     //LOG::msg(Level::Debug, '', $data);
     $_E['template']['challenge_list_pagelist'] = $pl;
     $_E['template']['challenge_list_now'] = $page;

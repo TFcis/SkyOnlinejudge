@@ -6,7 +6,7 @@ use \SKYOJ\FormInfo;
 use \SKYOJ\HTML_ROW;
 use \SKYOJ\HTML_HR;
 use \SKYOJ\HTML_INPUT_TEXT;
-use \SKYOJ\HTML_INPUT_DIV;
+use \SKYOJ\HTML_INPUT_CODEPAD;
 use \SKYOJ\HTML_INPUT_SELECT;
 use \SKYOJ\HTML_INPUT_BUTTOM;
 use \SKYOJ\HTML_INPUT_HIDDEN;
@@ -34,23 +34,6 @@ $(document).ready(function(){
             }, 500);
         });
         return true;
-    });
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/twilight");
-    editor.getSession().setMode("ace/mode/markdown");
-    editor.getSession().setUseWrapMode(true);
-    editor.setOptions({
-        minLines: 20,
-        maxLines: 20
-    });
-
-    var editor = ace.edit("_json_data");
-    editor.setTheme("ace/theme/twilight");
-    editor.getSession().setMode("ace/mode/json");
-    editor.getSession().setUseWrapMode(true);
-    editor.setOptions({
-        minLines: 20,
-        maxLines: 20
     });
 })
 </script>
@@ -80,9 +63,12 @@ $(document).ready(function(){
                             ,'default' => $tmpl['problem']->GetJudge()
                             ,'option'  => ['help_text' => 'Judge']]),
 
-                        new HTML_INPUT_DIV(['name'=>'','id'=>'editor','option' =>
+                        new HTML_INPUT_CODEPAD(['option' =>
                             [
-                                'html'=>$tmpl['problem']->GetRowContent(),
+                                'code'=>$tmpl['problem']->GetRowContent(),
+                                'language'=>'markdown',
+                                'id'=> 'editor',
+                                'setting'=>['minLines'=>20,'maxLines'=>20],
                                 'help_text' => '題目敘述'
                             ]]),
 
@@ -114,9 +100,12 @@ TAG
                             ,'default' => $tmpl['problem']->GetSubmitAccess()
                             ,'option'  => ['help_text' => '上傳權限']]),
                         new HTML_HR(),
-                        new HTML_INPUT_DIV(['name'=>'','id'=>'_json_data','option' =>
+                        new HTML_INPUT_CODEPAD(['option' =>
                             [
-                                'html'=>$tmpl['pjson'],
+                                'code'=>$tmpl['pjson'],
+                                'language'=>'json',
+                                'id'=> '_json_data',
+                                'setting'=>['minLines'=>20,'maxLines'=>20],
                                 'help_text' => 'JSON'
                             ]]),
                         new HTML_ROW(['html'=> <<<TAG
