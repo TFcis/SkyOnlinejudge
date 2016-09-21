@@ -9,6 +9,10 @@ function problem_api_judgeHandle()
     global $_G,$_E;
     $cid = \SKYOJ\safe_get('cid');
     try{
+        if( !\userControl::isAdmin($_G['uid']) )
+            \SKYOJ\throwjson('error', 'Access denied');
+        
+        session_write_close(); // prevent stuck
         $data = new \SKYOJ\Challenge\Challenge($cid);
         $res = $data->run_judge();
 

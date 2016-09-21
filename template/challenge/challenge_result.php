@@ -76,9 +76,9 @@ $(document).ready(function()
 		</div>
 	</div>
 	<?php if( $data['uid']==$_G['uid'] || \userControl::isAdmin($_G['uid']) ):?>
-		<?php if($data['result']==0):?>
+		<?php if(\userControl::isAdmin($_G['uid'])):?>
 		<div class="row">
-			<a href="<?=$SkyOJ->uri('problem','api','judge')?>?cid=<?=$data['cid']?>">Judge Me</a>
+			<a href="<?=$SkyOJ->uri('problem','api','judge')?>?cid=<?=$data['cid']?>">Rejudge</a>
 		</div>
 		<?php endif;?>
 		<?php if( !empty($t) ):?>

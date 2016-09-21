@@ -336,26 +336,26 @@ function getresulttext($resultid)
         case 4: $res = 'TLE'; break;
         case 5: $res = 'MLE'; break;
         case 6: $res = 'CE'; break;
-        case 7: $res = 'ERR'; break;
+        case 7: $res = 'JE'; break;
     }
     return $res;
 }
 
 function getresulttexthtml($resultid)
 {
-    $res = 'NO';
+    $mini = getresulttext($resultid);
     switch ($resultid) {
-        case 0: $res = 'NONE'; break;
-        case 1: $res = 'AC'; break;
-        case 2: $res = 'WA'; break;
-        case 3: $res = 'RE'; break;
-        case 4: $res = 'TLE'; break;
-        case 5: $res = 'MLE'; break;
-        case 6: $res = 'CE'; break;
-        case 7: $res = 'ERR'; break;
+        case 0: $res = 'Challenging'; break;
+        case 1: $res = 'Accepted'; break;
+        case 2: $res = 'Wrong Answer'; break;
+        case 3: $res = 'Runtime Error'; break;
+        case 4: $res = 'Time Limit Exceed'; break;
+        case 5: $res = 'Memory Limit Exceed'; break;
+        case 6: $res = 'Compile Error'; break;
+        case 7: $res = 'Judge Error'; break;
         default:$res = 'NO'; break;
     }
-    return "<span class='{$res}'>{$res}</span>";
+    return "<span class='{$mini}'>{$res}</span>";
 }
 
 function html(string $str):string
