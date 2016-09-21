@@ -23,9 +23,7 @@ $(document).ready(function()
         }
         $("#s_code").val(code);
         api_submit("<?=$SkyOJ->uri('problem','api','submit')?>","#submit","#info",function(res){
-            api_submit("<?=$SkyOJ->uri('problem','api','judge')?>?cid="+res.data,"#submit","#info",function(r){
-                location.href="<?=$SkyOJ->uri('chal','result')?>/"+res.data;
-            });
+            location.href="<?=$SkyOJ->uri('chal','result')?>/"+res.data;
         });
     });
 })

@@ -95,6 +95,67 @@ final class _SkyOJ
         return "{$this->site_title} - {$_E['site']['name']}";
     }
 
+    
+    CONST OUTPUT_HTML = 1;
+    CONST OUTPUT_API  = 2;
+    CONST OUTPUT_HTML_BG = 3;
+    private $output_mode = self::OUTPUT_HTML;
+
+    public function setOutputMode(int $mode):bool
+    {
+        if( $this->output_mode == self::OUTPUT_HTML_BG )
+        {
+            if( $mode != self::OUTPUT_HTML_BG )
+            {
+                \Log::msg(\Level::Notice,"[SKYOJ] OUTPUT_HTML_BG cannot be changed!");
+                return false;
+            }
+            return true;
+        }
+        switch($mode)
+        {
+            case self::OUTPUT_HTML:
+            case self::OUTPUT_API:
+                break;
+            case self::OUTPUT_HTML_BG:
+                ob_end_clean();
+                header("Connection: close\r\n");
+                header("Content-Encoding: none\r\n");
+                ignore_user_abort(true);
+                ob_start();
+                break;
+            default: NeverReach();
+        }
+        $this->output_mode = $mode;
+        return true;
+    }
+
+    public function throwjson_keep($status, $data)
+    {
+        $str = json_encode(['status' => $status, 'data' => $data]);
+        if( $this->output_mode == self::OUTPUT_HTML_BG )
+        {
+            echo $str;
+            $this->flush();
+        }
+        else
+        {
+            exit($str);
+        }
+    }
+
+    private $flush_called = false;
+    public function flush()//end output but keep run php
+    {
+        $this->flush_called = true;
+        $size = ob_get_length();
+        header("Content-Length: $size");
+        ob_end_flush();
+        flush();
+        ob_end_clean();
+        session_write_close();
+    }
+
     public function run()
     {
         try{
@@ -117,6 +178,17 @@ final class _SkyOJ
             }
             $this->handle_list[$param0][0]();
         }catch(\Throwable $e){
+            switch( $this->output_mode )
+            {
+                case self::OUTPUT_HTML:
+                case $this->flush_called==true:
+                    echo $e->getMessage();
+                    var_dump($e);
+                    exit(0);
+                case self::OUTPUT_API:
+                case self::OUTPUT_HTML_BG:
+            }
+            
             echo $e->getMessage();
             var_dump($e);
             exit(0);

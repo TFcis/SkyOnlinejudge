@@ -7,7 +7,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 require_once($_E['ROOT'].'/function/challenge/challenge.lib.php');
 function problem_api_submitHandle()
 {
-    global $_G,$_E;
+    global $SkyOJ,$_G,$_E;
 
     //TODO : 題目權限
     if( !$_G['uid'] )
@@ -25,15 +25,27 @@ function problem_api_submitHandle()
         $problem = new \SKYOJ\Problem($pid);
         $pid = $problem->pid();
 
+        $judge = null;
+        $judgename = $problem->GetJudge();
+        if( \Plugin::loadClassFileInstalled('judge',$judgename)!==false )
+            $judge = new $judgename;
+
         if( $problem->pid()===null )
             throw new \Exception('Problem data load fail!');
 
         #題目權限
         if( !$problem->hasSubmitAccess($_G['uid']) )
             throw new \Exception('Access denied');
+        
         //TODO
-        if( $compiler !== 'cpp11' )
+        if( $judge ){
+            $compilers = $judge->get_compiler();
+            if( !\array_key_exists($compiler,$compilers) )
+                throw new \Exception('NoSuchJudge');
+        }else if( !empty($compiler) ){
             throw new \Exception('NoSuchJudge');
+        }
+
 
         if( strlen($code)>100000 )
             throw new \Exception('code length more than limit');
@@ -42,8 +54,22 @@ function problem_api_submitHandle()
         if( $cid===null )
             throw new \Exception('SQL Error');
 
-        \SKYOJ\throwjson('SUCC',$cid);
+        $SkyOJ->throwjson_keep('SUCC',$cid);
     }catch(\Exception $e){
-        \SKYOJ\throwjson('error',$e->getMessage());
+        $throwjson('error',$e->getMessage());
+    }
+
+    //Flushed! run on back round
+    try{
+        $data = new \SKYOJ\Challenge\Challenge($cid);
+        $res = $data->run_judge();
+
+        if( $res === false )
+        {
+            //Give JE for this
+            throw new \Exception('run_judge error');
+        }
+    }catch(\Exception $e){
+        \Log::msg(\Level::Error,'judge error:'.$e->getMessage());
     }
 }

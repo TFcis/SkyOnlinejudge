@@ -33,9 +33,7 @@ function submitHandle()
             key : unique id let judge plugin work(named by each judge plugin)
             val : judge info support by judge plugin
         */
-        $_E['template']['compiler'] = [
-            'cpp11' => 'c++14/gnu c++ compiler 5.4.0 | options: -O2 -std=c++11'
-        ];
+        $_E['template']['compiler'] = $judge->get_compiler();
         \Render::render('problem_submit','problem');
     }catch(\Exception $e){
         \Render::errormessage($e->getMessage(),'Problem closed');
