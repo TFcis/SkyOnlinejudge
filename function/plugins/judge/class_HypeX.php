@@ -196,6 +196,12 @@ class class_HypeX extends Judge
             public $redir_check;
         };
     }
+    public function get_compiler()
+    {
+        return [
+            'cpp11' => 'c++14/gnu c++ compiler 5.4.0 | options: -O2 -std=c++11',
+        ];
+    }
 
     public function judge(\SKYOJ\Challenge\Challenge $c)
     {
