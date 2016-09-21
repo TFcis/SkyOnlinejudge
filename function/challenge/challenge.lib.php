@@ -29,7 +29,7 @@ class Challenge
     {
         global $_E,$_G;
         $tchallenge = \DB::tname('challenge');
-        if(!\DB::queryEx("INSERT INTO `{$tchallenge}`(`cid`, `uid`, `pid`, `code`, `compiler`, `result`, `time`, `score`, `timestamp`)
+        if(!\DB::queryEx("INSERT INTO `{$tchallenge}`(`cid`, `uid`, `pid`, `code`, `compiler`, `result`, `runtime`, `score`, `timestamp`)
                          VALUES (NULL,?,?,?,?,?,0,0,NULL)",$uid,$pid,$code,$compiler,\SKYOJ\RESULTCODE::WAIT))
         {
             return null;
@@ -41,7 +41,7 @@ class Challenge
     {
         $tchallenge = \DB::tname('challenge');
         if( $this->light = $light ){
-            $this->sql_data = \DB::fetchEx("SELECT `cid`, `pid`, `uid`, `result`, `time`, `score`, `timestamp` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
+            $this->sql_data = \DB::fetchEx("SELECT `cid`, `pid`, `uid`, `result`, `runtime`, `score`, `timestamp` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
         }else{
             $this->sql_data = \DB::fetchEx("SELECT * FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
         }
@@ -82,7 +82,7 @@ class Challenge
     {
         return $this->sql_data['result'];
     }
-    public function time():int
+    public function runtime():int
     {
         return $this->sql_data['time'];
     }
@@ -149,7 +149,7 @@ class Challenge
 
         $res = json_encode($res);
         $tchallenge = \DB::tname('challenge');
-        if( !\DB::queryEx("UPDATE `{$tchallenge}` SET `package`=?,`result`=?,`score` =?,`time` =?
+        if( !\DB::queryEx("UPDATE `{$tchallenge}` SET `package`=?,`result`=?,`score` =?,`runtime` =?
                            WHERE `cid` = ?",$res,$problem_stat,$total_score,$total_time,$this->cid()) )
         {
             \Log::msg(\Level::Error,"(Challenge)UPDATE challenge SQL Error!");

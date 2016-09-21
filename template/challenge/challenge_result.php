@@ -70,7 +70,7 @@ $(document).ready(function()
 						<td>總得分</td>
 						<td><?=$data['score']?>, <?=\SKYOJ\getresulttexthtml($data['result'])?>
 							<?php if( $data['result'] >= \SKYOJ\RESULTCODE::AC && $data['result'] <= \SKYOJ\RESULTCODE::CE): ?>
-								 in <?=$data['time']?> ms
+								 in <?=$data['runtime']?> ms
 							<?php endif; ?>
 						</td>
 					</tr>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機: localhost
--- 產生時間： 2016-08-05 21:44:46
+-- 產生時間： 2016-09-21 20:28:32
 -- 伺服器版本: 10.1.10-MariaDB
 -- PHP 版本： 7.0.4
 
@@ -57,9 +57,13 @@ CREATE TABLE `tojtest_challenge` (
   `cid` int(11) NOT NULL,
   `pid` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
+  `code` text COLLATE utf8_bin NOT NULL,
+  `compiler` char(60) COLLATE utf8_bin NOT NULL DEFAULT '',
   `result` int(11) NOT NULL,
+  `runtime` int(11) NOT NULL,
   `score` int(11) NOT NULL DEFAULT '0',
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `package` text COLLATE utf8_bin NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -101,7 +105,9 @@ CREATE TABLE `tojtest_plugin` (
   `id` int(11) NOT NULL,
   `class` char(64) COLLATE utf8_bin NOT NULL,
   `version` text COLLATE utf8_bin NOT NULL,
-  `author` text COLLATE utf8_bin NOT NULL,
+  `name` text COLLATE utf8_bin NOT NULL,
+  `description` text COLLATE utf8_bin NOT NULL,
+  `copyright` text COLLATE utf8_bin NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -114,7 +120,11 @@ CREATE TABLE `tojtest_plugin` (
 CREATE TABLE `tojtest_problem` (
   `pid` int(11) NOT NULL,
   `owner` int(11) NOT NULL,
-  `title` text COLLATE utf8_bin NOT NULL
+  `content_access` int(11) NOT NULL,
+  `submit_access` int(11) NOT NULL,
+  `title` text COLLATE utf8_bin NOT NULL,
+  `class` char(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `judge_type` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -225,7 +235,10 @@ ALTER TABLE `tojtest_cache`
 -- 資料表索引 `tojtest_challenge`
 --
 ALTER TABLE `tojtest_challenge`
-  ADD PRIMARY KEY (`cid`);
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `uid` (`uid`),
+  ADD KEY `pid` (`pid`),
+  ADD KEY `cid` (`cid`);
 
 --
 -- 資料表索引 `tojtest_codepad`
@@ -280,7 +293,8 @@ ALTER TABLE `tojtest_syslog`
 -- 資料表索引 `tojtest_sysvalue`
 --
 ALTER TABLE `tojtest_sysvalue`
-  ADD UNIQUE KEY `name` (`name`);
+  ADD UNIQUE KEY `name` (`name`),
+  ADD KEY `name_2` (`name`);
 
 --
 -- 資料表索引 `tojtest_userojacct`
@@ -296,7 +310,7 @@ ALTER TABLE `tojtest_userojacct`
 -- 使用資料表 AUTO_INCREMENT `tojtest_account`
 --
 ALTER TABLE `tojtest_account`
-  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- 使用資料表 AUTO_INCREMENT `tojtest_challenge`
 --
@@ -306,7 +320,7 @@ ALTER TABLE `tojtest_challenge`
 -- 使用資料表 AUTO_INCREMENT `tojtest_codepad`
 --
 ALTER TABLE `tojtest_codepad`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- 使用資料表 AUTO_INCREMENT `tojtest_ojlist`
 --
@@ -316,12 +330,12 @@ ALTER TABLE `tojtest_ojlist`
 -- 使用資料表 AUTO_INCREMENT `tojtest_plugin`
 --
 ALTER TABLE `tojtest_plugin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- 使用資料表 AUTO_INCREMENT `tojtest_problem`
 --
 ALTER TABLE `tojtest_problem`
-  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- 使用資料表 AUTO_INCREMENT `tojtest_statsboard`
 --
@@ -331,7 +345,7 @@ ALTER TABLE `tojtest_statsboard`
 -- 使用資料表 AUTO_INCREMENT `tojtest_syslog`
 --
 ALTER TABLE `tojtest_syslog`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=364;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

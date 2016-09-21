@@ -55,7 +55,7 @@ $cl_prob = $tmpl['challenge_prob'];
                         <td><a href="<?=$SkyOJ->uri('chal','result',$row['cid'])?>"><?=\SKYOJ\html($nickname[$row['uid']])?></a></td>
                         <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'])?>"><?=\SKYOJ\html(\SKYOJ\Problem::get_title($row['pid']))?></a></td>
                         <td><?=\SKYOJ\getresulttexthtml($row['result'])?></td>
-                        <td class="hidden-xs"><?=$row['time']?></td>
+                        <td class="hidden-xs"><?=$row['runtime']?></td>
                         <td><?=$row['score']?></td>
                         <td><?=$row['timestamp'];?></td>
                     </tr>
