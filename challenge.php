@@ -17,6 +17,8 @@ function ChallengeHandle()
 
     switch( $param )
     {
+        case 'api':
+            break;
         case 'list':
         case 'result':
             break;
