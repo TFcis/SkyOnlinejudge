@@ -13,6 +13,7 @@ class ChallengeTask
     public $score;  //sub score
     public $msg;    //judge message
 }
+
 class Challenge
 {
     private $cid;
@@ -28,9 +29,8 @@ class Challenge
     {
         global $_E,$_G;
         $tchallenge = \DB::tname('challenge');
-
-        if(!\DB::queryEx("INSERT INTO `{$tchallenge}`(`cid`, `uid`, `pid`, `code`, `compiler`, `result`, `score`, `timestamp`)
-                         VALUES (NULL,?,?,?,?,0,0,NULL)",$uid,$pid,$code,$compiler))
+        if(!\DB::queryEx("INSERT INTO `{$tchallenge}`(`cid`, `uid`, `pid`, `code`, `compiler`, `result`, `time`, `score`, `timestamp`)
+                         VALUES (NULL,?,?,?,?,?,0,0,NULL)",$uid,$pid,$code,$compiler,\SKYOJ\RESULTCODE::WAIT))
         {
             return null;
         }
@@ -41,7 +41,7 @@ class Challenge
     {
         $tchallenge = \DB::tname('challenge');
         if( $this->light = $light ){
-            $this->sql_data = \DB::fetchEx("SELECT `cid`, `pid`, `uid`, `result`, `score`, `timestamp` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
+            $this->sql_data = \DB::fetchEx("SELECT `cid`, `pid`, `uid`, `result`, `time`, `score`, `timestamp` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
         }else{
             $this->sql_data = \DB::fetchEx("SELECT * FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
         }
@@ -82,6 +82,10 @@ class Challenge
     {
         return $this->sql_data['result'];
     }
+    public function time():int
+    {
+        return $this->sql_data['time'];
+    }
 
     public function score():int
     {
@@ -96,6 +100,12 @@ class Challenge
     public function sql_data()
     {
         return $this->sql_data;
+    }
+
+    public function set_result(int $code)
+    {
+        $tchallenge = \DB::tname('challenge');
+        \DB::queryEx("UPDATE `{$tchallenge}` SET `result` = ? WHERE `cid` = ?",$code,$this->cid());
     }
 
     public function run_judge():bool //No Reply
@@ -113,29 +123,34 @@ class Challenge
             \Log::msg(\Level::Error,"(Challenge)run_judge load judge {$problem->GetJudge()} failed!");
             return false;
         }
+        $this->set_result(\SKYOJ\RESULTCODE::JUDGING);
+
         $judge = $problem->GetJudge();
         $judge = new $judge;
-
+        
         $res = $judge->judge($this);
        
         if( $res === false )
         {
             \Log::msg(\Level::Error,"(Challenge)run_judge judge error!");
+            $this->set_result(\SKYOJ\RESULTCODE::JE);
             return false;
         }
 
         $problem_stat = 0;
         $total_score  = 0;
+        $total_time   = 0;
         foreach($res as $row)
         {
             $problem_stat = max([$problem_stat,$row->state]);
             $total_score += $row->score;
+            $total_time  += $row->runtime;
         }
 
         $res = json_encode($res);
         $tchallenge = \DB::tname('challenge');
-        if( !\DB::queryEx("UPDATE `{$tchallenge}` SET `package` = ?,`result` = ?,`score` =? 
-                           WHERE `cid` = ?",$res,$problem_stat,$total_score,$this->cid()) )
+        if( !\DB::queryEx("UPDATE `{$tchallenge}` SET `package`=?,`result`=?,`score` =?,`time` =?
+                           WHERE `cid` = ?",$res,$problem_stat,$total_score,$total_time,$this->cid()) )
         {
             \Log::msg(\Level::Error,"(Challenge)UPDATE challenge SQL Error!");
             return false;

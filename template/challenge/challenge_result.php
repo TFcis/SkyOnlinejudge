@@ -44,7 +44,7 @@ $(document).ready(function()
 						<td><?=$data['cid']?></td>
 					</tr>
 					<tr>
-						<td>時間</td>
+						<td>上傳時間</td>
 						<td><?=$data['timestamp']?></td>
 					</tr>
 					<tr>
@@ -68,7 +68,11 @@ $(document).ready(function()
 					</tr>
 					<tr>
 						<td>總得分</td>
-						<td><?=\SKYOJ\getresulttexthtml($data['result'])?>, <?=$data['score']?></td>
+						<td><?=$data['score']?>, <?=\SKYOJ\getresulttexthtml($data['result'])?>
+							<?php if( $data['result'] >= \SKYOJ\RESULTCODE::AC && $data['result'] <= \SKYOJ\RESULTCODE::CE): ?>
+								 in <?=$data['time']?> ms
+							<?php endif; ?>
+						</td>
 					</tr>
 				</tbody>
 			</table>

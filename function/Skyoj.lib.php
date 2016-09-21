@@ -325,37 +325,55 @@ class privatedata
     }
 }
 
+class RESULTCODE extends BasicEnum
+{
+    const WAIT = -1;
+    const JUDGING = 0;
+    const AC = 1;
+    const WA = 2;
+    const RE = 3;
+    const TLE= 4;
+    const MLE= 5;
+    const CE = 6;
+    const JE = 7;
+}
+
 function getresulttext($resultid)
 {
-    $res = 'NO';
+    $res = '';
     switch ($resultid) {
-        case 0: $res = 'NONE'; break;
-        case 1: $res = 'AC'; break;
-        case 2: $res = 'WA'; break;
-        case 3: $res = 'RE'; break;
-        case 4: $res = 'TLE'; break;
-        case 5: $res = 'MLE'; break;
-        case 6: $res = 'CE'; break;
-        case 7: $res = 'JE'; break;
+        case RESULTCODE::WAIT:      $res = 'WAIT'; break;
+        case RESULTCODE::JUDGING:   $res = 'NONE'; break;
+        case RESULTCODE::AC:        $res = 'AC'; break;
+        case RESULTCODE::WA:        $res = 'WA'; break;
+        case RESULTCODE::RE:        $res = 'RE'; break;
+        case RESULTCODE::TLE:       $res = 'TLE'; break;
+        case RESULTCODE::MLE:       $res = 'MLE'; break;
+        case RESULTCODE::CE:        $res = 'CE'; break;
+        case RESULTCODE::JE:        $res = 'JE'; break;
     }
     return $res;
 }
 
-function getresulttexthtml($resultid)
+function getresulttexthtml($resultid,bool $simple = false)
 {
     $mini = getresulttext($resultid);
     switch ($resultid) {
-        case 0: $res = 'Challenging'; break;
-        case 1: $res = 'Accepted'; break;
-        case 2: $res = 'Wrong Answer'; break;
-        case 3: $res = 'Runtime Error'; break;
-        case 4: $res = 'Time Limit Exceed'; break;
-        case 5: $res = 'Memory Limit Exceed'; break;
-        case 6: $res = 'Compile Error'; break;
-        case 7: $res = 'Judge Error'; break;
-        default:$res = 'NO'; break;
+        case RESULTCODE::WAIT:      $res = 'Waiting'; break;
+        case RESULTCODE::JUDGING:   $res = 'Challenging'; break;
+        case RESULTCODE::AC:        $res = 'Accepted'; break;
+        case RESULTCODE::WA:        $res = 'Wrong Answer'; break;
+        case RESULTCODE::RE:        $res = 'Runtime Error'; break;
+        case RESULTCODE::TLE:       $res = 'Time Limit Exceed'; break;
+        case RESULTCODE::MLE:       $res = 'Memory Limit Exceed'; break;
+        case RESULTCODE::CE:        $res = 'Compile Error'; break;
+        case RESULTCODE::JE:        $res = 'Judge Error'; break;
+        default:                    $res = '?'; break;
     }
-    return "<span class='{$mini}'>{$res}</span>";
+    if( $simple )
+        return "<span class='{$mini}' data-res='{$mini}'>{$mini}</span>";
+    else
+        return "<span class='{$mini}' data-res='{$mini}'>{$res}</span>";
 }
 
 function html(string $str):string
