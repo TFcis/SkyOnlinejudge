@@ -12,7 +12,7 @@ $(document).ready(function()
     var editor = ace.edit("rcode");
 	var sec = 1;
     editor.setReadOnly(true);
-	<?php if( $data['result'] < 1):?>
+	<?php if( $data['result'] < \SKYOJ\RESULTCODE::AC):?>
 	function waitjudge(){
 		$.get("<?=$SkyOJ->uri('chal','api','waitjudge')?>",{cid:<?=$data['cid']?>},function(res){
 			if( res.status == 'error' ){

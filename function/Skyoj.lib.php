@@ -327,15 +327,16 @@ class privatedata
 
 class RESULTCODE extends BasicEnum
 {
-    const WAIT = -1;
-    const JUDGING = 0;
-    const AC = 1;
-    const WA = 2;
-    const RE = 3;
-    const TLE= 4;
-    const MLE= 5;
-    const CE = 6;
-    const JE = 7;
+    const WAIT = 0;
+    const JUDGING = 10;
+    const AC = 20;
+    const PE = 25;
+    const WA = 30;
+    const RE = 40;
+    const TLE= 50;
+    const MLE= 60;
+    const CE = 70;
+    const JE = 80;
 }
 
 function getresulttext($resultid)
@@ -345,6 +346,7 @@ function getresulttext($resultid)
         case RESULTCODE::WAIT:      $res = 'WAIT'; break;
         case RESULTCODE::JUDGING:   $res = 'NONE'; break;
         case RESULTCODE::AC:        $res = 'AC'; break;
+        case RESULTCODE::PE:        $res = 'PE'; break;
         case RESULTCODE::WA:        $res = 'WA'; break;
         case RESULTCODE::RE:        $res = 'RE'; break;
         case RESULTCODE::TLE:       $res = 'TLE'; break;
@@ -368,7 +370,7 @@ function getresulttexthtml($resultid,bool $simple = false)
         case RESULTCODE::MLE:       $res = 'Memory Limit Exceed'; break;
         case RESULTCODE::CE:        $res = 'Compile Error'; break;
         case RESULTCODE::JE:        $res = 'Judge Error'; break;
-        default:                    $res = '?'; break;
+        default:                    $res = $mini; break;
     }
     if( $simple )
         return "<span class='{$mini}' data-res='{$mini}'>{$mini}</span>";

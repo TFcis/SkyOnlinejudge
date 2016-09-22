@@ -5,12 +5,17 @@ if (!defined('IN_SKYOJSYSTEM')) {
 
 function apiHandle()
 {
-    global $SkyOJ,$_E;
+    global $SkyOJ,$_E,$_G;
 
     $param = $SkyOJ->UriParam(2);
     switch( $param )
     {
         case 'waitjudge':
+            break;
+        
+        case 'rejudgep':
+            if( !\userControl::isAdmin($_G['uid']) )
+                \SKYOJ\throwjson('error', 'Access denied');
             break;
             
         default:

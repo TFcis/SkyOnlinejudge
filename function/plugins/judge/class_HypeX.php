@@ -255,7 +255,7 @@ class class_HypeX extends Judge
             $tmp->taskid = $row->test_idx;
             $tmp->runtime= $row->runtime;//ms
             $tmp->mem    = $row->peakmem;//in KB
-            $tmp->state  = $row->state; //AC WA..
+            $tmp->state  = ($row->state+1)*10; //To SKY Format Code..
             $tmp->score  = ($row->state==1) * $score[$tmp->taskid];  //sub score
             $tmp->msg    = $row->verdict[0];//judge message
             $res[] = $tmp;

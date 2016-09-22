@@ -22,7 +22,7 @@ function challenge_api_waitjudgeHandle()
             {
                 throw new \Exception('SQL Error');
             }
-            if( $res['result'] >= 1) //AC
+            if( $res['result'] >= \SKYOJ\RESULTCODE::AC ) //AC
             {
                 \SKYOJ\throwjson('SUCC',false);
             }

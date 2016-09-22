@@ -33,7 +33,7 @@ $(document).ready(function()
                 <!--</button>-->
                 <?php endif; ?>
                 </th>
-                <th>AC rate</th>
+                <th>Submit AC rate</th>
             </tr>
         </thead>
         <tbody>
@@ -44,9 +44,9 @@ $(document).ready(function()
                 <td>
                     <?php if( $_G['uid'] ):?>
                         <?php $d = \SKYOJ\Problem\UserProblemState($row['pid'],$_G['uid']) ?>
-                        <?php if( $d == 1 ): ?>
+                        <?php if( $d == \SKYOJ\RESULTCODE::AC ): ?>
                             <span class="AC glyphicon glyphicon-ok"></span>
-                        <?php elseif( $d > 1 ): ?>
+                        <?php elseif( $d > \SKYOJ\RESULTCODE::AC ): ?>
                             <span class="WA glyphicon glyphicon-thumbs-down"></span>
                         <?php endif; ?>
                     <?php endif;?>
@@ -65,8 +65,8 @@ $(document).ready(function()
                 </td>
                 <?php
                     $all = \SKYOJ\Problem\ProblemSubmitNum($row['pid']);
-                    $ac  = \SKYOJ\Problem\ProblemStateNum($row['pid'],1);
-                    $rate = round(($all==0&&$ac==0)?0:$ac*100/$all,2);
+                    $ac  = \SKYOJ\Problem\ProblemStateNum($row['pid'],\SKYOJ\RESULTCODE::AC);
+                    $rate = sprintf("%.2f",($all==0&&$ac==0)?0:$ac*100/$all,2);
                 ?>
                 <td><?=$rate?>% (<?=$ac?>/<?=$all?>)</td>
             </tr>
