@@ -173,6 +173,8 @@ class userControl
         $table = DB::tname($table);
         $userdata = [];
         $uid = array_values(array_unique($uid));
+        if( empty($uid) )
+            return [];
 
         $tmp_column = [$index=>'x'];
         foreach( $column as $c ) {
