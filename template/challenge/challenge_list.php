@@ -15,18 +15,23 @@ $cl_prob = $tmpl['challenge_prob'];
             <form class="form-inline">
                 <div class="form-group">
                     <label for="user">Uid</label>
-                    <input type="text" class="form-control" id="user" placeholder="uid">
+                    <input type="text" class="form-control" pattern="[0-9]\d*" name="uid" placeholder="uid">
                 </div>
                 <div class="form-group">
                     <label for="pid">Pid</label>
-                    <input type="text" class="form-control" id="pid" placeholder="pid">
+                    <input type="text" class="form-control" pattern="[0-9]\d*" name="pid" placeholder="pid">
                 </div>
                 <div class="form-group">
                     <label for="verdict">Verdict</label>
-                    <input type="text" class="form-control" id="verdict" placeholder="verdict">
+                    <select class="form-control" name="result">
+                        <option selected value> -- select an option -- </option>
+                        <?php foreach(\SKYOJ\RESULTCODE::getConstants() as $key=>$val):?>
+                        <option value='<?=$val?>'><?=$key?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-default disabled">Submit</button>
+                    <button type="submit" class="btn btn-default">Submit</button>
                 </div>
             </form>
             <br>
@@ -65,7 +70,7 @@ $cl_prob = $tmpl['challenge_prob'];
             <center>
             <?php Render::renderPagination(
             $_E['template']['challenge_list_pagelist'],
-            $_E['SITEROOT'].'index.php/chal/list/%d',
+            $_E['SITEROOT'].'index.php/chal/list/%d'.$tmpl['challenge_query'],
             $_E['template']['challenge_list_now']) ?>
             </center>
         </div>

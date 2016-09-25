@@ -14,14 +14,15 @@ function challenge_api_rejudgepHandle()
     session_write_close();
 
     try{
-        \Log::msg(\Level::Notice,"Start Rejudge Pid:",$pid);
+        
 
         #Load Problem
         $problem = new \SKYOJ\Problem($pid);
         $pid = $problem->pid();
         if( $problem->pid()===null )
             throw new \Exception('Load Problem Error');
-        
+
+        \Log::msg(\Level::Notice,"Start Rejudge Pid:{$pid}");
         //Set All problem to waiting
         \DB::queryEx("UPDATE `{$tchallenge}` SET `result` = ? WHERE `pid` = ?",\SKYOJ\RESULTCODE::WAIT,$pid);
 
