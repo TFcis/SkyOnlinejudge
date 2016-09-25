@@ -14,8 +14,29 @@ data/problem/prased.html
 
 class ProblemDescriptionEnum extends BasicEnum
 {
+    const PDF       = '0';
     const MarkDown  = '1';
     const HTML      = '2';
+}
+
+class ProblemJudgeTypeEnum extends BasicEnum
+{
+    const Hidden    = 0; //< Not support
+    const Normal    = 1; //< STD IO
+    const FileIO    = 2; //< File IO
+}
+
+class ProblemContentAccessEnum extends BasicEnum
+{
+    const Hidden    = 0; //< Only Access >= can see problem
+    const Open      = 1; //< All users
+}
+
+class ProblemSubmitAccessEnum extends BasicEnum
+{
+    const Closed    = 0; //< All users cannot submit (it will not effct submited challenge)
+    const Test      = 1; //< Only Access >= can submit problem
+    const Open      = 2; //< All users can submit it
 }
 
 class Problem
@@ -108,6 +129,18 @@ class Problem
             throw new \Exception('Bad Config!');
     }
 
+    public static function get_title(int $pid)
+    {
+        static $t = [];
+        $tproblem = \DB::tname('problem');
+        if( isset($t[$pid]) )
+            return $t[$pid];
+        $data = \DB::fetchEx("SELECT `title` FROM `{$tproblem}` WHERE `pid`=?", $pid);
+        if( $data !== false )
+            return $t[$pid] = $data['title'];
+        return '(null)';
+    }
+
     public function __destruct()
     {
         $this->Update();
@@ -131,6 +164,111 @@ class Problem
         return $this->SQLData['owner']??null;
     }
 
+    /**
+     * this function will not check $col
+     */
+    private function UpdateSQLLazy(string $col = null,$val = null)
+    {
+        static $host = [];
+        if( $col === null ){
+            $back = $host;
+            $host = [];
+            return $back;
+        }
+        $this->SQLData[$col] = $val;
+        $host[] = [$col,$val];
+    }
+
+    public function UpdateSQL():bool
+    {
+        $tproblem = \DB::tname('problem');
+        $data = $this->UpdateSQLLazy();
+        //TODO : Need report sql status
+        foreach( $data as $d )
+            \DB::queryEx("UPDATE `{$tproblem}` SET `{$d[0]}`= ? WHERE `pid`=?",$d[1],$this->pid());
+        return true;
+    }
+
+    public function GetContentAccess():int
+    {
+        return $this->SQLData['content_access']??null;
+    }
+
+    public function SetContentAccess($val):bool
+    {
+        if( ProblemContentAccessEnum::isValidValue($val) )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('content_access',$val);
+        return true;
+    }
+
+    public static function hasContentAccess_s(int $uid,int $owner,int $acccode):bool
+    {
+        switch($acccode)
+        {
+            case ProblemContentAccessEnum::Hidden: return $owner===$uid || \userControl::isAdmin($uid);
+            case ProblemContentAccessEnum::Open:   return true;
+            default: \SKYOJ\NeverReach();
+        }
+    }
+
+    public function hasContentAccess(int $uid):bool
+    {
+        return self::hasContentAccess_s($uid,$this->owner(),$this->GetContentAccess());
+    }
+
+    public function GetSubmitAccess():int
+    {
+        return $this->SQLData['submit_access']??null;
+    }
+
+    public function SetSubmitAccess($val):bool
+    {
+        if( ProblemSubmitAccessEnum::isValidValue($val) )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('submit_access',$val);
+        return true;
+    }
+
+    public static function hasSubmitAccess_s(int $uid,int $owner,int $acccode):bool
+    {
+        switch($acccode)
+        {
+            case ProblemSubmitAccessEnum::Closed: return false;
+            case ProblemSubmitAccessEnum::Test:   return $owner===$uid || \userControl::isAdmin($uid);
+            case ProblemSubmitAccessEnum::Open:   return $uid!=0;
+            default: \SKYOJ\NeverReach();
+        }
+    }
+
+    public function hasSubmitAccess(int $uid):bool
+    {
+        return self::hasSubmitAccess_s($uid,$this->owner(),$this->GetSubmitAccess());
+    }
+
+    public function GetJudge():string
+    {
+        return $this->SQLData['class']??null;
+    }
+
+    public function SetJudge(string $class):bool
+    {
+        if( $class != $this->SQLData['class'] && $class != '' )
+        {
+            //TODO : Check for installed
+            if( !\Plugin::isClassName($class) )
+            {
+                return false;
+            }
+        }
+        $this->UpdateSQLLazy('class',$class);
+        return true;
+    }
+
     //Get Problem Content
     public function GetTitle():string
     {
@@ -143,8 +281,23 @@ class Problem
         {
             return false;
         }
-        $tproblem = \DB::tname('problem');
-        return \DB::queryEx("UPDATE `{$tproblem}` SET `title`= ? WHERE `pid`=?",$title,$this->pid())!==false;
+        $this->UpdateSQLLazy('title',$title);
+        return true;
+    }
+
+    public function GetJudgeType():int
+    {
+        return $this->SQLData['judge_type'];
+    }
+
+    public function SetJudgeType(string $judge_type):bool
+    {
+        if( ProblemJudgeTypeEnum::isValidValue($judge_type) )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('judge_type',$judge_type);
+        return true;
     }
 
     static public function RenderString(string $str,int $type):string
@@ -205,12 +358,14 @@ class Problem
         $this->row_changed = true;
     }
 
-    public function Update()
+    public function Update():bool
     {
+        $this->UpdateSQL();
         if( $this->row_changed )
         {
             $this->RenderRowContentToFile();
             $this->row_changed = false;
         }
+        return true;
     }
 }

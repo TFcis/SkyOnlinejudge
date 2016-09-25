@@ -46,6 +46,7 @@ function api_submit(url,fmid,showid,succ,err)
         }
     },"json").fail(function(e){
         console.log(e);
+        $(showid).html(e.responseText);
     });
 }
 

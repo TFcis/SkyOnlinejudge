@@ -56,7 +56,7 @@ class Plugin
 
     public static function getAllFolders()
     {
-        return ['rank/board_other_oj', 'user/login'];
+        return ['rank/board_other_oj', 'user/login','judge'];
     }
 
     /**
@@ -150,12 +150,65 @@ class Plugin
             return false;
         }
         foreach ($data as $row) {
-            $rev[$data['class']] = $row;
+            $rev[$row['class']] = $row;
         }
 
         return $rev;
     }
 
+    /**
+     * @note path base on ROOT/function/plugins/
+     *
+     * @return All class_[name].file on $path
+     */
+    public static function listInstalledClassFileByFolder(string $path)
+    {
+        $data = self::listClassFileByFolder($path);
+        foreach($data as &$file)
+            $file = self::getClassName($file);
+        $res  = self::checkInstall($data);
+        if( $res === false )
+            return  [];
+        foreach( $res as $key => $info )
+        {
+            if( $info === false )
+                unset($res[$key]);
+        }
+        return $res;
+    }
+
+    public static function installClass(string $class)
+    {
+        global $_E;
+        $err_msg = 'Unknown';
+        $tplugin = DB::tname('plugin');
+
+        if( !$class::install($err_msg) ){
+            throw new Exception($err_msg);
+        }else{
+            $res = DB::queryEx("INSERT INTO `{$tplugin}` (`id`, `class`, `version`, `name`, `description`, `copyright`, `timestamp`)
+                              VALUES (NULL,?,?,?,?,?,NULL)",$class,$class::VERSION,$class::NAME,$class::DESCRIPTION,$class::COPYRIGHT);
+            if($res===false)
+                throw new Exception('SQL Error');
+        }
+        return true;
+    }
+
+    public static function uninstallClass(string $class)
+    {
+        global $_E;
+        $err_msg = 'Unknown';
+        $tplugin = DB::tname('plugin');
+
+        if( !$class::uninstall($err_msg) ){
+            throw new Exception($err_msg);
+        }else{
+            $res = DB::queryEx("DELETE FROM `tojtest_plugin` WHERE `class` = ?",$class);
+            if($res===false)
+                throw new Exception('SQL Error');
+        }
+        return true;
+    }
     /**
      * return value
      * classname(string)
@@ -186,6 +239,22 @@ class Plugin
         }
 
         return false;
+    }
+
+    /**
+     * return value
+     * plugin info(string)
+     * false : fail to load class.
+     */
+    public static function loadClassFileInstalled(string $folder, string $class)
+    {
+        $info = self::checkInstall($class);
+        if( $info === false )
+            return false;
+        $classname = self::loadClassFile($folder,$class);
+        if( $classname===false )
+            return false;
+        return $info;
     }
 
     /**

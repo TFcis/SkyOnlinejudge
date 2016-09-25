@@ -36,7 +36,7 @@ $(document).ready(function()
     </div>
     <div class="row">
         <div class="col-lg-8 col-md-8">
-        <?php Render::renderSingleTemplate('common_codepanel'); ?>
+        <?php Render::renderCode('','c_cpp','editor'); ?>
         </div>
     </div>
     <div class="row" style = "margin-top:15px;">

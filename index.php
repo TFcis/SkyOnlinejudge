@@ -8,6 +8,7 @@ $SkyOJ->RegisterHandle('code' ,'\\SKYOJ\\Code\\CodeHandle',$_E['ROOT'].'/code.ph
 $SkyOJ->RegisterHandle('admin','\\SKYOJ\\Admin\\AdminHandle',$_E['ROOT'].'/admin.php');
 $SkyOJ->RegisterHandle('user','\\SKYOJ\\User\\UserHandle',$_E['ROOT'].'/user.php');
 $SkyOJ->RegisterHandle('problem','\\SKYOJ\\Problem\\ProblemHandle',$_E['ROOT'].'/problem.php');
+$SkyOJ->RegisterHandle('chal','\\SKYOJ\\Challenge\\ChallengeHandle',$_E['ROOT'].'/challenge.php');
 $SkyOJ->run();
 function Index(){
     global $SkyOJ;

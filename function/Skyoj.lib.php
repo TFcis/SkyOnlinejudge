@@ -7,7 +7,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 //BASIC
 function NeverReach()
 {
-    throw new Exception('NeverReach Code!');
+    throw new \Exception('NeverReach Code!');
 }
 
 function throwjson($status, $data)
@@ -222,6 +222,7 @@ function envadd($table)
         return false;
     }
 }
+
 function ojacct_reg($rel, $uid, &$change = null)
 {
     if (isset($change)) {
@@ -322,4 +323,62 @@ class privatedata
             unlink($this->name);
         }
     }
+}
+
+class RESULTCODE extends BasicEnum
+{
+    const WAIT = 0;
+    const JUDGING = 10;
+    const AC = 20;
+    const PE = 25;
+    const WA = 30;
+    const RE = 40;
+    const TLE= 50;
+    const MLE= 60;
+    const CE = 70;
+    const JE = 80;
+}
+
+function getresulttext($resultid)
+{
+    $res = '';
+    switch ($resultid) {
+        case RESULTCODE::WAIT:      $res = 'WAIT'; break;
+        case RESULTCODE::JUDGING:   $res = 'NONE'; break;
+        case RESULTCODE::AC:        $res = 'AC'; break;
+        case RESULTCODE::PE:        $res = 'PE'; break;
+        case RESULTCODE::WA:        $res = 'WA'; break;
+        case RESULTCODE::RE:        $res = 'RE'; break;
+        case RESULTCODE::TLE:       $res = 'TLE'; break;
+        case RESULTCODE::MLE:       $res = 'MLE'; break;
+        case RESULTCODE::CE:        $res = 'CE'; break;
+        case RESULTCODE::JE:        $res = 'JE'; break;
+    }
+    return $res;
+}
+
+function getresulttexthtml($resultid,bool $simple = false)
+{
+    $mini = getresulttext($resultid);
+    switch ($resultid) {
+        case RESULTCODE::WAIT:      $res = 'Waiting'; break;
+        case RESULTCODE::JUDGING:   $res = 'Challenging'; break;
+        case RESULTCODE::AC:        $res = 'Accepted'; break;
+        case RESULTCODE::WA:        $res = 'Wrong Answer'; break;
+        case RESULTCODE::RE:        $res = 'Runtime Error'; break;
+        case RESULTCODE::TLE:       $res = 'Time Limit Exceed'; break;
+        case RESULTCODE::MLE:       $res = 'Memory Limit Exceed'; break;
+        case RESULTCODE::CE:        $res = 'Compile Error'; break;
+        case RESULTCODE::JE:        $res = 'Judge Error'; break;
+        default:                    $res = $mini; break;
+    }
+    if( $simple )
+        return "<span class='{$mini}' data-res='{$mini}'>{$mini}</span>";
+    else
+        return "<span class='{$mini}' data-res='{$mini}'>{$res}</span>";
+}
+
+function html(string $str):string
+{
+    return htmlentities($str,ENT_HTML5|ENT_COMPAT,"UTF-8");
 }

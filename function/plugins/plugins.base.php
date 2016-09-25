@@ -40,13 +40,48 @@ abstract class PluginBase
     {
         Enforcer::__add(__CLASS__, get_called_class());
     }
+    
+    static $_valtmp = [];
+    static private function _getSysValT()
+    {
+        static $t;
+        if(isset($t))return $t;
+        return $t = \DB::tname('sysvalue'); 
+    }
 
+    static protected function getval(string $name)
+    {
+        $t =self::_getSysValT();
+        $name = get_called_class()."$".$name;
+        
+        if( isset(self::$_valtmp[$name]) )
+        {
+            return self::$_valtmp[$name];
+        }
+
+        $data = \DB::fetchEx("SELECT `var` FROM `{$t}` WHERE `name` = ?",$name);
+        if( $data && isset($data['var']) )
+        {
+            return self::$_valtmp[$name] = $data['var'];
+        }
+        return null;
+    }
+    
+    static protected function setval(string $name,$val)
+    {
+        $t = self::_getSysValT();
+        $name = get_called_class()."$".$name;
+        return false!==\DB::queryEx("INSERT INTO `{$t}` (`name`,`var`)
+                                   VALUES (?,?)
+                                   ON DUPLICATE KEY UPDATE
+                                    `var` = VALUES(`var`)",$name,$val);
+    }
     /**
      * function requiredFunctions():array;.
      *
      * @return array of strings
      *               like : ['strlen','md5']
-     *               it support SKY OJ SYSTEM to check env for install this Plugun.
+     *               it support SKY OJ SYSTEM to check env for install this PlugIn.
      */
     abstract public static function requiredFunctions():array;
 
@@ -65,16 +100,24 @@ abstract class PluginBase
      */
     public static function installForm():array
     {
-        return [
-            'data' => [
-                ['type' => 'text', 'name' => 'A', 'title' => 'URL'],
-                ['type' => 'hr'],
-                ['type' => 'text', 'name' => 'A', 'title' => 'URL'],
-                ['type' => 'text', 'name' => 'A', 'title' => 'URL'],
-                ['type' => 'submit', 'id' => 'install', 'option' => ['info' => '']],
-            ],
-        ];
+        return [];
     }
+
+    /**
+     * function install(&$error_msg):bool
+     *
+     * @param &$error_msg OUTPUT return error message
+     * @return bool is insatlled
+     */
+     public static function install(&$error_msg):bool
+     {
+         return true;
+     }
+
+     public static function uninstall(&$error_msg):bool
+     {
+         return true;
+     }
 }
 
 abstract class OnlineJudgeCapture extends PluginBase
@@ -86,6 +129,19 @@ abstract class OnlineJudgeCapture extends PluginBase
         parent::__construct();
         Enforcer::__add(__CLASS__, get_called_class());
     }
+}
+
+abstract class Judge extends PluginBase
+{
+    public function __construct()
+    {
+        parent::__construct();
+        Enforcer::__add(__CLASS__, get_called_class());
+    }
+
+    //abstract public function RunSignalCodeAsync(\SKYOJ\Problem $problem,\SKYOJ\Code $code):bool;
+    //abstract public function AddProblem(\SKYOJ\Problem $problem):bool;
+    //abstract public function ModifyProblem(\SKYOJ\Problem $problem):bool;
 }
 
 abstract class ThirdPartySign extends PluginBase

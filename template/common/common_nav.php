@@ -56,7 +56,6 @@ $(document).ready(function()
 <?php endif;?>
 <body <?=$classtmp?>>
 <div id="wrap"> 
-    <script>$('.dropdown-toggle').dropdown();</script>
     <nav class="navbar navbar-default navbar-static-top navbar-inverse" style="background-color:#101010">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -71,7 +70,7 @@ $(document).ready(function()
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="<?=$SkyOJ->uri('problem','list')?>">Problems</a></li>
-                    <li><a href="<?=$_E['SITEROOT']?>index.php">Submission</a></li>
+                    <li><a href="<?=$SkyOJ->uri('chal')?>">Challenges</a></li>
                     <li><a href="<?=$SkyOJ->uri('index','old')?>">Dev Message</a></li>
                     <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools<span class="caret"></span></a>

@@ -17,6 +17,7 @@ $_E = [];
 $_LG = [];
 
 $_E['ROOT'] = __DIR__;
+$_E['SITEPORT'] = '80';
 $_E['SITEDIR'] = '/';
 $_E['DATADIR'] = $_E['ROOT'].'/data/';
 
@@ -54,7 +55,7 @@ if (file_exists('LocalSetting.php')) {
 }
 
 //Set Constant Strings
-$_E['SITEROOT'] = '//'.$_SERVER['SERVER_NAME'].$_E['SITEDIR'];
+$_E['SITEROOT'] = '//'.$_SERVER['SERVER_NAME'].':'.$_E['SITEPORT'].$_E['SITEDIR'];
 if (isset($cgUseHTTPS) && $cgUseHTTPS === true) {
     //is needed?
 

@@ -12,6 +12,11 @@ function apiHandle()
     {
         case 'new':
         case 'modify':
+        case 'judge':
+            break;
+
+        case 'submit':
+            $SkyOJ->setOutputMode(\SKYOJ\_SkyOJ::OUTPUT_HTML_BG);
             break;
             
         default:

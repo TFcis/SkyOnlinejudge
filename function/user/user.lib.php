@@ -269,7 +269,7 @@ class UserInfo
         foreach ($res as $r) {
             $resdata[$r['uid']] = $r;
         }
-        \LOG::msg(\Level::Debug, 'GetUserData', $resdata);
+        //\LOG::msg(\Level::Debug, 'GetUserData', $resdata);
 
         return $resdata;
     }
@@ -284,7 +284,7 @@ class UserInfo
         }
         //registed user
         $acctdata = self::GetUserData('account', $uid);
-        //LOG::msg(Level::Debug,"acctdata",$acctdata,$uid);
+        //\LOG::msg(\Level::Debug,"acctdata",$uid);
         if ($acctdata === false || !isset($acctdata[$uid])) {
             $acceptflag = false;
         }

@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.12
--- http://www.phpmyadmin.net
+-- version 4.6.3
+-- https://www.phpmyadmin.net/
 --
 -- 主機: localhost
--- 產生時間： 2016-03-05 10:35:34
+-- 產生時間： 2016-09-21 20:28:32
 -- 伺服器版本: 10.1.10-MariaDB
 -- PHP 版本： 7.0.4
 
@@ -26,8 +26,7 @@ SET time_zone = "+00:00";
 -- 資料表結構 `tojtest_account`
 --
 
-DROP TABLE IF EXISTS `tojtest_account`;
-CREATE TABLE IF NOT EXISTS `tojtest_account` (
+CREATE TABLE `tojtest_account` (
   `uid` int(11) NOT NULL,
   `email` varchar(64) COLLATE utf8_bin NOT NULL,
   `passhash` varchar(200) COLLATE utf8_bin NOT NULL,
@@ -42,8 +41,7 @@ CREATE TABLE IF NOT EXISTS `tojtest_account` (
 -- 資料表結構 `tojtest_cache`
 --
 
-DROP TABLE IF EXISTS `tojtest_cache`;
-CREATE TABLE IF NOT EXISTS `tojtest_cache` (
+CREATE TABLE `tojtest_cache` (
   `name` varchar(64) COLLATE utf8_bin NOT NULL,
   `timeout` int(11) NOT NULL,
   `data` text COLLATE utf8_bin NOT NULL
@@ -52,14 +50,33 @@ CREATE TABLE IF NOT EXISTS `tojtest_cache` (
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `tojtest_challenge`
+--
+
+CREATE TABLE `tojtest_challenge` (
+  `cid` int(11) NOT NULL,
+  `pid` int(11) NOT NULL,
+  `uid` int(11) NOT NULL,
+  `code` text COLLATE utf8_bin NOT NULL,
+  `compiler` char(60) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `result` int(11) NOT NULL,
+  `runtime` int(11) NOT NULL,
+  `score` int(11) NOT NULL DEFAULT '0',
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `package` text COLLATE utf8_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `tojtest_codepad`
 --
 
-DROP TABLE IF EXISTS `tojtest_codepad`;
-CREATE TABLE IF NOT EXISTS `tojtest_codepad` (
+CREATE TABLE `tojtest_codepad` (
   `id` int(11) NOT NULL,
   `owner` int(11) NOT NULL,
   `hash` char(30) COLLATE utf8_bin NOT NULL,
+  `type` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `content` text COLLATE utf8_bin
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -70,8 +87,7 @@ CREATE TABLE IF NOT EXISTS `tojtest_codepad` (
 -- 資料表結構 `tojtest_ojlist`
 --
 
-DROP TABLE IF EXISTS `tojtest_ojlist`;
-CREATE TABLE IF NOT EXISTS `tojtest_ojlist` (
+CREATE TABLE `tojtest_ojlist` (
   `id` int(11) NOT NULL,
   `class` char(64) COLLATE utf8_bin NOT NULL,
   `name` text COLLATE utf8_bin NOT NULL,
@@ -85,12 +101,13 @@ CREATE TABLE IF NOT EXISTS `tojtest_ojlist` (
 -- 資料表結構 `tojtest_plugin`
 --
 
-DROP TABLE IF EXISTS `tojtest_plugin`;
-CREATE TABLE IF NOT EXISTS `tojtest_plugin` (
+CREATE TABLE `tojtest_plugin` (
   `id` int(11) NOT NULL,
   `class` char(64) COLLATE utf8_bin NOT NULL,
   `version` text COLLATE utf8_bin NOT NULL,
-  `author` text COLLATE utf8_bin NOT NULL,
+  `name` text COLLATE utf8_bin NOT NULL,
+  `description` text COLLATE utf8_bin NOT NULL,
+  `copyright` text COLLATE utf8_bin NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -100,13 +117,14 @@ CREATE TABLE IF NOT EXISTS `tojtest_plugin` (
 -- 資料表結構 `tojtest_problem`
 --
 
-DROP TABLE IF EXISTS `tojtest_problem`;
-CREATE TABLE IF NOT EXISTS `tojtest_problem` (
+CREATE TABLE `tojtest_problem` (
   `pid` int(11) NOT NULL,
   `owner` int(11) NOT NULL,
+  `content_access` int(11) NOT NULL,
+  `submit_access` int(11) NOT NULL,
   `title` text COLLATE utf8_bin NOT NULL,
-  `skey` char(255) COLLATE utf8_bin NOT NULL,
-  `contents` text COLLATE utf8_bin NOT NULL
+  `class` char(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `judge_type` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -115,8 +133,7 @@ CREATE TABLE IF NOT EXISTS `tojtest_problem` (
 -- 資料表結構 `tojtest_profile`
 --
 
-DROP TABLE IF EXISTS `tojtest_profile`;
-CREATE TABLE IF NOT EXISTS `tojtest_profile` (
+CREATE TABLE `tojtest_profile` (
   `uid` int(11) NOT NULL,
   `quote` text COLLATE utf8_bin,
   `quote_ref` text COLLATE utf8_bin,
@@ -127,23 +144,10 @@ CREATE TABLE IF NOT EXISTS `tojtest_profile` (
 -- --------------------------------------------------------
 
 --
--- 資料表結構 `tojtest_skysystem`
---
-
-DROP TABLE IF EXISTS `tojtest_skysystem`;
-CREATE TABLE IF NOT EXISTS `tojtest_skysystem` (
-  `name` char(64) COLLATE utf8_bin NOT NULL,
-  `var` text COLLATE utf8_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
--- --------------------------------------------------------
-
---
 -- 資料表結構 `tojtest_statsboard`
 --
 
-DROP TABLE IF EXISTS `tojtest_statsboard`;
-CREATE TABLE IF NOT EXISTS `tojtest_statsboard` (
+CREATE TABLE `tojtest_statsboard` (
   `id` int(11) NOT NULL,
   `name` text COLLATE utf8_bin NOT NULL,
   `owner` int(11) NOT NULL,
@@ -160,8 +164,7 @@ CREATE TABLE IF NOT EXISTS `tojtest_statsboard` (
 -- 資料表結構 `tojtest_syslog`
 --
 
-DROP TABLE IF EXISTS `tojtest_syslog`;
-CREATE TABLE IF NOT EXISTS `tojtest_syslog` (
+CREATE TABLE `tojtest_syslog` (
   `id` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `level` char(64) COLLATE utf8_bin DEFAULT NULL,
@@ -171,11 +174,21 @@ CREATE TABLE IF NOT EXISTS `tojtest_syslog` (
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `tojtest_sysvalue`
+--
+
+CREATE TABLE `tojtest_sysvalue` (
+  `name` char(64) COLLATE utf8_bin NOT NULL,
+  `var` text COLLATE utf8_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `tojtest_userojacct`
 --
 
-DROP TABLE IF EXISTS `tojtest_userojacct`;
-CREATE TABLE IF NOT EXISTS `tojtest_userojacct` (
+CREATE TABLE `tojtest_userojacct` (
   `indexid` char(40) COLLATE utf8_bin NOT NULL,
   `uid` int(11) NOT NULL,
   `id` int(11) NOT NULL,
@@ -189,8 +202,7 @@ CREATE TABLE IF NOT EXISTS `tojtest_userojacct` (
 -- 資料表結構 `tojtest_usertoken`
 --
 
-DROP TABLE IF EXISTS `tojtest_usertoken`;
-CREATE TABLE IF NOT EXISTS `tojtest_usertoken` (
+CREATE TABLE `tojtest_usertoken` (
   `uid` int(11) NOT NULL,
   `timeout` int(11) NOT NULL,
   `type` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -218,6 +230,15 @@ ALTER TABLE `tojtest_account`
 --
 ALTER TABLE `tojtest_cache`
   ADD PRIMARY KEY (`name`);
+
+--
+-- 資料表索引 `tojtest_challenge`
+--
+ALTER TABLE `tojtest_challenge`
+  ADD PRIMARY KEY (`cid`),
+  ADD KEY `uid` (`uid`),
+  ADD KEY `pid` (`pid`),
+  ADD KEY `cid` (`cid`);
 
 --
 -- 資料表索引 `tojtest_codepad`
@@ -256,12 +277,6 @@ ALTER TABLE `tojtest_profile`
   ADD PRIMARY KEY (`uid`);
 
 --
--- 資料表索引 `tojtest_skysystem`
---
-ALTER TABLE `tojtest_skysystem`
-  ADD UNIQUE KEY `name` (`name`);
-
---
 -- 資料表索引 `tojtest_statsboard`
 --
 ALTER TABLE `tojtest_statsboard`
@@ -273,6 +288,13 @@ ALTER TABLE `tojtest_statsboard`
 --
 ALTER TABLE `tojtest_syslog`
   ADD PRIMARY KEY (`id`);
+
+--
+-- 資料表索引 `tojtest_sysvalue`
+--
+ALTER TABLE `tojtest_sysvalue`
+  ADD UNIQUE KEY `name` (`name`),
+  ADD KEY `name_2` (`name`);
 
 --
 -- 資料表索引 `tojtest_userojacct`
@@ -289,6 +311,11 @@ ALTER TABLE `tojtest_userojacct`
 --
 ALTER TABLE `tojtest_account`
   MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- 使用資料表 AUTO_INCREMENT `tojtest_challenge`
+--
+ALTER TABLE `tojtest_challenge`
+  MODIFY `cid` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- 使用資料表 AUTO_INCREMENT `tojtest_codepad`
 --

@@ -1,21 +1,4 @@
 
-.AC {
-    width: 50px;
-	color: #00cc00;
-	font-size: 20px;
-}
-
-.WA {
-    width: 50px;
-	color: #cc0000;
-	font-size: 20px;
-}
-.NO {
-    width: 50px;
-	color: #444444;	
-	font-size: 20px;
-}
-
 table {
     border-collapse: collapse;
 }
@@ -26,26 +9,6 @@ table {
     width: calc( 100% - 160px );
     background: #1A1A1A;
 }
-tr{
-    border: 0;
-    transition: 0.2s;
-}
-tr:nth-child(odd) {
-    background: #222222;
-}
-
-tr:nth-child(even) {
-    background: #282828;
-}
-tr:hover{
-    background-color:#317082;
-}
-tr .label{ width: 80px; }
-
-
-th { text-align: left; }
-td { padding: 0 4px;}
-
 
 .page-nav > li {
     display: inline-block;
@@ -57,6 +20,7 @@ td { padding: 0 4px;}
     overflow:hidden;
     text-overflow : ellipsis;
 }
+
 .nickname:hover {
     text-overflow:inherit;
     overflow:visible;

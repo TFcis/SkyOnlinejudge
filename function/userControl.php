@@ -54,7 +54,6 @@ class userControl
         if ($usecookie) {
             self::SetCookie($namespace, $token, $timeout);
         }
-        LOG::msg(Level::Debug, "Reg Token [$namespace]$token");
 
         return $token;
     }
@@ -169,23 +168,25 @@ class userControl
 
     //http://stackoverflow.com/questions/31500/do-indexes-work-with-in-clause
     //Use Where in let SQL Server Decide how to optimize
-    public static function getuserdata(string $table,array $uid,array $column)
+    public static function getuserdata(string $table,array $uid,array $column,string $index = 'uid')
     {
         $table = DB::tname($table);
         $userdata = [];
+        $uid = array_values(array_unique($uid));
+        if( empty($uid) )
+            return [];
 
-        $tmp_column = ['uid'=>'x'];
+        $tmp_column = [$index=>'x'];
         foreach( $column as $c ) {
             $tmp_column[$c] = 'x';
         }
         $column = DB::ArrayToQueryString($tmp_column)['column'];
-
         $qstr = rtrim(str_repeat('?,',count($uid)),',');
 
-        $res = DB::fetchAll("SELECT {$column} FROM `$table` WHERE `uid`IN  ({$qstr})",$uid);
+        $res = DB::fetchAll("SELECT {$column} FROM `$table` WHERE `{$index}` IN  ({$qstr})",$uid);
         if( $res ) {
             foreach($res as $u){
-                $userdata[$u['uid']] = $u;
+                $userdata[$u[$index]] = $u;
             }
         }
         return $userdata;

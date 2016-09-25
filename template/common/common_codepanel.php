@@ -3,31 +3,16 @@
         exit('Access denied');
     }
 ?>
-<style type="text/css" media="screen">
-    #editor { 
-        width : 100%;
-        height : 100%;
-        font-size:14px;
-    }
-    body .ace_scrollbar-v {
-        overflow-y: hidden;
-    }
-    
-    body .ace_scrollbar-h {
-        overflow-x: auto;
-    }
-</style>
 <script>
 $(document).ready( function()
 {
-    var editor = ace.edit("editor");
+    var editor = ace.edit("<?=htmlspecialchars($tmpl['_id'])?>");
     editor.setTheme("ace/theme/twilight");
-    editor.getSession().setMode("ace/mode/c_cpp");
-    editor.setOptions({
-        minLines: 20,
-        maxLines: Infinity
-    });
+    editor.getSession().setValue(<?=json_encode($tmpl['_defaultcode'])?>);
+    editor.getSession().setMode("ace/mode/<?=$tmpl['_language']?>");
+    editor.getSession().setUseWrapMode(true);
+    editor.setOptions(<?=json_encode($tmpl['_set'])?>);
 })
 </script>
-<div id="editor"><?php if (isset($tmpl['defaultcode'])): ?><?= htmlspecialchars($tmpl['defaultcode']) ?><?php endif; ?></div>
+<div class="code_editor" id="<?=htmlspecialchars($tmpl['_id'])?>"></div>
 

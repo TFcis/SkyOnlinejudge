@@ -7,6 +7,27 @@ if (!defined('IN_TEMPLATE')) {
     <div class="row">
         <h1>更新日誌</h1>
         <div>
+            <time>2016-9-15</time>
+            <ol>
+                <li>新增題目權限</li>
+                <li>優化網頁載入</li>
+                <li>更新AC Rate 及一些數據功能</li>
+            </ol>
+        </div>
+        <div>
+            <time>2016-9-13</time>
+            <ol>
+                <li>修正了common_codepad的設計</li>
+                <li>Challenge result不再能夠編輯code了</li>
+            </ol>
+        </div>
+        <div>
+            <time>2016-9-12</time>
+            <ol>
+                <li>體驗版上線</li>
+            </ol>
+        </div>
+        <div>
             <time>2016-7-18</time>
             <ol>
                 <li>新的表單基礎元件</li>

@@ -17,7 +17,7 @@ $(document).ready(function()
         <div class="page-header">
             <h1>題目列表<small></small></h1>
         </div>
-        <table class = "table">
+        <table class = "table table-striped">
         <thead>
             <tr>
                 <th style = "width: 40px"></th>
@@ -33,15 +33,24 @@ $(document).ready(function()
                 <!--</button>-->
                 <?php endif; ?>
                 </th>
-                <th style = "width: 100px">TAG</th>
-                <th style = "width: 180px" class = "hidden-xs">AC rate</th>
-                <th style = "width: 180px" class = "hidden-xs">AC rate</th>
+                <th>Submit AC rate</th>
             </tr>
         </thead>
         <tbody>
         <?php foreach ($_E['template']['problem_info'] as $row) :?>
+            <?php if( !\SKYOJ\Problem::hasContentAccess_s($_G['uid'],$row['owner'],$row['content_access'])&&
+                      !\SKYOJ\Problem::hasSubmitAccess_s($_G['uid'],$row['owner'],$row['submit_access']) ) continue; ?>
             <tr style = "height: 40px">
-                <td>AC</td>
+                <td>
+                    <?php if( $_G['uid'] ):?>
+                        <?php $d = \SKYOJ\Problem\UserProblemState($row['pid'],$_G['uid']) ?>
+                        <?php if( $d == \SKYOJ\RESULTCODE::AC ): ?>
+                            <span class="AC glyphicon glyphicon-ok"></span>
+                        <?php elseif( $d > \SKYOJ\RESULTCODE::AC ): ?>
+                            <span class="WA glyphicon glyphicon-thumbs-down"></span>
+                        <?php endif; ?>
+                    <?php endif;?>
+                </td>
                 <td><?=$row['pid'];?></td>
                 <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'])?>"><?=htmlspecialchars($row['title']);?></a></td>
                 <td class="hidden-xs">
@@ -54,9 +63,12 @@ $(document).ready(function()
                         </span>
                     <?php endif; ?>
                 </td>
-                <td></td>
-                <td class="hidden-xs"></td>
-                <td></td>
+                <?php
+                    $all = \SKYOJ\Problem\ProblemSubmitNum($row['pid']);
+                    $ac  = \SKYOJ\Problem\ProblemStateNum($row['pid'],\SKYOJ\RESULTCODE::AC);
+                    $rate = sprintf("%.2f",($all==0&&$ac==0)?0:$ac*100/$all,2);
+                ?>
+                <td><?=$rate?>% (<?=$ac?>/<?=$all?>)</td>
             </tr>
         <?php endforeach;?>
         </tbody>

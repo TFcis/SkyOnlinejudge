@@ -179,3 +179,45 @@ th {
     cursor: pointer;
     color: #ffffff;
 }
+
+.AC {
+	color: #00cc00;
+}
+.WA {
+	color: #cc0000;
+}
+.RE {
+    color: #27fff6;
+}
+.TLE {
+    color: #70649a;
+}
+.MLE {
+    color: #e83015;
+}
+.CE {
+	color: #ffeb00;
+}
+.code_editor { 
+    width : 100% !important; 
+    font-size:14px !important;
+}
+body .ace_scrollbar-v {
+    overflow-y: hidden;
+}
+
+body .ace_scrollbar-h {
+    overflow-x: auto;
+}
+
+
+.table-striped tr:nth-child(odd) {
+    background: #222222 !important;
+}
+
+.table-striped tr:nth-child(even) {
+    background: #282828 !important;
+}
+.table-striped tr:hover{
+    background-color:#317082 !important;
+}

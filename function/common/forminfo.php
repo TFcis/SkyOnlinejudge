@@ -108,8 +108,27 @@ class HTML_INPUT_DIV extends HTML_INPUT_HELPER implements HTML_Element
 {
     function __construct(array $setting,callable $make_html_callback = null)
     {
-        HTML_INPUT_HELPER::check_setting('html',$setting,'');
+        HTML_INPUT_HELPER::check_setting('code',$setting,'');
         parent::__construct($setting,$make_html_callback);
+    }
+}
+
+class HTML_INPUT_CODEPAD extends HTML_INPUT_HELPER implements HTML_Element 
+{
+    private $c;
+    function __construct(array $setting,callable $make_html_callback = null)
+    {
+        parent::__construct($setting,$make_html_callback);
+        HTML_INPUT_HELPER::check_setting('code',$setting['option'],'code');
+        HTML_INPUT_HELPER::check_setting('language',$setting['option'],'c_cpp');
+        HTML_INPUT_HELPER::check_setting('setting',$setting['option'],\Render::CODE_SETTING);
+        $this->c = new HTML_CODEPAD(['code'=>$setting['option']['code']
+                                    ,'language'=>$setting['option']['language']
+                                    ,'id'=>$setting['option']['id']??null
+                                    ,'setting'=>$setting['option']['setting']]);
+    }
+    function make_code(){
+        $this->c->make_html();
     }
 }
 
@@ -135,6 +154,26 @@ class HTML_ROW implements HTML_Element
     }
 }
 
+class HTML_CODEPAD implements HTML_Element 
+{
+    private $code;
+    private $language;
+    private $id;
+    private $setting;
+    function __construct(array $setting,callable $make_html_callback = null)
+    {
+        $this->code = $setting['code'];
+        $this->language = $setting['language'];
+        $this->id = $setting['id']??null;
+        $this->setting = $setting['setting']??null;
+    }
+
+    public function make_html($setting = null,callable $callback = null):string
+    {
+        \Render::renderCode($this->code,$this->language,$this->id,$this->setting);
+        return '';
+    }
+}
 class FormInfo
 {
     //As same as class name
