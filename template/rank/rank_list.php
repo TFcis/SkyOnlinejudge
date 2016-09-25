@@ -26,7 +26,7 @@ $(document).ready(function()
                 <?php if ($_G['uid']): ?>
                 <!--<button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新增記分板" id="b_add" onclick="location.href='rank.php?mod=cbedit'">-->
                     TOOLS
-                    <a class = "icon-bttn" title = "Create New" href="<?=$SkyOJ->uri('rank','cbedit')?>">
+                    <a class = "icon-bttn" title = "Create New" href="<?=$SkyOJ->uri('rank','sbedit')?>">
                         <span class="glyphicon glyphicon-plus"></span>
                     </a>
                 <!--</button>-->
@@ -46,7 +46,7 @@ $(document).ready(function()
                         <!--<span class="icon-bttn glyphicon glyphicon-plus-sign" title="加入"></span>
                         <span class="icon-bttn glyphicon glyphicon-remove" title="離開"></span>-->
                         <?php if (userControl::getpermission($row['owner'])): ?>
-                        <a class="icon-bttn" href="<?=$SkyOJ->uri('rank','cbedit',$row['sb_id'])?>">
+                        <a class="icon-bttn" href="<?=$SkyOJ->uri('rank','sbedit',$row['sb_id'])?>">
                             <span class="glyphicon glyphicon-pencil" title="編輯"></span>
                         </a>
                         <!--<span class = "icon-bttn">

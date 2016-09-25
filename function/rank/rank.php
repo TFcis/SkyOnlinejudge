@@ -12,7 +12,7 @@ function RankHandle()
     {
         case 'list':
         case 'commonboard':
-        case 'edit':
+        case 'sbedit':
             break;
 
             //api
