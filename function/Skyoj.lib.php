@@ -41,6 +41,45 @@ function safe_post($key, $usearray = false)
     return null;
 }
 
+/**
+ * check if $val can be turn to c int format
+ * string :
+ *   0236  :false
+ *   123   :true
+ *   1321654165161651 : false( if php int cannot support it )
+ * int :
+ *   why check this?
+ * others :
+ *   false
+ */
+function check_tocint($val):bool
+{
+    if( is_int($val) )
+    {
+        return true;
+    }
+    if( is_string($val) )
+    {
+        if( ctype_digit($val) && ($val==='0'||$val[0]!=='0') )
+            return true;
+    }
+    return false;
+}
+function safe_post_int(string $key)
+{
+    $data = safe_post($key);
+    if( !isset($data) || empty($data) )
+    {
+        return null;
+    }
+    if( !check_tocint($data) )
+    {
+        throw new \Exception('safe_post_int for ['.$key.'] failed!');
+        return null;
+    }
+    return (int)$data;
+}
+
 function CreateFolder(string $path,bool $rewrite = false,bool $recursive = false):bool
 {
     if( !$rewrite && file_exists($path) )
