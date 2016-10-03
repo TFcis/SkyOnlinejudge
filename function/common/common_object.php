@@ -34,9 +34,20 @@ abstract class CommonObject{
         $idname = $this->getIDName();
         $data = $this->UpdateSQLLazy();
 
-        //TODO : Need report sql status
-        foreach( $data as $d )
-            \DB::queryEx("UPDATE `{$table}` SET `{$d[0]}`= ? WHERE `{idname}`=?",$d[1],$this->$idname());
-        return true;
+        if( empty($data) )
+            return true;
+
+        try{
+            \DB::$pdo->beginTransaction();
+            foreach( $data as $d )
+                if( \DB::queryEx("UPDATE `{$table}` SET `{$d[0]}`= ? WHERE `{$idname}`=?",$d[1],$this->$idname()) === false )
+                    throw \DB::$last_exception;
+            \DB::$pdo->commit();
+            return true;
+        }catch(\Exception $e){
+            \DB::$pdo->rollBack();
+            \Log::msg(\Level::Error,"UpdateSQL Transaction rollBack! :",$e->getMessage());
+            return false;
+        }
     }
 }

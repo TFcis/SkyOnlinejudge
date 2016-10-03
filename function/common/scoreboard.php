@@ -22,7 +22,7 @@ class ScoreBoard extends CommonObject
     {
         static $t;
         if( isset($t) )return $t;
-        return $t = \DB::tname('problem');
+        return $t = \DB::tname('scoreboard');
     }
 
     protected function getIDName():string
@@ -44,7 +44,7 @@ class ScoreBoard extends CommonObject
             $this->sb_id = $sb_id;
             $this->sb_data = $data;
         }catch(\Exception $e){
-            $this->sb_id = false;
+            $this->sb_id = null;
         }
     }
 
@@ -65,8 +65,24 @@ class ScoreBoard extends CommonObject
             return false;
         }
         $this->UpdateSQLLazy('title',$title);
+        return true;
     }
     
+    function GetAnnounce():string
+    {
+        return $this->sb_data['announce']??'';
+    }
+
+    function SetAnnounce(string $announce):bool
+    {
+        if( strlen($announce)>30000 )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('announce',$announce);
+        return true;
+    }
+
     function GetState():int
     {
         return $this->sb_data['state']??0;
