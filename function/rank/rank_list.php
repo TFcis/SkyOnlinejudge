@@ -11,12 +11,12 @@ function listHandle()
     if( !preg_match('/^[1-9][0-9]*$/',$page) )
         $page = '1';
 
-    $pl = new PageList('statsboard');
+    $pl = new PageList('scoreboard');
     $data = $pl->GetPageDataByPage($page,'id');
 
-    $_E['template']['statsboard_list_pagelist'] = $pl;
-    $_E['template']['statsboard_list_now'] = $page;
-    $_E['template']['statsboard_info'] = $data ? $data : [];
+    $_E['template']['scoreboard_list_pagelist'] = $pl;
+    $_E['template']['scoreboard_list_now'] = $page;
+    $_E['template']['scoreboard_info'] = $data ? $data : [];
     
     \Render::render('rank_list', 'rank');
 }

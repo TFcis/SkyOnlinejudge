@@ -2,17 +2,20 @@
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
-//require_once 'function/user/user.lib.php';
-require_once 'rank.lib.php';
+
 function RankHandle()
 {
     global $SkyOJ,$_E;
+    require_once $_E['ROOT'].'/function/common/scoreboard.php';
+    require_once $_E['ROOT'].'/function/common/problem.php';
+    require_once 'rank.lib.php';
+
     $param = $SkyOJ->UriParam(1)??'list';
     switch( $param )
     {
         case 'list':
-        case 'commonboard':
-        case 'sbedit':
+        case 'new':
+        case 'modify':
             break;
 
             //api

@@ -26,18 +26,17 @@ $(document).ready(function()
                 <?php if ($_G['uid']): ?>
                 <!--<button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新增記分板" id="b_add" onclick="location.href='rank.php?mod=cbedit'">-->
                     TOOLS
-                    <a class = "icon-bttn" title = "Create New" href="<?=$SkyOJ->uri('rank','sbedit')?>">
+                    <a class = "icon-bttn" title = "Create New" href="<?=$SkyOJ->uri('rank','new')?>">
                         <span class="glyphicon glyphicon-plus"></span>
                     </a>
                 <!--</button>-->
                 <?php endif; ?>
                 </th>
-                <th style = "width: 180px" class = "hidden-xs">FOUNDER</th>
                 <th style = "width: 100px">STATUS</th>
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($tmpl['statsboard_info'] as $row): ?>
+        <?php foreach ($tmpl['scoreboard_info'] as $row): ?>
             <tr style = "height: 40px">
                 <td><?=$row['sb_id']?></td>
                 <td><a href="<?=$SkyOJ->uri('rank','commonboard',$row['sb_id'])?>"><?=\SKYOJ\html($row['name'])?></a></td>
@@ -59,7 +58,6 @@ $(document).ready(function()
                         <?php endif; ?>
                     <?php endif; ?>
                 </td>
-                <td class="hidden-xs"><?=\SKYOJ\html($_E['nickname'][$row['owner']])?></td>
                 <td>
                     <span class = 'jointoggle-on'>
                         <?php if ($row['userstatus']):?>
@@ -81,8 +79,8 @@ $(document).ready(function()
     
     <center>
         <?php Render::renderPagination(
-        $tmpl['statsboard_list_pagelist'],
+        $tmpl['scoreboard_list_pagelist'],
         $SkyOJ->uri('rank','list','%d'),
-        $tmpl['statsboard_list_now']) ?>
+        $tmpl['scoreboard_list_now']) ?>
     </center>
 </div>
