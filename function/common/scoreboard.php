@@ -17,6 +17,7 @@ class ScoreBoard extends CommonObject
     private $sb_id;
     private $sb_data;
     private $sb_users;
+    private $sb_problems;
 
     protected function getTableName():string
     {
@@ -28,6 +29,44 @@ class ScoreBoard extends CommonObject
     protected function getIDName():string
     {
         return 'sb_id';
+    }
+
+    private $flag_modify_users = false;
+    private $flag_modify_problems = false;
+    protected function UpdateSQL_extend()
+    {
+        if( $this->sb_id() === null )
+            throw new \Exception('SBID ERROR');
+        //Update Users & Problems
+        if( $this->flag_modify_users )
+        {
+            $tscoreboard_users = \DB::tname('scoreboard_users');
+            if( \DB::queryEx("DELETE FROM `$tscoreboard_users` WHERE `sb_id`=?",$this->sb_id())===false )
+                throw \DB::$last_exception;
+            foreach( $this->sb_users as $uid )
+            {
+                if( \DB::queryEx("INSERT INTO `{$tscoreboard_users}`(`sb_id`, `uid`) VALUES (?,?)",$this->sb_id(),$uid) === false )
+                {
+                    throw \DB::$last_exception;
+                }
+            }
+        }
+        if( $this->flag_modify_problems )
+        {
+            $i = 0;
+            $tscoreboard_problems = \DB::tname('scoreboard_problems');
+            if( \DB::queryEx("DELETE FROM `$tscoreboard_problems` WHERE `sb_id`=?",$this->sb_id())===false )
+                throw \DB::$last_exception;
+            foreach( $this->sb_problems as $row )
+            {
+                if( \DB::queryEx("INSERT INTO `$tscoreboard_problems`(`sb_id`, `ord`, `problem`, `note`) VALUES (?,?,?,?)"
+                    ,$this->sb_id(),$i++,$row['problem'],$row['note']) === false )
+                {
+                    throw \DB::$last_exception;
+                }
+            }
+        }
+        
     }
 
     function __construct(int $sb_id)
@@ -68,6 +107,36 @@ class ScoreBoard extends CommonObject
         return true;
     }
     
+    function GetStart():string
+    {
+        return $this->sb_data['start']??'';
+    }
+
+    function SetStart(string $start):bool
+    {
+        if( !check_totimestamp($start,$start) )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('start',$start);
+        return true;
+    }
+
+    function GetEnd():string
+    {
+        return $this->sb_data['end']??'';
+    }
+
+    function SetEnd(string $end):bool
+    {
+        if( !check_totimestamp($end,$end) )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('end',$end);
+        return true;
+    }
+
     function GetAnnounce():string
     {
         return $this->sb_data['announce']??'';
@@ -93,7 +162,7 @@ class ScoreBoard extends CommonObject
         return $this->sb_data['owner'];
     }
 
-    private function load_userdata():bool
+    private function load_users():bool
     {
         if( isset($this->sb_users) )
         {
@@ -104,26 +173,96 @@ class ScoreBoard extends CommonObject
             return false;
         }
 
-        $tscoreboard_user = DB::tname('scoreboard_user');
-        $data = \DB::fetchAllEx("SELECT `uid`,`score` FROM {$tscoreboard_user} WHERE `sbid=?`",$this->sb_id());
+        $tscoreboard_users = \DB::tname('scoreboard_users');
+        $data = \DB::fetchAllEx("SELECT `uid` FROM {$tscoreboard_users} WHERE `sb_id`=? ORDER BY `uid`",$this->sb_id());
         if( $data === false )
         {
             return false;
         }
-
         $this->sb_users = [];
-        foreach($data as $row)
+        foreach( $data as $row )
+            $this->sb_users[] = $row['uid'];
+        return true;
+    }
+
+    private function load_problems():bool
+    {
+        if( isset($this->sb_problems) )
         {
-            $this->sb_users[$row['uid']] = (double)$row['score'];
+            return true;   
         }
+        if( $this->sb_id() === false )
+        {
+            return false;
+        }
+
+        $tscoreboard_problems = \DB::tname('scoreboard_problems');
+        $data = \DB::fetchAllEx("SELECT `problem`,`note` FROM {$tscoreboard_problems} WHERE `sb_id`=? ORDER BY `ord`",$this->sb_id());
+        if( $data === false )
+        {
+            return false;
+        }
+        $this->sb_problems = [];
+        foreach( $data as $row )
+            $this->sb_problems[] = ['problem'=>$row['problem'],'note'=>$row['note']];
         return true;
     }
 
     function GetUsers():array
     {
-        if( !$this->load_userdata() )
+        if( !$this->load_users() )
             throw new \Exception('ScoreBoard getUsers Failed!');
         return $this->sb_users;
+    }
+
+    function SetUsers($data):bool
+    {
+        if( is_string($data) )
+        {
+            $data = explode(',',$data);
+        }
+        if( !is_array($data) )
+        {
+            return false;
+        }
+        foreach($data as &$d)
+        {
+            if( !check_tocint($d) || $d == 0 )
+            {
+                return false;
+            }
+            $d = (int)$d;
+        }
+        $this->sb_users = array_unique($data);
+        $this->flag_modify_users = true;
+        return true;
+    }
+
+    function GetProblems():array
+    {
+        if( !$this->load_problems() )
+            throw new \Exception('ScoreBoard GetProblems Failed!');
+        return $this->sb_problems;
+    }
+
+    function SetProblems($data):bool
+    {
+        if( is_string($data) )
+        {
+            $data = explode(',',$data);
+        }
+        if( !is_array($data) )
+        {
+            return false;
+        }
+        $data = array_unique($data);
+        foreach( $data as &$row )
+        {
+            $row = ['problem'=>$row,'note'=>''];
+        }
+        $this->sb_problems = $data;
+        $this->flag_modify_problems = true;
+        return true;
     }
 
     static function GetData(int $sb_id)

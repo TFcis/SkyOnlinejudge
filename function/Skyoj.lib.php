@@ -65,6 +65,31 @@ function check_tocint($val):bool
     }
     return false;
 }
+
+function check_totimestamp($val,&$conv = null):bool
+{
+    static $days = [0,31,29,31,30,31,30,31,31,30,31,30,31];
+    if( !is_string($val) )
+    {
+        return false;
+    }
+    $d = sscanf($val,"%d-%d-%d %d:%d:%d");
+    if( !is_array($d) || count($d) != 6 )
+    {
+        return false;
+    }
+    
+    if( $d[0]<2000 )return false; //year
+    if( $d[1]<1 || 12<$d[1] )return false; //month
+    if( $d[2]<1 || $days[$d[1]]<$d[2] )return false; //day
+
+    if( $d[3]<0 || 24<$d[3] )return false; //hour
+    if( $d[4]<0 || 60<$d[4] )return false; //minute
+    if( $d[5]<0 || 60<$d[5] )return false; //second
+    $conv = vsprintf("%04d-%02d-%02d %02d:%02d:%02d",$d);
+    return true;
+        
+}
 function safe_post_int(string $key)
 {
     $data = safe_post($key);

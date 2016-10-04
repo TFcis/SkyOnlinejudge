@@ -10,11 +10,6 @@ abstract class CommonObject{
     
     protected abstract function getTableName():string;
     protected abstract function getIDName():string;
-    
-    function __destruct()
-    {
-        $this->UpdateSQL();
-    }
 
     protected function UpdateSQLLazy(string $col = null,$val = null)
     {
@@ -28,6 +23,8 @@ abstract class CommonObject{
         $host[] = [$col,$val];
     }
 
+    
+    protected function UpdateSQL_extend(){}
     public function UpdateSQL():bool
     {
         $table = $this->getTableName();
@@ -39,6 +36,7 @@ abstract class CommonObject{
 
         try{
             \DB::$pdo->beginTransaction();
+            $this->UpdateSQL_extend();
             foreach( $data as $d )
                 if( \DB::queryEx("UPDATE `{$table}` SET `{$d[0]}`= ? WHERE `{$idname}`=?",$d[1],$this->$idname()) === false )
                     throw \DB::$last_exception;
