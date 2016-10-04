@@ -225,8 +225,8 @@ class class_HypeX extends Judge
         #put file to judge
         $json->code_path = $this->putCodeviaSSH($c->code(),$c->cid());
         $json->res_path  = self::getval('data_dir')."/problem/{$c->pid()}/res";
-        $json->comp_type = "g++";
-        $json->check_type = "diff";
+        $json->comp_type = $pjson->compile;
+        $json->check_type = $pjson->check;
 
         foreach ($pjson->test as $testdata) {
             $test = self::get_json_test();
