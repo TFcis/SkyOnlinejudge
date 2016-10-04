@@ -12,7 +12,7 @@ function listHandle()
         $page = '1';
 
     $pl = new PageList('scoreboard');
-    $data = $pl->GetPageDataByPage($page,'id');
+    $data = $pl->GetPageDataByPage($page,'sb_id');
 
     $_E['template']['scoreboard_list_pagelist'] = $pl;
     $_E['template']['scoreboard_list_now'] = $page;
