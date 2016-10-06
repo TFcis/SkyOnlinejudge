@@ -9,62 +9,57 @@ if (!defined('IN_TEMPLATE')) {
             <th style="padding: 4px;width: 40px;left:0px;position: absolute;"></th>
             <th style="padding: 4px;width: 120px;left:40px;position: absolute;"><span id="infobox"></span></th>
             <th class="text-center" style="padding: 4px;width: 50px;"><a onclick="change_rate()" id="svchange" title="Change rate/source">score<span></th>
-            <?php foreach ($tmpl['plist'] as $prob) {
-    ?>
+            <?php foreach( $tmpl['sb']->GetProblems() as $prob ):?>
                 <th class="text-center" style="padding: 4px;width: 40px;">
-                    <div class="problemname"><?=$prob['show']?></div>
+                    <div class="problmname" title="<?=\SKYOJ\html(\SKYOJ\Problem::get_title($prob['problem']))?>"><a href='<?=$SkyOJ->uri('problem','view',$prob['problem'])?>'><?=$prob['problem']?></a></div>
                 </th>
-            <?php 
-}?>
+            <?php endforeach;?>
             <th></th>
         </tr>
     </thead>
     <tbody sytle="white-space: nowrap;">
-        <?php foreach ($tmpl['user'] as $uid) {
-    ?>
+        <?php foreach ($tmpl['sb']->GetUsers() as $uid): ?>
         <tr>
             <td style="left:0px;position: absolute;">
-                <?php if ($tmpl['owner'] != -1 && (userControl::getpermission($tmpl['owner']) || $uid == $_G['uid'])): ?>
+                <?php if (false): ?>
                 <a class = "icon-bttn" onclick="build_cb_data('<?=$uid?>')">
                     <span class="pointer glyphicon glyphicon-refresh"  title="重新擷取"></span>
                 </a>
-                <?php endif;
-    ?>
+                <?php endif;?>
             </td>
             <td class="text-right" style="left:40px;position:absolute;">
                 <div class="nickname">
-                    <a style="color:white;" href=<?=$_E['SITEROOT']."user.php/view/$uid"?>><?=$_E['nickname'][$uid]?></a>
+                    <a style="color:white;" href='<?=$SkyOJ->uri('user','view',$uid)?>'><?=\SKYOJ\html($_E['nickname'][$uid])?></a>
                 </div>
             </td>
-    		<?php $AC_count = $tmpl['userdetail'][$uid]['statistics']['90'];
-    ?>
+    		<?php $AC_count = 0; 
+                foreach( $tmpl['tsb'][$uid] as $row )
+                    if( $row[0] == \SKYOJ\RESULTCODE::AC  )
+                        $AC_count++;
+            ?>
             <td class="text-right">
             <span class="score" onclick="change_rate()"><?=$AC_count?>AC</span>
-            <span class="ac_rate" style="display:none" onclick="change_rate()"><?=round($AC_count / count($tmpl['plist']) * 100.0)?>%</span>
+            <span class="ac_rate" style="display:none" onclick="change_rate()"><?=round($AC_count / count($tmpl['sb']->GetProblems()) * 100.0)?>%</span>
     
             </td>
-<?php foreach ($tmpl['plist'] as $prob) {
-    $vid = $tmpl['s'][$uid][$prob['name']]['vid'];
-    $chal = $tmpl['s'][$uid][$prob['name']]['challink'];
-
-    ?><td class = "text-center <?=$vid?>"><?php
+<?php foreach( $tmpl['sb']->GetProblems() as $prob ):?><?php
+    $vid = $tmpl['tsb'][$uid][$prob['problem']][0];
+    $chal = '';
+    $vid = ($vid == \SKYOJ\RESULTCODE::WAIT ||  $vid == \SKYOJ\RESULTCODE::JUDGING) ? 'NO' : \SKYOJ\getresulttext($vid);
+?><td class="text-center <?=$vid?>" style="width:50px;font-size:20px;"><?php
     if ($chal == '') {
         ?>●<?php
 
     } else {
         ?><span onclick = "javascript:window.open('<?=$chal?>')" target="_blank" style="cursor: pointer;">●</span><?php
-
     }
 
-    ?></td><?php
-
-}
-    ?>
+    ?></td>
+<?php endforeach;?>
             <td>
             </td>
         </tr>
-        <?php 
-}?>
+        <?php endforeach;?>
     </tbody>
 </table>
-<div style = "color: #666666; text-align: right; padding-right: 20px">Lastest update: <?=$tmpl['buildtime'] ?></div>
+<div style = "color: #666666; text-align: right; padding-right: 20px"></div>

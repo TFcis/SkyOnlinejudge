@@ -18,6 +18,7 @@ class ScoreBoard extends CommonObject
     private $sb_data;
     private $sb_users;
     private $sb_problems;
+    private $sb_sb;
 
     protected function getTableName():string
     {
@@ -288,6 +289,101 @@ class ScoreBoard extends CommonObject
         }
         $exists[$tname] = 1; //Anyway
         return $tname;
+    }
+
+    /*
+        Make Scoreboard Data
+    */
+    public function make_inline()
+    {
+        if( isset($this->sb_sb) )
+            return ;
+        $users = $this->GetUsers();
+        $problems = $this->GetProblems();
+        $skyoj_problems = [];
+        $data = [];
+
+        foreach( $users as $uid )
+        {
+            $data[$uid] = [];
+            foreach( $problems as $problem )
+            {
+                $data[$uid][$problem['problem']] = [0,0];
+                if( check_tocint($problem['problem']) )
+                {
+                    $skyoj_problems[] = $problem['problem'];
+                }
+            }
+        }
+        $this->sb_sb = $data;
+        if( !empty($skyoj_problems) ){
+            $data = $this->QuerySKYOJ($skyoj_problems);
+        }
+    }
+
+    private function QuerySKYOJ($probs)
+    {
+        $qstr = rtrim(str_repeat('?,',count($probs)),',');
+        $data = $probs;
+        array_unshift($data,$this->sb_id());
+        $data[] = $this->GetStart();
+        $data[] = $this->GetEnd();
+        //var_dump($probs,$data,$qstr);
+        $tchallenge = \DB::tname('challenge');
+        $tscoreboard_users = \DB::tname('scoreboard_users');
+        $query= <<<TAG
+SELECT
+  uid,
+  pid,
+  score,
+  MIN(result) AS mr
+FROM
+  `{$tchallenge}`
+INNER JOIN
+  (
+  SELECT
+    `uid` AS auid
+  FROM
+    `{$tscoreboard_users}`
+  WHERE
+    `sb_id` = ?
+) a
+ON
+  uid = auid 
+INNER JOIN
+  (
+  SELECT
+    pid AS bpid,
+    uid AS buid,
+    MAX(score) ms
+  FROM
+    `{$tchallenge}`
+  WHERE
+    `pid` IN({$qstr}) AND timestamp BETWEEN ? AND ?
+  GROUP BY
+    pid,
+    uid
+) b
+ON
+  pid = b.bpid AND uid = b.buid AND `score` = b.ms
+GROUP BY
+  pid,
+  uid
+TAG;
+        $res = \DB::fetchAll($query,$data);
+        //var_dump($res);
+        if( $res !== false )
+        {
+            foreach($res as $row)
+            {
+                $this->sb_sb[$row['uid']][$row['pid']] = [$row['mr'],$row['score']];
+            }
+        }
+    }
+
+    function getScoreBoard()
+    {
+        return $this->sb_sb;
     }
 
     static function CreateNew(string $title,int $type):int
