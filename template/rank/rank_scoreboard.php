@@ -5,22 +5,15 @@ if (!defined('IN_TEMPLATE')) {
 ?>
 
 <script>
-    var viededrate = 'score';
+    var viededrate = 0;
     function change_rate()
     {
-        if( viededrate == 'rate' )
-        {
-            $(".ac_rate").hide();
-            $(".score").show();
-            viededrate = 'score';
-        }
-        else
-        {
-            $(".score").hide();
-            $(".ac_rate").show();
-            viededrate = 'rate';
-        }
-        $("#svchange").html(viededrate);
+        var data_type = ['score','ac_num','ac_rate'];
+        var data_show = ['Score','AC','Rate'];
+        viededrate = (viededrate +1) % data_type.length;
+        $("[swtab]").hide();
+        $("[swtab='"+data_type[viededrate]+"']").show();
+        $("#svchange").html(data_show[viededrate]);
     }
     $(document).ready(function()
     {

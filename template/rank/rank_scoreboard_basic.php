@@ -8,7 +8,7 @@ if (!defined('IN_TEMPLATE')) {
         <tr>
             <th style="padding: 4px;width: 40px;left:0px;position: absolute;"></th>
             <th style="padding: 4px;width: 120px;left:40px;position: absolute;"><span id="infobox"></span></th>
-            <th class="text-center" style="padding: 4px;width: 50px;"><a onclick="change_rate()" id="svchange" title="Change rate/source">score<span></th>
+            <th class="text-center" style="padding: 4px;width: 50px;"><a onclick="change_rate()" id="svchange" title="Change rate/source">Score<span></th>
             <?php foreach( $tmpl['sb']->GetProblems() as $prob ):?>
                 <th class="text-center" style="padding: 4px;width: 40px;">
                     <div class="problmname" title="<?=\SKYOJ\html(\SKYOJ\Problem::get_title($prob['problem']))?>"><a href='<?=$SkyOJ->uri('problem','view',$prob['problem'])?>'><?=$prob['problem']?></a></div>
@@ -32,15 +32,18 @@ if (!defined('IN_TEMPLATE')) {
                     <a style="color:white;" href='<?=$SkyOJ->uri('user','view',$uid)?>'><?=\SKYOJ\html($_E['nickname'][$uid])?></a>
                 </div>
             </td>
-    		<?php $AC_count = 0; 
+    		<?php $AC_count = 0;$score = 0; 
                 foreach( $tmpl['tsb'][$uid] as $row )
+                {
+                    $score += $row[1];
                     if( $row[0] == \SKYOJ\RESULTCODE::AC  )
                         $AC_count++;
+                }
             ?>
-            <td class="text-right">
-            <span class="score" onclick="change_rate()"><?=$AC_count?>AC</span>
-            <span class="ac_rate" style="display:none" onclick="change_rate()"><?=round($AC_count / count($tmpl['sb']->GetProblems()) * 100.0)?>%</span>
-    
+            <td class="text-right" onclick="change_rate()">
+                <span swtab="score" ><?=$score?></span>
+                <span swtab="ac_num"  style="display:none"><?=$AC_count?>AC</span>
+                <span swtab="ac_rate" style="display:none"><?=round($AC_count / count($tmpl['sb']->GetProblems()) * 100.0)?>%</span>
             </td>
 <?php foreach( $tmpl['sb']->GetProblems() as $prob ):?><?php
     $vid = $tmpl['tsb'][$uid][$prob['problem']][0];
