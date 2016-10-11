@@ -76,7 +76,7 @@ $(document).ready(function()
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li class="dropdown-header">Coder</li>
-                            <li><a href="<?=$SkyOJ->uri('rank','list')?>">Stats</a></li>
+                            <li><a href="<?=$SkyOJ->uri('rank','list')?>">Scoreboard</a></li>
                             <li><a href="<?=$SkyOJ->uri('code')?>">Code</a></li>
                             <li class="divider"></li>
                             <li><a href="http://forum.tfcis.org/forum.php?mod=group&fid=107" target="_blank">Discuss</a></li>
