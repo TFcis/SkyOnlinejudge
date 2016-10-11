@@ -6,7 +6,6 @@
 
 define('IN_SKYOJSYSTEM', 1);
 
-session_start();
 date_default_timezone_set('Asia/Taipei');
 
 require_once 'config/config.php';

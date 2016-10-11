@@ -121,7 +121,12 @@ class userControl
     //this function must call first to check if user has logined and set var $_G
     public static function intro()
     {
-        global $_G,$permission,$_config;
+        global $_G,$_E,$permission,$_config;
+
+        $session_setting = session_get_cookie_params();
+        session_set_cookie_params($session_setting["lifetime"],$_E['SITEDIR']);
+        session_start();
+
         $acctable = DB::tname('account');
         if (self::CheckToken('login')) {
             //load user data
