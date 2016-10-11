@@ -209,6 +209,29 @@ class ScoreBoard extends CommonObject
         return true;
     }
 
+    function GetSortedUsers():array
+    {
+        static $res = null;
+        if( isset($res) )
+        {
+            return $res;
+        }
+        $users = $this->GetUsers();
+        $this->make_inline();
+        $sb = $this->getScoreBoard();
+        $total_score = [];
+        foreach($sb as $uid => $pids)
+        {
+            $total_score[$uid] = 0;
+            foreach($pids as $prob)
+                $total_score[$uid]+= $prob[1];//score
+        }
+        usort($users,function($a,$b)use($total_score){
+            return $total_score[$a]<=>$total_score[$b];
+        });
+        return $res = array_reverse($users);
+    }
+
     function GetUsers():array
     {
         if( !$this->load_users() )
@@ -226,15 +249,20 @@ class ScoreBoard extends CommonObject
         {
             return false;
         }
-        foreach($data as &$d)
+        $users = [];
+        foreach($data as $d)
         {
+            if( empty($d) )
+            {
+                continue;
+            }
             if( !check_tocint($d) || $d == 0 )
             {
                 return false;
             }
-            $d = (int)$d;
+            $users[]= (int)$d;
         }
-        $this->sb_users = array_unique($data);
+        $this->sb_users = array_unique($users);
         $this->flag_modify_users = true;
         return true;
     }
@@ -256,12 +284,15 @@ class ScoreBoard extends CommonObject
         {
             return false;
         }
-        $data = array_unique($data);
-        foreach( $data as &$row )
+        $problems = [];
+        foreach( array_unique($data) as $row )
         {
-            $row = ['problem'=>$row,'note'=>''];
+            if( !empty($row) )
+            {
+                $problems[] = ['problem'=>$row,'note'=>''];
+            }
         }
-        $this->sb_problems = $data;
+        $this->sb_problems = $problems;
         $this->flag_modify_problems = true;
         return true;
     }
@@ -381,7 +412,7 @@ TAG;
         }
     }
 
-    function getScoreBoard()
+    public function GetScoreBoard()
     {
         return $this->sb_sb;
     }

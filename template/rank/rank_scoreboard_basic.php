@@ -18,7 +18,7 @@ if (!defined('IN_TEMPLATE')) {
         </tr>
     </thead>
     <tbody sytle="white-space: nowrap;">
-        <?php foreach ($tmpl['sb']->GetUsers() as $uid): ?>
+        <?php foreach ($tmpl['sb']->GetSortedUsers() as $uid): ?>
         <tr>
             <td style="left:0px;position: absolute;">
                 <?php if (false): ?>

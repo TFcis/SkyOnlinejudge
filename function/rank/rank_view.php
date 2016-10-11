@@ -20,7 +20,7 @@ function viewHandle()
 
         $sb->make_inline();
         $_E['template']['sb'] = $sb;
-        $_E['template']['tsb'] = $sb->getScoreBoard();
+        $_E['template']['tsb'] = $sb->GetScoreBoard();
         \Render::render('rank_scoreboard', 'rank');
     }catch(\Exception $e)
     {
