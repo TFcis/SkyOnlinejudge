@@ -41,7 +41,7 @@ class PageList
 
     public function min(int $d):int
     {
-        return max(1, $d - self::PAGE_RANGE);
+        return max(1, min($this->all(),$d - self::PAGE_RANGE));
     }
 
     public function max(int $d):int
@@ -51,19 +51,20 @@ class PageList
 
     public function left(int $d)
     {
-        return max($d - 1, $this->min($d));
+        return max(min($d - 1,$this->all()), $this->min($d));
     }
 
     public function right(int $d)
     {
-        return min($d + 1, $this->max($d));
+        return min(min($d + 1,$this->all()), $this->max($d));
     }
-
 
     public function GetPageDataByPage(int $page,string $order,string $select = '*',$ASC = 'ASC')
     {
-        if( $page < 1 || $this->all() < $page ) {
+        if( $page < 1 ) {
             $page = 1;
+        } elseif( $this->all() < $page ) {
+            $page = $this->all();
         }
         if( $ASC !== 'ASC' )$ASC  = 'DESC' ;
         $pdo = \DB::prepare("SELECT {$select} FROM `{$this->table}` 
