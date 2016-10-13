@@ -439,7 +439,8 @@ function getresulttexthtml($resultid,bool $simple = false)
     if( $simple )
         return "<span class='{$mini}' data-res='{$mini}'>{$mini}</span>";
     else
-        return "<span class='{$mini}' data-res='{$mini}'>{$res}</span>";
+        return "<span class='hidden-xs hidden-sm {$mini}' data-res='{$mini}'>{$res}</span>".
+               "<span class='visible-xs-inline visible-sm-inline {$mini}' data-res='{$mini}'>{$mini}</span>";
 }
 
 function html(string $str):string
