@@ -19,4 +19,6 @@ Install
 3. Fill out your MySQL setting in config.php
 4. Set up your database using `install/FullSQLFormat.sql`.
 5. Copy `LocalSetting.example.php` to `LocalSetting.php` then set its starting directory at `$_E['SITEDIR']`
+7. Install [composer](https://getcomposer.org/) or put composer.phar to site root
+8. use `php composer.phar install` or `composer install` to install php library
 6. start your SKY Online Judge ~

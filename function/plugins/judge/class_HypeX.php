@@ -69,9 +69,6 @@ class class_HypeX extends Judge
                 new \SKYOJ\HTML_INPUT_TEXT(['name'=>'ssh_dir','value'=>self::getval('ssh_dir'),'option'=>['help_text'=>'放置資料夾']]),
                 new \SKYOJ\HTML_HR(),
                 new \SKYOJ\HTML_INPUT_TEXT(['name'=>'data_dir','value'=>self::getval('data_dir'),'required'=>'required','placeholder'=>'/home/user/uploads/ ; C:\\uploads\\','option'=>['help_text'=>'上傳資料夾完整位置']]),
-                new \SKYOJ\HTML_HR(),
-                new \SKYOJ\HTML_INPUT_DIV(['name'=>'','option'=>['html'=>"SSH 功能使用phpseclib 1，請指定該該函數庫位置"]]),
-                new \SKYOJ\HTML_INPUT_TEXT(['name'=>'phpseclib_dir','value'=>self::getval('phpseclib_dir'),'option'=>['help_text'=>'phpseclib 位置']]),
             ]
         ];
     }
@@ -95,21 +92,15 @@ class class_HypeX extends Judge
                 case HypeX_FileMethodEnum::SFTP:
                     if( !isset($ssh_acct,$ssh_host,$ssh_port) )
                         throw new \Exception('缺少SSH連線資訊');
-                    
-                    #Try to load phpseclib
-                    set_include_path(get_include_path().PATH_SEPARATOR.$phpseclib_dir);
-                    //if( !file_exists('phpseclib/Net/SSH2.php') )
-                    //    throw new \Exception('請確認phpseclib安裝位置');
-                    require_once 'Net/SFTP.php';
 
-                    if( !class_exists('\\Net_SFTP') )
-                        throw new \Exception('請確認phpseclib安裝錯誤  無法載入\\Net_SFTP');
+                    if( !class_exists('phpseclib\\Net\\SFTP') ){
+                        throw new \Exception('請確認phpseclib安裝(composer install)，無法載入phpseclib\\Net\\SFTP');
+                    }
 
-                    $sftp = new \Net_SFTP($ssh_host,$ssh_port);
+                    $sftp = new \phpseclib\Net\SFTP($ssh_host,$ssh_port);
                     if( !$sftp->login($ssh_acct,$ssh_pass) ) throw new \Exception('SFTP 無法登入');
                     if( !$sftp->put($ssh_dir.'/HypeX'," ") ) throw new \Exception('SFTP 權限不足(put)');
                     $sftp->mkdir($ssh_dir.'/'."problem");
-                    //if( !$sftp->mkdir($ssh_dir.'/'."problem") ) throw new \Exception('SFTP 權限不足(mkdir)');
                     if( !$sftp->put($ssh_dir.'/problem/HypeX'," ") ) throw new \Exception('SFTP 權限不足(put)');
                     break;
                 default: throw new \Exception('file_method error');
@@ -134,20 +125,13 @@ class class_HypeX extends Judge
     {
         if( empty($data) )$data = ' ';//Hack
 
-        static $preload_class = false;
-        if( !$preload_class )
-        {
-            $phpseclib_path = self::getval('phpseclib_dir');
-            set_include_path(get_include_path().PATH_SEPARATOR.$phpseclib_path);
-            require_once 'Net/SFTP.php';
-        }
         $host = self::getval('ssh_host');
         $port = self::getval('ssh_port');
         $acct = self::getval('ssh_acct');
         $pass = self::getval('ssh_pass');
         $dir  = self::getval('ssh_dir');
 
-        $sftp = new \Net_SFTP($host,$port);
+        $sftp = new \phpseclib\Net\SFTP($host,$port);
         if(!$sftp->login($acct,$pass))
         {
             return false;
@@ -199,7 +183,7 @@ class class_HypeX extends Judge
     public function get_compiler()
     {
         return [
-            'cpp11' => 'c++14/gnu c++ compiler 5.4.0 | options: -O2 -std=c++11',
+            'cpp14' => 'c++14/gnu c++ compiler 5.4.0 | options: -O2 -std=c++14',
         ];
     }
 
