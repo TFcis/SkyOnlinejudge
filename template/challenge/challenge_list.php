@@ -12,7 +12,7 @@ $cl_prob = $tmpl['challenge_prob'];
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <form class="form-inline">
+            <form class="form-inline" action="<?=$SkyOJ->uri('chal','list')?>">
                 <div class="form-group">
                     <label for="user">Uid</label>
                     <input type="text" class="form-control" pattern="[0-9]\d*" name="uid" placeholder="uid">
