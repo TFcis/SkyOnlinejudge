@@ -5,6 +5,7 @@ require_once 'function/SkyOJ.php';
 
 $SkyOJ->RegisterHandle('index','\\SKYOJ\\Index',null,true);
 $SkyOJ->RegisterHandle('code' ,'\\SKYOJ\\Code\\CodeHandle',$_E['ROOT'].'/code.php');
+$SkyOJ->RegisterHandle('rank' ,'\\SKYOJ\\Rank\\RankHandle',$_E['ROOT'].'/function/rank/rank.php');
 $SkyOJ->RegisterHandle('admin','\\SKYOJ\\Admin\\AdminHandle',$_E['ROOT'].'/admin.php');
 $SkyOJ->RegisterHandle('user','\\SKYOJ\\User\\UserHandle',$_E['ROOT'].'/user.php');
 $SkyOJ->RegisterHandle('problem','\\SKYOJ\\Problem\\ProblemHandle',$_E['ROOT'].'/problem.php');

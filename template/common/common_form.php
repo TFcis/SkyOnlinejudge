@@ -60,7 +60,10 @@ TAG;
                 }
                 $rev.="</select>";
             }else if( $info['this'] instanceof \SKYOJ\HTML_INPUT_DIV ){
-                $rev.= htmlentities($setting['option']['html'])??'';
+                if( $setting['option']['row']??false )
+                     $rev.= $setting['option']['html']??'';
+                else
+                    $rev.= htmlentities($setting['option']['html'])??'';
                 $rev.="</div>";
             }
             

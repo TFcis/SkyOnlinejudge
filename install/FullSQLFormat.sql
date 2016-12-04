@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機: localhost
--- 產生時間： 2016-09-21 20:28:32
+-- 產生時間： 2016-12-04 16:21:54
 -- 伺服器版本: 10.1.10-MariaDB
 -- PHP 版本： 7.0.4
 
@@ -58,6 +58,7 @@ CREATE TABLE `tojtest_challenge` (
   `pid` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
   `code` text COLLATE utf8_bin NOT NULL,
+  `comment` text COLLATE utf8_bin,
   `compiler` char(60) COLLATE utf8_bin NOT NULL DEFAULT '',
   `result` int(11) NOT NULL,
   `runtime` int(11) NOT NULL,
@@ -144,18 +145,60 @@ CREATE TABLE `tojtest_profile` (
 -- --------------------------------------------------------
 
 --
--- 資料表結構 `tojtest_statsboard`
+-- 資料表結構 `tojtest_scoreboard`
 --
 
-CREATE TABLE `tojtest_statsboard` (
-  `id` int(11) NOT NULL,
-  `name` text COLLATE utf8_bin NOT NULL,
+CREATE TABLE `tojtest_scoreboard` (
+  `sb_id` int(11) NOT NULL,
+  `title` text COLLATE utf8_bin NOT NULL,
   `owner` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `type_note` text COLLATE utf8_bin,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `end` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `userlist` text COLLATE utf8_bin NOT NULL,
   `problems` text COLLATE utf8_bin NOT NULL,
   `announce` text COLLATE utf8_bin,
   `state` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `tojtest_scoreboard_data_example`
+--
+
+CREATE TABLE `tojtest_scoreboard_data_example` (
+  `sb_id` int(11) NOT NULL,
+  `uid` int(11) NOT NULL,
+  `pid` int(11) NOT NULL,
+  `result` int(11) NOT NULL,
+  `score` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `tojtest_scoreboard_problems`
+--
+
+CREATE TABLE `tojtest_scoreboard_problems` (
+  `sb_id` int(11) NOT NULL,
+  `ord` int(11) NOT NULL,
+  `problem` text COLLATE utf8_bin NOT NULL,
+  `note` text COLLATE utf8_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `tojtest_scoreboard_users`
+--
+
+CREATE TABLE `tojtest_scoreboard_users` (
+  `sb_id` int(11) NOT NULL,
+  `uid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -238,7 +281,8 @@ ALTER TABLE `tojtest_challenge`
   ADD PRIMARY KEY (`cid`),
   ADD KEY `uid` (`uid`),
   ADD KEY `pid` (`pid`),
-  ADD KEY `cid` (`cid`);
+  ADD KEY `cid` (`cid`),
+  ADD KEY `result` (`result`);
 
 --
 -- 資料表索引 `tojtest_codepad`
@@ -277,11 +321,31 @@ ALTER TABLE `tojtest_profile`
   ADD PRIMARY KEY (`uid`);
 
 --
--- 資料表索引 `tojtest_statsboard`
+-- 資料表索引 `tojtest_scoreboard`
 --
-ALTER TABLE `tojtest_statsboard`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
+ALTER TABLE `tojtest_scoreboard`
+  ADD PRIMARY KEY (`sb_id`),
+  ADD UNIQUE KEY `id` (`sb_id`);
+
+--
+-- 資料表索引 `tojtest_scoreboard_data_example`
+--
+ALTER TABLE `tojtest_scoreboard_data_example`
+  ADD KEY `sb_id` (`sb_id`);
+
+--
+-- 資料表索引 `tojtest_scoreboard_problems`
+--
+ALTER TABLE `tojtest_scoreboard_problems`
+  ADD UNIQUE KEY `sb_id` (`sb_id`,`ord`),
+  ADD KEY `sb_id_2` (`sb_id`);
+
+--
+-- 資料表索引 `tojtest_scoreboard_users`
+--
+ALTER TABLE `tojtest_scoreboard_users`
+  ADD UNIQUE KEY `sb_id` (`sb_id`,`uid`),
+  ADD KEY `sb_id_2` (`sb_id`);
 
 --
 -- 資料表索引 `tojtest_syslog`
@@ -337,10 +401,10 @@ ALTER TABLE `tojtest_plugin`
 ALTER TABLE `tojtest_problem`
   MODIFY `pid` int(11) NOT NULL AUTO_INCREMENT;
 --
--- 使用資料表 AUTO_INCREMENT `tojtest_statsboard`
+-- 使用資料表 AUTO_INCREMENT `tojtest_scoreboard`
 --
-ALTER TABLE `tojtest_statsboard`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tojtest_scoreboard`
+  MODIFY `sb_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- 使用資料表 AUTO_INCREMENT `tojtest_syslog`
 --

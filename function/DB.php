@@ -10,6 +10,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 class DB
 {
     public static $pdo = null;
+    public static $last_exception = null;
 
     public static function getpdo()
     {
@@ -58,6 +59,7 @@ class DB
         try {
             $res = self::$pdo->prepare($string);
         } catch (PDOException $e) {
+            self::$last_exception = $e;
             echo 'Error!: '.$e->getMessage()."<br/> $string <br/>";
             die();
         }
@@ -70,13 +72,13 @@ class DB
         try {
             if (!$object->execute($array)) {
                 $data = $object->errorInfo();
+                self::$last_exception = new \Exception($data[2]);
                 self::log($data[2].",\nDB execute String : ".$object->queryString);
-
                 return false;
             }
         } catch (PDOException $e) {
+            self::$last_exception = $e;
             self::log('DB Exception :'.$e->getMessage().",\nString :".$object->queryString);
-
             return false;
         }
 

@@ -41,6 +41,70 @@ function safe_post($key, $usearray = false)
     return null;
 }
 
+/**
+ * check if $val can be turn to c int format
+ * string :
+ *   0236  :false
+ *   123   :true
+ *   1321654165161651 : false( if php int cannot support it )
+ * int :
+ *   why check this?
+ * others :
+ *   false
+ */
+function check_tocint($val):bool
+{
+    if( is_int($val) )
+    {
+        return true;
+    }
+    if( is_string($val) )
+    {
+        if( ctype_digit($val) && ($val==='0'||$val[0]!=='0') )
+            return true;
+    }
+    return false;
+}
+
+function check_totimestamp($val,&$conv = null):bool
+{
+    static $days = [0,31,29,31,30,31,30,31,31,30,31,30,31];
+    if( !is_string($val) )
+    {
+        return false;
+    }
+    $d = sscanf($val,"%d-%d-%d %d:%d:%d");
+    if( !is_array($d) || count($d) != 6 )
+    {
+        return false;
+    }
+    
+    if( $d[0]<2000 )return false; //year
+    if( $d[1]<1 || 12<$d[1] )return false; //month
+    if( $d[2]<1 || $days[$d[1]]<$d[2] )return false; //day
+
+    if( $d[3]<0 || 24<$d[3] )return false; //hour
+    if( $d[4]<0 || 60<$d[4] )return false; //minute
+    if( $d[5]<0 || 60<$d[5] )return false; //second
+    $conv = vsprintf("%04d-%02d-%02d %02d:%02d:%02d",$d);
+    return true;
+        
+}
+function safe_post_int(string $key)
+{
+    $data = safe_post($key);
+    if( !isset($data) || empty($data) )
+    {
+        return null;
+    }
+    if( !check_tocint($data) )
+    {
+        throw new \Exception('safe_post_int for ['.$key.'] failed!');
+        return null;
+    }
+    return (int)$data;
+}
+
 function CreateFolder(string $path,bool $rewrite = false,bool $recursive = false):bool
 {
     if( !$rewrite && file_exists($path) )
@@ -375,7 +439,8 @@ function getresulttexthtml($resultid,bool $simple = false)
     if( $simple )
         return "<span class='{$mini}' data-res='{$mini}'>{$mini}</span>";
     else
-        return "<span class='{$mini}' data-res='{$mini}'>{$res}</span>";
+        return "<span class='hidden-xs hidden-sm {$mini}' data-res='{$mini}'>{$res}</span>".
+               "<span class='visible-xs-inline visible-sm-inline {$mini}' data-res='{$mini}'>{$mini}</span>";
 }
 
 function html(string $str):string

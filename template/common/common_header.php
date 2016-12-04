@@ -34,6 +34,7 @@
     <script src="<?=$_E['SITEROOT']?>js/third/jquery.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>css/third/bootstrap/js/bootstrap.min.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/common.js"></script>
+    <script src="<?=$_E['SITEROOT']?>js/timer.js"></script>
     <script src="<?=$_E['SITEROOT']?>js/ace/ace.js"></script>
     <?php if (userControl::isAdmin($_G['uid'])):?>
     <script src="<?=$_E['SITEROOT']?>js/admin_check.js"></script>

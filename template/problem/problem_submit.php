@@ -54,7 +54,7 @@ $(document).ready(function()
 
     <div class="row">
         <div class="col-sm-12">
-        <?php Render::renderCode('','c_cpp','editor'); ?>
+        <?php Render::renderCode('','c_cpp','editor',['minLines'=>20,'maxLines'=>20]); ?>
         </div>
     </div>
 

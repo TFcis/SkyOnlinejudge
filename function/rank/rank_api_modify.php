@@ -1,8 +1,57 @@
-<?php
-
+<?php namespace SKYOJ\Rank;
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
+
+function rank_api_modifyHandle()
+{
+    global $SkyOJ,$_E,$_G;
+
+    try{
+        $sb_id = $SkyOJ->UriParam(3);
+
+        $title = \SKYOJ\safe_post('title');
+        $start = \SKYOJ\safe_post('start');
+        $end   = \SKYOJ\safe_post('end');
+        $users = \SKYOJ\safe_post('users');
+        $problems = \SKYOJ\safe_post('problems');
+        
+        $announce = \SKYOJ\safe_post('announce');
+
+        if( !\SKYOJ\check_tocint($sb_id) )
+            throw new \Exception('ID Error');
+
+        $sb = new \SKYOJ\ScoreBoard($sb_id);
+        $sb_id = $sb->sb_id();
+
+        if( $sb->sb_id()===null || !\userControl::isAdmin($_G['uid']) )
+            throw new \Exception('Access denied');
+
+        if( !$sb->SetTitle($title) )
+            throw new \Exception('modify title error');
+        if( !$sb->SetStart($start) )
+            throw new \Exception('modify start error');
+        if( !$sb->SetEnd($end) )
+            throw new \Exception('modify end error:');
+        if( !$sb->SetUsers($users) )
+            throw new \Exception('modify users error');
+        if( !$sb->SetProblems($problems) )
+            throw new \Exception('modify problems error');
+        if( strtotime($start) > strtotime($end) )
+            throw new \Exception('time range error');
+        if( !$sb->SetAnnounce($announce) )
+            throw new \Exception('modify announce error');
+
+        if( !$sb->UpdateSQL() )
+            throw new \Exception('SQL Error!');
+        \SKYOJ\throwjson('SUCC','yee');
+    }catch(\Exception $e){
+        \SKYOJ\throwjson('error',$e->getMessage());
+    }
+    
+}
+
+/*
 //API CALL FUNCTION!
 // mode = cbedit
 // page : ARGS
@@ -128,3 +177,4 @@ switch ($editpage) {
 }
 
 throwjson('error', 'error');
+*/

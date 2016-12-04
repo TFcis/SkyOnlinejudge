@@ -203,7 +203,7 @@ th {
     font-size:14px !important;
 }
 body .ace_scrollbar-v {
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
 body .ace_scrollbar-h {
