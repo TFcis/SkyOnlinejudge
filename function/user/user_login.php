@@ -26,7 +26,7 @@ function loginHandle()
         $key = md5($exkey->decode($GB));
         $iv = $_SESSION['iv'];
 
-        $decode = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, base64_decode($AESenpass), MCRYPT_MODE_CBC, $iv);
+        $decode = openssl_decrypt($AESenpass,'aes-256-cbc',$key,OPENSSL_ZERO_PADDING,$iv);
         $password = rtrim($decode, "\0");
 
         $user = login($email, $password);

@@ -9,7 +9,6 @@ Required
    1. pdo
    2. pdo-mysql
    3. gmp
-   4. mcrypt
 2. MySQL or MariaDB
 
 Install
