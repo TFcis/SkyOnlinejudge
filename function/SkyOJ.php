@@ -17,6 +17,7 @@ require_once 'pluginsCore.php';
 require_once 'function/common/encrypt.php';
 require_once 'function/common/emnu.php';
 require_once 'function/common/forminfo.php';
+require_once 'function/common/common_object.php';
 require_once 'Skyoj.lib.php';
 
 final class _SkyOJ
