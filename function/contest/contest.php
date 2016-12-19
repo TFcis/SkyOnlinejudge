@@ -10,7 +10,6 @@ function ContestHandle()
     #require_once $_E['ROOT'].'/function/common/scoreboard.php';
     require_once $_E['ROOT'].'/function/common/contest.php';
     require_once $_E['ROOT'].'/function/common/problem.php';
-    #require_once 'rank.lib.php';
 
     $param = $SkyOJ->UriParam(1)??'list';
     switch( $param )

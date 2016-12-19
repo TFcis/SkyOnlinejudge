@@ -21,15 +21,16 @@ class ContestUserRegisterStateEnum extends BasicEnum
 
 class ContestTeamStateEnum extends BasicEnum
 {
-    const Pending    = 0; //< Wait for admin permit
-    const Accept     = 1; //< Normal Team
-    const Hidden     = 2; //< Unlist Hidden Team for test contest
-    const Reject     = 3; //< Reject
-    const Unofficial = 4; //< list but not get award on scoreboard
+    const NoRegister = 0; //< For programming, mean not register
+    const Pending    = 1; //< Wait for admin permit
+    const Accept     = 2; //< Normal Team
+    const Hidden     = 3; //< Unlist Hidden Team for test contest
+    const Reject     = 4; //< Reject
+    const Unofficial = 5; //< list but not get award on scoreboard
     const Virtual    = 10;//< Join via virtual contest system
     const Dropped    = 99;//< may be some guy use hack!?
 
-    function allow(int $Case):bool
+    static function allow(int $Case):bool
     {
         switch($Case)
         {
@@ -41,5 +42,49 @@ class ContestTeamStateEnum extends BasicEnum
             default:
                 return false;
         }
+    }
+}
+
+class Contest extends CommonObject
+{
+    private $cont_id;
+    protected function getTableName():string
+    {
+        static $t;
+        if( isset($t) )return $t;
+        return $t = \DB::tname('contest');
+    }
+
+    protected function getIDName():string
+    {
+        return 'cont_id';
+    }
+
+    function __construct(int $cont_id)
+    {
+        $data = \DB::fetchEx("SELECT * FROM {$this->getTableName()} WHERE `{$this->getIDName()}`=?",$cont_id);
+        if( $data === false )
+        {
+            $this->cont_id = -1;
+            $this->sqldata = [];
+        }
+        else
+        {
+            $this->cont_id = $data[$this->getIDName()];
+            $this->sqldata = $data;
+        }
+    }
+    
+    function cont_id():int
+    {
+        return $this->cont_id;
+    }
+
+    //User check
+    function user_regstate(int $uid):int
+    {
+        $table = \DB::tname("contest_user");
+        $res = \DB::fetchEx("SELECT `state` FROM `{$table}` WHERE `cont_id`=? AND `uid`=?",$this->cont_id(),$uid);
+        return $res['state']??ContestTeamStateEnum::NoRegister;
     }
 }

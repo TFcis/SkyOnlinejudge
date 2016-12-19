@@ -16,13 +16,6 @@ function GetPasswordHash(string $password)
     return $re;
 }
 
-function getTimestamp()
-{
-    \LOG::msg(\Level::Notice, 'getTimestamp() is Old Function!');
-
-    return date('Y-m-d G:i:s');
-}
-
 define('NOE_FAIL', 0);
 define('NOE_IS_NICKNAMEL', 1);
 define('NOE_IS_EMAI', 2);

@@ -18,6 +18,12 @@ abstract class CommonObject{
         return $this->sqldata[$name]??null;
     }
 
+    public function isIdfail()
+    {
+        $name = $this->getIDName();
+        return $this->$name <= 0;
+    }
+
     protected function UpdateSQLLazy(string $col = null,$val = null)
     {
         static $host = [];
