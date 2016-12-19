@@ -15,6 +15,7 @@ function viewHandle()
         $contest = new \SKYOJ\Contest($cont_id);
         if( $contest->isIdfail() )
             throw new \Exception('CONT_ID Error');
+        $_E['template']['contest'] = $contest;
 
         $reg_state = $contest->user_regstate($_G['uid']);
         if( $reg_state === \SKYOJ\ContestTeamStateEnum::NoRegister )
@@ -36,9 +37,14 @@ function viewHandle()
                 default:
                     throw new \Exception('Unknown Team State Code : '.$reg_state);
             }
-            \SKYOJ\NeverReach();
+            exit(0);
         }
 
+        if( $contest->ispreparing() )
+        {
+            \Render::render('contest_preparing', 'contest');
+            exit(0);
+        }
 
         //$sb->make_inline();
         //$_E['template']['sb'] = $sb;

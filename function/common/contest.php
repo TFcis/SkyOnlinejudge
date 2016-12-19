@@ -87,4 +87,24 @@ class Contest extends CommonObject
         $res = \DB::fetchEx("SELECT `state` FROM `{$table}` WHERE `cont_id`=? AND `uid`=?",$this->cont_id(),$uid);
         return $res['state']??ContestTeamStateEnum::NoRegister;
     }
+
+    // preparing - (st) - play - (ed) ended
+    function isended():bool
+    {
+        $now = \SKYOJ\get_timestamp(time());
+        return strtotime($this->endtime) < strtotime($now);
+    }
+
+    function ispreparing():bool
+    {
+        $now = \SKYOJ\get_timestamp(time());
+        return strtotime($now) < strtotime($this->starttime);
+    }
+
+    function isplaying():bool
+    {
+        return !$this->isended()&&!$this->ispreparing();
+    }
+
+    
 }
