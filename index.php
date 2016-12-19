@@ -10,6 +10,7 @@ $SkyOJ->RegisterHandle('admin','\\SKYOJ\\Admin\\AdminHandle',$_E['ROOT'].'/admin
 $SkyOJ->RegisterHandle('user','\\SKYOJ\\User\\UserHandle',$_E['ROOT'].'/user.php');
 $SkyOJ->RegisterHandle('problem','\\SKYOJ\\Problem\\ProblemHandle',$_E['ROOT'].'/problem.php');
 $SkyOJ->RegisterHandle('chal','\\SKYOJ\\Challenge\\ChallengeHandle',$_E['ROOT'].'/challenge.php');
+$SkyOJ->RegisterHandle('contest','\\SKYOJ\\Contest\\ContestHandle',$_E['ROOT'].'/function/contest/contest.php');
 $SkyOJ->run();
 function Index(){
     global $SkyOJ;
