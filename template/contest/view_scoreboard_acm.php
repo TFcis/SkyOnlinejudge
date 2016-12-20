@@ -51,8 +51,8 @@ if (!defined('IN_TEMPLATE')) {
                             <td class="<?=$cls?>">
                                 <?=$sb->try_times?>/<?=$sb->is_ac?$sb->ac_time:"--"?>
                             </td>
-                        <td><?=$row->total_submit?>/<?=$row->ac?></td>
                         <?php endforeach;?>
+                        <td><?=$row->total_submit?>/<?=$row->ac?></td>
                     </tr>
                 <?php endforeach;?>
             </tbody>
