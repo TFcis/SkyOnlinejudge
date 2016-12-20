@@ -30,10 +30,13 @@ function viewHandle()
             {
                 case \SKYOJ\ContestTeamStateEnum::Pending:
                     \Render::render('contest_reg_pending', 'contest');
+                    break;
                 case \SKYOJ\ContestTeamStateEnum::Reject:
                     \Render::render('contest_reg_reject', 'contest');
+                    break;
                 case \SKYOJ\ContestTeamStateEnum::Dropped:
                     \Render::render('contest_reg_dropped', 'contest');
+                    break;
                 default:
                     throw new \Exception('Unknown Team State Code : '.$reg_state);
             }
