@@ -18,8 +18,8 @@ class UserBlock
     public $ac_time;
     static function acm_cmp($a,$b){
         if( $a->ac!=$b->ac ) return $b->ac<=>$a->ac;
-        if( $a->ac_time!=$b->ac_time ) return $b->ac_time<=>$a->ac_time;
-        return $b->total_submit<=>$a->total_submit;
+        if( $a->ac_time!=$b->ac_time ) return $a->ac_time<=>$b->ac_time;
+        return $a->total_submit<=>$b->total_submit;
     }
     
 }
