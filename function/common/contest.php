@@ -45,9 +45,38 @@ class ContestTeamStateEnum extends BasicEnum
     }
 }
 
+class ContestProblemStateEnum extends BasicEnum
+{
+    const Hidden  = 0;
+    const Normal  = 1;
+    const Readonly= 2;
+    static function allow(int $Case):bool
+    {
+        switch($Case)
+        {
+            case self::Normal:
+            case self::Readonly:
+                return true;
+            default:
+                return false;
+        }
+    }
+}
+
+class ContestProblemInfo
+{
+    static $column=['cont_id','pid','ptag','state','priority'];
+    public $cont_id;
+    public $pid;
+    public $ptag;
+    public $state;
+    public $priority;
+}
+
 class Contest extends CommonObject
 {
     private $cont_id;
+    private $now_time;
     protected function getTableName():string
     {
         static $t;
@@ -63,6 +92,7 @@ class Contest extends CommonObject
     function __construct(int $cont_id)
     {
         $data = \DB::fetchEx("SELECT * FROM {$this->getTableName()} WHERE `{$this->getIDName()}`=?",$cont_id);
+        $this->now_time = \SKYOJ\get_timestamp(time());
         if( $data === false )
         {
             $this->cont_id = -1;
@@ -91,14 +121,12 @@ class Contest extends CommonObject
     // preparing - (st) - play - (ed) ended
     function isended():bool
     {
-        $now = \SKYOJ\get_timestamp(time());
-        return strtotime($this->endtime) < strtotime($now);
+        return strtotime($this->endtime) < strtotime($this->now_time);
     }
 
     function ispreparing():bool
     {
-        $now = \SKYOJ\get_timestamp(time());
-        return strtotime($now) < strtotime($this->starttime);
+        return strtotime($this->now_time) < strtotime($this->starttime);
     }
 
     function isplaying():bool
@@ -106,5 +134,30 @@ class Contest extends CommonObject
         return !$this->isended()&&!$this->ispreparing();
     }
 
-    
+    //problem function
+    function get_all_problems_info():array
+    {
+        static $cache;
+        if( isset($cache) )
+        {
+            return $cache;
+        }
+        $table = \DB::tname('contest_problem');
+        $probs = \DB::fetchAllEx("SELECT * FROM {$table} WHERE `cont_id`=? ORDER BY `priority` ASC",$this->cont_id());
+        if( $probs===false )
+        {
+            throw new \Exception('contest get_all_problems_info() fail!');
+        }
+        $data = [];
+        foreach( $probs as $row )
+        {
+            $tmp = new ContestProblemInfo();
+            foreach( ContestProblemInfo::$column as $c )
+            {
+                $tmp->$c = $row[$c];
+            }
+            $data[]=$tmp;
+        }
+        return $cache = $data;
+    }
 }

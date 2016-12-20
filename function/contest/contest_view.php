@@ -49,6 +49,12 @@ function viewHandle()
             exit(0);
         }
 
+        if( $contest->isplaying() )
+        {
+            viewPlayingHandle($contest);
+            exit(0);
+        }
+
         //$sb->make_inline();
         //$_E['template']['sb'] = $sb;
         //$_E['template']['tsb'] = $sb->GetScoreBoard();
@@ -57,4 +63,22 @@ function viewHandle()
         \Render::errormessage('Oops! '.$e->getMessage(),'Contest');
         \Render::render('nonedefine');
     }
+}
+
+function viewPlayingHandle(\SKYOJ\Contest $contest)
+{
+    global $SkyOJ,$_E,$_G;
+    if( !$contest->isplaying() )
+    {
+        throw new \Exception('viewPlayingHandle() called but not accetp playing contest!');
+    }
+    if( $SkyOJ->UriParam(3)==='subpage' )
+    {
+        require_once('contest_view_sub.php');
+        viewPlayingSubpageHandle($contest);
+    }
+    #Get Common info
+    $prob_info = $contest->get_all_problems_info();
+
+    \Render::render('contest_playing_main', 'contest');
 }
