@@ -56,7 +56,7 @@ function problem_api_submitHandle()
 
         $SkyOJ->throwjson_keep('SUCC',$cid);
     }catch(\Exception $e){
-        $throwjson('error',$e->getMessage());
+        \SKYOJ\throwjson('error',$e->getMessage());
     }
 
     //Flushed! run on back round

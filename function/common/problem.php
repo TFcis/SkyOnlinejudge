@@ -30,6 +30,7 @@ class ProblemContentAccessEnum extends BasicEnum
 {
     const Hidden    = 0; //< Only Access >= can see problem
     const Open      = 1; //< All users
+    const Contest   = 2; //< Only user in contest or admin access
 }
 
 class ProblemSubmitAccessEnum extends BasicEnum
@@ -37,6 +38,7 @@ class ProblemSubmitAccessEnum extends BasicEnum
     const Closed    = 0; //< All users cannot submit (it will not effct submited challenge)
     const Test      = 1; //< Only Access >= can submit problem
     const Open      = 2; //< All users can submit it
+    const Contest   = 3; //< Only user in contest or admin access
 }
 
 class Problem
@@ -204,19 +206,49 @@ class Problem
         return true;
     }
 
-    public static function hasContentAccess_s(int $uid,int $owner,int $acccode):bool
+    public static function uid_contest_playing_problem_set(int $uid)
+    {
+        static $cache = [];
+        if( isset($cache[$uid]) )return $cache[$uid];
+        $tc  = \DB::tname("contest");
+        $tcp = \DB::tname("contest_problem");
+        $tcu = \DB::tname("contest_user");
+        $now = \SKYOJ\get_timestamp(time());
+        $res = \DB::fetchAllEx("
+SELECT DISTINCT `pid` FROM `{$tcp}`
+	INNER JOIN `tojtest_contest`
+    	ON `{$tcp}`.`cont_id`=`{$tc}`.`cont_id`
+    WHERE `{$tcp}`.`cont_id` 
+    	IN (SELECT `cont_id` FROM `{$tcu}` WHERE `uid` = ?)
+    AND `starttime`<= ? 
+    AND ? <= `endtime`
+        ",$uid,$now,$now);
+
+        \log::msg(\Level::Debug,'',$res);
+        if( $res === false )
+            return [];
+        $cache[$uid]=[];
+        foreach($res as $row)
+            $cache[$uid][] = (int)$row['pid'];
+        return $cache[$uid];
+    }
+
+    public static function hasContentAccess_s(int $uid,int $owner,int $acccode,int $pid):bool
     {
         switch($acccode)
         {
             case ProblemContentAccessEnum::Hidden: return $owner===$uid || \userControl::isAdmin($uid);
             case ProblemContentAccessEnum::Open:   return true;
+            case ProblemContentAccessEnum::Contest:
+                if(  $owner===$uid || \userControl::isAdmin($uid) )return true;
+                return in_array($pid,self::uid_contest_playing_problem_set($uid));
             default: \SKYOJ\NeverReach();
         }
     }
 
     public function hasContentAccess(int $uid):bool
     {
-        return self::hasContentAccess_s($uid,$this->owner(),$this->GetContentAccess());
+        return self::hasContentAccess_s($uid,$this->owner(),$this->GetContentAccess(),$this->pid());
     }
 
     public function GetSubmitAccess():int
@@ -234,20 +266,23 @@ class Problem
         return true;
     }
 
-    public static function hasSubmitAccess_s(int $uid,int $owner,int $acccode):bool
+    public static function hasSubmitAccess_s(int $uid,int $owner,int $acccode,int $pid):bool
     {
         switch($acccode)
         {
             case ProblemSubmitAccessEnum::Closed: return false;
             case ProblemSubmitAccessEnum::Test:   return $owner===$uid || \userControl::isAdmin($uid);
             case ProblemSubmitAccessEnum::Open:   return $uid!=0;
+            case ProblemSubmitAccessEnum::Contest:
+                if( $owner===$uid || \userControl::isAdmin($uid) )return true;
+                return in_array($pid,self::uid_contest_playing_problem_set($uid));
             default: \SKYOJ\NeverReach();
         }
     }
 
     public function hasSubmitAccess(int $uid):bool
     {
-        return self::hasSubmitAccess_s($uid,$this->owner(),$this->GetSubmitAccess());
+        return self::hasSubmitAccess_s($uid,$this->owner(),$this->GetSubmitAccess(),$this->pid());
     }
 
     public function GetJudge():string
