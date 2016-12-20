@@ -7,21 +7,18 @@ if (!defined('IN_SKYOJSYSTEM')) {
 function ContestHandle()
 {
     global $SkyOJ,$_E;
-    #require_once $_E['ROOT'].'/function/common/scoreboard.php';
     require_once $_E['ROOT'].'/function/common/contest.php';
     require_once $_E['ROOT'].'/function/common/problem.php';
 
     $param = $SkyOJ->UriParam(1)??'list';
     switch( $param )
     {
-//        case 'list':
-//        case 'new':
-//        case 'modify':
         case 'view':
+        case 'register':
+        case 'scoreboard':
             break;
-
-            //api
-//        case 'api'://cbfetch
+        
+        case 'api'://cbfetch
             break;
         default:
             \Render::render('nonedefined');

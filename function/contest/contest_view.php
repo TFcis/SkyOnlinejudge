@@ -21,7 +21,12 @@ function viewHandle()
         if( $reg_state === \SKYOJ\ContestTeamStateEnum::NoRegister )
         {
             //TODO reheader to register page
-            throw new \Exception('Not register yet!');
+            if( \SKYOJ\ContestUserRegisterStateEnum::allow($contest->register_type) )
+            {
+                \Render::render('contest_reg', 'contest');
+                exit(0);
+            }
+            throw new \Exception('register not open!');
         }
 
         if( !\SKYOJ\ContestTeamStateEnum::allow($reg_state) )
@@ -55,9 +60,6 @@ function viewHandle()
             exit(0);
         }
 
-        //$sb->make_inline();
-        //$_E['template']['sb'] = $sb;
-        //$_E['template']['tsb'] = $sb->GetScoreBoard();
         \Render::render('contest_gg', 'contest');
     }catch(\Exception $e){
         \Render::errormessage('Oops! '.$e->getMessage(),'Contest');

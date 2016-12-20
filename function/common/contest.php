@@ -17,6 +17,18 @@ class ContestUserRegisterStateEnum extends BasicEnum
     const NotAllow  = 0; //< Only admin allow add user to contest
     const Open      = 1; //< All user without guest can join contest within time limit
     const PermitRequired = 2; //< require admin check
+
+    static function allow(int $Case):bool
+    {
+        switch($Case)
+        {
+            case self::Open:
+            case self::PermitRequired:
+                return true;
+            default:
+                return false;
+        }
+    }
 }
 
 class ContestTeamStateEnum extends BasicEnum
