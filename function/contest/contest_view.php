@@ -58,7 +58,7 @@ function viewHandle()
         //$sb->make_inline();
         //$_E['template']['sb'] = $sb;
         //$_E['template']['tsb'] = $sb->GetScoreBoard();
-        \Render::render('rank_scoreboard', 'rank');
+        \Render::render('contest_gg', 'contest');
     }catch(\Exception $e){
         \Render::errormessage('Oops! '.$e->getMessage(),'Contest');
         \Render::render('nonedefine');

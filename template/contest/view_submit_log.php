@@ -28,7 +28,8 @@ if (!defined('IN_TEMPLATE')) {
                         <th>結果</th>
                         <th class="hidden-xs">使用時間</th>
                         <th>分數</th>
-                        <th>上傳時間</th>
+                        <th>經過時間</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,7 +45,9 @@ if (!defined('IN_TEMPLATE')) {
                         <td><span id="cid-<?=$row['cid']?>"><?=\SKYOJ\getresulttexthtml($row['result'])?></span></td>
                         <td class="hidden-xs"><?=$row['runtime']?></td>
                         <td><?=$row['score']?></td>
-                        <td><?=$row['timestamp'];?></td>
+                        
+                        <td><?=(int)floor((strtotime($row['timestamp'])-strtotime($tmpl['contest']->starttime))/60)?></td>
+                        <td><?=$row['timestamp']?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>

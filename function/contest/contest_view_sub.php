@@ -23,6 +23,7 @@ function viewPlayingSubpageHandle(\SKYOJ\Contest $contest)
     {
         case 'log':
         case 'submit':
+        case 'scoreboard':
             break;
         default:
             \Render::renderSingleTemplate('nonedefined');
@@ -56,7 +57,6 @@ function viewPlayingProblem(\SKYOJ\Contest $contest,string $ptag):bool
 
     #TODO Use common object
     $prob_data = new \SKYOJ\Problem($prob->pid);
-    \log::msg(\Level::Debug,'',$prob_data);
     if( $prob_data->pid()===null )
     {
         return false;
