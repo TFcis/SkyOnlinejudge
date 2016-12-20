@@ -27,6 +27,7 @@ $(document).ready(function(){
             var client_time = getTimeNow(offset);
             var delta_sec = parseInt( (end_time - client_time - client.getTimezoneOffset()*60000 )/1000 );
             if( delta_sec < 0 ) delta_sec = 0;
+            var dsec = delta_sec;
             var html='';
             [[86400,'days '],[3600,':'],[60,':'],[0,'']].forEach(function(e){
                 var arg = delta_sec;
@@ -42,7 +43,7 @@ $(document).ready(function(){
                 }
             });
             $(this).html(html);
-            if( delta_sec!=0 ){
+            if( dsec!=0 ){
                 req_update = true;
             }else{
                 if( typeof $(this).attr('onclockdownzero') === 'string' ){
