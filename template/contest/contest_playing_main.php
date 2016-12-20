@@ -28,6 +28,7 @@ if (!defined('IN_TEMPLATE')) {
             adder = '&';
         }
 	    $(content).load("<?=$SkyOJ->uri('contest','view',$tmpl['contest']->cont_id(),'subpage')?>/"+template,function(){
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
             $(content).hide();
             $(content).fadeIn();
             $('#'+bid+' a[tmpl]').click(function(event){
