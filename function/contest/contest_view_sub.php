@@ -21,13 +21,15 @@ function viewPlayingSubpageHandle(\SKYOJ\Contest $contest)
     }
     switch( $param )
     {
+        case 'log':
+            break;
         default:
             \Render::renderSingleTemplate('nonedefined');
             exit(0);
     }
 
-    $funcpath = $_E['ROOT']."/function/contest/contest_sub_$param.php";
-    $func     = __NAMESPACE__ ."\\{$param}Handle";
+    $funcpath = $_E['ROOT']."/function/contest/contest_view_sub_$param.php";
+    $func     = __NAMESPACE__ ."\\sub_{$param}Handle";
 
     require_once($funcpath);
     $func($contest);

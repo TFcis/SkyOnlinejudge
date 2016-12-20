@@ -13,24 +13,9 @@ $(document).ready(function()
 	var sec = 1;
     editor.setReadOnly(true);
 	<?php if( $data['result'] < \SKYOJ\RESULTCODE::AC):?>
-	function waitjudge(){
-		$.get("<?=$SkyOJ->uri('chal','api','waitjudge')?>",{cid:<?=$data['cid']?>},function(res){
-			if( res.status == 'error' ){
-				console.log('server error retry in ' + sec +'sec');
-				setTimeout(function(){
-					sec*=2;
-					waitjudge();
-				},sec*1000);
-			}else{
-				if( res.data ) waitjudge();//wait
-				else location.reload();//OK
-			}
-		},"json").fail(function(e){
-			console.log(e);
-			console.log(e.responseText);
-		});
-	}
-	waitjudge();
+	updateJudgeVerdict("<?=$SkyOJ->uri('chal','api','waitjudge')?>",<?=$data['cid']?>,function(cid,res){
+		location.reload();
+	});
 	<?php endif ;?>
 })
 </script>

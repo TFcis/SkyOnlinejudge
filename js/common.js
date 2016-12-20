@@ -74,3 +74,23 @@ function updateQueryStringParameter(key, value) {
     }
     location.replace(url);
 }
+
+function updateJudgeVerdict(api,cid,callback){
+    $.get(api,{cid:cid},function(res){
+        if( res.status == 'error' ){
+				console.log('server error retry in ' + sec +'sec');
+				setTimeout(function(){
+					sec*=2;
+					updateJudgeVerdict(api,cid,callback);
+				},sec*1000);
+			}else{
+				if( res.data.wait ) updateJudgeVerdict(api,cid,callback);//wait
+				else if (typeof callback != 'undefined'){
+                    callback(cid,res);
+                }
+			}
+    },"json").fail(function(e){
+        console.log(e);
+        console.log(e.responseText);
+    });
+}
