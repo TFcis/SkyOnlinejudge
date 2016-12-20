@@ -22,6 +22,7 @@ function viewPlayingSubpageHandle(\SKYOJ\Contest $contest)
     switch( $param )
     {
         case 'log':
+        case 'submit':
             break;
         default:
             \Render::renderSingleTemplate('nonedefined');
