@@ -35,7 +35,7 @@ function sub_scoreboardHandle(\SKYOJ\Contest $contest)
     $all = \DB::fetchAllEx("SELECT `pid`,`uid`,`result`,`timestamp` FROM $tname 
         WHERE  `timestamp` BETWEEN ? AND ? 
             AND `uid` IN (SELECT `uid` FROM $tuid WHERE `cont_id`=?) 
-            AND `pid` IN (SELECT `uid` FROM $tuid WHERE `cont_id`=?) 
+            AND `pid` IN (SELECT `pid` FROM $tuid WHERE `cont_id`=?) 
         ORDER BY `cid` ASC",
         $contest->starttime,$fzend,$contest->cont_id(),$contest->cont_id()
     );
