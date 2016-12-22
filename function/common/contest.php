@@ -123,11 +123,16 @@ class Contest extends CommonObject
     }
 
     //User check
-    function user_regstate(int $uid):int
+    static function user_regstate_static(int $uid,int $cont_id):int
     {
         $table = \DB::tname("contest_user");
-        $res = \DB::fetchEx("SELECT `state` FROM `{$table}` WHERE `cont_id`=? AND `uid`=?",$this->cont_id(),$uid);
+        $res = \DB::fetchEx("SELECT `state` FROM `{$table}` WHERE `cont_id`=? AND `uid`=?",$cont_id,$uid);
         return $res['state']??ContestTeamStateEnum::NoRegister;
+    }
+
+    function user_regstate(int $uid):int
+    {
+        return self::user_regstate_static($uid,$this->cont_id());
     }
 
     // preparing - (st) - play - (ed) ended

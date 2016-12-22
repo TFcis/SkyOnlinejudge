@@ -71,7 +71,7 @@ $(document).ready(function()
                 <ul class="nav navbar-nav">
                     <li><a href="<?=$SkyOJ->uri('problem','list')?>">Problems</a></li>
                     <li><a href="<?=$SkyOJ->uri('chal')?>">Challenges</a></li>
-                    <li><a href="<?=$SkyOJ->uri('index','old')?>">Dev Message</a></li>
+                    <li><a href="<?=$SkyOJ->uri('contest','list')?>">Contest</a></li>
                     <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools<span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -79,6 +79,7 @@ $(document).ready(function()
                             <li><a href="<?=$SkyOJ->uri('rank','list')?>">Scoreboard</a></li>
                             <li><a href="<?=$SkyOJ->uri('code')?>">Code</a></li>
                             <li class="divider"></li>
+                            <li><a href="<?=$SkyOJ->uri('index','old')?>">Dev Message</a></li>
                             <li><a href="http://forum.tfcis.org/forum.php?mod=group&fid=107" target="_blank">Discuss</a></li>
                         </ul>
                     </li>
