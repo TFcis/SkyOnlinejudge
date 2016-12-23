@@ -8,10 +8,10 @@
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?=htmlentities($SkyOJ->GetTitle())?></title>
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,700,600' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans:300,400,700,600'  type='text/css'>
     <link rel="stylesheet" href="<?=$_E['SITEROOT']?>css/third/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/github-gist.min.css">
-    <link rel="stylesheet" type="text/css" href="<?=$_E['SITEROOT']?>css/index.css">
+    <link rel="stylesheet" href="<?=$_E['SITEROOT']?>css/index.css" type="text/css">
     <?php if ($_E['EnableMathJax']): ?>
       	<script type="text/x-mathjax-config">
       		MathJax.Hub.Config(

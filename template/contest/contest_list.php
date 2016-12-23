@@ -50,7 +50,7 @@ $(document).ready(function()
                         <!--<span class="icon-bttn glyphicon glyphicon-plus-sign" title="加入"></span>
                         <span class="icon-bttn glyphicon glyphicon-remove" title="離開"></span>-->
                         <?php if (userControl::getpermission($row['owner'])): ?>
-                            <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','award',$row['cont_id'])?>">
+                            <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','resolver',$row['cont_id'])?>">
                                 <span class="glyphicon glyphicon glyphicon glyphicon-flag" title="開獎機"></span>
                             </a>
                         <!--<span class = "icon-bttn">

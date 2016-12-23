@@ -18,6 +18,7 @@ function ContestHandle()
         case 'register':
         case 'scoreboard':
         case 'list':
+        case 'resolver':
             break;
         
         case 'api'://cbfetch

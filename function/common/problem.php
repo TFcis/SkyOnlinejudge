@@ -224,7 +224,6 @@ SELECT DISTINCT `pid` FROM `{$tcp}`
     AND ? <= `endtime`
         ",$uid,$now,$now);
 
-        \log::msg(\Level::Debug,'',$res);
         if( $res === false )
             return [];
         $cache[$uid]=[];
