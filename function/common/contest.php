@@ -209,6 +209,11 @@ class Contest extends CommonObject
         return !$this->isended()&&!$this->ispreparing();
     }
 
+    function isfreeze():bool
+    {
+        return strtotime($this->endtime)-$this->freeze_sec < strtotime($this->now_time);
+    }
+
     //problem function
     function get_all_problems_info():array
     {

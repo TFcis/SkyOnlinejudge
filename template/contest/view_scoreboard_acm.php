@@ -28,6 +28,9 @@ setTimeout(function(){
 </style>
 <div class="container">
     <div class="row">
+        <?php if($tmpl['contest']->isfreeze()):?>
+        <h4 style="color:red">FREEZE!</h4>
+        <?php endif;?>
         <table class="table">
             <thead>
                 <tr class="score_head">
