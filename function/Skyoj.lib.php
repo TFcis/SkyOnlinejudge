@@ -105,6 +105,21 @@ function safe_post_int(string $key)
     return (int)$data;
 }
 
+function safe_get_int(string $key)
+{
+    $data = safe_get($key);
+    if( !isset($data) || empty($data) )
+    {
+        return null;
+    }
+    if( !check_tocint($data) )
+    {
+        throw new \Exception('safe_get_int for ['.$key.'] failed!');
+        return null;
+    }
+    return (int)$data;
+}
+
 //TODO use ?int when upgrade to PHP7.1
 function get_timestamp(int $time):string
 {

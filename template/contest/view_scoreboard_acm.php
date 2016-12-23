@@ -44,7 +44,7 @@ setTimeout(function(){
             <tbody>
                 <?php $rank=1;$last=null; ?>
                 <?php foreach($tmpl['user'] as $row):?>
-                    <?php if( isset($last) && \SKYOJ\UserBlock::acm_cmp($last,$row)!=0){$rank++;} ?>
+                    <?php if( isset($last) && $tmpl['contest']->rank_cmp($last,$row)!=0){$rank++;} ?>
                     <?php $last=$row;$nickname=\SKYOJ\nickname($row->uid); ?>
                     <tr>
                         <td><?=$rank?></td>

@@ -117,6 +117,9 @@ class UserBlock
 class ProblemBlock
 {
     public $pid;
+    public $ptag;
+    public $try_times;
+    public $ac_times;
 }
 
 class Contest extends CommonObject
@@ -277,6 +280,9 @@ class Contest extends CommonObject
                 {
                     $probleminfo[$pid] = new ProblemBlock();
                     $probleminfo[$pid]->pid = $pid;
+                    $probleminfo[$pid]->ptag = $row->ptag;
+                    $probleminfo[$pid]->try_times = 0;
+                    $probleminfo[$pid]->ac_times  = 0;
                 }
             }
             $probleminfo_build = true;
@@ -292,6 +298,7 @@ class Contest extends CommonObject
             if( $scoreboard[$uid][$pid]->is_ac != 0 )continue;
 
             $scoreboard[$uid][$pid]->try_times++;
+            $probleminfo[$pid]->try_times++;
             if( $verdict == \SKYOJ\RESULTCODE::AC )
             {
                 $scoreboard[$uid][$pid]->is_ac = 1;
@@ -304,6 +311,7 @@ class Contest extends CommonObject
                 $userinfo[$uid]->total_submit+=$scoreboard[$uid][$pid]->try_times;
                 $userinfo[$uid]->ac_time+=$scoreboard[$uid][$pid]->ac_time;
                 $userinfo[$uid]->ac++;
+                $probleminfo[$pid]->ac_times++;
             }
         }
 
