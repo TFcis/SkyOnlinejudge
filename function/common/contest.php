@@ -85,6 +85,40 @@ class ContestProblemInfo
     public $priority;
 }
 
+class ContestUserInfo
+{
+    static $column=['cont_id','uid','team_id','state'];
+    public $cont_id;
+    public $uid;
+    public $team_id;
+    public $state;
+}
+
+class ScoreBlock
+{
+    public $try_times;
+    public $ac_time;
+    public $is_ac;
+    public $firstblood;
+}
+
+class UserBlock
+{
+    public $uid;
+    public $total_submit;
+    public $ac;
+    public $ac_time;
+    static function acm_cmp($a,$b){
+        if( $a->ac!=$b->ac ) return $b->ac<=>$a->ac;
+        if( $a->ac_time!=$b->ac_time ) return $a->ac_time<=>$b->ac_time;
+        return $a->total_submit<=>$b->total_submit;
+    }
+}
+class ProblemBlock
+{
+    public $pid;
+}
+
 class Contest extends CommonObject
 {
     private $cont_id;
@@ -135,6 +169,27 @@ class Contest extends CommonObject
         return self::user_regstate_static($uid,$this->cont_id());
     }
 
+    function get_all_users_info():array
+    {
+        $table = \DB::tname('contest_user');
+        $users = \DB::fetchAllEx("SELECT * FROM {$table} WHERE `cont_id`=?",$this->cont_id());
+        if( $users===false )
+        {
+            throw new \Exception('contest get_all_users_info() fail!');
+        }
+        $data = [];
+        foreach( $users as $row )
+        {
+            $tmp = new ContestUserInfo();
+            foreach( ContestUserInfo::$column as $c )
+            {
+                $tmp->$c = $row[$c];
+            }
+            $data[]=$tmp;
+        }
+        return $data;
+    }
+
     // preparing - (st) - play - (ed) ended
     function isended():bool
     {
@@ -154,11 +209,6 @@ class Contest extends CommonObject
     //problem function
     function get_all_problems_info():array
     {
-        static $cache;
-        if( isset($cache) )
-        {
-            return $cache;
-        }
         $table = \DB::tname('contest_problem');
         $probs = \DB::fetchAllEx("SELECT * FROM {$table} WHERE `cont_id`=? ORDER BY `priority` ASC",$this->cont_id());
         if( $probs===false )
@@ -175,6 +225,109 @@ class Contest extends CommonObject
             }
             $data[]=$tmp;
         }
-        return $cache = $data;
+        return $data;
+    }
+
+    //ScoreBoard
+    private function get_chal_data_by_timestamp($start,$end):array
+    {
+        $tname = \DB::tname('challenge');
+        $tuid  = \DB::tname('contest_user');
+        $tpid  = \DB::tname('contest_problem');
+        $all = \DB::fetchAllEx("SELECT `pid`,`uid`,`result`,`timestamp` FROM $tname 
+            WHERE  `timestamp` BETWEEN ? AND ? 
+                AND `uid` IN (SELECT `uid` FROM $tuid WHERE `cont_id`=?) 
+                AND `pid` IN (SELECT `pid` FROM $tpid WHERE `cont_id`=?) 
+            ORDER BY `cid` ASC",
+            $start,$end,$this->cont_id(),$this->cont_id()
+        );
+
+        return $all;
+    }
+
+    private function get_scoreboard_by_timestamp($start,$end)
+    {
+        $all  = $this->get_chal_data_by_timestamp($start,$end);
+        $uids = $this->get_all_users_info();
+        $pids = $this->get_all_problems_info();
+        $scoreboard =[];
+        $userinfo   =[];
+        $probleminfo=[];
+        $probleminfo_build = false;
+
+        foreach($uids as $user)
+        {
+            $uid=$user->uid;
+            $userinfo[$uid] = new UserBlock();
+            $userinfo[$uid]->uid=$uid;
+            $userinfo[$uid]->total_submit=0;
+            $userinfo[$uid]->ac=0;
+            $userinfo[$uid]->ac_time=0;
+
+            $scoreboard[$uid]=[];
+            foreach($pids as $row)
+            {
+                $pid=$row->pid;
+                $scoreboard[$uid][$pid]=new ScoreBlock();
+                $scoreboard[$uid][$pid]->try_times = 0;
+                $scoreboard[$uid][$pid]->is_ac     = 0;
+                $scoreboard[$uid][$pid]->ac_time   = 0;
+                $scoreboard[$uid][$pid]->firstblood= 0;
+                if( !$probleminfo_build )
+                {
+                    $probleminfo[$pid] = new ProblemBlock();
+                    $probleminfo[$pid]->pid = $pid;
+                }
+            }
+            $probleminfo_build = true;
+        }
+
+        $acset = [];
+        foreach( $all as $row )
+        {
+            $uid=$row['uid'];
+            $pid=$row['pid'];
+            $verdict=$row['result'];
+            $time=strtotime($row['timestamp'])-strtotime($this->starttime);
+            if( $scoreboard[$uid][$pid]->is_ac != 0 )continue;
+
+            $scoreboard[$uid][$pid]->try_times++;
+            if( $verdict == \SKYOJ\RESULTCODE::AC )
+            {
+                $scoreboard[$uid][$pid]->is_ac = 1;
+                $scoreboard[$uid][$pid]->ac_time = (int)floor(($time + ($scoreboard[$uid][$pid]->try_times-1)*$this->penalty)/60);
+                if( !isset($acset[$pid]) )
+                {
+                    $acset[$pid] = 1;
+                    $scoreboard[$uid][$pid]->firstblood = 1;
+                }
+                $userinfo[$uid]->total_submit+=$scoreboard[$uid][$pid]->try_times;
+                $userinfo[$uid]->ac_time+=$scoreboard[$uid][$pid]->ac_time;
+                $userinfo[$uid]->ac++;
+            }
+        }
+
+        usort($userinfo,[$this,'rank_cmp']);
+        return  ['scoreboard'=>$scoreboard,'userinfo'=>$userinfo,'probleminfo'=>$probleminfo];
+    }
+
+    public function rank_cmp($a,$b)
+    {
+        $cmp = __NAMESPACE__."\\UserBlock::acm_cmp";
+        return $cmp($a,$b);
+    }
+
+    public function get_scoreboard()
+    {
+        $start = $this->starttime;
+        $end   = \SKYOJ\get_timestamp( max([ strtotime($start) , strtotime($this->endtime)-$this->freeze_sec ]) );
+        return $this->get_scoreboard_by_timestamp($start,$end);
+    }
+
+    public function get_scoreboard_all()
+    {
+        $start = $this->starttime;
+        $end   = $this->endtime;
+        return $this->get_scoreboard_by_timestamp($start,$end);
     }
 }

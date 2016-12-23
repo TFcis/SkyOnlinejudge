@@ -9,12 +9,7 @@ function viewHandle()
     try{
         $cont_id = $SkyOJ->UriParam(2);
 
-        if( !\SKYOJ\check_tocint($cont_id) )
-            throw new \Exception('CONT_ID Error');
-
-        $contest = new \SKYOJ\Contest($cont_id);
-        if( $contest->isIdfail() )
-            throw new \Exception('CONT_ID Error');
+        $contest = GetContestByID($cont_id);
         $_E['template']['contest'] = $contest;
 
         $reg_state = $contest->user_regstate($_G['uid']);

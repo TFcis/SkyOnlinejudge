@@ -9,6 +9,7 @@ function ContestHandle()
     global $SkyOJ,$_E;
     require_once $_E['ROOT'].'/function/common/contest.php';
     require_once $_E['ROOT'].'/function/common/problem.php';
+    require_once $_E['ROOT'].'/function/contest/contest.lib.php';
 
     $param = $SkyOJ->UriParam(1)??'list';
     switch( $param )

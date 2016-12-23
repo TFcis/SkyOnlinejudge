@@ -3,6 +3,17 @@ if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
+
+<script>
+setTimeout(function(){
+    if( typeof loadTemplate === "function" ){
+        //Do nothing prevent bug
+    }else{
+        location.reload(true);//prevent cache
+    }
+},30000);
+</script>
+
 <style>
 .first_solved, .solvedFirst {
     background-color: #218540 !important;
@@ -33,7 +44,7 @@ if (!defined('IN_TEMPLATE')) {
             <tbody>
                 <?php $rank=1;$last=null; ?>
                 <?php foreach($tmpl['user'] as $row):?>
-                    <?php if( isset($last) && \SKYOJ\Contest\UserBlock::acm_cmp($last,$row)!=0){$rank++;} ?>
+                    <?php if( isset($last) && \SKYOJ\UserBlock::acm_cmp($last,$row)!=0){$rank++;} ?>
                     <?php $last=$row;$nickname=\SKYOJ\nickname($row->uid); ?>
                     <tr>
                         <td><?=$rank?></td>
