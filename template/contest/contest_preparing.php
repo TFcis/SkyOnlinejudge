@@ -5,7 +5,9 @@ if (!defined('IN_TEMPLATE')) {
 ?>
 <script>
 function lol(){
-    alert('lol');
+    if( confirm("Let's GO!") ){
+        location.reload(true);
+    }
 }
 </script>
 <div class = "container">
