@@ -47,7 +47,7 @@ if (!defined('IN_TEMPLATE')) {
         <div class="col-sm-2 col-md-2" style="min-height:500px">
             <div>
                 <h3><?=\SKYOJ\html($tmpl['contest']->title)?></h3>
-                <p>剩餘時間 : <span data-toggle="sky-countdown" data-value="<?=$tmpl['contest']->endtime?>" onclockdownzero=""></span></p>
+                <p>剩餘時間 : <span data-toggle="sky-countdown" data-value="<?=$tmpl['contest']->endtime?>" onclockdownzero="location.reload()"></span></p>
             </div>
             <hr>
             <ul class="nav nav-pills nav-stacked">
