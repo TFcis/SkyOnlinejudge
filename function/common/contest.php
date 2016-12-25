@@ -237,7 +237,7 @@ class Contest extends CommonObject
     }
 
     //ScoreBoard
-    private function get_chal_data_by_timestamp($start,$end):array
+    public function get_chal_data_by_timestamp($start,$end):array
     {
         $tname = \DB::tname('challenge');
         $tuid  = \DB::tname('contest_user');
@@ -253,7 +253,7 @@ class Contest extends CommonObject
         return $all;
     }
 
-    private function get_scoreboard_by_timestamp($start,$end)
+    public function get_scoreboard_by_timestamp($start,$end)
     {
         $all  = $this->get_chal_data_by_timestamp($start,$end);
         $uids = $this->get_all_users_info();

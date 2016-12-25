@@ -93,7 +93,7 @@ function check_totimestamp($val,&$conv = null):bool
 function safe_post_int(string $key)
 {
     $data = safe_post($key);
-    if( !isset($data) || empty($data) )
+    if( !isset($data) )
     {
         return null;
     }
@@ -108,7 +108,7 @@ function safe_post_int(string $key)
 function safe_get_int(string $key)
 {
     $data = safe_get($key);
-    if( !isset($data) || empty($data) )
+    if( !isset($data) )
     {
         return null;
     }

@@ -10,6 +10,7 @@ function apiHandle()
     $param = $SkyOJ->UriParam(2);
     switch( $param )
     {
+        case 'balloon':
         case 'bangkok_results_before':
         case 'bangkok_results_final':
             break;
