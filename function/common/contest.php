@@ -55,6 +55,24 @@ class ContestTeamStateEnum extends BasicEnum
                 return false;
         }
     }
+
+    static function getallowlist():array
+    {
+        static $c;
+        if( !isset($c) )
+        {
+            $data = self::getConstants();
+            $c = [];
+            foreach($data as $val)
+            {
+                if( self::allow($val) )
+                {
+                    $c[] = $val;
+                }
+            }
+        }
+        return $c;
+    }
 }
 
 class ContestProblemStateEnum extends BasicEnum
@@ -62,6 +80,7 @@ class ContestProblemStateEnum extends BasicEnum
     const Hidden  = 0;
     const Normal  = 1;
     const Readonly= 2;
+
     static function allow(int $Case):bool
     {
         switch($Case)
@@ -242,9 +261,11 @@ class Contest extends CommonObject
         $tname = \DB::tname('challenge');
         $tuid  = \DB::tname('contest_user');
         $tpid  = \DB::tname('contest_problem');
+        $allow_type = ContestTeamStateEnum::getallowlist();
+        $u = implode(",",$allow_type);
         $all = \DB::fetchAllEx("SELECT `pid`,`uid`,`result`,`timestamp` FROM $tname 
             WHERE  `timestamp` BETWEEN ? AND ? 
-                AND `uid` IN (SELECT `uid` FROM $tuid WHERE `cont_id`=?) 
+                AND `uid` IN (SELECT `uid` FROM $tuid WHERE `cont_id`=? AND `state` IN ($u) ) 
                 AND `pid` IN (SELECT `pid` FROM $tpid WHERE `cont_id`=?) 
             ORDER BY `cid` ASC",
             $start,$end,$this->cont_id(),$this->cont_id()
@@ -266,6 +287,10 @@ class Contest extends CommonObject
         foreach($uids as $user)
         {
             $uid=$user->uid;
+            if( !ContestTeamStateEnum::allow($user->state) )
+            {
+                continue;
+            }
             $userinfo[$uid] = new UserBlock();
             $userinfo[$uid]->uid=$uid;
             $userinfo[$uid]->total_submit=0;
@@ -307,14 +332,14 @@ class Contest extends CommonObject
             if( $verdict == \SKYOJ\RESULTCODE::AC )
             {
                 $scoreboard[$uid][$pid]->is_ac = 1;
-                $scoreboard[$uid][$pid]->ac_time = (int)floor(($time + ($scoreboard[$uid][$pid]->try_times-1)*$this->penalty)/60);
+                $scoreboard[$uid][$pid]->ac_time = (int)floor($time/60); 
                 if( !isset($acset[$pid]) )
                 {
                     $acset[$pid] = 1;
                     $scoreboard[$uid][$pid]->firstblood = 1;
                 }
                 $userinfo[$uid]->total_submit+=$scoreboard[$uid][$pid]->try_times;
-                $userinfo[$uid]->ac_time+=$scoreboard[$uid][$pid]->ac_time;
+                $userinfo[$uid]->ac_time+=(int)floor(($time + ($scoreboard[$uid][$pid]->try_times-1)*$this->penalty)/60);;
                 $userinfo[$uid]->ac++;
                 $probleminfo[$pid]->ac_times++;
             }
