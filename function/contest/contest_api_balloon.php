@@ -22,7 +22,7 @@ function contest_api_balloonHandle()
         if( $contest->ispreparing() )
             throw new \Exception('Contest is preparing!');
         
-        $try_times = 3;
+        $try_times = 1;
         $delay = 5;
         $ac = [];
         while($try_times--)
@@ -38,10 +38,10 @@ function contest_api_balloonHandle()
                     $ac [] = ['team'=>$nickname[$row['uid']]];
                 }
             }
-            if($flag)break;
-            if($try_times>=0){
+            if($flag)break;sleep($delay);
+            /*if($try_times>=0){
                 sleep($delay);
-            }
+            }*/
         }
         \SKYOJ\throwjson('SUCC',['last'=>$end,'AC'=>$ac]);
     }catch(\Exception $e){
