@@ -22,7 +22,7 @@ function contest_api_balloonHandle()
         if( $contest->ispreparing() )
             throw new \Exception('Contest is preparing!');
         
-        $try_times = 6;
+        $try_times = 3;
         $delay = 5;
         $ac = [];
         while($try_times--)
