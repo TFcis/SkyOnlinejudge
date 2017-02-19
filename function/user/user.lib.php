@@ -34,6 +34,17 @@ function CheckEmailFormat(string $email)
     return preg_match($pattern, $email);
 }
 
+function CheckNicknameFormat(string $nickanme)
+{
+    if (strpos($nickanme, '@') !== false) {
+        return false;
+    }
+    if ($nickanme !== addslashes($nickanme)) {
+        return false;
+    }
+    return strlen($nickanme)<50;
+}
+
 function checknickname($name)
 {
     \LOG::msg(\Level::Notice, 'checknickname() is Old Function!');
@@ -45,6 +56,13 @@ function checknickname($name)
     }
 
     return true;
+}
+
+function CheckNicknameExists(string $nickname):bool
+{
+    $acctable = \DB::tname('account');
+    $data = \DB::fetchEx("SELECT COUNT(*) FROM `{$acctable}` WHERE `nickname`=?",$nickname);
+    return $data[0]>=1;
 }
 
 function CheckUidFormat($uid):bool

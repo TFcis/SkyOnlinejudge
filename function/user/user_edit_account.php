@@ -10,6 +10,7 @@ function edit_accountHandle(UserInfo $userInfo)
 
     $newpass  =\SKYOJ\safe_post('newpasswd');
     $realname =\SKYOJ\safe_post('realname');
+    $nickname =\SKYOJ\safe_post('nickname');
 
     $data = $userInfo->load_data('account');
     
@@ -18,7 +19,7 @@ function edit_accountHandle(UserInfo $userInfo)
     }
 
     //Change Old Password    
-    if (isset($newpass)) {
+    if (!empty($newpass)) {
         if (!CheckPasswordFormat($newpass)) {
             \SKYOJ\throwjson('error', 'Password format error!');
         }
@@ -32,6 +33,17 @@ function edit_accountHandle(UserInfo $userInfo)
             \SKYOJ\throwjson('error', 'Realname 太長');
         }
         $data['realname'] = $realname;
+    }
+
+    //Chanege nickname
+    if( !empty($nickname) && $data['nickname'] != $nickname ) {
+        if( !CheckNicknameFormat($nickname) ){
+            \SKYOJ\throwjson('error', 'Nickname 太長');
+        }
+        if( CheckNicknameExists($nickname) ){
+            \SKYOJ\throwjson('error', 'Nickname 重複');
+        }
+        $data['nickname'] = $nickname;
     }
 
     if ( !$userInfo->save_data('account', $data) ) {
