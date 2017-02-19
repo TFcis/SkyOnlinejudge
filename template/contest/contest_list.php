@@ -23,6 +23,7 @@ $(document).ready(function()
                 <th style="width: 40px"></th>
                 <th style="width: 40px"></th>
                 <th>NAME</th>
+                <th>MODE</th>
                 <th style='width: 140px' class="hidden-xs">
                 <?php if ($_G['uid']): ?>
                 <!--<button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新增記分板" id="b_add" onclick="location.href='rank.php?mod=cbedit'">-->
@@ -42,6 +43,7 @@ $(document).ready(function()
                 <td style="width: 40px"></td>
                 <td><?=$row['cont_id']?></td>
                 <td><a href="<?=$SkyOJ->uri('contest','view',$row['cont_id'])?>"><?=\SKYOJ\html($row['title'])?></a></td>
+                <td><?=\SKYOJ\html($row['class'])?></td>
                 <td class="hidden-xs">
                     <?php if ($_G['uid']): ?>
                         <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','scoreboard',$row['cont_id'])?>">

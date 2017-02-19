@@ -119,6 +119,7 @@ class ScoreBlock
     public $ac_time;
     public $is_ac;
     public $firstblood;
+    public $score;
 }
 
 class UserBlock
@@ -127,10 +128,14 @@ class UserBlock
     public $total_submit;
     public $ac;
     public $ac_time;
+    public $score;
     static function acm_cmp($a,$b){
         if( $a->ac!=$b->ac ) return $b->ac<=>$a->ac;
         if( $a->ac_time!=$b->ac_time ) return $a->ac_time<=>$b->ac_time;
         return $a->total_submit<=>$b->total_submit;
+    }
+    static function ioi_cmp($a,$b){
+        return $b->score <=> $a->score;
     }
 }
 class ProblemBlock
@@ -263,7 +268,7 @@ class Contest extends CommonObject
         $tpid  = \DB::tname('contest_problem');
         $allow_type = ContestTeamStateEnum::getallowlist();
         $u = implode(",",$allow_type);
-        $all = \DB::fetchAllEx("SELECT `pid`,`uid`,`result`,`timestamp` FROM $tname 
+        $all = \DB::fetchAllEx("SELECT `pid`,`uid`,`result`,`score`,`timestamp` FROM $tname 
             WHERE  `timestamp` BETWEEN ? AND ? 
                 AND `uid` IN (SELECT `uid` FROM $tuid WHERE `cont_id`=? AND `state` IN ($u) ) 
                 AND `pid` IN (SELECT `pid` FROM $tpid WHERE `cont_id`=?) 
@@ -296,6 +301,7 @@ class Contest extends CommonObject
             $userinfo[$uid]->total_submit=0;
             $userinfo[$uid]->ac=0;
             $userinfo[$uid]->ac_time=0;
+            $userinfo[$uid]->score=0;
 
             $scoreboard[$uid]=[];
             foreach($pids as $row)
@@ -306,6 +312,7 @@ class Contest extends CommonObject
                 $scoreboard[$uid][$pid]->is_ac     = 0;
                 $scoreboard[$uid][$pid]->ac_time   = 0;
                 $scoreboard[$uid][$pid]->firstblood= 0;
+                $scoreboard[$uid][$pid]->score     = 0;
                 if( !$probleminfo_build )
                 {
                     $probleminfo[$pid] = new ProblemBlock();
@@ -329,6 +336,12 @@ class Contest extends CommonObject
 
             $scoreboard[$uid][$pid]->try_times++;
             $probleminfo[$pid]->try_times++;
+            if( $row['score'] > $scoreboard[$uid][$pid]->score )
+            {
+                $delta = $row['score'] - $scoreboard[$uid][$pid]->score; 
+                $scoreboard[$uid][$pid]->score = $row['score'];
+                $userinfo[$uid]->score += $delta;
+            }
             if( $verdict == \SKYOJ\RESULTCODE::AC )
             {
                 $scoreboard[$uid][$pid]->is_ac = 1;
@@ -339,12 +352,12 @@ class Contest extends CommonObject
                     $scoreboard[$uid][$pid]->firstblood = 1;
                 }
                 $userinfo[$uid]->total_submit+=$scoreboard[$uid][$pid]->try_times;
-                $userinfo[$uid]->ac_time+=(int)floor(($time + ($scoreboard[$uid][$pid]->try_times-1)*$this->penalty)/60);;
+                $userinfo[$uid]->ac_time+=(int)floor(($time + ($scoreboard[$uid][$pid]->try_times-1)*$this->penalty)/60);
                 $userinfo[$uid]->ac++;
                 $probleminfo[$pid]->ac_times++;
             }
         }
-
+        
         usort($userinfo,[$this,'rank_cmp']);
         return  ['scoreboard'=>$scoreboard,'userinfo'=>$userinfo,'probleminfo'=>$probleminfo];
     }
@@ -352,6 +365,8 @@ class Contest extends CommonObject
     public function rank_cmp($a,$b)
     {
         $cmp = __NAMESPACE__."\\UserBlock::acm_cmp";
+        if( $this->class == "ioi" )
+            $cmp = __NAMESPACE__."\\UserBlock::ioi_cmp";
         return $cmp($a,$b);
     }
 
