@@ -2,6 +2,11 @@
 if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
+use \SKYOJ\FormInfo;
+use \SKYOJ\HTML_INPUT_HIDDEN;
+use \SKYOJ\HTML_INPUT_TEXT;
+use \SKYOJ\HTML_ROW;
+use \SKYOJ\HTML_INPUT_BUTTOM;
 $data = $tmpl['challenge_result_info'];
 $result = json_decode($data['package'],true) ?? [];
 //$result = $_E['template']['challenge_result_info']['result'];
@@ -99,6 +104,43 @@ $(document).ready(function()
 					<div class="panel-body">
 						<div class="container-fluid">
 							<tt><?=nl2br(htmlspecialchars($t))?></tt>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php endif;?>
+		<?php if( \userControl::isAdmin($_G['uid']) ): ?>
+		<script>
+			$(document).ready(function()
+			{
+				$("#cont_comment").submit(function(e)
+				{
+					e.preventDefault();
+					api_submit("<?=$SkyOJ->uri('chal','api','modify_comment')?>","#cont_comment","#btn-show",function(){
+						setTimeout(function(){location.reload();},500);
+					});
+					return true;
+				});
+			})
+			</script>
+			<?php
+				Render::renderForm(new FormInfo([
+                    'data' => [
+                        new HTML_INPUT_HIDDEN(['name' => 'cid','value'=>$data['cid']]),
+                        new HTML_INPUT_TEXT(  ['name' => 'result','value'=>$data['result'],'option'=>['help_text'=>'result code']]),
+                        new HTML_INPUT_TEXT(  ['name' => 'comment','value'=>$data['comment'],'option'=>['help_text'=>'comment']]),
+                        new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出','option' => ['help_text' => 'true']]),
+                    ],
+                ]),"cont_comment");?>
+		<?php elseif( !empty($data['comment']) ):?>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Admin's Comment</div>
+					<div class="panel-body">
+						<div class="container-fluid">
+							<tt><?=nl2br(htmlspecialchars($data['comment']))?></tt>
 						</div>
 					</div>
 				</div>

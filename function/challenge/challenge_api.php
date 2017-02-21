@@ -12,7 +12,7 @@ function apiHandle()
     {
         case 'waitjudge':
             break;
-        
+        case 'modify_comment':
         case 'rejudgep':
             if( !\userControl::isAdmin($_G['uid']) )
                 \SKYOJ\throwjson('error', 'Access denied');

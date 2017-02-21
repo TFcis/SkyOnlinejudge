@@ -46,7 +46,7 @@ class Challenge extends \SKYOJ\CommonObject
     public function __construct(int $cid)
     {
         $tchallenge = $this->getTableName();
-        $this->sqldata = \DB::fetchEx("SELECT `cid`, `pid`, `uid`, `result`, `runtime`, `score`, `timestamp` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
+        $this->sqldata = \DB::fetchEx("SELECT `cid`, `pid`, `uid`, `result`, `runtime`, `score`, `timestamp`,`comment` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
         if( $this->sqldata == false ){
             $this->cid = null;
             return ;
@@ -112,6 +112,11 @@ class Challenge extends \SKYOJ\CommonObject
     public function sqldata()
     {
         return $this->sqldata;
+    }
+
+    public function set_comment(string $comment)
+    {
+        $this->UpdateSQLLazy('comment',$comment);
     }
 
     public function set_result(int $code):bool
