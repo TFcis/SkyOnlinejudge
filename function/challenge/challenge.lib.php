@@ -56,13 +56,13 @@ class Challenge extends \SKYOJ\CommonObject
 
     private function get_code_lazy()
     {
-        static $code = null;
-        if( isset($code) ){
-            return $code;
+        static $code = [];
+        if( isset($code[$this->cid]) ){
+            return $code[$this->cid];
         }
         $tchallenge = $this->getTableName();
         $d = \DB::fetchEx("SELECT `code` FROM `{$tchallenge}` WHERE `cid` = ?",$this->cid);
-        return $code = ($d===false)?'':$d['code'];
+        return $code[$this->cid] = ($d===false)?'':$d['code'];
     }
     
     public function cid():int
