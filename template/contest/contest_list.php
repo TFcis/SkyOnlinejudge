@@ -52,11 +52,14 @@ $(document).ready(function()
                         <!--<span class="icon-bttn glyphicon glyphicon-plus-sign" title="加入"></span>
                         <span class="icon-bttn glyphicon glyphicon-remove" title="離開"></span>-->
                         <?php if (userControl::getpermission($row['owner'])): ?>
+							<a class="icon-bttn" href="<?=$SkyOJ->uri('contest','modify',$row['cont_id'])?>">
+                                <span class="glyphicon glyphicon-pencil" title="編輯"></span>
+                            </a>
                             <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','resolver',$row['cont_id'])?>">
                                 <span class="glyphicon glyphicon-flag" title="開獎機"></span>
                             </a>
                             <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','balloon',$row['cont_id'])?>">
-                                <span class="glyphicon glyphicon-map-marker" title="開獎機"></span>
+                                <span class="glyphicon glyphicon-map-marker" title="氣球發獎機"></span>
                             </a>
                         <!--<span class = "icon-bttn">
                             <span class="glyphicon glyphicon-lock" title="鎖定"></span>

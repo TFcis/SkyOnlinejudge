@@ -261,7 +261,7 @@ class Contest extends CommonObject
             $this->sqldata = $data;
         }
     }
-    
+
     function cont_id():int
     {
         return $this->cont_id;

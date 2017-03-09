@@ -2,6 +2,7 @@
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
+
 function newHandle()
 {
     global $_G;
