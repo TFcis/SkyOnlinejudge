@@ -10,7 +10,7 @@ abstract class CommonObject{
     
     protected abstract function getTableName():string;
     protected abstract function getIDName():string;
-    
+
     protected $sqldata = [];
 
     public function __get($name)

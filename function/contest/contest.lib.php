@@ -4,6 +4,14 @@ if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
 
+function CreateNewContestID(int $owner,string $title):int
+{
+    $tcontest = \DB::tname('contest');
+    $res = \DB::queryEx("INSERT INTO `{$tcontest}` (`cont_id`, `owner`, `title`) 
+                         VALUES (NULL,?,?)",$owner,$title);
+    return $res?\DB::lastInsertId('cont_id'):null;
+}
+
 function GetContestByID($cont_id)
 {
     if( !\SKYOJ\check_tocint($cont_id) )

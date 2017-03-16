@@ -150,6 +150,28 @@ class Contest extends CommonObject
 {
     private $cont_id;
     private $now_time;
+
+    const TITLE_LENTH_MAX = 200;
+    protected function UpdateSQL_extend()
+    {
+        if( $this->cont_id() === null )
+            throw new \Exception('CONT_ID ERROR');
+        if( $this->flag_modify_problems )
+        {
+            $tcontest_problems = \DB::tname('contest_problem');
+            if( \DB::queryEx("DELETE FROM `$tcontest_problems` WHERE `cont_id`=?",$this->cont_id())===false )
+                throw \DB::$last_exception;
+            foreach( $this->problems_update as $row )
+            {
+                if( \DB::queryEx("INSERT INTO `$tcontest_problems`(`cont_id`, `pid`, `ptag`, `state`, `priority`) VALUES (?,?,?,?,?)"
+                    ,$this->cont_id(),$row[1],$row[0],$row[2],$row[3]) === false )
+                {
+                    throw \DB::$last_exception;
+                }
+            }
+        }
+    }
+
     protected function getTableName():string
     {
         static $t;
@@ -160,6 +182,68 @@ class Contest extends CommonObject
     protected function getIDName():string
     {
         return 'cont_id';
+    }
+
+    function GetProblems():array
+    {
+        $data = $this->get_all_problems_info();
+        $data_output = [];
+        foreach($data as $r){
+            if(!empty($r)){
+                $ptag = $r->ptag;
+                $pid = $r->pid;
+                $pstate = $r->state;
+                $priority = $r->priority;
+                $output = $ptag.':'.$pid.':'.$pstate.':'.$priority;
+                $data_output[] = $output;
+            }
+        }
+        return $data_output;
+    }
+
+    function owner():string
+    {
+        return $this->sqldata['owner']??'';
+    }
+
+    function GetRegisterType():int
+    {
+        return $this->sqldata['register_type']??null;
+    }
+
+    function GetPenalty():int
+    {
+        return $this->sqldata['penalty']??null;
+    }
+
+    function GetFreezeSec():int
+    {
+        return $this->sqldata['freeze_sec']??null;
+    }
+
+    function GetTitle():string
+    {
+        return $this->sqldata['title']??'';
+    }
+
+    function GetStart():string
+    {
+        return $this->sqldata['starttime']??'';
+    }
+
+    function GetEnd():string
+    {
+        return $this->sqldata['endtime']??'';
+    }
+
+    function GetRegBegin():int
+    {
+        return $this->sqldata['register_beginsec']??'';
+    }
+
+    function GetRegDelay():int
+    {
+        return $this->sqldata['register_delaysec']??'';
     }
 
     function __construct(int $cont_id)
@@ -181,6 +265,84 @@ class Contest extends CommonObject
     function cont_id():int
     {
         return $this->cont_id;
+    }
+
+    public function SetTitle(string $title):bool
+    {
+        if( strlen($title) > self::TITLE_LENTH_MAX )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('title',$title);
+        return true;
+    }
+
+    public function SetStart(string $start):bool
+    {
+        if( !check_totimestamp($start,$start) )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('starttime',$start);
+        return true;
+    }
+
+    public function SetEnd(string $end):bool
+    {
+        if( !check_totimestamp($end,$end) )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('endtime',$end);
+        return true;
+    }
+
+    public function SetRegisterType(string $reg_type):bool
+    {
+        if( ContestUserRegisterStateEnum::isValidValue($reg_type) )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('register_type',$reg_type);
+        return true;
+    }
+
+    public function SetRegisterBegin(string $begin):bool
+    {
+        $this->UpdateSQLLazy('register_beginsec',$begin);
+        return true;
+    }
+
+    public function SetRegisterDelay(string $delay):bool
+    {
+        $this->UpdateSQLLazy('register_delaysec',$delay);
+        return true;
+    }
+
+    public function SetPenalty(string $penalty):bool
+    {
+        $this->UpdateSQLLazy('penalty',$penalty);
+        return true;
+    }
+
+    public function SetFreezeSec(string $freezesec):bool
+    {
+        $this->UpdateSQLLazy('freeze_sec',$freezesec);
+        return true;
+    }
+
+    public function SetProblems(string $problems):bool
+    {
+        $data = explode(',',$problems);
+        $this->problems_update = [];
+        foreach($data as $row){
+            if(!empty($row)){
+                $p = explode(':',$row);
+                $this->problems_update[] = $p;
+            }
+        }
+        $this->flag_modify_problems = true;
+        return true;
     }
 
     //User check
