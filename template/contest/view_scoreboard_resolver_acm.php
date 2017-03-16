@@ -46,8 +46,10 @@ if (!defined('IN_TEMPLATE')) {
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script>
-g_before_url = <?=json_encode($SkyOJ->uri('contest','api','bangkok_results_before')."?cont_id=".$tmpl['contest']->cont_id())?>;
-g_final_url =  <?=json_encode($SkyOJ->uri('contest','api','bangkok_results_final')."?cont_id=".$tmpl['contest']->cont_id())?>;
+result_version = 0;
+scoreboardUpdateTime = 10000;
+g_before_url = <?=json_encode($SkyOJ->uri('contest','api','bangkok_results_before')."?cont_id=".$tmpl['contest']->cont_id().'&version='.time())?>;
+g_final_url =  <?=json_encode($SkyOJ->uri('contest','api','bangkok_results_final')."?cont_id=".$tmpl['contest']->cont_id().'&version='.time())?>;
 </script>
 <script src="<?=$_E['SITEROOT']?>js/third/bangkok-resolver/handlebars.min.js"></script>
-<script src="<?=$_E['SITEROOT']?>js/third/bangkok-resolver/resolver_acm.js"></script>
+<script src="<?=$_E['SITEROOT']?>js/third/bangkok-resolver/live_acm.js"></script>

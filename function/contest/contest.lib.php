@@ -32,6 +32,8 @@ function to_resolver_json($scordboard_data,\SKYOJ\Contest $contest)
     {
         $json["solved"][$prob->ptag] = $prob->ac_times;
         $json["attempted"][$prob->ptag] = $prob->try_times;
+        $json["problems"][$prob->ptag] = [];
+        $json["problems"][$prob->ptag]["score"] = 100;
     }
     $rank = 1;
     $last = null;
@@ -57,6 +59,7 @@ function to_resolver_json($scordboard_data,\SKYOJ\Contest $contest)
             $sb=$scordboard_data['scoreboard'][$user->uid][$prob->pid];
             $d[$prob->ptag] = [];
             $d[$prob->ptag]['a'] = $sb->try_times;
+            $d[$prob->ptag]['score'] = (int)$sb->score;
             if( $sb->is_ac )
             {
                 $d[$prob->ptag]['t'] = $sb->ac_time;

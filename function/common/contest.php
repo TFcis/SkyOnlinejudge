@@ -469,6 +469,7 @@ class Contest extends CommonObject
             foreach($pids as $row)
             {
                 $pid=$row->pid;
+                $ptag=$row->ptag;
                 $scoreboard[$uid][$pid]=new ScoreBlock();
                 $scoreboard[$uid][$pid]->try_times = 0;
                 $scoreboard[$uid][$pid]->is_ac     = 0;
@@ -492,6 +493,13 @@ class Contest extends CommonObject
         {
             $uid=$row['uid'];
             $pid=$row['pid'];
+            $ptag='';
+            foreach($pids as $p){
+                if($p->pid==$row['pid']){
+                    $ptag=$p->ptag;
+                    break;
+                }
+            }
             $verdict=$row['result'];
             $time=strtotime($row['timestamp'])-strtotime($this->starttime);
             if( $scoreboard[$uid][$pid]->is_ac != 0 )continue;
