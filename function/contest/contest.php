@@ -15,6 +15,8 @@ function ContestHandle()
     switch( $param )
     {
         case 'view':
+        case 'new':
+        case 'modify':
         case 'register':
         case 'scoreboard':
         case 'list':
