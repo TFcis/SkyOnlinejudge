@@ -214,7 +214,7 @@ class Problem
         $tcp = \DB::tname("contest_problem");
         $tcu = \DB::tname("contest_user");
         $now = \SKYOJ\get_timestamp(time());
-        $res = \DB::fetchAllEx("
+        /*$res = \DB::fetchAllEx("
 SELECT DISTINCT `pid` FROM `{$tcp}`
 	INNER JOIN `tojtest_contest`
     	ON `{$tcp}`.`cont_id`=`{$tc}`.`cont_id`
@@ -222,13 +222,26 @@ SELECT DISTINCT `pid` FROM `{$tcp}`
     	IN (SELECT `cont_id` FROM `{$tcu}` WHERE `uid` = ?)
     AND `starttime`<= ? 
     AND ? <= `endtime`
-        ",$uid,$now,$now);
+        ",$uid,$now,$now);*/
+        $res = \DB::fetchAllEx("SELECT `cont_id` FROM `{$tcu}` WHERE `uid` = ?",$uid);
 
         if( $res === false )
             return [];
         $cache[$uid]=[];
-        foreach($res as $row)
-            $cache[$uid][] = (int)$row['pid'];
+        foreach($res as $row){
+            $cont_id = $row['cont_id'];
+            if( !\SKYOJ\check_tocint($cont_id) )continue;
+            $contest = new \SKYOJ\Contest($cont_id);
+            if( $contest->isIdfail() )continue;
+            if( $now<$contest->__get('starttime') || $now>$contest->__get('endtime'))continue;
+            $probs = $contest->get_all_problems_info();
+            foreach($probs as $prob){
+                $pid = $prob->pid;
+                if(!in_array($pid,$cache[$uid])){
+                    $cache[$uid][] = (int)$pid;
+                }
+            }
+        }
         return $cache[$uid];
     }
 
