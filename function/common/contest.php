@@ -418,6 +418,9 @@ class Contest extends CommonObject
         $data = [];
         foreach( $probs as $row )
         {
+            if(!ContestProblemStateEnum::allow($row['state'])){
+                continue;
+            }
             $tmp = new ContestProblemInfo();
             foreach( ContestProblemInfo::$column as $c )
             {
