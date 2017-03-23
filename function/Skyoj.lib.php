@@ -464,7 +464,7 @@ function getresulttexthtml($resultid,bool $simple = false)
                "<span class='visible-xs-inline visible-sm-inline {$mini}' data-res='{$mini}'>{$mini}</span>";
 }
 
-function html(string $str):string
+function html(?string $str):string
 {
     return htmlentities($str,ENT_HTML5|ENT_COMPAT,"UTF-8");
 }
