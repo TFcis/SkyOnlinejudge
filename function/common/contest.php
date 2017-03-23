@@ -138,6 +138,7 @@ class UserBlock
         return $b->score <=> $a->score;
     }
 }
+
 class ProblemBlock
 {
     public $pid;
@@ -150,6 +151,7 @@ class Contest extends CommonObject
 {
     private $cont_id;
     private $now_time;
+    private $manger;
 
     const TITLE_LENTH_MAX = 200;
     protected function UpdateSQL_extend()
@@ -259,7 +261,11 @@ class Contest extends CommonObject
         {
             $this->cont_id = $data[$this->getIDName()];
             $this->sqldata = $data;
+            $class = empty($data['class']) ? "class_ACM_ICPC" : $data['class'];
+            $class = \Plugin::loadClassFile('contest',$class);
+            $this->manger = new $class;
         }
+        
     }
     
     function cont_id():int
@@ -526,6 +532,7 @@ class Contest extends CommonObject
 
     public function rank_cmp($a,$b)
     {
+        return $this->manger->compare($a,$b);
         $cmp = __NAMESPACE__."\\UserBlock::acm_cmp";
         if( $this->class == "ioi" )
             $cmp = __NAMESPACE__."\\UserBlock::ioi_cmp";
