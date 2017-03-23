@@ -14,6 +14,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
     /problem/api/[method]
 */
 require_once 'function/problem/problem.lib.php';
+require_once 'function/common/contest.php';
 function ProblemHandle()
 {
     global $SkyOJ,$_E;

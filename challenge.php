@@ -10,6 +10,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
     /chal/list/[page] ? quest str (default)
 */
 require_once 'function/challenge/challenge.lib.php';
+require_once 'function/common/contest.php';
 function ChallengeHandle()
 {
     global $SkyOJ,$_E;
