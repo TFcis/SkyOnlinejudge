@@ -30,7 +30,7 @@ function contest_api_modifyHandle()
 
         $contest = GetContestByID($cont_id);
         $cont_id = $contest->cont_id();
-        if( $contest->isIdfail() || !\userControl::getpermission($contest->owner()) )
+        if( $contest->isIdfail() || !\userControl::getpermission($contest->owner) )
             throw new \Exception('Access denied');
 
         $contest->title = $title;
