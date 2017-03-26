@@ -90,6 +90,7 @@ function check_totimestamp($val,&$conv = null):bool
     return true;
         
 }
+
 function safe_post_int(string $key)
 {
     $data = safe_post($key);
@@ -100,7 +101,6 @@ function safe_post_int(string $key)
     if( !check_tocint($data) )
     {
         throw new \Exception('safe_post_int for ['.$key.'] failed!');
-        return null;
     }
     return (int)$data;
 }
