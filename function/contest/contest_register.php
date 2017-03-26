@@ -10,28 +10,21 @@ function RegisterHandle()
     $param = $SkyOJ->UriParam(2)??null;
     try{
         if( $param===null )
-        {
             throw new \Exception('????');
-        }
+
         if( !$_G['uid'] )
-        {
             throw new \Exception('Login First!');
-        }
+
         $contest = new \SKYOJ\Contest($param);
         if( $contest->isIdfail() )
             throw new \Exception('CONT_ID Error');
-        
-        
+
         if( !\SKYOJ\ContestUserRegisterStateEnum::allow($contest->register_type) )
-        {
             throw new \Exception('Register not open!');
-        }
 
         $state_code = \SKYOJ\ContestTeamStateEnum::Pending;
         if( $contest->register_type ==  \SKYOJ\ContestUserRegisterStateEnum::Open )
-        {
             $state_code = \SKYOJ\ContestTeamStateEnum::Accept;
-        }
 
         $table = \DB::tname('contest_user');
 

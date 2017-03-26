@@ -11,9 +11,7 @@ function sub_scoreboardHandle(\SKYOJ\Contest $contest)
     $_E['template']['user'] = $data['userinfo'];
     $_E['template']['pids'] = $data['probleminfo'];
     $_E['template']['scoreboard'] = $data['scoreboard'];
-    if( $contest->class == "ioi" )
-        \Render::renderSingleTemplate('view_scoreboard_ioi','contest');
-    else
-        \Render::renderSingleTemplate('view_scoreboard_acm','contest');
+    $tmpl = $contest->scoreboard_template();
+    \Render::renderSingleTemplate($tmpl[0],$tmpl[1]);
     exit(0);
 }

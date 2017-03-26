@@ -38,4 +38,9 @@ class class_ACM_ICPC extends ContestManger
         if( $a->ac_time!=$b->ac_time ) return $a->ac_time<=>$b->ac_time;
         return $a->total_submit<=>$b->total_submit;
     }
+
+    public function scoreboard_template():array
+    {
+        return ['view_scoreboard_acm','contest'];
+    }
 }
