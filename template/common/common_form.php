@@ -44,8 +44,9 @@ TAG;
                 if( !is_string($tag) || !is_scalar($key) )continue;
                 if($tag == 'type')continue;
                 $rev .= ' '.htmlentities($tag);
-                if( !empty($key) ){
-                    $rev .= '="'.htmlentities($key).'"';
+                $var = htmlentities((string)$key);
+                if( $var!=="" ){
+                    $rev .= '="'.htmlentities($var).'"';
                 }
             }
             $rev.='>';
