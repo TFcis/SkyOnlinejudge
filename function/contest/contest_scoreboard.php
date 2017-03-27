@@ -19,11 +19,8 @@ function scoreboardHandle()
         $_E['template']['user'] = $data['userinfo'];
         $_E['template']['pids'] = $data['probleminfo'];
         $_E['template']['scoreboard'] = $data['scoreboard'];
-        if( $contest->class == "ioi" )
-            \Render::render('view_scoreboard_ioi','contest');
-        else
-            \Render::render('view_scoreboard_acm','contest');
-        exit(0);
+        $tmpl = $contest->scoreboard_template();
+        \Render::render($tmpl[0],$tmpl[1]);
     }catch(\Exception $e){
         \Render::errormessage('Oops! '.$e->getMessage(),'Contest');
         \Render::render('nonedefine');
