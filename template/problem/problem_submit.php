@@ -14,7 +14,7 @@ $(document).ready(function()
     {
         var editor = ace.edit("editor");
         var code = editor.getValue();
-        if( code === '' && false )
+        if( code === '' )
         {
             if( !confirm('Are you sure to submit an empty code?') )
             {
@@ -41,7 +41,6 @@ $(document).ready(function()
         });
     };
     init();
-
 })
 </script>
 <div class="container">
