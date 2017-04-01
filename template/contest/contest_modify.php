@@ -11,10 +11,6 @@ use \SKYOJ\HTML_INPUT_SELECT;
 use \SKYOJ\HTML_INPUT_BUTTOM;
 use \SKYOJ\HTML_INPUT_HIDDEN;
 ?>
-<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/github-gist.min.css">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>-->
 <script>
 $(document).ready(function(){
     $("#modify-contest-from").submit(function(e)
@@ -44,20 +40,19 @@ $(document).ready(function(){
                     'data'=>[
                         new HTML_INPUT_HIDDEN(['name'=>'cont_id','value'=>$tmpl['contest']->cont_id()]),
                         new HTML_INPUT_HIDDEN(['name'=>'content','id'=>'content','value'=>'']),
-                        new HTML_INPUT_TEXT(['name'=>'title','value'=>$tmpl['contest']->GetTitle(),'required'=>'required','option' => ['help_text' => '競賽名稱']]),
-						new HTML_INPUT_TEXT(['name'=>'start','value'=>$tmpl['contest']->GetStart(),'option' => ['help_text' => '開始時間']]),
-                        new HTML_INPUT_TEXT(['name'=>'end','value'=>$tmpl['contest']->GetEnd(),'option' => ['help_text' => '結束時間']]),
+                        new HTML_INPUT_TEXT(['name'=>'title','value'=>$tmpl['contest']->title,'required'=>'required','option' => ['help_text' => '競賽名稱']]),
+						new HTML_INPUT_TEXT(['name'=>'start','value'=>$tmpl['contest']->starttime,'option' => ['help_text' => '開始時間']]),
+                        new HTML_INPUT_TEXT(['name'=>'end','value'=>$tmpl['contest']->endtime,'option' => ['help_text' => '結束時間']]),
                         new HTML_INPUT_TEXT(['name'=>'problems','value'=>implode(',',$p),'option' => ['help_text' => '題目列表']]),
                         new HTML_INPUT_SELECT(['name'=>'registertype'
                             ,'key-pair'=> \SKYOJ\ContestUserRegisterStateEnum::getConstants()
-                            ,'default'=>$tmpl['contest']->GetRegisterType()
+                            ,'default'=>$tmpl['contest']->register_type
                             ,'option'  => ['help_text' => '註冊模式']]),
 							
-						new HTML_INPUT_TEXT(['name'=>'registerbegin','value'=>$tmpl['contest']->GetRegBegin(),'option' => ['help_text' => '註冊開放於競賽開始前(sec)']]),
-                        new HTML_INPUT_TEXT(['name'=>'registerdelay','value'=>$tmpl['contest']->GetRegDelay(),'option' => ['help_text' => '註冊開放於競賽開始後(sec)']]),
-                        new HTML_INPUT_TEXT(['name'=>'freezesec','value'=>$tmpl['contest']->GetFreezeSec(),'option' => ['help_text' => '凍結於競賽結束前(sec)']]),
-                        new HTML_INPUT_TEXT(['name'=>'penalty','value'=>$tmpl['contest']->GetPenalty(),'option' => ['help_text' => '答錯罰時(sec)']]),
-
+						new HTML_INPUT_TEXT(['name'=>'registerbegin','value'=>$tmpl['contest']->register_beginsec,'option' => ['help_text' => '註冊開放於競賽開始前(sec)']]),
+                        new HTML_INPUT_TEXT(['name'=>'registerdelay','value'=>$tmpl['contest']->register_delaysec,'option' => ['help_text' => '註冊開放於競賽開始後(sec)']]),
+                        new HTML_INPUT_TEXT(['name'=>'freezesec','value'=>$tmpl['contest']->freeze_sec,'option' => ['help_text' => '凍結於競賽結束前(sec)']]),
+                        new HTML_INPUT_TEXT(['name'=>'penalty','value'=>$tmpl['contest']->penalty,'option' => ['help_text' => '答錯罰時(sec)']]),
                         new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出','option' => ['help_text' => 'true']]),
                     ]
                 ]),'modify-contest-from');

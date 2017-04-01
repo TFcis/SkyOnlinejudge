@@ -5,46 +5,50 @@ if (!defined('IN_SKYOJSYSTEM')) {
 function contest_api_modifyHandle()
 {
     global $_G,$_E;
-    if( !\userControl::isAdmin($_G['uid']) )
-        \SKYOJ\throwjson('error', 'Access denied');
-    $cont_id = \SKYOJ\safe_post('cont_id');
-    $title   = \SKYOJ\safe_post('title');
-    $content = \SKYOJ\safe_post('content');
-    $start_time = \SKYOJ\safe_post('start');
-    $end_time = \SKYOJ\safe_post('end');
-    $registertype = \SKYOJ\safe_post('registertype');
-    $registerbegin = \SKYOJ\safe_post('registerbegin');
-    $registerdelay = \SKYOJ\safe_post('registerdelay');
-    $penalty = \SKYOJ\safe_post('penalty');
-    $freezesec = \SKYOJ\safe_post('freezesec');
-    $problems = \SKYOJ\safe_post('problems');
-    if( !isset($cont_id,$title,$content))
-        \SKYOJ\throwjson('error','param error');
+    
     try{
-        $contest = new \SKYOJ\Contest($cont_id);
+        if( !\userControl::isAdmin($_G['uid']) )
+            \SKYOJ\throwjson('error', 'Access denied');
+        $cont_id = \SKYOJ\safe_post_int('cont_id');
+        $title   = \SKYOJ\safe_post('title');
+        $content = \SKYOJ\safe_post('content');
+
+        $starttime = \SKYOJ\safe_post('start');
+        $endtime  = \SKYOJ\safe_post('end');
+
+        $registertype  = \SKYOJ\safe_post_int('registertype');
+        $registerbegin = \SKYOJ\safe_post_int('registerbegin');
+        $registerdelay = \SKYOJ\safe_post_int('registerdelay');
+
+        $penalty   = \SKYOJ\safe_post_int('penalty');
+        $freezesec = \SKYOJ\safe_post_int('freezesec');
+
+        $problems  = \SKYOJ\safe_post('problems');
+
+        if( !isset($cont_id,$title,$content))
+            \SKYOJ\throwjson('error','param error');
+
+        $contest = GetContestByID($cont_id);
         $cont_id = $contest->cont_id();
-        if( $contest->cont_id()===null || !\userControl::getpermission($contest->owner()) )
+        if( $contest->isIdfail() || !\userControl::getpermission($contest->owner) )
             throw new \Exception('Access denied');
-        if( !$contest->SetTitle($title) )
-            throw new \Exception('title length more than limit');
-        if( !$contest->SetRegisterType($registertype) )
-            throw new \Exception('no such register_type');
-        if( strtotime($start_time) > strtotime($end_time) )
+
+        $contest->title = $title;
+        $contest->register_type = $registertype;
+        
+        if( strtotime($starttime) > strtotime($endtime) )
             throw new \Exception('time range error');
-        if( !$contest->SetStart($start_time) )
-            throw new \Exception('modify start_time error');
-        if( !$contest->SetEnd($end_time) )
-            throw new \Exception('modify end_time error');
-        if( !$contest->SetRegisterBegin($registerbegin) )
-            throw new \Exception('modify register_begin error');
-        if( !$contest->SetRegisterDelay($registerdelay) )
-            throw new \Exception('modify register_delay error');
-        if( !$contest->SetPenalty($penalty) )
-            throw new \Exception('modify penalty error');
-        if( !$contest->SetFreezeSec($freezesec) )
-            throw new \Exception('modify freeze_sec error');
-        if( !$contest->SetProblems($problems) )
-            throw new \Exception('modify problems error');
+        $contest->starttime = $starttime;
+        $contest->endtime = $endtime;
+
+        $contest->register_beginsec = $registerbegin;
+        $contest->register_delaysec = $registerdelay;
+
+        $contest->penalty = $penalty;
+        $contest->freeze_sec = $freezesec;
+
+        $contest->problems = $problems;
+
         $contest->UpdateSQL();
         \SKYOJ\throwjson('SUCC','succ');
     }catch(\Exception $e){

@@ -138,6 +138,7 @@ class UserBlock
         return $b->score <=> $a->score;
     }
 }
+
 class ProblemBlock
 {
     public $pid;
@@ -150,6 +151,9 @@ class Contest extends CommonObject
 {
     private $cont_id;
     private $now_time;
+    private $manger;
+    private $problems_update;
+    private $flag_modify_problems;
 
     const TITLE_LENTH_MAX = 200;
     protected function UpdateSQL_extend()
@@ -201,51 +205,6 @@ class Contest extends CommonObject
         return $data_output;
     }
 
-    function owner():string
-    {
-        return $this->sqldata['owner']??'';
-    }
-
-    function GetRegisterType():int
-    {
-        return $this->sqldata['register_type']??null;
-    }
-
-    function GetPenalty():int
-    {
-        return $this->sqldata['penalty']??null;
-    }
-
-    function GetFreezeSec():int
-    {
-        return $this->sqldata['freeze_sec']??null;
-    }
-
-    function GetTitle():string
-    {
-        return $this->sqldata['title']??'';
-    }
-
-    function GetStart():string
-    {
-        return $this->sqldata['starttime']??'';
-    }
-
-    function GetEnd():string
-    {
-        return $this->sqldata['endtime']??'';
-    }
-
-    function GetRegBegin():int
-    {
-        return $this->sqldata['register_beginsec']??'';
-    }
-
-    function GetRegDelay():int
-    {
-        return $this->sqldata['register_delaysec']??'';
-    }
-
     function __construct(int $cont_id)
     {
         $data = \DB::fetchEx("SELECT * FROM {$this->getTableName()} WHERE `{$this->getIDName()}`=?",$cont_id);
@@ -259,7 +218,11 @@ class Contest extends CommonObject
         {
             $this->cont_id = $data[$this->getIDName()];
             $this->sqldata = $data;
+            $class = empty($data['class']) ? "class_ACM_ICPC" : $data['class'];
+            $class = \Plugin::loadClassFile('contest',$class);
+            $this->manger = new $class;
         }
+        
     }
 
     function cont_id():int
@@ -267,71 +230,73 @@ class Contest extends CommonObject
         return $this->cont_id;
     }
 
-    public function SetTitle(string $title):bool
+    function scoreboard_template():array
+    {
+        return $this->manger->scoreboard_template();
+    }
+
+    protected function set_title(string $title):bool
     {
         if( strlen($title) > self::TITLE_LENTH_MAX )
-        {
-            return false;
-        }
+            throw new CommonObjectError("title length should less than:".self::TITLE_LENTH_MAX,SKY_ERROR::UNKNOWN_ERROR);
+
         $this->UpdateSQLLazy('title',$title);
         return true;
     }
 
-    public function SetStart(string $start):bool
+    public function set_starttime(string $start):bool
     {
         if( !check_totimestamp($start,$start) )
-        {
-            return false;
-        }
+            throw new CommonObjectError("starttime format error",SKY_ERROR::UNKNOWN_ERROR);
+
         $this->UpdateSQLLazy('starttime',$start);
         return true;
     }
 
-    public function SetEnd(string $end):bool
+    public function set_endtime(string $end):bool
     {
         if( !check_totimestamp($end,$end) )
-        {
-            return false;
-        }
+            throw new CommonObjectError("endtime format error",SKY_ERROR::UNKNOWN_ERROR);
+
         $this->UpdateSQLLazy('endtime',$end);
         return true;
     }
 
-    public function SetRegisterType(string $reg_type):bool
+    public function set_register_type(int $reg_type):bool
     {
-        if( ContestUserRegisterStateEnum::isValidValue($reg_type) )
-        {
-            return false;
-        }
+        if( !ContestUserRegisterStateEnum::isValidValue($reg_type) )
+            throw new CommonObjectError("register type",SKY_ERROR::NO_SUCH_ENUM_VALUE);
+
         $this->UpdateSQLLazy('register_type',$reg_type);
         return true;
     }
 
-    public function SetRegisterBegin(string $begin):bool
+    public function set_register_beginsec(int $begin):bool
     {
         $this->UpdateSQLLazy('register_beginsec',$begin);
         return true;
     }
 
-    public function SetRegisterDelay(string $delay):bool
+    public function set_register_delaysec(int $delay):bool
     {
         $this->UpdateSQLLazy('register_delaysec',$delay);
         return true;
     }
 
-    public function SetPenalty(string $penalty):bool
+    public function set_penalty(int $penalty):bool
     {
         $this->UpdateSQLLazy('penalty',$penalty);
         return true;
     }
 
-    public function SetFreezeSec(string $freezesec):bool
+    public function set_freeze_sec(int $freezesec):bool
     {
         $this->UpdateSQLLazy('freeze_sec',$freezesec);
         return true;
     }
 
-    public function SetProblems(string $problems):bool
+    //TODO: Rewrite this
+    public function set_problems(string $problems):bool
     {
         $data = explode(',',$problems);
         $this->problems_update = [];
@@ -412,6 +377,9 @@ class Contest extends CommonObject
         $data = [];
         foreach( $probs as $row )
         {
+            if(!ContestProblemStateEnum::allow($row['state'])){
+                continue;
+            }
             $tmp = new ContestProblemInfo();
             foreach( ContestProblemInfo::$column as $c )
             {
@@ -526,10 +494,7 @@ class Contest extends CommonObject
 
     public function rank_cmp($a,$b)
     {
-        $cmp = __NAMESPACE__."\\UserBlock::acm_cmp";
-        if( $this->class == "ioi" )
-            $cmp = __NAMESPACE__."\\UserBlock::ioi_cmp";
-        return $cmp($a,$b);
+        return $this->manger->compare($a,$b);
     }
 
     public function get_scoreboard()

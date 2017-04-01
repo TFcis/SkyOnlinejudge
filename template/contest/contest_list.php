@@ -3,16 +3,8 @@ if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 ?>
-<script>
-$(document).ready(function()
-{
-    $('#b_add').tooltip();
-})
-</script>
-
 <div id="image-bar"></div>
 <div class="container">
-
     <div>
         <div class="page-header">
             <h1>排名賽<small>再來啊</small></h1>
@@ -22,16 +14,14 @@ $(document).ready(function()
             <tr>
                 <th style="width: 40px"></th>
                 <th style="width: 40px"></th>
-                <th>NAME</th>
-                <th>MODE</th>
+                <th>名稱</th>
+                <th>競賽模式</th>
                 <th style='width: 140px' class="hidden-xs">
                 <?php if ($_G['uid']): ?>
-                <!--<button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新增記分板" id="b_add" onclick="location.href='rank.php?mod=cbedit'">-->
                     TOOLS
                     <a class="icon-bttn" title="Create New" href="<?=$SkyOJ->uri('contest','new')?>">
                         <span class="glyphicon glyphicon-plus"></span>
                     </a>
-                <!--</button>-->
                 <?php endif; ?>
                 </th>
                 <th style="width: 100px">STATUS</th>
@@ -49,10 +39,8 @@ $(document).ready(function()
                         <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','scoreboard',$row['cont_id'])?>">
                             <span class="glyphicon glyphicon glyphicon-th-list" title="記分板"></span>
                         </a>
-                        <!--<span class="icon-bttn glyphicon glyphicon-plus-sign" title="加入"></span>
-                        <span class="icon-bttn glyphicon glyphicon-remove" title="離開"></span>-->
                         <?php if (userControl::getpermission($row['owner'])): ?>
-							<a class="icon-bttn" href="<?=$SkyOJ->uri('contest','modify',$row['cont_id'])?>">
+                            <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','modify',$row['cont_id'])?>">
                                 <span class="glyphicon glyphicon-pencil" title="編輯"></span>
                             </a>
                             <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','resolver',$row['cont_id'])?>">
@@ -61,13 +49,6 @@ $(document).ready(function()
                             <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','balloon',$row['cont_id'])?>">
                                 <span class="glyphicon glyphicon-map-marker" title="氣球發獎機"></span>
                             </a>
-                        <!--<span class = "icon-bttn">
-                            <span class="glyphicon glyphicon-lock" title="鎖定"></span>
-                        </span>-->
-                        
-                        <!--<<span class="icon-bttn">
-                            <span class="glyphicon glyphicon-trash" title="移除"></span>
-                        </span>-->
                         <?php endif; ?>
                     <?php endif; ?>
                 </td>

@@ -14,7 +14,7 @@ $(document).ready(function()
     {
         var editor = ace.edit("editor");
         var code = editor.getValue();
-        if( code === '' && false )
+        if( code === '' )
         {
             if( !confirm('Are you sure to submit an empty code?') )
             {
@@ -26,6 +26,21 @@ $(document).ready(function()
             loadTemplate('log');
         });
     });
+    function init()
+    {
+        var j_submit = $('#codesubmit');
+        $('#s_file').on('change',function(e)
+        {
+            var reader = new FileReader();
+            reader.onload = function(e)
+            {
+                var editor = ace.edit("editor");
+                editor.getSession().setValue(reader.result);
+            };
+            reader.readAsText(this.files[0]);
+        });
+    };
+    init();
 })
 </script>
 <div class="container">
@@ -47,16 +62,19 @@ $(document).ready(function()
                         <?php endforeach; ?>
                     </select>
                 </div>
-                
+                <div class="row">
+                    <div class="col-sm-12">
+                    <?php Render::renderCode('','c_cpp','editor',['minLines'=>20,'maxLines'=>20]); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="file" id="s_file">
+                </div>
             </form>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-sm-12">
-        <?php Render::renderCode('','c_cpp','editor',['minLines'=>20,'maxLines'=>20]); ?>
-        </div>
-    </div>
+
 
     <div class="row" style = "margin-top:15px;">
         <div class="col-sm-offset-6 col-sm-6 text-right">
