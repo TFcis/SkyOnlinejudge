@@ -123,7 +123,7 @@ TAG
         <div class="col-lg-2">
             <h1>Tips</h1>
             <p>
-                <a class="btn btn-primary" href="<?=$SkyOJ->uri('problem','view',$tmpl['problem']->pid())?>">檢視題目</a>
+                <a class="btn btn-primary" href="<?=$SkyOJ->uri('problem','view',$tmpl['problem']->pid(),'')?>">檢視題目</a>
             </p>
         </div>
     </div>
