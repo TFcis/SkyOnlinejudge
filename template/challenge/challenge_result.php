@@ -40,7 +40,7 @@ $(document).ready(function()
 					<tr>
 						<td>題目</td>
 						<td>
-							<a href="<?=$SkyOJ->uri('problem','view',$data['pid'])?>">
+							<a href="<?=$SkyOJ->uri('problem','view',$data['pid'],'')?>">
 								<?=\SKYOJ\html(\SKYOJ\Problem::get_title($data['pid']))?>
 							</a>
 						</td>

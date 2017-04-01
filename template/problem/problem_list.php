@@ -52,7 +52,7 @@ $(document).ready(function()
                     <?php endif;?>
                 </td>
                 <td><?=$row['pid'];?></td>
-                <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'])?>"><?=htmlspecialchars($row['title']);?></a></td>
+                <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'],'')?>"><?=htmlspecialchars($row['title']);?></a></td>
                 <td class="hidden-xs">
                     <?php if ($_G['uid'] && userControl::getpermission($row['owner'])): ?>
                         <a class="icon-bttn" href="<?=$SkyOJ->uri('problem','modify',$row['pid'])?>">
