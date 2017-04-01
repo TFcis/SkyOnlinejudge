@@ -58,12 +58,15 @@ function viewachieveHandle(\SKYOJ\Problem $problem,string $filename)
         {
             throw new \Exception('403');
         }
+
         $filepath = \SKYOJ\Problem::GetHttpFolder($problem->pid()).$filename;
-        if( is_file($filepath) )
+        if( !is_file($filepath) )
         {
-            header("Content-type: ".filetype($filepath));
-            readfile($filepath);
+            throw new \Exception('403');
         }
+
+        header("Content-type: ".filetype($filepath));
+        readfile($filepath);
     }catch(\Exception $e){
         http_response_code(403);
         exit(0);
