@@ -152,6 +152,10 @@ abstract class ContestManger extends PluginBase
         Enforcer::__add(__CLASS__, get_called_class());
     }
     abstract public function compare(\SKYOJ\UserBlock $a,\SKYOJ\UserBlock $b);
+    public function get_user_problems_info(\SKYOJ\Contest $constst,int $uid)
+    {
+        return $constst->get_all_problems_info();
+    }
 }
 
 abstract class ThirdPartySign extends PluginBase

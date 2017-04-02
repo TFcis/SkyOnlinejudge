@@ -129,14 +129,6 @@ class UserBlock
     public $ac;
     public $ac_time;
     public $score;
-    static function acm_cmp($a,$b){
-        if( $a->ac!=$b->ac ) return $b->ac<=>$a->ac;
-        if( $a->ac_time!=$b->ac_time ) return $a->ac_time<=>$b->ac_time;
-        return $a->total_submit<=>$b->total_submit;
-    }
-    static function ioi_cmp($a,$b){
-        return $b->score <=> $a->score;
-    }
 }
 
 class ProblemBlock
@@ -388,6 +380,16 @@ class Contest extends CommonObject
             $data[]=$tmp;
         }
         return $data;
+    }
+
+    /**
+     *  get_user_problems_info
+     *  if manger have function get_user_problems_info ,this will return manger's value
+     *  else return all pid get from get_all_problems_info();
+     */
+    function get_user_problems_info(int $uid):array
+    {
+        return $this->manger->get_user_problems_info($this,$uid);
     }
 
     //ScoreBoard

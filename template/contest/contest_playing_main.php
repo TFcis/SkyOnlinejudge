@@ -5,6 +5,7 @@ if (!defined('IN_TEMPLATE')) {
 ?>
 <script>
 	var old = 'dashboard';
+    var cont_sub_url = "<?=$SkyOJ->uri('contest','view',$tmpl['contest']->cont_id(),'subpage')?>/";
 	$(document).ready(function(){
 	    $( "[navpage]" ).click(function(){loadTemplate($(this).attr('navpage'));});
         $("[navpage='"+old+"']").addClass('active');
@@ -16,6 +17,7 @@ if (!defined('IN_TEMPLATE')) {
         $("[navpage='"+template+"']").addClass('active');
         old = template;
         loadTemplateToBlock(template,'main-page');
+        
         return ;
 	}
 	function loadTemplateToBlock( template , bid  ){
@@ -27,7 +29,7 @@ if (!defined('IN_TEMPLATE')) {
         {
             adder = '&';
         }
-	    $(content).load("<?=$SkyOJ->uri('contest','view',$tmpl['contest']->cont_id(),'subpage')?>/"+template,function(){
+	    $(content).load(cont_sub_url+template,function(){
             MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
             $(content).hide();
             $(content).fadeIn();
@@ -37,6 +39,15 @@ if (!defined('IN_TEMPLATE')) {
                 console.log(tmpl);
                 console.log(bid);
                 loadTemplateToBlock(tmpl,bid);
+            });
+            //fix img url
+             var patten = /^https?:\/\//i;
+            $("#main-page img").each(function(){
+                var src = this.getAttribute('src');
+                if( !patten.test(src) ){
+                    src = cont_sub_url + template +'/' + src;
+                    this.setAttribute('src',src);
+                }
             });
         });
 	}
@@ -51,7 +62,7 @@ if (!defined('IN_TEMPLATE')) {
             </div>
             <hr>
             <ul class="nav nav-pills nav-stacked">
-                <?php foreach($tmpl['contest']->get_all_problems_info() as $prob):?>
+                <?php foreach($tmpl['contest']->get_user_problems_info($_G['uid']) as $prob):?>
                     <li role="presentation" navpage='prob_<?=\SKYOJ\html($prob->ptag)?>'><a href="#"><?=\SKYOJ\html($prob->ptag.', '.\SKYOJ\Problem::get_title($prob->pid))?></a></li>
                 <?php endforeach;?>
                 <li role="presentation" navpage='submit'><a href="#">上傳</a></li>

@@ -7,9 +7,15 @@ function sub_submitHandle(\SKYOJ\Contest $contest)
 {
     global $_G,$_E,$SkyOJ;
     $pid = $SkyOJ->UriParam(5)??null;
-    if( $pid === null ){;
+    if( $pid === null )
+    {
         \Render::renderSingleTemplate('view_submit_select','contest');
         exit(0);
+    }
+
+    if( !in_array($pid,$contest->get_user_problem_array($_G['uid'])) )
+    {
+        throw new \Exception('Access Denied!');
     }
 
     $problem = new \SKYOJ\Problem($pid);
