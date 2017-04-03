@@ -13,10 +13,7 @@ function sub_submitHandle(\SKYOJ\Contest $contest)
         exit(0);
     }
 
-    if( !in_array($pid,$contest->get_user_problem_array($_G['uid'])) )
-    {
-        throw new \Exception('Access Denied!');
-    }
+    //TODO: Check submit access
 
     $problem = new \SKYOJ\Problem($pid);
     $pid = $problem->pid();

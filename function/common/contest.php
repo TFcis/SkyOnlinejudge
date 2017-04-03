@@ -106,11 +106,13 @@ class ContestProblemInfo
 
 class ContestUserInfo
 {
-    static $column=['cont_id','uid','team_id','state'];
+    static $column=['cont_id','uid','team_id','state','timestamp','note'];
     public $cont_id;
     public $uid;
     public $team_id;
     public $state;
+    public $timestamp;
+    public $note;
 }
 
 class ScoreBlock
@@ -315,6 +317,20 @@ class Contest extends CommonObject
         return self::user_regstate_static($uid,$this->cont_id());
     }
 
+    function get_user_info(int $uid):ContestUserInfo
+    {
+        $table = \DB::tname('contest_user');
+        $user = \DB::fetchEx("SELECT * FROM {$table} WHERE `cont_id`=? AND `uid`=?",$this->cont_id(),$uid);
+        if( $user === false )
+        {
+            throw new CommonObjectError('no such data',SKY_ERROR::NO_SUCH_DATA);
+        }
+        $tmp = new ContestUserInfo();
+        foreach( ContestUserInfo::$column as $c )
+            $tmp->$c = $user[$c];
+        return $tmp;
+    }
+
     function get_all_users_info():array
     {
         $table = \DB::tname('contest_user');
@@ -413,6 +429,10 @@ class Contest extends CommonObject
 
     public function get_scoreboard_by_timestamp($start,$end)
     {
+        if( method_exists($this->manger,'get_scoreboard_by_timestamp') )
+        {
+            return $this->manger->get_scoreboard_by_timestamp($this,$start,$end);
+        }
         $all  = $this->get_chal_data_by_timestamp($start,$end);
         $uids = $this->get_all_users_info();
         $pids = $this->get_all_problems_info();
