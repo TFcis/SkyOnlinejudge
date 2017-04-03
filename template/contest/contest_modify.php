@@ -46,7 +46,7 @@ $(document).ready(function(){
                         new HTML_INPUT_TEXT(['name'=>'problems','value'=>implode(',',$p),'option' => ['help_text' => '題目列表']]),
                         new HTML_INPUT_SELECT(['name'=>'registertype'
                             ,'key-pair'=> \SKYOJ\ContestUserRegisterStateEnum::getConstants()
-                            ,'default'=>$tmpl['contest']->register_type
+                            ,'default' =>(int)$tmpl['contest']->register_type
                             ,'option'  => ['help_text' => '註冊模式']]),
 							
 						new HTML_INPUT_TEXT(['name'=>'registerbegin','value'=>$tmpl['contest']->register_beginsec,'option' => ['help_text' => '註冊開放於競賽開始前(sec)']]),
