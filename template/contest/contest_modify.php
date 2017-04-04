@@ -53,6 +53,7 @@ $(document).ready(function(){
                         new HTML_INPUT_TEXT(['name'=>'registerdelay','value'=>$tmpl['contest']->register_delaysec,'option' => ['help_text' => '註冊開放於競賽開始後(sec)']]),
                         new HTML_INPUT_TEXT(['name'=>'freezesec','value'=>$tmpl['contest']->freeze_sec,'option' => ['help_text' => '凍結於競賽結束前(sec)']]),
                         new HTML_INPUT_TEXT(['name'=>'penalty','value'=>$tmpl['contest']->penalty,'option' => ['help_text' => '答錯罰時(sec)']]),
+                        new HTML_INPUT_TEXT(['name'=>'class','value'=>$tmpl['contest']->class,'option' => ['help_text' => 'class']]),
                         new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出','option' => ['help_text' => 'true']]),
                     ]
                 ]),'modify-contest-from');

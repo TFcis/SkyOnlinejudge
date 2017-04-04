@@ -289,6 +289,15 @@ class Contest extends CommonObject
         return true;
     }
 
+    public function set_class(string $class):bool
+    {
+        $var = \Plugin::checkInstall($class);
+        if( !$var || !$var[$class] )
+            throw new CommonObjectError("set_class error",SKY_ERROR::NO_SUCH_DATA);
+        $this->UpdateSQLLazy('class',$class);
+        return true;
+    }
+
     //TODO: Rewrite this
     public function set_problems(string $problems):bool
     {

@@ -22,6 +22,7 @@ function contest_api_modifyHandle()
 
         $penalty   = \SKYOJ\safe_post_int('penalty');
         $freezesec = \SKYOJ\safe_post_int('freezesec');
+        $class = \SKYOJ\safe_post('class');
 
         $problems  = \SKYOJ\safe_post('problems');
 
@@ -46,6 +47,7 @@ function contest_api_modifyHandle()
 
         $contest->penalty = $penalty;
         $contest->freeze_sec = $freezesec;
+        $contest->class = $class;
 
         $contest->problems = $problems;
 
