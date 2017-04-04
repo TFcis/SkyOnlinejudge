@@ -7,13 +7,14 @@ function viewPlayingSubpageHandle(\SKYOJ\Contest $contest)
 {
     global $SkyOJ,$_E,$_G;
     $param = $SkyOJ->UriParam(4);
+    $addition = $SkyOJ->UriParam(5)??'';
     static $prob_prefix = 'prob_';
 
     if( substr($param,0,strlen($prob_prefix))==$prob_prefix )
     {
         //TODO Some bug with substr?
         $param = preg_replace('/^'.preg_quote($prob_prefix,'/').'/','', $param);
-        if( !viewPlayingProblem($contest,$param) )
+        if( !viewPlayingProblem($contest,$param,$addition) )
         {
             \Render::renderSingleTemplate('nonedefined');
         }
@@ -37,7 +38,7 @@ function viewPlayingSubpageHandle(\SKYOJ\Contest $contest)
     $func($contest);
 }
 
-function viewPlayingProblem(\SKYOJ\Contest $contest,string $ptag):bool
+function viewPlayingProblem(\SKYOJ\Contest $contest,string $ptag,string $filename):bool
 {
     global $SkyOJ,$_E,$_G;
     $probs = $contest->get_all_problems_info();
@@ -60,6 +61,13 @@ function viewPlayingProblem(\SKYOJ\Contest $contest,string $ptag):bool
     if( $prob_data->pid()===null )
     {
         return false;
+    }
+
+    if( strlen($filename)>0 )
+    {
+        require_once($_E['ROOT'].'/function/problem/problem_view.php');
+        \SKYOJ\Problem\viewachieveHandle($prob_data,$filename);
+        exit(0);
     }
 
     $_E['template']['problem'] = $prob_data;

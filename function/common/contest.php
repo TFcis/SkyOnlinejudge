@@ -106,11 +106,13 @@ class ContestProblemInfo
 
 class ContestUserInfo
 {
-    static $column=['cont_id','uid','team_id','state'];
+    static $column=['cont_id','uid','team_id','state','timestamp','note'];
     public $cont_id;
     public $uid;
     public $team_id;
     public $state;
+    public $timestamp;
+    public $note;
 }
 
 class ScoreBlock
@@ -129,14 +131,6 @@ class UserBlock
     public $ac;
     public $ac_time;
     public $score;
-    static function acm_cmp($a,$b){
-        if( $a->ac!=$b->ac ) return $b->ac<=>$a->ac;
-        if( $a->ac_time!=$b->ac_time ) return $a->ac_time<=>$b->ac_time;
-        return $a->total_submit<=>$b->total_submit;
-    }
-    static function ioi_cmp($a,$b){
-        return $b->score <=> $a->score;
-    }
 }
 
 class ProblemBlock
@@ -295,6 +289,15 @@ class Contest extends CommonObject
         return true;
     }
 
+    public function set_class(string $class):bool
+    {
+        $var = \Plugin::checkInstall($class);
+        if( !$var || !$var[$class] )
+            throw new CommonObjectError("set_class error",SKY_ERROR::NO_SUCH_DATA);
+        $this->UpdateSQLLazy('class',$class);
+        return true;
+    }
+
     //TODO: Rewrite this
     public function set_problems(string $problems):bool
     {
@@ -321,6 +324,20 @@ class Contest extends CommonObject
     function user_regstate(int $uid):int
     {
         return self::user_regstate_static($uid,$this->cont_id());
+    }
+
+    function get_user_info(int $uid):ContestUserInfo
+    {
+        $table = \DB::tname('contest_user');
+        $user = \DB::fetchEx("SELECT * FROM {$table} WHERE `cont_id`=? AND `uid`=?",$this->cont_id(),$uid);
+        if( $user === false )
+        {
+            throw new CommonObjectError('no such data',SKY_ERROR::NO_SUCH_DATA);
+        }
+        $tmp = new ContestUserInfo();
+        foreach( ContestUserInfo::$column as $c )
+            $tmp->$c = $user[$c];
+        return $tmp;
     }
 
     function get_all_users_info():array
@@ -390,6 +407,16 @@ class Contest extends CommonObject
         return $data;
     }
 
+    /**
+     *  get_user_problems_info
+     *  if manger have function get_user_problems_info ,this will return manger's value
+     *  else return all pid get from get_all_problems_info();
+     */
+    function get_user_problems_info(int $uid):array
+    {
+        return $this->manger->get_user_problems_info($this,$uid);
+    }
+
     //ScoreBoard
     public function get_chal_data_by_timestamp($start,$end):array
     {
@@ -411,6 +438,10 @@ class Contest extends CommonObject
 
     public function get_scoreboard_by_timestamp($start,$end)
     {
+        if( method_exists($this->manger,'get_scoreboard_by_timestamp') )
+        {
+            return $this->manger->get_scoreboard_by_timestamp($this,$start,$end);
+        }
         $all  = $this->get_chal_data_by_timestamp($start,$end);
         $uids = $this->get_all_users_info();
         $pids = $this->get_all_problems_info();

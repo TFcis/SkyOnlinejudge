@@ -46,13 +46,14 @@ $(document).ready(function(){
                         new HTML_INPUT_TEXT(['name'=>'problems','value'=>implode(',',$p),'option' => ['help_text' => '題目列表']]),
                         new HTML_INPUT_SELECT(['name'=>'registertype'
                             ,'key-pair'=> \SKYOJ\ContestUserRegisterStateEnum::getConstants()
-                            ,'default'=>$tmpl['contest']->register_type
+                            ,'default' =>(int)$tmpl['contest']->register_type
                             ,'option'  => ['help_text' => '註冊模式']]),
 							
 						new HTML_INPUT_TEXT(['name'=>'registerbegin','value'=>$tmpl['contest']->register_beginsec,'option' => ['help_text' => '註冊開放於競賽開始前(sec)']]),
                         new HTML_INPUT_TEXT(['name'=>'registerdelay','value'=>$tmpl['contest']->register_delaysec,'option' => ['help_text' => '註冊開放於競賽開始後(sec)']]),
                         new HTML_INPUT_TEXT(['name'=>'freezesec','value'=>$tmpl['contest']->freeze_sec,'option' => ['help_text' => '凍結於競賽結束前(sec)']]),
                         new HTML_INPUT_TEXT(['name'=>'penalty','value'=>$tmpl['contest']->penalty,'option' => ['help_text' => '答錯罰時(sec)']]),
+                        new HTML_INPUT_TEXT(['name'=>'class','value'=>$tmpl['contest']->class,'option' => ['help_text' => 'class']]),
                         new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出','option' => ['help_text' => 'true']]),
                     ]
                 ]),'modify-contest-from');

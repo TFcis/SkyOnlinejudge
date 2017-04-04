@@ -7,10 +7,13 @@ function sub_submitHandle(\SKYOJ\Contest $contest)
 {
     global $_G,$_E,$SkyOJ;
     $pid = $SkyOJ->UriParam(5)??null;
-    if( $pid === null ){;
+    if( $pid === null )
+    {
         \Render::renderSingleTemplate('view_submit_select','contest');
         exit(0);
     }
+
+    //TODO: Check submit access
 
     $problem = new \SKYOJ\Problem($pid);
     $pid = $problem->pid();
