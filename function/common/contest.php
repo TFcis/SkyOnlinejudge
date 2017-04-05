@@ -541,4 +541,76 @@ class Contest extends CommonObject
         $end   = $this->endtime;
         return $this->get_scoreboard_by_timestamp($start,$end);
     }
+    
+    public function get_resolver()
+    {
+        $start = $this->starttime;
+        $end   = \SKYOJ\get_timestamp( max([ strtotime($start) , strtotime($this->endtime)-$this->freeze_sec ]) );
+        $scdata = $this->get_scoreboard_by_timestamp($start,$end);
+        return $this->to_resolver_json($scdata);
+    }
+
+    public function get_resolver_all()
+    {
+        $start = $this->starttime;
+        $end   = $this->endtime;
+        $scdata = $this->get_scoreboard_by_timestamp($start,$end);
+        return $this->to_resolver_json($scdata);
+    }
+    
+    public function to_resolver_json($scordboard_data)
+    {
+        if( method_exists($this->manger,'to_resolver_json') )
+        {
+            return $this->manger->to_resolver_json($this,$scordboard_data);
+        }
+        
+        //solved attempted
+        $json = [];
+        $json["solved"] = [];
+        $json["attempted"] = [];
+        foreach($scordboard_data['probleminfo'] as $prob)
+        {
+            $json["solved"][$prob->ptag] = $prob->ac_times;
+            $json["attempted"][$prob->ptag] = $prob->try_times;
+        }
+        $rank = 1;
+        $last = null;
+        $json["scoreboard"] = [];
+        foreach($scordboard_data['userinfo'] as $user)
+        {
+            if( isset($last)&&$this->rank_cmp($last,$user)!=0 ){
+                $rank++;
+            }
+            $last = $user;
+            $d = [];
+            $d['id'] = (int)$user->uid;
+            $d['rank'] = $rank;
+            $d['solved'] = (int)$user->ac;
+            $d['points'] = (int)$user->ac_time;
+
+            $nickname=\SKYOJ\nickname($user->uid);
+            $d['name'] = $nickname[$user->uid];
+            $d['group'] = '';
+
+            foreach($scordboard_data['probleminfo'] as $prob)
+            {
+                $sb=$scordboard_data['scoreboard'][$user->uid][$prob->pid];
+                $d[$prob->ptag] = [];
+                $d[$prob->ptag]['a'] = $sb->try_times;
+                if( $sb->is_ac )
+                {
+                    $d[$prob->ptag]['t'] = $sb->ac_time;
+                }
+                if( $sb->firstblood )$d[$prob->ptag]['s'] = "first";
+                else if( $sb->is_ac )$d[$prob->ptag]['s'] = "solved";
+                else if( $sb->try_times ) $d[$prob->ptag]['s'] = "tried";
+                else $d[$prob->ptag]['s'] = "nottried";
+            }
+
+            $json["scoreboard"][] = $d;
+            
+        }
+        return json_encode($json);
+    }
 }

@@ -223,4 +223,52 @@ class class_RandomSet extends ContestManger
         usort($userinfo,[$contest,'rank_cmp']);
         return  ['scoreboard'=>$scoreboard,'userinfo'=>$userinfo,'probleminfo'=>$probleminfo];
     }
+    
+    public function to_resolver_json(\SKYOJ\Contest $contest,$scordboard_data)
+    {
+        //solved attempted
+        $json = [];
+        $json["solved"] = [];
+        $json["attempted"] = [];
+        foreach($scordboard_data['probleminfo'] as $prob)
+        {
+            $json["solved"][$prob->ptag] = $prob->ac_times;
+            $json["attempted"][$prob->ptag] = $prob->try_times;
+        }
+        $rank = 1;
+        $last = null;
+        $json["scoreboard"] = [];
+        foreach($scordboard_data['userinfo'] as $user)
+        {
+            if( isset($last)&&$contest->rank_cmp($last,$user)!=0 ){
+                $rank++;
+            }
+            $last = $user;
+            $d = [];
+            $d['id'] = (int)$user->uid;
+            $d['rank'] = $rank;
+            $d['solved'] = (int)$user->ac;
+            $d['points'] = (int)$user->score;
+
+            $nickname=\SKYOJ\nickname($user->uid);
+            $d['name'] = $nickname[$user->uid];
+            $d['group'] = '';
+
+            foreach($scordboard_data['probleminfo'] as $prob)
+            {
+                $sb=$scordboard_data['scoreboard'][$user->uid][$prob->ptag];
+                $d[$prob->ptag] = [];
+                $d[$prob->ptag]['a'] = $sb->try_times;
+                $d[$prob->ptag]['t'] = $sb->score;
+                if( $sb->firstblood )$d[$prob->ptag]['s'] = "first";
+                else if( $sb->is_ac )$d[$prob->ptag]['s'] = "solved";
+                else if( $sb->try_times ) $d[$prob->ptag]['s'] = "tried";
+                else $d[$prob->ptag]['s'] = "nottried";
+            }
+
+            $json["scoreboard"][] = $d;
+            
+        }
+        return json_encode($json);
+    }
 }
