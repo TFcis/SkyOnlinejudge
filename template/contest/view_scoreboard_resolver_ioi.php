@@ -6,7 +6,7 @@ if (!defined('IN_TEMPLATE')) {
 
 </head><!--close head--><!-- copy from https://www.acm-icpc.eng.chula.ac.th/2016 -->
 <link href="<?=$_E['SITEROOT']?>css/third/bangkok-resolver/bootstrap.min.css" rel="stylesheet">
-<link href="<?=$_E['SITEROOT']?>css/third/bangkok-resolver/resolver_acm.css" rel="stylesheet">
+<link href="<?=$_E['SITEROOT']?>css/third/bangkok-resolver/resolver_ioi.css" rel="stylesheet">
 
 
 <div id="scoreboard" class="scoreboard">
@@ -46,8 +46,10 @@ if (!defined('IN_TEMPLATE')) {
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script>
-g_before_url = <?=json_encode($SkyOJ->uri('contest','api','bangkok_results_before')."?cont_id=".$tmpl['contest']->cont_id())?>;
-g_final_url =  <?=json_encode($SkyOJ->uri('contest','api','bangkok_results_final')."?cont_id=".$tmpl['contest']->cont_id())?>;
+result_version = 0;
+scoreboardUpdateTime = 1000;
+g_before_url = <?=json_encode($SkyOJ->uri('contest','api','bangkok_results_before')."?cont_id=".$tmpl['contest']->cont_id().'&version='.time())?>;
+g_final_url =  <?=json_encode($SkyOJ->uri('contest','api','bangkok_results_final')."?cont_id=".$tmpl['contest']->cont_id().'&version='.time())?>;
 </script>
 <script src="<?=$_E['SITEROOT']?>js/third/bangkok-resolver/handlebars.min.js"></script>
-<script src="<?=$_E['SITEROOT']?>js/third/bangkok-resolver/resolver_acm.js"></script>
+<script src="<?=$_E['SITEROOT']?>js/third/bangkok-resolver/live_ioi.js"></script>
