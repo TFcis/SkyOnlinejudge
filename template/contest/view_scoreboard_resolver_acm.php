@@ -47,7 +47,7 @@ if (!defined('IN_TEMPLATE')) {
 <!-- Placed at the end of the document so the pages load faster -->
 <script>
 result_version = 0;
-scoreboardUpdateTime = 10000;
+scoreboardUpdateTime = 1000;
 g_before_url = <?=json_encode($SkyOJ->uri('contest','api','bangkok_results_before')."?cont_id=".$tmpl['contest']->cont_id().'&version='.time())?>;
 g_final_url =  <?=json_encode($SkyOJ->uri('contest','api','bangkok_results_final')."?cont_id=".$tmpl['contest']->cont_id().'&version='.time())?>;
 </script>

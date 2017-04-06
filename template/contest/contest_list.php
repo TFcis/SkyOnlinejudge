@@ -36,7 +36,7 @@ if (!defined('IN_TEMPLATE')) {
                 <td><?=\SKYOJ\html($row['class'])?></td>
                 <td class="hidden-xs">
                     <?php if ($_G['uid']): ?>
-                        <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','scoreboard_resolver',$row['cont_id'])?>">
+                        <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','scoreboard',$row['cont_id'])?>">
                             <span class="glyphicon glyphicon glyphicon-th-list" title="記分板"></span>
                         </a>
                         <?php if (userControl::getpermission($row['owner'])): ?>

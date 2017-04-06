@@ -19,11 +19,8 @@ function resolverHandle()
         $_E['template']['contest'] = $contest;
         //bangkok_resolver will destory page design
         \Render::renderSingleTemplate('common_header');
-        if( $contest->class == "ioi" )
-            \Render::renderSingleTemplate('bangkok_resolver_ioi','contest');
-        else
-            \Render::renderSingleTemplate('bangkok_resolver','contest');
-        exit(0);
+        $tmpl = $contest->resolver_template();
+        \Render::renderSingleTemplate($tmpl[0],$tmpl[1]);
     }catch(\Exception $e){
         \Render::errormessage('Oops! '.$e->getMessage(),'Contest');
         \Render::render('nonedefine');

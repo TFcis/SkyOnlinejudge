@@ -39,8 +39,17 @@ class class_ACM_ICPC extends ContestManger
         return $a->total_submit<=>$b->total_submit;
     }
 
-    public function scoreboard_template():array
+    public function scoreboard_template($resolver=false):array
     {
+        global $_G;
+        if(\userControl::isAdmin($_G['uid']) && $resolver){
+            return ['view_scoreboard_resolver_acm','contest','resolver'];
+        }
         return ['view_scoreboard_acm','contest'];
+    }
+    
+    public function resolver_template():array
+    {
+        return ['bangkok_resolver','contest'];
     }
 }

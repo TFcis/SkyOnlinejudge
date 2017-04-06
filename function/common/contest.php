@@ -224,9 +224,14 @@ class Contest extends CommonObject
         return $this->cont_id;
     }
 
-    function scoreboard_template():array
+    function scoreboard_template($resolver=false):array
     {
-        return $this->manger->scoreboard_template();
+        return $this->manger->scoreboard_template($resolver);
+    }
+    
+    function resolver_template():array
+    {
+        return $this->manger->resolver_template();
     }
 
     protected function set_title(string $title):bool

@@ -37,9 +37,18 @@ class class_RandomSet extends ContestManger
         return $b->score <=> $a->score;
     }
 
-    public function scoreboard_template():array
+    public function scoreboard_template($resolver=false):array
     {
+        global $_G;
+        if(\userControl::isAdmin($_G['uid']) && $resolver){
+            return ['view_scoreboard_resolver_ioi','contest','resolver'];
+        }
         return ['view_scoreboard_random_ioi','contest'];
+    }
+    
+    public function resolver_template():array
+    {
+        return ['bangkok_resolver_ioi','contest'];
     }
     /**
      * 避免相鄰 team id 同題目
@@ -234,6 +243,8 @@ class class_RandomSet extends ContestManger
         {
             $json["solved"][$prob->ptag] = $prob->ac_times;
             $json["attempted"][$prob->ptag] = $prob->try_times;
+            $json["problems"][$prob->ptag] = [];
+            $json["problems"][$prob->ptag]["score"] = 100;
         }
         $rank = 1;
         $last = null;

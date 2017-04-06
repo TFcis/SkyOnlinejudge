@@ -19,8 +19,16 @@ function scoreboardHandle()
         $_E['template']['user'] = $data['userinfo'];
         $_E['template']['pids'] = $data['probleminfo'];
         $_E['template']['scoreboard'] = $data['scoreboard'];
-        $tmpl = $contest->scoreboard_template();
-        \Render::render($tmpl[0],$tmpl[1]);
+        $tmpl = $contest->scoreboard_template(true);
+        if(isset($tmpl[2])){
+            if($tmpl[2]=='resolver'){
+                \Render::renderSingleTemplate('common_header');
+                \Render::renderSingleTemplate($tmpl[0],$tmpl[1]);
+            }
+        }
+        else{
+            \Render::render($tmpl[0],$tmpl[1]);
+        }
     }catch(\Exception $e){
         \Render::errormessage('Oops! '.$e->getMessage(),'Contest');
         \Render::render('nonedefine');
