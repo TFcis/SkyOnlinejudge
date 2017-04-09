@@ -99,6 +99,10 @@ TAG
                             ,'key-pair'=> \SKYOJ\ProblemSubmitAccessEnum::getConstants()
                             ,'default' => $tmpl['problem']->GetSubmitAccess()
                             ,'option'  => ['help_text' => '上傳權限']]),
+                        new HTML_INPUT_SELECT(['name'=>'codeview_access'
+                            ,'key-pair'=> \SKYOJ\ProblemCodeviewAccessEnum::getConstants()
+                            ,'default' => $tmpl['problem']->GetCodeviewAccess()
+                            ,'option'  => ['help_text' => '上傳權限']]),
                         new HTML_HR(),
                         new HTML_INPUT_CODEPAD(['option' =>
                             [
