@@ -319,14 +319,14 @@ class Problem
             case ProblemCodeviewAccessEnum::Logged_in:   return $uid!=0;
             case ProblemCodeviewAccessEnum::Logged_in_AC:return $uid!=0 && 
                 \SKYOJ\Problem\UserProblemState($pid,$uid,true) === \SKYOJ\RESULTCODE::AC||
-                $code_owner===$uid;
+                $code_owner===$uid||\userControl::isAdmin($uid);
             default: \SKYOJ\NeverReach();
         }
     }
 
     public function hasCodeviewAccess(int $uid,int $code_owner):bool
     {
-        return self::hasSubmitAccess_s($uid,$code_owner,$this->GetCodeviewAccess(),$this->pid());
+        return self::hasCodeviewAccess_s($uid,$code_owner,$this->GetCodeviewAccess(),$this->pid());
     }
 
     public function GetJudge():string
