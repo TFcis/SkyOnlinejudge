@@ -310,22 +310,23 @@ class Problem
         return true;
     }
 
-    public static function hasCodeviewAccess_s(int $uid,int $owner,int $acccode,int $pid):bool
+    public static function hasCodeviewAccess_s(int $uid,int $code_owner,int $acccode,int $pid):bool
     {
         switch($acccode)
         {
-            case ProblemCodeviewAccessEnum::Closed: return $owner===$uid || \userControl::isAdmin($uid);
+            case ProblemCodeviewAccessEnum::Closed: return $code_owner===$uid || \userControl::isAdmin($uid);
             case ProblemCodeviewAccessEnum::Always: return true;
             case ProblemCodeviewAccessEnum::Logged_in:   return $uid!=0;
             case ProblemCodeviewAccessEnum::Logged_in_AC:return $uid!=0 && 
-                \SKYOJ\Problem\UserProblemState($pid,$uid,true) === \SKYOJ\RESULTCODE::AC;
+                \SKYOJ\Problem\UserProblemState($pid,$uid,true) === \SKYOJ\RESULTCODE::AC||
+                $code_owner===$uid;
             default: \SKYOJ\NeverReach();
         }
     }
 
-    public function hasCodeviewAccess(int $uid):bool
+    public function hasCodeviewAccess(int $uid,int $code_owner):bool
     {
-        return self::hasSubmitAccess_s($uid,$this->owner(),$this->GetCodeviewAccess(),$this->pid());
+        return self::hasSubmitAccess_s($uid,$code_owner,$this->GetCodeviewAccess(),$this->pid());
     }
 
     public function GetJudge():string

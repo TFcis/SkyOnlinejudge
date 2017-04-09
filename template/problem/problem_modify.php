@@ -102,7 +102,7 @@ TAG
                         new HTML_INPUT_SELECT(['name'=>'codeview_access'
                             ,'key-pair'=> \SKYOJ\ProblemCodeviewAccessEnum::getConstants()
                             ,'default' => $tmpl['problem']->GetCodeviewAccess()
-                            ,'option'  => ['help_text' => '上傳權限']]),
+                            ,'option'  => ['help_text' => '程式碼檢視']]),
                         new HTML_HR(),
                         new HTML_INPUT_CODEPAD(['option' =>
                             [

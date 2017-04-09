@@ -3,6 +3,7 @@
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
+require_once 'function/problem/problem.lib.php';
 require_once 'function/common/problem.php';
 class ChallengeTask
 {
