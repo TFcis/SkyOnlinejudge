@@ -90,7 +90,7 @@ $(document).ready(function()
 			</table>
 		</div>
 	</div>
-	<?php if( $data['uid']==$_G['uid'] || \userControl::isAdmin($_G['uid']) ):?>
+	<?php if( \SKYOJ\Problem::hasCodeviewAccess_s($_G['uid'],$data['uid'],$data['codeview_access'],$data['pid']) ):?>
 		<?php if(\userControl::isAdmin($_G['uid'])):?>
 		<div class="row">
 			<a href="<?=$SkyOJ->uri('problem','api','judge')?>?cid=<?=$data['cid']?>">Rejudge</a>
