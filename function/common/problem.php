@@ -41,6 +41,14 @@ class ProblemSubmitAccessEnum extends BasicEnum
     const Contest   = 3; //< Only user in contest or admin access
 }
 
+class ProblemCodeviewAccessEnum extends BasicEnum
+{
+    const Closed    = 0; //< Only Admin and owner can view submitted code
+    const Always    = 1; //< Everyone can view submit code
+    const Logged_in = 2; //< Only User Who is logged in can view code
+    const Logged_in_AC = 3; //< Only User Who is logged in and accept problem can view code
+}
+
 class Problem
 {
     private $SQLData = [];
@@ -285,6 +293,39 @@ class Problem
     public function hasSubmitAccess(int $uid):bool
     {
         return self::hasSubmitAccess_s($uid,$this->owner(),$this->GetSubmitAccess(),$this->pid());
+    }
+
+    public function GetCodeviewAccess():int
+    {
+        return $this->SQLData['codeview_access']??null;
+    }
+
+    public function SetCodeviewAccess($val):bool
+    {
+        if( ProblemCodeviewAccessEnum::isValidValue($val) )
+        {
+            return false;
+        }
+        $this->UpdateSQLLazy('codeview_access',$val);
+        return true;
+    }
+
+    public static function hasCodeviewAccess_s(int $uid,int $owner,int $acccode,int $pid):bool
+    {
+        switch($acccode)
+        {
+            case ProblemCodeviewAccessEnum::Closed: return $owner===$uid || \userControl::isAdmin($uid);
+            case ProblemCodeviewAccessEnum::Always: return true;
+            case ProblemCodeviewAccessEnum::Logged_in:   return $uid!=0;
+            case ProblemCodeviewAccessEnum::Logged_in_AC:return $uid!=0 && 
+                \SKYOJ\Problem\UserProblemState($pid,$uid,true) === \SKYOJ\RESULTCODE::AC;
+            default: \SKYOJ\NeverReach();
+        }
+    }
+
+    public function hasCodeviewAccess(int $uid):bool
+    {
+        return self::hasSubmitAccess_s($uid,$this->owner(),$this->GetCodeviewAccess(),$this->pid());
     }
 
     public function GetJudge():string

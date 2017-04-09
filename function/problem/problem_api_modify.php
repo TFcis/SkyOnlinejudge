@@ -19,6 +19,7 @@ function problem_api_modifyHandle()
     $contenttype  = \SKYOJ\safe_post('contenttype');
     $content_access = \SKYOJ\safe_post('content_access');
     $submit_access  = \SKYOJ\safe_post('submit_access');
+    $codeview_access  = \SKYOJ\safe_post('codeview_access');
     $pjson = \SKYOJ\safe_post('json_data');
     \Log::msg(\Level::Debug,"",$pjson);
     if( !isset($pid,$title,$content,$contenttype) )
@@ -39,6 +40,8 @@ function problem_api_modifyHandle()
             throw new \Exception('no such ContentAccess type');
         if( !$problem->SetSubmitAccess($submit_access) )
             throw new \Exception('no such SubmitAccess type');
+        if( !$problem->SetCodeviewAccess($codeview_access) )
+            throw new \Exception('no such CodeviewAccess type');
         $problem->SetRowContent($content);
 
         file_put_contents($_E['DATADIR']."problem/{$pid}/{$pid}.json",$pjson);
