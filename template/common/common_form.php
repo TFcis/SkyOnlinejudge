@@ -46,7 +46,7 @@ TAG;
                 $rev .= ' '.htmlentities($tag);
                 $var = htmlentities((string)$key);
                 if( $var!=="" ){
-                    $rev .= '="'.htmlentities($var).'"';
+                    $rev .= '="'.$var.'"';
                 }
             }
             $rev.='>';
