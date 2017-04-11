@@ -41,7 +41,7 @@ function viewPlayingSubpageHandle(\SKYOJ\Contest $contest)
 function viewPlayingProblem(\SKYOJ\Contest $contest,string $ptag,string $filename):bool
 {
     global $SkyOJ,$_E,$_G;
-    $probs = $contest->get_all_problems_info();
+    $probs = $contest->get_user_problems_info($_G['uid']);
     $prob = null;
     foreach($probs as $row)
     {
