@@ -232,7 +232,7 @@ class Problem
             $contest = new \SKYOJ\Contest($cont_id);
             if( $contest->isIdfail() )continue;
             if( $now<$contest->starttime || $now>$contest->endtime)continue;
-            $probs = $contest->get_all_problems_info();
+            $probs = $contest->get_user_problems_info($uid);
             foreach($probs as $prob){
                 $pid = $prob->pid;
                 if(!in_array($pid,$cache[$uid])){
