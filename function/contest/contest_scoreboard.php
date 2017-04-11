@@ -10,6 +10,10 @@ function scoreboardHandle()
     try{
         $cont_id = $SkyOJ->UriParam(2);
         $contest = GetContestByID($cont_id);
+        $resolver = false;
+        if($SkyOJ->UriParam(3)=='resolver'){
+            $resolver = true;
+        }
 
         if( $contest->ispreparing() )
             throw new \Exception('Contest is preparing!');
@@ -19,7 +23,7 @@ function scoreboardHandle()
         $_E['template']['user'] = $data['userinfo'];
         $_E['template']['pids'] = $data['probleminfo'];
         $_E['template']['scoreboard'] = $data['scoreboard'];
-        $tmpl = $contest->scoreboard_template(true);
+        $tmpl = $contest->scoreboard_template($resolver);
         if(isset($tmpl[2])){
             if($tmpl[2]=='resolver'){
                 \Render::renderSingleTemplate('common_header');

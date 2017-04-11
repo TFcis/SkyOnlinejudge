@@ -40,6 +40,9 @@ if (!defined('IN_TEMPLATE')) {
                             <span class="glyphicon glyphicon glyphicon-th-list" title="記分板"></span>
                         </a>
                         <?php if (userControl::getpermission($row['owner'])): ?>
+                            <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','scoreboard',$row['cont_id'],'resolver')?>">
+                                <span class="glyphicon glyphicon glyphicon-blackboard" title="記分板-resolver"></span>
+                            </a>
                             <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','modify',$row['cont_id'])?>">
                                 <span class="glyphicon glyphicon-pencil" title="編輯"></span>
                             </a>
