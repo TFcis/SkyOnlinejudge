@@ -10,4 +10,11 @@ class skyoj_libTest extends TestCase
         $this->expectException('Exception');
         \SKYOJ\NeverReach();
     }
+
+    public function testget_timestamp()
+    {
+        $this->assertEquals(\SKYOJ\get_timestamp(strtotime('2017-08-08 20:17:16')),'2017-08-08 20:17:16');
+        //Fix timeformat bug at PR contest
+        $this->assertEquals(\SKYOJ\get_timestamp(strtotime('2017-04-12 09:57:16')),'2017-04-12 09:57:16');
+    }
 }
