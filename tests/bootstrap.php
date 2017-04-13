@@ -1,6 +1,6 @@
 <?php
 define('IN_SKYOJSYSTEM', 1);
-require __DIR__.'/../vendor/autoload.php';
+
 //load real file in ./
 function g__loadthis(string $file):void
 {
