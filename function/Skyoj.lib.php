@@ -123,7 +123,7 @@ function safe_get_int(string $key)
 //TODO use ?int when upgrade to PHP7.1
 function get_timestamp(int $time):string
 {
-     return date('Y-m-d G:i:s',$time);
+     return date('Y-m-d H:i:s',$time);
 }
 
 function CreateFolder(string $path,bool $rewrite = false,bool $recursive = false):bool
