@@ -1,8 +1,7 @@
 <?php
-
-define('IN_SKYOJSYSTEM', 1);
-require_once __DIR__.'/../function/common/encrypt.php';
-class encryptTest extends PHPUnit_Framework_TestCase
+g__loadthis(__FILE__);
+use PHPUnit\Framework\TestCase;
+class encryptTest extends TestCase
 {
     public function testEncryptConst()
     {
