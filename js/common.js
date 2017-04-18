@@ -32,7 +32,8 @@ function siteroot(url){
 
 function api_submit(url,fmid,showid,succ,err)
 {
-    $.post(url,$(fmid).serialize(),function(res){
+    var formData = new FormData(document.querySelector(fmid));
+    var warp = function(res){
         if(res.status == 'error'){
             $(showid).html(res.data);
             $(showid).css('color','Red');
@@ -44,7 +45,16 @@ function api_submit(url,fmid,showid,succ,err)
             if (typeof succ != 'undefined')
                 succ(res);
         }
-    },"json").fail(function(e){
+    }
+    $.ajax({
+        url:url,
+        type: 'POST',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        data:formData,
+        success:warp
+    }).fail(function(e){
         console.log(e);
         $(showid).html(e.responseText);
     });
