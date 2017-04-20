@@ -27,6 +27,7 @@ function sub_submitHandle(\SKYOJ\Contest $contest)
 
     $_E['template']['problem'] = $problem;
     $_E['template']['compiler'] = $judge->get_compiler();
-    \Render::renderSingleTemplate('view_submit','contest');
+    $_E['template']['jscallback'] = 'loadTemplate("log")';
+    \Render::renderSingleTemplate('problem_submit','problem');
     exit(0);
 }

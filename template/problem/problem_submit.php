@@ -23,7 +23,7 @@ $(document).ready(function()
         }
         $("#s_code").val(code);
         api_submit("<?=$SkyOJ->uri('problem','api','submit')?>","#submit","#info",function(res){
-            location.href="<?=$SkyOJ->uri('chal','result')?>/"+res.data;
+            <?=$tmpl['jscallback']??''?>
         });
     });
     function init()
@@ -31,13 +31,19 @@ $(document).ready(function()
         var j_submit = $('#codesubmit');
         $('#s_file').on('change',function(e)
         {
+            var editor = ace.edit("editor");
             var reader = new FileReader();
-            reader.onload = function(e)
-            {
-                var editor = ace.edit("editor");
+            reader.onload = function(e){
                 editor.getSession().setValue(reader.result);
-            };
-            reader.readAsText(this.files[0]);
+            }
+            if( this.files.length === 0 ){
+                editor.getSession().setValue("");
+                editor.setReadOnly(false);
+            }else{
+                editor.setReadOnly(true);
+                editor.getSession().setValue("Loading...");
+                reader.readAsText(this.files[0]);
+            }
         });
     };
     init();
@@ -68,7 +74,7 @@ $(document).ready(function()
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="file" id="s_file">
+                    <input type="file" id="s_file" name="codefile">
                 </div>
             </form>
         </div>
