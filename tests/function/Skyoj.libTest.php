@@ -11,6 +11,14 @@ class skyoj_libTest extends TestCase
         \SKYOJ\NeverReach();
     }
 
+    public function testis_utf8()
+    {
+        $this->assertTrue(\SKYOJ\is_utf8(''));
+        $this->assertTrue(\SKYOJ\is_utf8('string'));
+        $this->assertNotTrue(\SKYOJ\is_utf8(1234));
+        $this->assertNotTrue(\SKYOJ\is_utf8(null));
+    }
+
     public function testget_timestamp()
     {
         $this->assertEquals(\SKYOJ\get_timestamp(strtotime('2017-08-08 20:17:16')),'2017-08-08 20:17:16');

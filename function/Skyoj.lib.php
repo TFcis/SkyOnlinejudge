@@ -91,6 +91,17 @@ function check_totimestamp($val,&$conv = null):bool
         
 }
 
+/**
+ *  is_utf8
+ *  @param mixed $var
+ *  @return bool if $var is a valid utf8 encoding string
+ */
+function is_utf8($var):bool
+{
+    if(!is_string($var))return false;
+    return preg_match('!!u', $var)!=0;
+}
+
 function safe_post_int(string $key)
 {
     $data = safe_post($key);
