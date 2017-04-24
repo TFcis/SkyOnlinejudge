@@ -32,7 +32,8 @@ function siteroot(url){
 
 function api_submit(url,fmid,showid,succ,err)
 {
-    $.post(url,$(fmid).serialize(),function(res){
+    var formData = new FormData(document.querySelector(fmid));
+    var warp = function(res){
         if(res.status == 'error'){
             $(showid).html(res.data);
             $(showid).css('color','Red');
@@ -44,7 +45,16 @@ function api_submit(url,fmid,showid,succ,err)
             if (typeof succ != 'undefined')
                 succ(res);
         }
-    },"json").fail(function(e){
+    }
+    $.ajax({
+        url:url,
+        type: 'POST',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        data:formData,
+        success:warp
+    }).fail(function(e){
         console.log(e);
         $(showid).html(e.responseText);
     });
@@ -73,4 +83,24 @@ function updateQueryStringParameter(key, value) {
         url =  url + separator + key + "=" + value;
     }
     location.replace(url);
+}
+
+function updateJudgeVerdict(api,cid,callback){
+    $.get(api,{cid:cid},function(res){
+        if( res.status == 'error' ){
+				console.log('server error retry in ' + sec +'sec');
+				setTimeout(function(){
+					sec*=2;
+					updateJudgeVerdict(api,cid,callback);
+				},sec*1000);
+			}else{
+				if( res.data.wait ) updateJudgeVerdict(api,cid,callback);//wait
+				else if (typeof callback != 'undefined'){
+                    callback(cid,res);
+                }
+			}
+    },"json").fail(function(e){
+        console.log(e);
+        console.log(e.responseText);
+    });
 }

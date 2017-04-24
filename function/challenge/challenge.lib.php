@@ -3,6 +3,7 @@
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
+require_once 'function/problem/problem.lib.php';
 require_once 'function/common/problem.php';
 class ChallengeTask
 {
@@ -14,16 +15,22 @@ class ChallengeTask
     public $msg;    //judge message
 }
 
-class Challenge
+class Challenge extends \SKYOJ\CommonObject
 {
     private $cid;
     private $uid;
     private $pid;
     private $id;
-    private $sql_data;
 
-    private $light = false;
+    protected function getTableName():string
+    {
+        return \DB::tname('challenge');
+    }
 
+    protected function getIDName():string
+    {
+        return 'cid';
+    }
 
     public static function create(int $uid,int $pid,string $code,string $compiler)
     {
@@ -37,20 +44,26 @@ class Challenge
         return \DB::lastInsertId('cid');
     }
 
-    public function __construct(int $cid,$light = false)
+    public function __construct(int $cid)
     {
-        $tchallenge = \DB::tname('challenge');
-        if( $this->light = $light ){
-            $this->sql_data = \DB::fetchEx("SELECT `cid`, `pid`, `uid`, `result`, `runtime`, `score`, `timestamp` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
-        }else{
-            $this->sql_data = \DB::fetchEx("SELECT * FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
-        }
-
-        if( $this->sql_data == false ){
+        $tchallenge = $this->getTableName();
+        $this->sqldata = \DB::fetchEx("SELECT `cid`, `pid`, `uid`, `result`, `runtime`, `score`, `timestamp`,`comment` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
+        if( $this->sqldata == false ){
             $this->cid = null;
             return ;
         }
         $this->cid = $cid;
+    }
+
+    private function get_code_lazy()
+    {
+        static $code = [];
+        if( isset($code[$this->cid]) ){
+            return $code[$this->cid];
+        }
+        $tchallenge = $this->getTableName();
+        $d = \DB::fetchEx("SELECT `code` FROM `{$tchallenge}` WHERE `cid` = ?",$this->cid);
+        return $code[$this->cid] = ($d===false)?'':$d['code'];
     }
     
     public function cid():int
@@ -60,52 +73,57 @@ class Challenge
 
     public function uid():int
     {
-        return $this->sql_data['uid'];
+        return $this->sqldata['uid'];
     }
 
     public function pid():int
     {
-        return $this->sql_data['pid'];
+        return $this->sqldata['pid'];
     }
 
     public function code():string
     {
-        return $this->sql_data['code']??'';
+        return $this->get_code_lazy();
     }
 
     public function compiler():int
     {
-        return $this->sql_data['compiler']??'';
+        return $this->sqldata['compiler']??'';
     }
 
     public function result():int
     {
-        return $this->sql_data['result'];
+        return $this->sqldata['result'];
     }
     public function runtime():int
     {
-        return $this->sql_data['time'];
+        return $this->sqldata['time'];
     }
 
     public function score():int
     {
-        return $this->sql_data['score'];
+        return $this->sqldata['score'];
     }
 
     public function timestamp():string
     {
-        return $this->sql_data['timestamp'];
+        return $this->sqldata['timestamp'];
     }
 
-    public function sql_data()
+    public function sqldata()
     {
-        return $this->sql_data;
+        return $this->sqldata;
     }
 
-    public function set_result(int $code)
+    public function set_comment(string $comment)
     {
-        $tchallenge = \DB::tname('challenge');
-        \DB::queryEx("UPDATE `{$tchallenge}` SET `result` = ? WHERE `cid` = ?",$code,$this->cid());
+        $this->UpdateSQLLazy('comment',$comment);
+    }
+
+    public function set_result(int $code):bool
+    {
+        $this->UpdateSQLLazy('result',$code);
+        return $this->UpdateSQL();
     }
 
     public function run_judge():bool //No Reply
@@ -148,9 +166,12 @@ class Challenge
         }
 
         $res = json_encode($res);
-        $tchallenge = \DB::tname('challenge');
-        if( !\DB::queryEx("UPDATE `{$tchallenge}` SET `package`=?,`result`=?,`score` =?,`runtime` =?
-                           WHERE `cid` = ?",$res,$problem_stat,$total_score,$total_time,$this->cid()) )
+
+        $this->UpdateSQLLazy('package',$res);
+        $this->UpdateSQLLazy('result',$problem_stat);
+        $this->UpdateSQLLazy('score',$total_score);
+        $this->UpdateSQLLazy('runtime',$total_time);
+        if( !$this->UpdateSQL() )
         {
             \Log::msg(\Level::Error,"(Challenge)UPDATE challenge SQL Error!");
             return false;

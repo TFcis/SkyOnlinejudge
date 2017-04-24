@@ -6,6 +6,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 require_once($_E['ROOT'].'/function/challenge/challenge.lib.php');
 function challenge_api_waitjudgeHandle()
 {
+    #TODO Require Premission System
     global $_G,$_E;
     $cid = \SKYOJ\safe_get('cid');
     $tchallenge = \DB::tname('challenge');
@@ -24,11 +25,11 @@ function challenge_api_waitjudgeHandle()
             }
             if( $res['result'] >= \SKYOJ\RESULTCODE::AC ) //AC
             {
-                \SKYOJ\throwjson('SUCC',false);
+                \SKYOJ\throwjson('SUCC',["wait"=>false,'verdict'=>\SKYOJ\getresulttexthtml($res['result'])]);
             }
             sleep($Wait);
         }
-        \SKYOJ\throwjson('SUCC',true);
+        \SKYOJ\throwjson('SUCC',["wait"=>true]);
     }catch(\Exception $e){
         \SKYOJ\throwjson('error',$e->getMessage());
     }

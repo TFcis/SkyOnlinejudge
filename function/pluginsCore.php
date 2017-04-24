@@ -56,7 +56,7 @@ class Plugin
 
     public static function getAllFolders()
     {
-        return ['rank/board_other_oj', 'user/login','judge'];
+        return ['rank/board_other_oj', 'user/login','judge','contest'];
     }
 
     /**

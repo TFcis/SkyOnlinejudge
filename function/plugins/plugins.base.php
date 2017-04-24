@@ -144,6 +144,20 @@ abstract class Judge extends PluginBase
     //abstract public function ModifyProblem(\SKYOJ\Problem $problem):bool;
 }
 
+abstract class ContestManger extends PluginBase
+{
+    public function __construct()
+    {
+        parent::__construct();
+        Enforcer::__add(__CLASS__, get_called_class());
+    }
+    abstract public function compare(\SKYOJ\UserBlock $a,\SKYOJ\UserBlock $b);
+    public function get_user_problems_info(\SKYOJ\Contest $constst,int $uid)
+    {
+        return $constst->get_all_problems_info();
+    }
+}
+
 abstract class ThirdPartySign extends PluginBase
 {
 }

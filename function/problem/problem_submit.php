@@ -34,6 +34,7 @@ function submitHandle()
             val : judge info support by judge plugin
         */
         $_E['template']['compiler'] = $judge->get_compiler();
+        $_E['template']['jscallback'] = 'location.href="'.$SkyOJ->uri('chal','result').'/"+res.data;';
         \Render::render('problem_submit','problem');
     }catch(\Exception $e){
         \Render::errormessage($e->getMessage(),'Problem closed');

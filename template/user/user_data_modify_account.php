@@ -71,7 +71,8 @@ $(document).ready(function()
                         new HTML_INPUT_PASSWORD(['name' => 'newpasswd','id'=>  'newpass','option' => ['help_text' => '新密碼']]),
                         new HTML_INPUT_PASSWORD(['name' => ''         ,'id'=>'renewpass','option' => ['help_text' => '再次確認']]),
 
-                        new HTML_ROW(['html' => '<h3>修改本名</h3>']),
+                        new HTML_ROW(['html' => '<h3>修改名稱</h3>']),
+                        new HTML_INPUT_TEXT(  ['name' => 'nickname','id'=>  'nickname','option' => ['help_text' => '暱稱']]),
                         new HTML_INPUT_TEXT(  ['name' => 'realname','option' => ['help_text' => '真實姓名']]),
                         
                         new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出','option' => ['help_text' => 'true']]),

@@ -18,7 +18,7 @@ use \SKYOJ\HTML_INPUT_HIDDEN;
         </div>
         <div class="col-md-3 text-right">
             <p><?=array_search($tmpl['problem']->GetJudgeType(),SKYOJ\ProblemJudgeTypeEnum::getConstants())?> Judge</p>
-            <p>Open(Stats)</p>
+            <p>Code: <?=array_search($tmpl['problem']->GetCodeviewAccess(),SKYOJ\ProblemCodeviewAccessEnum::getConstants())?></p>
         </div>
     </div>
     <hr>

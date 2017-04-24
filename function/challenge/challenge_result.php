@@ -26,7 +26,7 @@ function resultHandle()
             throw new \Exception('cid error');
         }
 
-        if( !\SKYOJ\Problem::hasContentAccess_s($_G['uid'],$data['owner'],$data['content_access']) )
+        if( !\SKYOJ\Problem::hasContentAccess_s($_G['uid'],$data['owner'],$data['content_access'],$data['pid']) )
         {
             throw new \Exception('不具有檢視權限，無法觀看');
         }

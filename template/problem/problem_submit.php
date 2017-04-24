@@ -14,7 +14,7 @@ $(document).ready(function()
     {
         var editor = ace.edit("editor");
         var code = editor.getValue();
-        if( code === '' && false )
+        if( code === '' )
         {
             if( !confirm('Are you sure to submit an empty code?') )
             {
@@ -23,9 +23,30 @@ $(document).ready(function()
         }
         $("#s_code").val(code);
         api_submit("<?=$SkyOJ->uri('problem','api','submit')?>","#submit","#info",function(res){
-            location.href="<?=$SkyOJ->uri('chal','result')?>/"+res.data;
+            <?=$tmpl['jscallback']??''?>
         });
     });
+    function init()
+    {
+        var j_submit = $('#codesubmit');
+        $('#s_file').on('change',function(e)
+        {
+            var editor = ace.edit("editor");
+            var reader = new FileReader();
+            reader.onload = function(e){
+                editor.getSession().setValue(reader.result);
+            }
+            if( this.files.length === 0 ){
+                editor.getSession().setValue("");
+                editor.setReadOnly(false);
+            }else{
+                editor.setReadOnly(true);
+                editor.getSession().setValue("Loading...");
+                reader.readAsText(this.files[0]);
+            }
+        });
+    };
+    init();
 })
 </script>
 <div class="container">
@@ -47,16 +68,19 @@ $(document).ready(function()
                         <?php endforeach; ?>
                     </select>
                 </div>
-                
+                <div class="row">
+                    <div class="col-sm-12">
+                    <?php Render::renderCode('','c_cpp','editor',['minLines'=>20,'maxLines'=>20]); ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="file" id="s_file" name="codefile">
+                </div>
             </form>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-sm-12">
-        <?php Render::renderCode('','c_cpp','editor',['minLines'=>20,'maxLines'=>20]); ?>
-        </div>
-    </div>
+    
 
     <div class="row" style = "margin-top:15px;">
         <div class="col-sm-offset-6 col-sm-6 text-right">

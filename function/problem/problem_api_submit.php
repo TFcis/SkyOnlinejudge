@@ -8,6 +8,7 @@ require_once($_E['ROOT'].'/function/challenge/challenge.lib.php');
 function problem_api_submitHandle()
 {
     global $SkyOJ,$_G,$_E;
+    $CODE_LIMIT_LEN = 100000;
 
     //TODO : 題目權限
     if( !$_G['uid'] )
@@ -17,11 +18,25 @@ function problem_api_submitHandle()
     $compiler = \SKYOJ\safe_post('compiler');
     $code = \SKYOJ\safe_post('code');
     $uid = $_G['uid'];
-
-    if( !isset($pid,$compiler,$code) )
-        \SKYOJ\throwjson('error','param error');
-
     try{
+        if( isset($_FILES['codefile']) )
+        {
+            //User use file to upload! which instead of POST['code']
+            if( $_FILES['codefile']['error'] === UPLOAD_ERR_OK )
+            {
+                if( $_FILES['codefile']['size']>$CODE_LIMIT_LEN )
+                    throw new \Exception('code length more than limit');
+                $code = file_get_contents($_FILES['codefile']['tmp_name']);
+            }
+            else if( $_FILES['codefile']['error'] !== UPLOAD_ERR_NO_FILE )
+            {
+                throw new \Exception('Upload code error! #'.$_FILES['codefile']['error'] );
+            }
+        }
+
+        if( !isset($pid,$compiler,$code) )
+            throw new \Exception('param error');
+
         $problem = new \SKYOJ\Problem($pid);
         $pid = $problem->pid();
 
@@ -47,8 +62,10 @@ function problem_api_submitHandle()
         }
 
 
-        if( strlen($code)>100000 )
+        if( strlen($code)>$CODE_LIMIT_LEN )
             throw new \Exception('code length more than limit');
+        if( !\SKYOJ\is_utf8($code) )
+            throw new \Exception('This is not a utf-8 encoding file!');
 
         $cid = \SKYOJ\Challenge\Challenge::create($uid,$pid,$code,$compiler);
         if( $cid===null )
@@ -56,7 +73,7 @@ function problem_api_submitHandle()
 
         $SkyOJ->throwjson_keep('SUCC',$cid);
     }catch(\Exception $e){
-        $throwjson('error',$e->getMessage());
+        \SKYOJ\throwjson('error',$e->getMessage());
     }
 
     //Flushed! run on back round

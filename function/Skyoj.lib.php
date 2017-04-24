@@ -90,19 +90,51 @@ function check_totimestamp($val,&$conv = null):bool
     return true;
         
 }
+
+/**
+ *  is_utf8
+ *  @param mixed $var
+ *  @return bool if $var is a valid utf8 encoding string
+ */
+function is_utf8($var):bool
+{
+    if(!is_string($var))return false;
+    return preg_match('!!u', $var)!=0;
+}
+
 function safe_post_int(string $key)
 {
     $data = safe_post($key);
-    if( !isset($data) || empty($data) )
+    if( !isset($data) )
     {
         return null;
     }
     if( !check_tocint($data) )
     {
         throw new \Exception('safe_post_int for ['.$key.'] failed!');
+    }
+    return (int)$data;
+}
+
+function safe_get_int(string $key)
+{
+    $data = safe_get($key);
+    if( !isset($data) )
+    {
+        return null;
+    }
+    if( !check_tocint($data) )
+    {
+        throw new \Exception('safe_get_int for ['.$key.'] failed!');
         return null;
     }
     return (int)$data;
+}
+
+//TODO use ?int when upgrade to PHP7.1
+function get_timestamp(int $time):string
+{
+     return date('Y-m-d H:i:s',$time);
 }
 
 function CreateFolder(string $path,bool $rewrite = false,bool $recursive = false):bool
@@ -443,7 +475,7 @@ function getresulttexthtml($resultid,bool $simple = false)
                "<span class='visible-xs-inline visible-sm-inline {$mini}' data-res='{$mini}'>{$mini}</span>";
 }
 
-function html(string $str):string
+function html(?string $str):string
 {
     return htmlentities($str,ENT_HTML5|ENT_COMPAT,"UTF-8");
 }

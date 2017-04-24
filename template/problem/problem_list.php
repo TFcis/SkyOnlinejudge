@@ -38,8 +38,8 @@ $(document).ready(function()
         </thead>
         <tbody>
         <?php foreach ($_E['template']['problem_info'] as $row) :?>
-            <?php if( !\SKYOJ\Problem::hasContentAccess_s($_G['uid'],$row['owner'],$row['content_access'])&&
-                      !\SKYOJ\Problem::hasSubmitAccess_s($_G['uid'],$row['owner'],$row['submit_access']) ) continue; ?>
+            <?php if( !\SKYOJ\Problem::hasContentAccess_s($_G['uid'],$row['owner'],$row['content_access'],$row['pid'])&&
+                      !\SKYOJ\Problem::hasSubmitAccess_s($_G['uid'],$row['owner'],$row['submit_access'],$row['pid']) ) continue; ?>
             <tr style = "height: 40px">
                 <td>
                     <?php if( $_G['uid'] ):?>
@@ -52,7 +52,7 @@ $(document).ready(function()
                     <?php endif;?>
                 </td>
                 <td><?=$row['pid'];?></td>
-                <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'])?>"><?=htmlspecialchars($row['title']);?></a></td>
+                <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'],'')?>"><?=htmlspecialchars($row['title']);?></a></td>
                 <td class="hidden-xs">
                     <?php if ($_G['uid'] && userControl::getpermission($row['owner'])): ?>
                         <a class="icon-bttn" href="<?=$SkyOJ->uri('problem','modify',$row['pid'])?>">

@@ -2,6 +2,11 @@
 if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
+use \SKYOJ\FormInfo;
+use \SKYOJ\HTML_INPUT_HIDDEN;
+use \SKYOJ\HTML_INPUT_TEXT;
+use \SKYOJ\HTML_ROW;
+use \SKYOJ\HTML_INPUT_BUTTOM;
 $data = $tmpl['challenge_result_info'];
 $result = json_decode($data['package'],true) ?? [];
 //$result = $_E['template']['challenge_result_info']['result'];
@@ -13,24 +18,9 @@ $(document).ready(function()
 	var sec = 1;
     editor.setReadOnly(true);
 	<?php if( $data['result'] < \SKYOJ\RESULTCODE::AC):?>
-	function waitjudge(){
-		$.get("<?=$SkyOJ->uri('chal','api','waitjudge')?>",{cid:<?=$data['cid']?>},function(res){
-			if( res.status == 'error' ){
-				console.log('server error retry in ' + sec +'sec');
-				setTimeout(function(){
-					sec*=2;
-					waitjudge();
-				},sec*1000);
-			}else{
-				if( res.data ) waitjudge();//wait
-				else location.reload();//OK
-			}
-		},"json").fail(function(e){
-			console.log(e);
-			console.log(e.responseText);
-		});
-	}
-	waitjudge();
+	updateJudgeVerdict("<?=$SkyOJ->uri('chal','api','waitjudge')?>",<?=$data['cid']?>,function(cid,res){
+		location.reload();
+	});
 	<?php endif ;?>
 })
 </script>
@@ -50,7 +40,7 @@ $(document).ready(function()
 					<tr>
 						<td>題目</td>
 						<td>
-							<a href="<?=$SkyOJ->uri('problem','view',$data['pid'])?>">
+							<a href="<?=$SkyOJ->uri('problem','view',$data['pid'],'')?>">
 								<?=\SKYOJ\html(\SKYOJ\Problem::get_title($data['pid']))?>
 							</a>
 						</td>
@@ -100,7 +90,7 @@ $(document).ready(function()
 			</table>
 		</div>
 	</div>
-	<?php if( $data['uid']==$_G['uid'] || \userControl::isAdmin($_G['uid']) ):?>
+	<?php if( \SKYOJ\Problem::hasCodeviewAccess_s($_G['uid'],$data['uid'],$data['codeview_access'],$data['pid']) ):?>
 		<?php if(\userControl::isAdmin($_G['uid'])):?>
 		<div class="row">
 			<a href="<?=$SkyOJ->uri('problem','api','judge')?>?cid=<?=$data['cid']?>">Rejudge</a>
@@ -114,6 +104,43 @@ $(document).ready(function()
 					<div class="panel-body">
 						<div class="container-fluid">
 							<tt><?=nl2br(htmlspecialchars($t))?></tt>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php endif;?>
+		<?php if( \userControl::isAdmin($_G['uid']) ): ?>
+		<script>
+			$(document).ready(function()
+			{
+				$("#cont_comment").submit(function(e)
+				{
+					e.preventDefault();
+					api_submit("<?=$SkyOJ->uri('chal','api','modify_comment')?>","#cont_comment","#btn-show",function(){
+						setTimeout(function(){location.reload();},500);
+					});
+					return true;
+				});
+			})
+			</script>
+			<?php
+				Render::renderForm(new FormInfo([
+                    'data' => [
+                        new HTML_INPUT_HIDDEN(['name' => 'cid','value'=>$data['cid']]),
+                        new HTML_INPUT_TEXT(  ['name' => 'result','value'=>$data['result'],'option'=>['help_text'=>'result code']]),
+                        new HTML_INPUT_TEXT(  ['name' => 'comment','value'=>$data['comment'],'option'=>['help_text'=>'comment']]),
+                        new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出','option' => ['help_text' => 'true']]),
+                    ],
+                ]),"cont_comment");?>
+		<?php elseif( !empty($data['comment']) ):?>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Admin's Comment</div>
+					<div class="panel-body">
+						<div class="container-fluid">
+							<tt><?=nl2br(htmlspecialchars($data['comment']))?></tt>
 						</div>
 					</div>
 				</div>

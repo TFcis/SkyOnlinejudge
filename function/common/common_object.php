@@ -5,11 +5,59 @@
  * By LFsWang
  *
  */
+class SKY_ERROR extends BasicEnum
+{
+    const ERROR_NO = 0;
+
+    const NO_SUCH_METHOD = 1;
+    const NO_SUCH_ENUM_VALUE = 2;
+    const NO_SUCH_DATA = 3;
+    const UNKNOWN_ERROR = 9999;
+}
+
+class CommonObjectError extends \Exception
+{
+    public function __construct(string $msg,int $code = SKY_ERROR::UNKNOWN_ERROR , Exception $previous = null)
+    {
+        parent::__construct(SKY_ERROR::str($code).':'.$msg, $code, $previous);
+    }
+}
 
 abstract class CommonObject{
     
     protected abstract function getTableName():string;
     protected abstract function getIDName():string;
+
+    protected $sqldata = [];
+
+    public function __get(string $name)
+    {
+        if( !array_key_exists($name,$this->sqldata) )
+            throw new CommonObjectError($name,SKY_ERROR::UNKNOWN_ERROR);
+        return $this->sqldata[$name];
+    }
+
+    public function __set(string $name,$var):void
+    {
+        $called = "set_".$name;
+        if( method_exists($this,$called) )
+        {
+            if( $this->$called($var)!==true )
+            {
+                throw new CommonObjectError($called,SKY_ERROR::UNKNOWN_ERROR);
+            }
+        }
+        else
+        {
+            throw new CommonObjectError($called,SKY_ERROR::NO_SUCH_METHOD);
+        }
+    }
+
+    public function isIdfail()
+    {
+        $name = $this->getIDName();
+        return $this->$name() <= 0;
+    }
 
     protected function UpdateSQLLazy(string $col = null,$val = null)
     {
@@ -19,7 +67,7 @@ abstract class CommonObject{
             $host = [];
             return $back;
         }
-        $this->SQLData[$col] = $val;
+        $this->sqldata[$col] = $val;
         $host[] = [$col,$val];
     }
 
