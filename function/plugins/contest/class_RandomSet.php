@@ -313,6 +313,7 @@ class class_RandomSet extends ContestManger
             foreach($probleminfo as $problem){
                 $pid = $problem->pid;
                 $csv_string.=',';
+                $ptag = $problem->ptag;
                 $score = $scoreboard[$uid][$ptag]->score;
                 $sum_score+=$score;
                 $csv_string.=$score;
