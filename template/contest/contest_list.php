@@ -16,7 +16,7 @@ if (!defined('IN_TEMPLATE')) {
                 <th style="width: 40px"></th>
                 <th>名稱</th>
                 <th>競賽模式</th>
-                <th style='width: 140px' class="hidden-xs">
+                <th style='width: 160px' class="hidden-xs">
                 <?php if ($_G['uid']): ?>
                     TOOLS
                     <a class="icon-bttn" title="Create New" href="<?=$SkyOJ->uri('contest','new')?>">
