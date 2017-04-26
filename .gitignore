@@ -10,6 +10,7 @@
 function/plugins/rank/board_other_oj/cf_api_key.php
 /tools/*.txt
 .vscode
+tools.php
 
 composer.lock
 composer.phar

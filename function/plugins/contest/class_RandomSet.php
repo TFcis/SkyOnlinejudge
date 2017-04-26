@@ -282,4 +282,46 @@ class class_RandomSet extends ContestManger
         }
         return json_encode($json);
     }
+
+    public function to_csv_string(\SKYOJ\Contest $contest,$scoreboard_data){
+
+        $start = $contest->starttime;
+        $end   = $contest->endtime;
+
+        $probleminfo = $scoreboard_data['probleminfo'];
+        $scoreboard = $scoreboard_data['scoreboard'];
+        $userinfo = $scoreboard_data['userinfo'];
+
+        $csv_string = '';
+
+        $csv_string.='nickname';
+        foreach($probleminfo as $problem){
+            $ptag = $problem->ptag;
+            $csv_string.=',';
+            $csv_string.=$ptag;
+        }
+        $csv_string.=',';
+        $csv_string.='ALL';
+        $csv_string.="\n";
+
+        foreach($userinfo as $user){
+            $uid = $user->uid;
+            $nickname = \SKYOJ\nickname($uid);
+            $nickname = $nickname[$uid];
+            $csv_string.=$nickname;
+            $sum_score = 0;
+            foreach($probleminfo as $problem){
+                $pid = $problem->pid;
+                $csv_string.=',';
+                $score = $scoreboard[$uid][$ptag]->score;
+                $sum_score+=$score;
+                $csv_string.=$score;
+            }
+            $csv_string.=',';
+            $csv_string.=$sum_score;
+            $csv_string.="\n";
+        }
+
+        return $csv_string;
+    }
 }

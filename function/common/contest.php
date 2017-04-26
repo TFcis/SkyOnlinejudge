@@ -626,4 +626,52 @@ class Contest extends CommonObject
         }
         return json_encode($json);
     }
+
+    public function to_csv_string(){
+
+        $start = $this->starttime;
+        $end   = $this->endtime;
+        $scoreboard_data = $this->get_scoreboard_by_timestamp($start,$end);
+
+        if( method_exists($this->manger,'to_csv_string') )
+        {
+            return $this->manger->to_csv_string($this,$scoreboard_data);
+        }
+
+        $probleminfo = $scoreboard_data['probleminfo'];
+        $scoreboard = $scoreboard_data['scoreboard'];
+        $userinfo = $scoreboard_data['userinfo'];
+
+        $csv_string = '';
+
+        $csv_string.='nickname';
+        foreach($probleminfo as $problem){
+            $ptag = $problem->ptag;
+            $csv_string.=',';
+            $csv_string.=$ptag;
+        }
+        $csv_string.=',';
+        $csv_string.='ALL';
+        $csv_string.="\n";
+
+        foreach($userinfo as $user){
+            $uid = $user->uid;
+            $nickname = \SKYOJ\nickname($uid);
+            $nickname = $nickname[$uid];
+            $csv_string.=$nickname;
+            $sum_score = 0;
+            foreach($probleminfo as $problem){
+                $pid = $problem->pid;
+                $csv_string.=',';
+                $score = $user[$pid]->score;
+                $sum_score+=$score;
+                $csv_string.=$score;
+            }
+            $csv_string.=',';
+            $csv_string.=$sum_score;
+            $csv_string.="\n";
+        }
+
+        return $csv_string;
+    }
 }
