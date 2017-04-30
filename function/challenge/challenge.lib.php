@@ -5,6 +5,23 @@ if (!defined('IN_SKYOJSYSTEM')) {
 }
 require_once 'function/problem/problem.lib.php';
 require_once 'function/common/problem.php';
+
+function get_ranked_chal(int $pid,int $limit = 20)
+{
+    $t = \DB::tname('challenge');
+    $res = \DB::fetchAllEx("SELECT `cid` FROM {$t} WHERE `result`=? AND `pid`=? ORDER BY `runtime`,`memory`,`cid` ASC  LIMIT 0,{$limit}",\SKYOJ\RESULTCODE::AC,$pid);
+
+    $data = [];
+    if( $res === false )
+        return [];
+    
+    foreach($res as $cid)
+    {
+        $data[] = new Challenge($cid['cid']);
+    }
+    return $data;
+}
+
 class ChallengeTask
 {
     public $taskid; //subid
