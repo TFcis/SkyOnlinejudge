@@ -36,8 +36,8 @@ class Challenge extends \SKYOJ\CommonObject
     {
         global $_E,$_G;
         $tchallenge = \DB::tname('challenge');
-        if(!\DB::queryEx("INSERT INTO `{$tchallenge}`(`cid`, `uid`, `pid`, `code`, `compiler`, `result`, `runtime`, `score`, `timestamp`)
-                         VALUES (NULL,?,?,?,?,?,0,0,NULL)",$uid,$pid,$code,$compiler,\SKYOJ\RESULTCODE::WAIT))
+        if(!\DB::queryEx("INSERT INTO `{$tchallenge}`(`cid`, `uid`, `pid`, `code`, `compiler`, `result`, `runtime`, `memory`, `score`, `timestamp`)
+                         VALUES (NULL,?,?,?,?,?,0,0,0,NULL)",$uid,$pid,$code,$compiler,\SKYOJ\RESULTCODE::WAIT))
         {
             return null;
         }
@@ -47,7 +47,7 @@ class Challenge extends \SKYOJ\CommonObject
     public function __construct(int $cid)
     {
         $tchallenge = $this->getTableName();
-        $this->sqldata = \DB::fetchEx("SELECT `cid`, `pid`, `uid`, `result`, `runtime`, `score`, `timestamp`,`comment` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
+        $this->sqldata = \DB::fetchEx("SELECT `cid`, `pid`, `uid`, `result`, `runtime`, `memory`, `score`, `timestamp`,`comment` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
         if( $this->sqldata == false ){
             $this->cid = null;
             return ;
@@ -158,11 +158,13 @@ class Challenge extends \SKYOJ\CommonObject
         $problem_stat = 0;
         $total_score  = 0;
         $total_time   = 0;
+        $max_memory   = 0;
         foreach($res as $row)
         {
             $problem_stat = max([$problem_stat,$row->state]);
             $total_score += $row->score;
             $total_time  += $row->runtime;
+            $max_memory = max($max_memory,$row->mem);
         }
 
         $res = json_encode($res);
@@ -171,6 +173,7 @@ class Challenge extends \SKYOJ\CommonObject
         $this->UpdateSQLLazy('result',$problem_stat);
         $this->UpdateSQLLazy('score',$total_score);
         $this->UpdateSQLLazy('runtime',$total_time);
+        $this->UpdateSQLLazy('memory',$max_memory);
         if( !$this->UpdateSQL() )
         {
             \Log::msg(\Level::Error,"(Challenge)UPDATE challenge SQL Error!");
