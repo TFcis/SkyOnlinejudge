@@ -35,7 +35,7 @@ use \SKYOJ\HTML_INPUT_HIDDEN;
                         <a class="btn btn-primary btn-block" href="<?=$SkyOJ->uri('chal').'?pid='.$tmpl['problem']->pid()?>">本題狀態</a>
                     </p>
                     <p class="col-md-12 col-sm-3">
-                        <a class="btn btn-primary btn-block" href="#">統計</a>
+                        <a class="btn btn-primary btn-block" href="<?=$SkyOJ->uri('problem','statistics',$tmpl['problem']->pid())?>">統計</a>
                     </p>
                     <!--<p class="col-md-12 col-sm-3">
                         <a class="btn btn-primary btn-block hidden-xs" href="#">列印</a>
