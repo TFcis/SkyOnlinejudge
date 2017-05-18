@@ -14,3 +14,4 @@ function/plugins/rank/board_other_oj/cf_api_key.php
 composer.lock
 composer.phar
 /vendor/
+tools.php

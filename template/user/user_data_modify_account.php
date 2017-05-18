@@ -65,7 +65,7 @@ $(document).ready(function()
                 Render::renderForm(new FormInfo([
                     'data' => [
                         new HTML_INPUT_HIDDEN(['name' => 'id','value'=>$tmpl['showid']]),
-                        new HTML_INPUT_PASSWORD(['name' => 'oldpasswd','required'=>'required','option' => ['help_text' => '舊密碼']]),
+                        new HTML_INPUT_PASSWORD(['name' => 'oldpasswd','option' => ['help_text' => '舊密碼']]),
 
                         new HTML_ROW(['html' => '<h3>修改密碼</h3>']),
                         new HTML_INPUT_PASSWORD(['name' => 'newpasswd','id'=>  'newpass','option' => ['help_text' => '新密碼']]),
