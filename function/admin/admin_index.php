@@ -14,6 +14,7 @@ function indexHandle()
         switch($page)
         {
             case 'log':
+            case 'userlist':
             case 'plugins':
                 
                 break;

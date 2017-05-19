@@ -6,14 +6,23 @@ if (!defined('IN_TEMPLATE')) {
 <script>
 	var CONT;
 	var old = 'dashboard';
+    
 	$(document).ready(function(){
 	    CONT = document.getElementById('content');
-	    $( "[navpage]" ).click(function(){loadTemplate($(this).attr('navpage'));});
+	    //$( "[navpage]" ).click(function(){loadTemplate($(this).attr('navpage'));});
         $("[navpage='"+old+"']").addClass('active');
         loadTemplate(old);
+        
 	});
+    
+
+    $(document).on("click","[navpage]",function(event){
+        event.preventDefault();
+        loadTemplate($(this).attr('navpage'));
+    });
 
 	function loadTemplate(template){
+        console.log('load'+template);
         $("[navpage='"+old+"']").removeClass();
         $("[navpage='"+template+"']").addClass('active');
         old = template;
@@ -21,6 +30,7 @@ if (!defined('IN_TEMPLATE')) {
         return ;
 	}
 	function loadTemplateToBlock( template , bid  ){
+        //console.log('load...');
 	    var content = document.getElementById(bid);
 	    if( content === null )return false;
 
@@ -49,6 +59,7 @@ if (!defined('IN_TEMPLATE')) {
         <ul class="nav nav-pills nav-stacked">
             <li role="presentation" navpage='dashboard'><a href="#">摘要</a></li>
             <li role="presentation" navpage='log'><a href="#">系統紀錄</a></li>
+            <li role="presentation" navpage='userlist?page=1'><a href="#">使用者清單</a></li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="plugindb">插件<span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="plugindb">

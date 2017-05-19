@@ -76,12 +76,13 @@ class Render
 
     //Genformat : it will use sprintf($url,pid) to gen url!
     //care of any type of injection
-    public static function renderPagination(\SKYOJ\PageList $p, string $url, int $now)
+    public static function renderPagination(\SKYOJ\PageList $p, string $url, int $now, $use_nav = false)
     {
         global $_E;
         $_E['template']['_pagelist'] = $p;
         $_E['template']['_pagelist_now'] = $now;
         $_E['template']['_pagelist_url'] = $url;
+        $_E['template']['_use_nav'] = $use_nav;
         self::renderSingleTemplate('common_pagination');
     }
     CONST CODE_SETTING = ['minLines'=>20,'maxLines'=>1E9];
