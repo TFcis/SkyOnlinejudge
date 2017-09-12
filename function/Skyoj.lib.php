@@ -453,6 +453,24 @@ function getresulttext($resultid)
     return $res;
 }
 
+function getresultcolor($resultid)
+{
+    $res = '#000';
+    switch ($resultid) {
+        //case RESULTCODE::WAIT:      $res = '#000'; break;
+        //case RESULTCODE::JUDGING:   $res = '#000'; break;
+        case RESULTCODE::AC:        $res = '#0C0'; break;
+        //case RESULTCODE::PE:        $res = '#000'; break;
+        case RESULTCODE::WA:        $res = '#C00'; break;
+        case RESULTCODE::RE:        $res = '#27fff6'; break;
+        case RESULTCODE::TLE:       $res = '#70649a'; break;
+        case RESULTCODE::MLE:       $res = '#e83015'; break;
+        case RESULTCODE::CE:        $res = '#ffeb00'; break;
+        //case RESULTCODE::JE:        $res = '#000'; break;
+    }
+    return $res;
+}
+
 function getresulttexthtml($resultid,bool $simple = false)
 {
     $mini = getresulttext($resultid);

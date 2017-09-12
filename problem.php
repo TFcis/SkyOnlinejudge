@@ -27,6 +27,7 @@ function ProblemHandle()
         case 'modify':
         case 'view':
         case 'submit':
+        case 'statistics':
             break;
 
         //api
