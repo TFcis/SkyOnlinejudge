@@ -6,6 +6,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 function modifyHandle()
 {
     global $SkyOJ,$_E;
+    
     try{
         $cont_id = $SkyOJ->UriParam(2);
         $contest = new \SKYOJ\Contest($cont_id);

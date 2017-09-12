@@ -19,6 +19,8 @@ function ContestHandle()
         case 'modify':
         case 'register':
         case 'scoreboard':
+        case 'scoreboard_download':
+        case 'scoreboard_resolver':
         case 'list':
         case 'resolver':
         case 'balloon':

@@ -16,7 +16,7 @@ if (!defined('IN_TEMPLATE')) {
                 <th style="width: 40px"></th>
                 <th>名稱</th>
                 <th>競賽模式</th>
-                <th style='width: 140px' class="hidden-xs">
+                <th style='width: 160px' class="hidden-xs">
                 <?php if ($_G['uid']): ?>
                     TOOLS
                     <a class="icon-bttn" title="Create New" href="<?=$SkyOJ->uri('contest','new')?>">
@@ -39,7 +39,13 @@ if (!defined('IN_TEMPLATE')) {
                         <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','scoreboard',$row['cont_id'])?>">
                             <span class="glyphicon glyphicon glyphicon-th-list" title="記分板"></span>
                         </a>
+                        <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','scoreboard_download',$row['cont_id'])?>">
+                            <span class="glyphicon glyphicon glyphicon-save" title="匯出CSV"></span>
+                        </a>
                         <?php if (userControl::getpermission($row['owner'])): ?>
+                            <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','scoreboard',$row['cont_id'],'resolver')?>">
+                                <span class="glyphicon glyphicon glyphicon-blackboard" title="記分板-resolver"></span>
+                            </a>
                             <a class="icon-bttn" href="<?=$SkyOJ->uri('contest','modify',$row['cont_id'])?>">
                                 <span class="glyphicon glyphicon-pencil" title="編輯"></span>
                             </a>

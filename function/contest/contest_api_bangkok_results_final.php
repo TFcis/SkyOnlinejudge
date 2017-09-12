@@ -19,8 +19,7 @@ function contest_api_bangkok_results_finalHandle()
         if( $contest->ispreparing() )
             throw new \Exception('Contest is preparing!');
         
-        $data = $contest->get_scoreboard_all();
-        $json = to_resolver_json($data,$contest);
+        $json = $contest->get_resolver_all();
 
         echo $json;
         exit(0);

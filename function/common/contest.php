@@ -218,15 +218,20 @@ class Contest extends CommonObject
         }
         
     }
-    
+
     function cont_id():int
     {
         return $this->cont_id;
     }
 
-    function scoreboard_template():array
+    function scoreboard_template($resolver=false):array
     {
-        return $this->manger->scoreboard_template();
+        return $this->manger->scoreboard_template($resolver);
+    }
+    
+    function resolver_template():array
+    {
+        return $this->manger->resolver_template();
     }
 
     protected function set_title(string $title):bool
@@ -468,6 +473,7 @@ class Contest extends CommonObject
             foreach($pids as $row)
             {
                 $pid=$row->pid;
+                $ptag=$row->ptag;
                 $scoreboard[$uid][$pid]=new ScoreBlock();
                 $scoreboard[$uid][$pid]->try_times = 0;
                 $scoreboard[$uid][$pid]->is_ac     = 0;
@@ -491,6 +497,13 @@ class Contest extends CommonObject
         {
             $uid=$row['uid'];
             $pid=$row['pid'];
+            $ptag='';
+            foreach($pids as $p){
+                if($p->pid==$row['pid']){
+                    $ptag=$p->ptag;
+                    break;
+                }
+            }
             $verdict=$row['result'];
             $time=strtotime($row['timestamp'])-strtotime($this->starttime);
             if( $scoreboard[$uid][$pid]->is_ac != 0 )continue;
@@ -540,5 +553,125 @@ class Contest extends CommonObject
         $start = $this->starttime;
         $end   = $this->endtime;
         return $this->get_scoreboard_by_timestamp($start,$end);
+    }
+    
+    public function get_resolver()
+    {
+        $start = $this->starttime;
+        $end   = \SKYOJ\get_timestamp( max([ strtotime($start) , strtotime($this->endtime)-$this->freeze_sec ]) );
+        $scdata = $this->get_scoreboard_by_timestamp($start,$end);
+        return $this->to_resolver_json($scdata);
+    }
+
+    public function get_resolver_all()
+    {
+        $start = $this->starttime;
+        $end   = $this->endtime;
+        $scdata = $this->get_scoreboard_by_timestamp($start,$end);
+        return $this->to_resolver_json($scdata);
+    }
+    
+    public function to_resolver_json($scordboard_data)
+    {
+        if( method_exists($this->manger,'to_resolver_json') )
+        {
+            return $this->manger->to_resolver_json($this,$scordboard_data);
+        }
+        
+        //solved attempted
+        $json = [];
+        $json["solved"] = [];
+        $json["attempted"] = [];
+        foreach($scordboard_data['probleminfo'] as $prob)
+        {
+            $json["solved"][$prob->ptag] = $prob->ac_times;
+            $json["attempted"][$prob->ptag] = $prob->try_times;
+        }
+        $rank = 1;
+        $last = null;
+        $json["scoreboard"] = [];
+        foreach($scordboard_data['userinfo'] as $user)
+        {
+            if( isset($last)&&$this->rank_cmp($last,$user)!=0 ){
+                $rank++;
+            }
+            $last = $user;
+            $d = [];
+            $d['id'] = (int)$user->uid;
+            $d['rank'] = $rank;
+            $d['solved'] = (int)$user->ac;
+            $d['points'] = (int)$user->ac_time;
+
+            $nickname=\SKYOJ\nickname($user->uid);
+            $d['name'] = $nickname[$user->uid];
+            $d['group'] = '';
+
+            foreach($scordboard_data['probleminfo'] as $prob)
+            {
+                $sb=$scordboard_data['scoreboard'][$user->uid][$prob->pid];
+                $d[$prob->ptag] = [];
+                $d[$prob->ptag]['a'] = $sb->try_times;
+                if( $sb->is_ac )
+                {
+                    $d[$prob->ptag]['t'] = $sb->ac_time;
+                }
+                if( $sb->firstblood )$d[$prob->ptag]['s'] = "first";
+                else if( $sb->is_ac )$d[$prob->ptag]['s'] = "solved";
+                else if( $sb->try_times ) $d[$prob->ptag]['s'] = "tried";
+                else $d[$prob->ptag]['s'] = "nottried";
+            }
+
+            $json["scoreboard"][] = $d;
+            
+        }
+        return json_encode($json);
+    }
+
+    public function to_csv_string(){
+
+        $start = $this->starttime;
+        $end   = $this->endtime;
+        $scoreboard_data = $this->get_scoreboard_by_timestamp($start,$end);
+
+        if( method_exists($this->manger,'to_csv_string') )
+        {
+            return $this->manger->to_csv_string($this,$scoreboard_data);
+        }
+
+        $probleminfo = $scoreboard_data['probleminfo'];
+        $scoreboard = $scoreboard_data['scoreboard'];
+        $userinfo = $scoreboard_data['userinfo'];
+
+        $csv_string = '';
+
+        $csv_string.='nickname';
+        foreach($probleminfo as $problem){
+            $ptag = $problem->ptag;
+            $csv_string.=',';
+            $csv_string.=$ptag;
+        }
+        $csv_string.=',';
+        $csv_string.='ALL';
+        $csv_string.="\n";
+
+        foreach($userinfo as $user){
+            $uid = $user->uid;
+            $nickname = \SKYOJ\nickname($uid);
+            $nickname = $nickname[$uid];
+            $csv_string.=$nickname;
+            $sum_score = 0;
+            foreach($probleminfo as $problem){
+                $pid = $problem->pid;
+                $csv_string.=',';
+                $score = $user[$pid]->score;
+                $sum_score+=$score;
+                $csv_string.=$score;
+            }
+            $csv_string.=',';
+            $csv_string.=$sum_score;
+            $csv_string.="\n";
+        }
+
+        return $csv_string;
     }
 }

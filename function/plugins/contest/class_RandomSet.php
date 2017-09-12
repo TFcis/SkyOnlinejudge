@@ -37,9 +37,18 @@ class class_RandomSet extends ContestManger
         return $b->score <=> $a->score;
     }
 
-    public function scoreboard_template():array
+    public function scoreboard_template($resolver=false):array
     {
+        global $_G;
+        if(\userControl::isAdmin($_G['uid']) && $resolver){
+            return ['view_scoreboard_resolver_ioi','contest','resolver'];
+        }
         return ['view_scoreboard_random_ioi','contest'];
+    }
+    
+    public function resolver_template():array
+    {
+        return ['bangkok_resolver_ioi','contest'];
     }
     /**
      * 避免相鄰 team id 同題目
@@ -222,5 +231,98 @@ class class_RandomSet extends ContestManger
         
         usort($userinfo,[$contest,'rank_cmp']);
         return  ['scoreboard'=>$scoreboard,'userinfo'=>$userinfo,'probleminfo'=>$probleminfo];
+    }
+    
+    public function to_resolver_json(\SKYOJ\Contest $contest,$scordboard_data)
+    {
+        //solved attempted
+        $json = [];
+        $json["solved"] = [];
+        $json["attempted"] = [];
+        foreach($scordboard_data['probleminfo'] as $prob)
+        {
+            $json["solved"][$prob->ptag] = $prob->ac_times;
+            $json["attempted"][$prob->ptag] = $prob->try_times;
+            $json["problems"][$prob->ptag] = [];
+            $json["problems"][$prob->ptag]["score"] = 100;
+        }
+        $rank = 1;
+        $last = null;
+        $json["scoreboard"] = [];
+        foreach($scordboard_data['userinfo'] as $user)
+        {
+            if( isset($last)&&$contest->rank_cmp($last,$user)!=0 ){
+                $rank++;
+            }
+            $last = $user;
+            $d = [];
+            $d['id'] = (int)$user->uid;
+            $d['rank'] = $rank;
+            $d['solved'] = (int)$user->ac;
+            $d['points'] = (int)$user->score;
+
+            $nickname=\SKYOJ\nickname($user->uid);
+            $d['name'] = $nickname[$user->uid];
+            $d['group'] = '';
+
+            foreach($scordboard_data['probleminfo'] as $prob)
+            {
+                $sb=$scordboard_data['scoreboard'][$user->uid][$prob->ptag];
+                $d[$prob->ptag] = [];
+                $d[$prob->ptag]['a'] = $sb->try_times;
+                $d[$prob->ptag]['t'] = $sb->score;
+                if( $sb->firstblood )$d[$prob->ptag]['s'] = "first";
+                else if( $sb->is_ac )$d[$prob->ptag]['s'] = "solved";
+                else if( $sb->try_times ) $d[$prob->ptag]['s'] = "tried";
+                else $d[$prob->ptag]['s'] = "nottried";
+            }
+
+            $json["scoreboard"][] = $d;
+            
+        }
+        return json_encode($json);
+    }
+
+    public function to_csv_string(\SKYOJ\Contest $contest,$scoreboard_data){
+
+        $start = $contest->starttime;
+        $end   = $contest->endtime;
+
+        $probleminfo = $scoreboard_data['probleminfo'];
+        $scoreboard = $scoreboard_data['scoreboard'];
+        $userinfo = $scoreboard_data['userinfo'];
+
+        $csv_string = '';
+
+        $csv_string.='nickname';
+        foreach($probleminfo as $problem){
+            $ptag = $problem->ptag;
+            $csv_string.=',';
+            $csv_string.=$ptag;
+        }
+        $csv_string.=',';
+        $csv_string.='ALL';
+        $csv_string.="\n";
+
+        foreach($userinfo as $user){
+            $uid = $user->uid;
+            $nickname = \SKYOJ\nickname($uid);
+            $nickname = $nickname[$uid];
+            $csv_string.=$nickname;
+            $sum_score = 0;
+            foreach($probleminfo as $problem){
+                $pid = $problem->pid;
+                $csv_string.=',';
+                $ptag = $problem->ptag;
+                $score = $scoreboard[$uid][$ptag]->score;
+                $sum_score+=$score;
+                $csv_string.=$score;
+            }
+            $csv_string.=',';
+            $csv_string.=$sum_score;
+            $csv_string.="\n";
+        }
+
+        return $csv_string;
     }
 }
