@@ -158,6 +158,17 @@ function login(string $userinput, string $password)
     return $resultdata;
 }
 
+function list_oj_column(bool $update = false):array
+{
+    static $cache = null;
+    if( !$update && isset($cache) )
+        return $cache;
+
+    $table = \DB::tname('ojlist');
+    $cache = \DB::fetchAllEx("SELECT * FROM $table");
+    return $cache;
+}
+
 function page_ojacct($uid)
 {
     global $_E;
@@ -438,66 +449,33 @@ class UserInfo
     private function _load_data_ojacct()
     {
         $userojaccttable = \DB::tname('userojacct');
-        $res = \DB::query("SELECT * FROM `$userojaccttable` WHERE `uid` = ".$this->uid);
-        if (!$res) {
-            return false;
-        }
-        $val = [];
-        while ($tmp = \DB::fetch($res)) {
-            $val[] = $tmp;
-        }
-        $flag = false;
-        $res = ojacct_reg($val, $this->uid, $flag);
-        if ($flag) {
-            $this->_save_data_ojacct($res);
-        }
-        Render::errormessage($flag);
-
-        return $res;
+        $data = \DB::fetchAllEx("SELECT * FROM `$userojaccttable` WHERE `uid` = ?",$this->uid);
+        return $data;
     }
 
     private function _save_data_ojacct($ojarray, $cg = null)
     {
         $userojaccttable = \DB::tname('userojacct');
-        //remove old data
-        if (isset($cg)) {
-            if (is_array($cg[0])) {
-                \DB::syslog('RM'.$cg[0], 'ojacct');
-                foreach ($cg[0] as $indexid) {
-                    \DB::query("DELETE FROM `$userojaccttable` WHERE `indexid` = '$indexid'");
-                }
+        try{
+            \DB::$pdo->beginTransaction();
+            \DB::queryEx("DELETE FROM `$userojaccttable` WHERE `uid` = ?",$this->uid);
+            foreach( $ojarray as $d )
+            {
+                $res = \DB::queryEx("INSERT INTO `tojtest_userojacct`(`uid`, `id`, `account`, `approve`) VALUES (?,?,?,?)"
+                    ,$d['uid']
+                    ,$d['id']
+                    ,$d['account']
+                    ,$d['approve']
+                );
+                if( $res === false )throw \DB::$last_exception;
             }
-            if (is_array($cg[1])) {
-                foreach ($ojarray as $row) {
-                    if (in_array($row['indexid'], $cg[1])) {
-                        \DB::syslog('ADD'.$row['indexid'], 'ojacct');
-                        $uid = (int) $row['uid'];
-                        $id = (int) $row['id'];
-                        $indexid = "$uid+$id";
-                        $account = \DB::real_escape_string($row['account']);
-                        $approve = (int) $row['approve'];
-                        \DB::query("INSERT INTO `$userojaccttable` (`indexid`,`uid`,`id` ,`account`,`approve`)
-                                    VALUES ('$indexid',  $uid,  $id,  '$account',  $approve)
-                                    ON DUPLICATE KEY
-                                    UPDATE `account` = '$account' , `approve` = $approve");
-                    }
-                }
-            }
-        } else {
-            \DB::syslog('GLOBAL ADD'.$this->uid, 'ojacct');
-            \DB::query("DELETE FROM `$userojaccttable` WHERE `uid` = ".$this->uid);
-            foreach ($ojarray as $row) {
-                $uid = (int) $row['uid'];
-                $id = (int) $row['id'];
-                $indexid = "$uid+$id";
-                $account = \DB::real_escape_string($row['account']);
-                $approve = (int) $row['approve'];
-                \DB::query("INSERT INTO `$userojaccttable` (`indexid`,`uid`,`id` ,`account`,`approve`)
-                            VALUES ('$indexid',  $uid,  $id,  '$account',  '$approve')");
-            }
+            \DB::$pdo->commit();
+            return true;
+        }catch(\Exception $e){
+            \DB::$pdo->rollBack();
+            \Log::msg(\Level::Error,"UpdateSQL Transaction rollBack! :",$e->getMessage());
+            return false;
         }
-
-        return true;
     }
 
     public function load_data($dataname)

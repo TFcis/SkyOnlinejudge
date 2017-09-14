@@ -26,6 +26,7 @@ function editHandle()
     {
         case 'quote':
         case 'account':
+        case 'ojacct':
             break;
         default:
             \SKYOJ\throwjson('error', 'Access denied');
