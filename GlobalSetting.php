@@ -9,7 +9,9 @@ define('IN_SKYOJSYSTEM', 1);
 date_default_timezone_set('Asia/Taipei');
 
 require_once 'config/config.php';
-require_once 'vendor/autoload.php';
+$loader = require_once 'vendor/autoload.php';
+$loader->add('',__DIR__.'/library/TFcis');
+
 //Environment
 $_E = [];
 //LanguageData
