@@ -24,6 +24,6 @@ function viewHandle()
         \Render::render('rank_scoreboard', 'rank');
     }catch(\Exception $e)
     {
-        Render::errormessage('記分板 Load Failed!'.$e->getMessage(),'RANK');
+        \Render::errormessage('記分板 Load Failed!'.$e->getMessage(),'RANK');
     }
 }
