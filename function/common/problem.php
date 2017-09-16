@@ -403,6 +403,13 @@ class Problem
     {
         $pid = $this->pid();
         $str = $this->GetRowContent();
+        $pjson_path = \SKYOJ\Problem::GetProblemBaseFolder($pid)."/{$pid}.json";
+        if( file_exists($pjson_path) )
+        {
+            $pjson = json_decode(file_get_contents($pjson_path));
+            $pjson->memlimit/=1024*1024;
+            $str .= "\n# Judge Setting\n * Memery Limit= ```{$pjson->memlimit}```Mb\n\n* Time Limit =```{$pjson->timelimit}```ms";
+        }
         $res = self::RenderString($str,$this->config['content']['type']);
         file_put_contents(self::GetHttpFolder($pid).self::RENDERED_FILE,$res);
     }
