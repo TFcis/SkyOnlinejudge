@@ -9,7 +9,7 @@ function edit_ojacctHandle(UserInfo $userInfo)
     $olddata = $userInfo->load_data('ojacct');
     $ojs = list_oj_column();
 
-    \SKYOJ\ScoreBoard::plugin_init();
+    \SKYOJ\ScoreBoard::pluginInit();
     $plugins = \SKYOJ\ScoreBoard::$plugins;
     
     $ojacctinfo = [];

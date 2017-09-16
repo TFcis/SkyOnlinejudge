@@ -70,7 +70,7 @@ class ScoreBoard extends CommonObject
     }
 
     static $plugins = [];
-    static function plugin_init()
+    static function pluginInit()
     {
         global $_E;
         static $loaded = false;
@@ -90,7 +90,7 @@ class ScoreBoard extends CommonObject
 
     function __construct(int $sb_id)
     {
-        self::plugin_init();
+        self::pluginInit();
         try{
             $tscoreboard = \DB::tname('scoreboard');
 
@@ -371,6 +371,26 @@ class ScoreBoard extends CommonObject
         $skyoj_problems = [];
         $data = [];
 
+        // Prepare
+        $problems_pool = [];
+        foreach( $problems as $prob )
+        {
+            $pname = $prob['problem'];
+            if( array_key_exists($pname,$this->prob_match) )
+            {
+                $class = $this->prob_match[$pname];
+                if( !isset($problems_pool[$class]) )
+                    $problems_pool[$class] = [];
+                $problems_pool[$this->prob_match[$pname]][] = $pname;
+            }
+        }
+
+        foreach( $problems_pool as $class => $probs )
+        {
+            self::$plugins[$class]->prepare($users,$probs);
+        }
+
+
         foreach( $users as $uid )
         {
             $data[$uid] = [];
@@ -381,11 +401,17 @@ class ScoreBoard extends CommonObject
                 {
                     $skyoj_problems[] = $problem['problem'];
                 }
+                else
+                {
+                    $pname = $problem['problem'];
+                    $class = $this->prob_match[$pname];
+                    $data[$uid][$pname] = self::$plugins[$class]->query($uid,$pname);
+                }
             }
         }
         $this->sb_sb = $data;
         if( !empty($skyoj_problems) ){
-            $data = $this->QuerySKYOJ($skyoj_problems);
+            $this->QuerySKYOJ($skyoj_problems);
         }
     }
 
