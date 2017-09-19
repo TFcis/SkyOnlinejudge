@@ -15,9 +15,18 @@ class UVA extends \SkyOJ\Plugin\Scoreboard
 
     private function setcache()
     {
-        global $SkyOJ; 
-        $SkyOJ->cache_pool->set('UVA_username2uid',$this->uvauid??[],time()+8640000);
-        $SkyOJ->cache_pool->set('UVA_pnum2pid',$this->uvapid??[],time()+8640000);
+        global $SkyOJ;
+        $this->uvauid = $this->uvauid??[];
+        $this->uvapid = $this->uvapid??[];
+
+        foreach( $this->uvauid as $acct => $uid )
+        {
+            if( $uid === 0 )
+                unset($this->uvauid[$acct]);
+        }
+
+        $SkyOJ->cache_pool->set('UVA_username2uid',$this->uvauid,time()+8640000);
+        $SkyOJ->cache_pool->set('UVA_pnum2pid',$this->uvapid,time()+8640000);
     }
 
     function __destruct()
@@ -25,10 +34,12 @@ class UVA extends \SkyOJ\Plugin\Scoreboard
         if( $this->cachechange )
             $this->setcache();
     }
+
     function patten():string
     {
         return "/^uva[0-9]+$/i";
     }
+
     function is_match(string $name):bool
     {
         return preg_match($this->patten(),$name)===1;
@@ -59,11 +70,10 @@ class UVA extends \SkyOJ\Plugin\Scoreboard
             return 0;
 
         $uid = (int)$response;
-        if( $uid!==0 )
-        {
-            $this->cachechange = true;
-            $this->uvauid[$uname] =(int) $uid;
-        }
+
+        $this->cachechange = true;
+        $this->uvauid[$uname] =(int) $uid;
+
         return $uid;
     }
 
@@ -93,9 +103,17 @@ class UVA extends \SkyOJ\Plugin\Scoreboard
         
         $querystr = implode(',',$uids);
         $response = @file_get_contents("https://uhunt.onlinejudge.org/api/solved-bits/".$querystr);
+
         $json = json_decode($response);
         if( $json === false ) return [];
         return $json;
+    }
+
+    public function verify_account(string $acct):bool
+    {
+        if( !isset($this->uvauid) )
+            $this->loadcache();
+        return $this->username2uid($acct) !== 0;
     }
 
     private $acmap = [];
@@ -148,3 +166,4 @@ class UVA extends \SkyOJ\Plugin\Scoreboard
         return [0,0];
     }
 }
+

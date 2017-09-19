@@ -8,14 +8,20 @@ function edit_ojacctHandle(UserInfo $userInfo)
 {
     $olddata = $userInfo->load_data('ojacct');
     $ojs = list_oj_column();
+    $plugins = [];
 
-    \SKYOJ\ScoreBoard::pluginInit();
-    $plugins = \SKYOJ\ScoreBoard::$plugins;
-    
     $ojacctinfo = [];
     foreach( $ojs as $oj )
     {
         $username = \SKYOJ\safe_post("oj{$oj['id']}")??'';
+        if( !isset($plugins[$oj['class']]) )
+        {
+            $plugins[$oj['class']] = new $oj['class'];
+        }
+        if( $username!=='' && !$plugins[$oj['class']]->verify_account($username) )
+        {
+            \SKYOJ\throwjson('error', 'verify account no.'.$oj['id'].' error!');
+        }
         $ojacctinfo[] = [
             'uid' => $userInfo->uid(),
             'id' => $oj['id'],
