@@ -141,7 +141,7 @@ class class_UVA extends Judge
         return null;
     }
 
-    public function wait(int $submitid,int $times = 6,int $hold = 20)
+    public function wait(int $submitid,int $times = 6,int $hold = 10)
     {
         $uid = self::getval('uvaid');
         $qsid = $submitid-1;
@@ -164,8 +164,8 @@ class class_UVA extends Judge
             if( $uvaverdict[0] != $submitid )
                 return null;
 
-            if( $uvaverdict[2]==0 || $uvaverdict[2]==20 )
-                continue;
+            if( $uvaverdict[2]!==0 && $uvaverdict[2]!==20 )
+                break;
         }
         return $uvaverdict;
     }
