@@ -53,8 +53,8 @@ class Challenge extends \SKYOJ\CommonObject
     {
         global $_E,$_G;
         $tchallenge = \DB::tname('challenge');
-        if(!\DB::queryEx("INSERT INTO `{$tchallenge}`(`cid`, `uid`, `pid`, `code`, `compiler`, `result`, `runtime`, `memory`, `score`, `timestamp`)
-                         VALUES (NULL,?,?,?,?,?,0,0,0,NULL)",$uid,$pid,$code,$compiler,\SKYOJ\RESULTCODE::WAIT))
+        if(!\DB::queryEx("INSERT INTO `{$tchallenge}`(`cid`, `uid`, `pid`, `code`, `compiler`, `result`, `runtime`, `memory`, `score`, `timestamp`,`package`)
+                         VALUES (NULL,?,?,?,?,?,0,0,0,NULL,'')",$uid,$pid,$code,$compiler,\SKYOJ\RESULTCODE::WAIT))
         {
             return null;
         }
@@ -64,7 +64,7 @@ class Challenge extends \SKYOJ\CommonObject
     public function __construct(int $cid)
     {
         $tchallenge = $this->getTableName();
-        $this->sqldata = \DB::fetchEx("SELECT `cid`, `pid`, `uid`, `result`, `runtime`, `memory`, `score`, `timestamp`,`comment` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
+        $this->sqldata = \DB::fetchEx("SELECT `cid`, `pid`, `uid`, `compiler`, `result`, `runtime`, `memory`, `score`, `timestamp`,`comment` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
         if( $this->sqldata == false ){
             $this->cid = null;
             return ;
