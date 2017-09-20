@@ -428,9 +428,11 @@ class RESULTCODE extends BasicEnum
     const AC = 20;
     const PE = 25;
     const WA = 30;
+    const OLE= 35;
     const RE = 40;
     const TLE= 50;
     const MLE= 60;
+    const RF = 65;
     const CE = 70;
     const JE = 80;
 }
@@ -444,9 +446,11 @@ function getresulttext($resultid)
         case RESULTCODE::AC:        $res = 'AC'; break;
         case RESULTCODE::PE:        $res = 'PE'; break;
         case RESULTCODE::WA:        $res = 'WA'; break;
+        case RESULTCODE::OLE:       $res = 'OLE'; break;
         case RESULTCODE::RE:        $res = 'RE'; break;
         case RESULTCODE::TLE:       $res = 'TLE'; break;
         case RESULTCODE::MLE:       $res = 'MLE'; break;
+        case RESULTCODE::RF:        $res = 'RF'; break;
         case RESULTCODE::CE:        $res = 'CE'; break;
         case RESULTCODE::JE:        $res = 'JE'; break;
     }
