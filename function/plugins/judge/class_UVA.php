@@ -159,10 +159,12 @@ class class_UVA extends Judge
             $data = json_decode(file_get_contents("https://uhunt.onlinejudge.org/api/subs-user/".$uid.'/'.$qsid));
             if( $data === false )
                 continue;
+            if( !isset($data->subs[0]) )
+                continue;
 
             $uvaverdict = $data->subs[0];
             if( $uvaverdict[0] != $submitid )
-                return null;
+                continue;
 
             if( $uvaverdict[2]!==0 && $uvaverdict[2]!==20 )
                 break;
