@@ -11,7 +11,7 @@ class PageList
     private $table;
     private $allrow;
     private $quest;
-    const ROW_PER_PAGE = 20;
+    const ROW_PER_PAGE = 100;
     const PAGE_RANGE = 3; //> it will show +-PAGE_RANGE, if now at 5, it shiw 234 5 678
 
     private function update()

@@ -159,7 +159,7 @@ class class_UVA extends Judge
             $data = json_decode(file_get_contents("https://uhunt.onlinejudge.org/api/subs-user/".$uid.'/'.$qsid));
             if( $data === false )
                 continue;
-            
+
             $uvaverdict = $data->subs[0];
             if( $uvaverdict[0] != $submitid )
                 return null;
@@ -243,6 +243,7 @@ class class_UVA extends Judge
             $tmp->msg    = "UVA Submit id = ".$submit_id;
             $res[] = $tmp;
         }catch(\Exception $e){
+            \Log::msg(\Level::Error, 'UVA ERROR : ',$e->getMessage(),$val);
             return false;
         }
         return $res;
