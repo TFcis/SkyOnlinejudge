@@ -22,8 +22,8 @@ function viewHandle()
         $_E['template']['sb'] = $sb;
         $_E['template']['tsb'] = $sb->GetScoreBoard();
         \Render::render('rank_scoreboard', 'rank');
-    }catch(\Exception $e)
-    {
-        Render::errormessage('記分板 Load Failed!'.$e->getMessage(),'RANK');
+    } catch(\Exception $e) {
+        \Render::errormessage($e->getMessage());
+        \Render::render('nonedefined');
     }
 }

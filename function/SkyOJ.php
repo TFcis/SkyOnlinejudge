@@ -22,6 +22,17 @@ require_once 'Skyoj.lib.php';
 
 final class _SkyOJ
 {
+    //Setup cache
+    public $cache_pool;
+    private function initCache()
+    {
+        global $_E;
+
+        $filesystemAdapter = new \League\Flysystem\Adapter\Local($_E['DATADIR']);
+        $filesystem        = new \League\Flysystem\Filesystem($filesystemAdapter);
+
+        $this->cache_pool = new \Cache\Adapter\Filesystem\FilesystemCachePool($filesystem);
+    }
     /**
      *  URL Handler
      *  TODO: User defined URI rewrite
@@ -160,6 +171,7 @@ final class _SkyOJ
     public function run()
     {
         try{
+            $this->initCache();
             if( empty($this->uri_param[0]) ){
                 $this->uri_param[0] = $this->default_handle;
             }

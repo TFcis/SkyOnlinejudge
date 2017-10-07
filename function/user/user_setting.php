@@ -23,6 +23,7 @@ function settingHandle(UserInfo $userInfo)//Permission Checked
         case 'profile':
         case 'account':
         case 'mycodepad':
+        case 'ojacct':
             break;
         default:
             \Render::renderSingleTemplate('nonedefined');

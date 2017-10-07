@@ -1,6 +1,7 @@
 /js/MathJax/
 /config/config.php
-/data/cache/*.cache
+/data/cache/*
+!/data/cache/index.html
 /data/codepad/*.code
 /data/problem/*
 !/data/problem/.gitkeep

@@ -11,7 +11,7 @@ if (!defined('IN_TEMPLATE')) {
             <th class="text-center" style="padding: 4px;width: 50px;"><a onclick="change_rate()" id="svchange" title="Change rate/source">Score<span></th>
             <?php foreach( $tmpl['sb']->GetProblems() as $prob ):?>
                 <th class="text-center" style="padding: 4px;width: 40px;">
-                    <div class="problmname" title="<?=\SKYOJ\html(\SKYOJ\Problem::get_title($prob['problem']))?>"><a href='<?=$SkyOJ->uri('problem','view',$prob['problem'])?>'><?=$prob['problem']?></a></div>
+                    <div class="problmname" title="<?=\SKYOJ\html($tmpl['sb']->problem_title($prob['problem']))?>"><a href='<?=$SkyOJ->uri('problem','view',$prob['problem'])?>'><?=$prob['problem']?></a></div>
                 </th>
             <?php endforeach;?>
             <th></th>

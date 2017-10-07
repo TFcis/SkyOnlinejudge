@@ -67,11 +67,30 @@ class ScoreBoard extends CommonObject
                 }
             }
         }
-        
+    }
+
+    static $plugins = [];
+    static function pluginInit()
+    {
+        global $_E;
+        static $loaded = false;
+
+        if( $loaded ) return;
+        $loaded = true;
+
+        //TODO Plugin Loder
+        $class_files = \SkyOJ\Helper\DirScanner::open($_E['ROOT'].'/library/TFcis/SkyOJ/Scoreboard/Plugin/*.php');
+        foreach($class_files as $path)
+        {
+            $base = pathinfo($path,PATHINFO_FILENAME);
+            $classname = '\\SkyOJ\\Scoreboard\\Plugin\\'.$base;
+            self::$plugins[$base] = new $classname;
+        }
     }
 
     function __construct(int $sb_id)
     {
+        self::pluginInit();
         try{
             $tscoreboard = \DB::tname('scoreboard');
 
@@ -186,6 +205,7 @@ class ScoreBoard extends CommonObject
         return true;
     }
 
+    private $prob_match = [];
     private function load_problems():bool
     {
         if( isset($this->sb_problems) )
@@ -203,10 +223,27 @@ class ScoreBoard extends CommonObject
         {
             return false;
         }
+
         $this->sb_problems = [];
         foreach( $data as $row )
+        {
             $this->sb_problems[] = ['problem'=>$row['problem'],'note'=>$row['note']];
+            foreach( self::$plugins as $name => $plugin )
+            {
+                if( $plugin->is_match($row['problem']) )
+                {
+                    $this->prob_match[$row['problem']] = $name;
+                }
+            }
+        }
         return true;
+    }
+
+    function problem_title(string $pname):string
+    {
+        if( isset($this->prob_match[$pname]) )
+            return self::$plugins[ $this->prob_match[$pname] ]::get_title($pname);
+        return \SKYOJ\Problem::get_title($pname);
     }
 
     function GetSortedUsers():array
@@ -334,6 +371,26 @@ class ScoreBoard extends CommonObject
         $skyoj_problems = [];
         $data = [];
 
+        // Prepare
+        $problems_pool = [];
+        foreach( $problems as $prob )
+        {
+            $pname = $prob['problem'];
+            if( array_key_exists($pname,$this->prob_match) )
+            {
+                $class = $this->prob_match[$pname];
+                if( !isset($problems_pool[$class]) )
+                    $problems_pool[$class] = [];
+                $problems_pool[$this->prob_match[$pname]][] = $pname;
+            }
+        }
+
+        foreach( $problems_pool as $class => $probs )
+        {
+            self::$plugins[$class]->prepare($users,$probs);
+        }
+
+
         foreach( $users as $uid )
         {
             $data[$uid] = [];
@@ -344,11 +401,17 @@ class ScoreBoard extends CommonObject
                 {
                     $skyoj_problems[] = $problem['problem'];
                 }
+                else
+                {
+                    $pname = $problem['problem'];
+                    $class = $this->prob_match[$pname];
+                    $data[$uid][$pname] = self::$plugins[$class]->query($uid,$pname);
+                }
             }
         }
         $this->sb_sb = $data;
         if( !empty($skyoj_problems) ){
-            $data = $this->QuerySKYOJ($skyoj_problems);
+            $this->QuerySKYOJ($skyoj_problems);
         }
     }
 
