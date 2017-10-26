@@ -10,7 +10,12 @@ base    /cont //put problem decript
 */
 class ProblemManager extends ManagerBase
 {
-    const CONT_DIR = 'cont';
+    #predefine some file name
+    const CONT_DIR = 'cont/';
+    const CONT_ROW_FILE = 'cont/conf.row';
+    const CONT_HTML_FILE = 'cont/conf.html';
+    const CONT_PDF_FILE = 'cont/conf.pdf';
+
     private $pid;
     public function __construct(int $id)
     {

@@ -27,12 +27,12 @@ class Container
         {
             case ProblemDescriptionEnum::MarkDown:
                 $Parsedown = new \parsedown\Parsedown();
-                $val = $this->ProblemManager->read(ProblemManager::CONT_DIR.'/conf.row.txt');
+                $val = $this->ProblemManager->read(ProblemManager::CONT_ROW_FILE);
                 $val = $Parsedown->text($val);
-                $this->ProblemManager->write($val,ProblemManager::CONT_DIR.'/conf.html');
+                $this->ProblemManager->write($val,ProblemManager::CONT_HTML_FILE);
             case ProblemDescriptionEnum::HTML:
-                $val = $this->ProblemManager->read(ProblemManager::CONT_DIR.'/conf.row.txt');
-                $this->ProblemManager->write($val,ProblemManager::CONT_DIR.'/conf.html');
+                $val = $this->ProblemManager->read(ProblemManager::CONT_ROW_FILE);
+                $this->ProblemManager->write($val,ProblemManager::CONT_HTML_FILE);
             default:
                 //Nothing To do
         }
@@ -45,9 +45,9 @@ class Container
         {
             case ProblemDescriptionEnum::MarkDown:
             case ProblemDescriptionEnum::HTML:
-                $this->ProblemManager->write($data,ProblemManager::CONT_DIR.'/conf.row.txt');
+                $this->ProblemManager->write($data,ProblemManager::CONT_ROW_FILE);
             case ProblemDescriptionEnum::PDF:
-                $this->ProblemManager->move($data,ProblemManager::CONT_DIR.'/conf.pdf');
+                $this->ProblemManager->move($data,ProblemManager::CONT_PDF_FILE);
             default:
                 throw new ContainerException('NO SUCH format!');
         }
