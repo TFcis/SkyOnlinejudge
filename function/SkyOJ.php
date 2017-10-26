@@ -171,6 +171,8 @@ final class _SkyOJ
     public function run()
     {
         try{
+            global $_E;
+            \SkyOJ\File\Path::initialize($_E['DATADIR']);
             $this->initCache();
             if( empty($this->uri_param[0]) ){
                 $this->uri_param[0] = $this->default_handle;

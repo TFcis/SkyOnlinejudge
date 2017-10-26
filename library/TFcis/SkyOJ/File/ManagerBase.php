@@ -1,18 +1,18 @@
 <?php namespace SkyOJ\File;
 
-class ManagerBase extends Path
+class ManagerBase
 {
     protected $subrootname = '';
     function base():string
     {
-        return self::dataBase().$this->subrootname.self::DIR_SPILT_CHAR;
+        return Path::base().$this->subrootname;
     }
 
     function mkdir($path):bool
     {
         $full = $this->base().$path;
         if( is_dir($full) ) return true;
-        return !mkdir($full,0777,true);
+        return mkdir($full,0777,true);
     }
 
     function read(string $path,bool $blank = true)

@@ -15,7 +15,7 @@ class ProblemManager extends ManagerBase
     public function __construct(int $id)
     {
         $this->pid = $id;
-        $this->subrootname = 'problem/'.self::id2folder($id).self::DIR_SPILT_CHAR;
+        $this->subrootname = 'problem/'.Path::id2folder($id);
         if( !file_exists($this->subrootname) )
         {
             if( !$this->buildStructure() )
