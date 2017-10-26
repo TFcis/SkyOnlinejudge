@@ -15,10 +15,24 @@ class Container
     private $pid;
     private $ProblemManager;
     private $content_type;
+    private $json;
 
     function __construct(int $pid)
     {
-        $ProblemManager = new ProblemManager($pid);
+        $this->ProblemManager = new ProblemManager($pid);
+        $this->json = json_decode($this->ProblemManager->read(ProblemManager::PROBLEM_JSON_FILE),true);
+        $this->content_type = $this->json['content']['type'];
+        $this->pid = $pid;
+    }
+
+    public function pid():int
+    {
+        return $this->pid;
+    }
+
+    public function title():string
+    {
+        return '';
     }
 
     private function praseRowContent():bool
@@ -53,6 +67,25 @@ class Container
         }
         $this->content_type = $format;
         return $this->praseRowContent();
+    }
+
+    public function getRendedContent()
+    {
+        switch($this->content_type)
+        {
+            case ProblemDescriptionEnum::MarkDown:
+            case ProblemDescriptionEnum::HTML:
+                return $this->ProblemManager->read(ProblemManager::CONT_HTML_FILE);
+            case ProblemDescriptionEnum::PDF:
+                return null;
+        }
+    }
+
+    public function genAssertLocalPath(string $file)
+    {
+        if( !$this->ProblemManager->checkFilename($file) )
+            throw new ContainerException('FILENAME NOT AVAILABLE');
+        return $this->ProblemManager->base().ProblemManager::ASSERT_DIR.$file;
     }
 }
 

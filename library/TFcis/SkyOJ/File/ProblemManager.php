@@ -11,18 +11,23 @@ base    /cont //put problem decript
 class ProblemManager extends ManagerBase
 {
     #predefine some file name
+    const PROBLEM_JSON_FILE = 'prob.json';
     const CONT_DIR = 'cont/';
-    const CONT_ROW_FILE = 'cont/conf.row';
-    const CONT_HTML_FILE = 'cont/conf.html';
-    const CONT_PDF_FILE = 'cont/conf.pdf';
+    const CONT_ROW_FILE = 'cont/cont.row';
+    const CONT_HTML_FILE = 'cont/cont.html';
+    const CONT_PDF_FILE = 'cont/cont.pdf';
+    const ASSERT_DIR = 'assert/';
+    const FILENAME_PATTEN = '/^[a-zA-Z0-9\.]{1,64}$/';
 
     private $pid;
-    public function __construct(int $id)
+    public function __construct(int $id,bool $builddir = false)
     {
         $this->pid = $id;
         $this->subrootname = 'problem/'.Path::id2folder($id);
-        if( !file_exists($this->subrootname) )
+        if( !file_exists($this->base()) )
         {
+            if( !$builddir )
+                throw new ProblemManagerException('No Such Problem!');
             if( !$this->buildStructure() )
                 throw new ProblemManagerException('buildStructure fail');
         }
@@ -37,6 +42,12 @@ class ProblemManager extends ManagerBase
         $res &= $this->mkdir('testdata/make');
         $res &= $this->mkdir('testdata/checker');
         return $res;
+    }
+
+    public function checkFilename($name):bool
+    {
+        if( !is_string($name) ) return false;
+        return preg_match(self::FILENAME_PATTEN,$name);
     }
 }
 

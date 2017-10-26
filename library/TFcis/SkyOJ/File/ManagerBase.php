@@ -18,7 +18,7 @@ class ManagerBase
     function read(string $path,bool $blank = true)
     {
         $full = $this->base().$path;
-        if( !file_exist($full) )
+        if( !file_exists($full) )
         {
             if( $blank ) return '';
             throw new ManagerBaseException('No Such File!');

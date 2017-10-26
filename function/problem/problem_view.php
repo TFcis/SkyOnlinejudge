@@ -11,8 +11,14 @@ function viewHandle()
     $filename = $SkyOJ->UriParam(3);
     
     try{
-        $problem = new \SKYOJ\Problem($pid);
-        $pid = $problem->pid();
+        if( empty($pid) )
+        {
+            header("Location:".$SkyOJ->uri('problem','list'));
+            exit(0);
+        }
+        $problem = new \SkyOJ\Problem\Container($pid);
+        #$problem = new \SKYOJ\Problem($pid);
+        #$pid = $problem->pid();
 
         if( isset($filename) && strlen($filename)>0 )
         {
@@ -20,23 +26,23 @@ function viewHandle()
             exit(0);
         }
 
-        if( $problem->pid()===null )
-            throw new \Exception('題目載入失敗');
+        #if( $problem->pid()===null )
+        #    throw new \Exception('題目載入失敗');
 
-        if( !$problem->hasContentAccess($_G['uid']) )
-        {
-            if( $problem->hasSubmitAccess($_G['uid']) )
-            {
-                 header("Location:".$SkyOJ->uri('problem','submit',$pid));
-                 exit();
-            }
-            throw new \Exception('權限不足，不開放此題目');
-        }
+        #if( !$problem->hasContentAccess($_G['uid']) )
+        #{
+        #    if( $problem->hasSubmitAccess($_G['uid']) )
+        #    {
+        #         header("Location:".$SkyOJ->uri('problem','submit',$pid));
+        #         exit();
+        #    }
+        #    throw new \Exception('權限不足，不開放此題目');
+        #}
 
         
 
         $_E['template']['problem'] = $problem;
-        $SkyOJ->SetTitle($problem->GetTitle());
+        $SkyOJ->SetTitle( $problem->title() );
         \Render::render('problem_view','problem');
     }catch(\Exception $e){
         \Render::errormessage($e->getMessage());
@@ -44,22 +50,16 @@ function viewHandle()
     }
 }
 
-function viewachieveHandle(\SKYOJ\Problem $problem,string $filename)
+function viewachieveHandle(\SkyOJ\Problem\Container $problem,string $filename)
 {
     global $_G;
     try{
-        $patten = "/^[a-zA-Z0-9\.]{1,64}$/";
-        if( $problem->pid() === null || !$problem->hasContentAccess($_G['uid']) )
-        {
-            throw new \Exception('403');
-        }
+        #if( !$problem->hasContentAccess($_G['uid']) )
+        #{
+        #    throw new \Exception('403');
+        #}
 
-        if( !preg_match($patten,$filename) )
-        {
-            throw new \Exception('403');
-        }
-
-        $filepath = \SKYOJ\Problem::GetHttpFolder($problem->pid()).$filename;
+        $filepath = $problem->genAssertLocalPath($filename);
         if( !is_file($filepath) )
         {
             throw new \Exception('403');
