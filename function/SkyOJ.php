@@ -67,7 +67,18 @@ final class _SkyOJ
     //SkyOJ Not deal with init time error
     public function __construct()
     {
-        global $_E;
+        global $_E,$_config;
+        global $_E,$_config;
+
+        \SkyOJ\File\Path::initialize($_E['DATADIR']);
+        $this->initCache();
+
+        $db = $_config['db'];
+        \SkyOJ\Core\Database\DB::$prefix = $db['tablepre'];
+        \SkyOJ\Core\Database\DB::initialize($db['query_string'], $db['dbuser'], $db['dbpassword']);
+        \SkyOJ\Core\Database\DB::query('SET NAMES UTF8');
+
+        #Old functions
         \LOG::intro();
         \DB::intro();
         \DB::query('SET NAMES UTF8');
@@ -171,9 +182,6 @@ final class _SkyOJ
     public function run()
     {
         try{
-            global $_E;
-            \SkyOJ\File\Path::initialize($_E['DATADIR']);
-            $this->initCache();
             if( empty($this->uri_param[0]) ){
                 $this->uri_param[0] = $this->default_handle;
             }

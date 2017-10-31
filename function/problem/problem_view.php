@@ -11,23 +11,18 @@ function viewHandle()
     $filename = $SkyOJ->UriParam(3);
     
     try{
-        if( empty($pid) )
+        if( empty($pid) || !is_numeric($pid) )
         {
             header("Location:".$SkyOJ->uri('problem','list'));
             exit(0);
         }
         $problem = new \SkyOJ\Problem\Container($pid);
-        #$problem = new \SKYOJ\Problem($pid);
-        #$pid = $problem->pid();
 
         if( isset($filename) && strlen($filename)>0 )
         {
             viewachieveHandle($problem,$filename);
             exit(0);
         }
-
-        #if( $problem->pid()===null )
-        #    throw new \Exception('題目載入失敗');
 
         #if( !$problem->hasContentAccess($_G['uid']) )
         #{
@@ -42,7 +37,7 @@ function viewHandle()
         
 
         $_E['template']['problem'] = $problem;
-        $SkyOJ->SetTitle( $problem->title() );
+        $SkyOJ->SetTitle( $problem->title );
         \Render::render('problem_view','problem');
     }catch(\Exception $e){
         \Render::errormessage($e->getMessage());
