@@ -2,7 +2,8 @@
 
 $_config = [];
 // ----------------------------  CONFIG DB  ----------------------------- //
-$_config['db']['query_string']  = 'mysql:host=localhost;dbname=sky';
+$_config['db']['query_string']  = 'mysql:host=localhost';
+$_config['db']['dbname'] = 'sky';
 $_config['db']['dbuser']        = 'root';
 $_config['db']['dbpassword']    = '';
 $_config['db']['dbcharset']     = 'utf8';

@@ -5,10 +5,10 @@ class DB
     public static $pdo = null;
     public static $last_exception = null;
     public static $prefix = '';
-    public static function initialize(string $url,string $user,string $pass)
+    public static function initialize(string $url,string $user,string $pass,string $dbname)
     {
         try{
-            self::$pdo = new \PDO($url,$user,$pass);
+            self::$pdo = new \PDO($url.";dbname=$dbname",$user,$pass);
         }catch (\PDOException $e){
             die('Error!: '.$e->getMessage().'<br/>');
         }
