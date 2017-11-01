@@ -17,5 +17,7 @@ return ['environments' =>
             'table_prefix' => $db['tablepre'],
             'connection' => $pdo,
         ]
+    ],'paths'=>[
+        'migrations' => '%%PHINX_CONFIG_DIR%%/db/migrations'
     ]
 ];
