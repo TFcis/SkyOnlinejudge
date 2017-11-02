@@ -16,7 +16,9 @@ function viewHandle()
             header("Location:".$SkyOJ->uri('problem','list'));
             exit(0);
         }
-        $problem = new \SkyOJ\Problem\Container($pid);
+        $problem = new \SkyOJ\Problem\Container();
+        if( !$problem->load($pid) )
+            throw new \Exception('NO SUCH PROBLEM');
 
         if( isset($filename) && strlen($filename)>0 )
         {
@@ -24,15 +26,10 @@ function viewHandle()
             exit(0);
         }
 
-        #if( !$problem->hasContentAccess($_G['uid']) )
-        #{
-        #    if( $problem->hasSubmitAccess($_G['uid']) )
-        #    {
-        #         header("Location:".$SkyOJ->uri('problem','submit',$pid));
-        #         exit();
-        #    }
-        #    throw new \Exception('權限不足，不開放此題目');
-        #}
+        if( !$SkyOJ->User->checkPermission($problem) )
+        {
+            throw new \Exception('權限不足，不開放此題目');
+        }
 
         
 
@@ -47,12 +44,12 @@ function viewHandle()
 
 function viewachieveHandle(\SkyOJ\Problem\Container $problem,string $filename)
 {
-    global $_G;
+    global $SkyOJ;
     try{
-        #if( !$problem->hasContentAccess($_G['uid']) )
-        #{
-        #    throw new \Exception('403');
-        #}
+        if( !$SkyOJ->User->checkPermission($problem) )
+        {
+            throw new \Exception('403');
+        }
 
         $filepath = $problem->genAssertLocalPath($filename);
         if( !is_file($filepath) )
@@ -62,6 +59,7 @@ function viewachieveHandle(\SkyOJ\Problem\Container $problem,string $filename)
 
         header("Content-type: ".filetype($filepath));
         readfile($filepath);
+        exit(0);
     }catch(\Exception $e){
         http_response_code(403);
         exit(0);

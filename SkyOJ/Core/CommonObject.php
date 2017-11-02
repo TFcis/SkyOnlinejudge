@@ -21,8 +21,8 @@ class CommonObjectError extends \Exception
 
 abstract class CommonObject{
     
-    protected $table; 
-    protected $prime_key;
+    protected static $table; 
+    protected static $prime_key;
     protected $sqldata = [];
 
     public function __get(string $name)
@@ -44,19 +44,56 @@ abstract class CommonObject{
         $this->sqldata[$name] = $var;
     }
 
-    public function Load(int $id)
+    public function load(int $id)
     {
-        if( !isset($this->table,$this->prime_key) )
+        if( !isset(static::$table,static::$prime_key) )
         {
-            throw new CommonObjectError($called,SKY_ERROR::UNKNOWN_ERROR);
+            throw new CommonObjectError($id,SKY_ERROR::UNKNOWN_ERROR);
         }
-        $table = DB::tname($this->table);
-        $data = DB::fetchEx("SELECT * FROM `{$table}` WHERE `{$this->prime_key}`=?",$id);
+        $table = DB::tname(static::$table);
+        $keyname = static::$prime_key;
+        $data = DB::fetchEx("SELECT * FROM `{$table}` WHERE `{$keyname}`=?",$id);
         if( empty($data) ) return false;
         $this->sqldata = $data;
         if( method_exists($this,'afterLoad') )
             return $this->afterLoad();
         return true;
+    }
+
+    public function loadByData(array $data)
+    {
+        $this->sqldata = $data;
+        if( method_exists($this,'afterLoad') )
+            return $this->afterLoad();
+        return true;
+    }
+
+    function loadRange(int $start,int $end)
+    {
+        if( !isset(static::$table,static::$prime_key) )
+        {
+            throw new CommonObjectError($called,SKY_ERROR::UNKNOWN_ERROR);
+        }
+        $table = DB::tname(static::$table);
+        $keyname = static::$prime_key;
+        $data = DB::fetchAllEx("SELECT * FROM `{$table}` WHERE `{$keyname}` BETWEEN  ? AND ?",$start,$end);
+        $class = get_called_class();
+        $res = [];
+        foreach( $data as $row )
+        {
+            $p = new $class(null);
+            if( $p->loadByData($row) );
+                $res[] = $p;
+        }
+        return $res;
+    }
+
+    static function fetchColByPrimeID(int $id,string $col)
+    {
+        $table = DB::tname(static::$table);
+        $keyname = static::$prime_key;
+
+        return DB::fetchEx("SELECT `$col` FROM `{$table}` WHERE `{$keyname}`=?",$id);
     }
 
     protected function UpdateSQLLazy(string $col = null,$val = null)
@@ -73,7 +110,7 @@ abstract class CommonObject{
 
     public function save():bool
     {
-        $table = DB::tname($this->table);
+        $table = DB::tname(static::$table);
         $prime_key = $this->prime_key;
         $data = $this->UpdateSQLLazy();
 
@@ -94,4 +131,6 @@ abstract class CommonObject{
             return false;
         }
     }
+
+    abstract public function getObjLevel():int;
 }

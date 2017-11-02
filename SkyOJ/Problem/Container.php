@@ -12,30 +12,28 @@ use \SkyOJ\File\ProblemManager;
 
 class Container extends \SkyOJ\Core\CommonObject
 {
-    protected $table = 'problem'; 
-    protected $prime_key = 'pid';
-    private $pid;
+    protected static $table = 'problem'; 
+    protected static $prime_key = 'pid';
     private $ProblemManager;
     private $content_type;
     private $json;
 
-    function __construct(?int $pid)
+    function __construct()
     {
-        if( !is_null($pid) )
-        {
-            if( !$this->Load($pid) )
-                throw new ContainerException('NO SUCH PROBLEM'); 
-        }
+
     }
 
     protected function afterLoad()
     {
-        $pid = (int)$this->sqldata['pid'];
-        $this->ProblemManager = new ProblemManager($pid);
+        $this->ProblemManager = new ProblemManager($this->pid,true);
         $this->json = json_decode($this->ProblemManager->read(ProblemManager::PROBLEM_JSON_FILE),true);
         $this->content_type = $this->json['content']['type'];
-        $this->pid = $pid;
         return true;
+    }
+
+    public function getObjLevel():int
+    {
+        return $this->content_access;
     }
 
     private function praseRowContent():bool
