@@ -24,6 +24,7 @@ abstract class CommonObject{
     protected static $table; 
     protected static $prime_key;
     protected $sqldata = [];
+    protected $lock = false;
 
     public function __get(string $name)
     {

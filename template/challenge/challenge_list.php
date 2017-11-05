@@ -53,20 +53,20 @@ $cl_prob = $tmpl['challenge_prob'];
                 </thead>
                 <tbody>
                 <?php foreach ($_E['template']['challenge_info'] as $row):?>
-                    <?php if( !\SKYOJ\Problem::hasContentAccess_s($_G['uid'],$cl_prob[$row['pid']]['owner'],$cl_prob[$row['pid']]['content_access'],$row['pid']) ) continue; ?>
-                    <?php if( $cl_prob[$row['pid']]['content_access']==\SKYOJ\ProblemContentAccessEnum::Contest && !\userControl::isAdmin($_G['uid']) && $_G['uid']!=$row['uid'])continue;?>
+                    <?php $c=$SkyOJ->User->checkPermission($cl_prob[$row['pid']]);?>
                     <tr>
                         <td><a href="<?=$SkyOJ->uri('chal','result',$row['cid'])?>"><?=$row['cid'];?></a></td>
                         <?php $nickname = \SKYOJ\nickname($row['uid']); ?>
                         <td><a href="<?=$SkyOJ->uri('chal','result',$row['cid'])?>"><?=\SKYOJ\html($nickname[$row['uid']])?></a></td>
-                        <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'],'')?>" title="<?=\SKYOJ\html(\SKYOJ\Problem::get_title($row['pid']))?>">
-                            <span class="hidden-xs"><?=\SKYOJ\html(\SKYOJ\Problem::get_title($row['pid']))?></span>
+                        <?php $title = \SKYOJ\html( $c?$cl_prob[$row['pid']]->title:'' )?>
+                        <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'],'')?>" title="<?=$title?>">
+                            <span class="hidden-xs"><?=$title?></span>
                             <span class="visible-xs-inline"><?=$row['pid']?></span>
                         </a></td>
-                        <td><?=\SKYOJ\getresulttexthtml($row['result'])?></td>
-                        <td class="hidden-xs"><?=$row['runtime']?></td>
-                        <td><?=$row['score']?></td>
-                        <td><?=$row['timestamp'];?></td>
+                        <td><?=$c?\SKYOJ\getresulttexthtml($row['result']):''?></td>
+                        <td class="hidden-xs"><?=$c?$row['runtime']:0?></td>
+                        <td><?=$c?$row['score']:0?></td>
+                        <td><?=$row['timestamp']?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>

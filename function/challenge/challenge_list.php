@@ -39,13 +39,21 @@ function listHandle()
     $pids = [];
     foreach($data as $row)
         $pids[] = $row['pid'];
+    $pids = array_unique($pids);
+
+    $problems = [];
+    foreach($pids as $pid)
+    {
+        $problems[$pid] = new \SkyOJ\Problem\Container();
+        $problems[$pid]->load($pid);
+    }
 
     //LOG::msg(Level::Debug, '', $data);
     $_E['template']['challenge_list_pagelist'] = $pl;
     $_E['template']['challenge_list_now'] = $page;
     $_E['template']['challenge_info'] = $data ? $data : [];
     $_E['template']['challenge_query'] = $query??'';
-    $_E['template']['challenge_prob'] = \userControl::getuserdata('problem',$pids,['owner','content_access'],'pid');
+    $_E['template']['challenge_prob'] = $problems;
 
     \Render::render('challenge_list', 'challenge');
 }

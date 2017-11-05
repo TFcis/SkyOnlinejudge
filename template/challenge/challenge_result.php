@@ -41,7 +41,7 @@ $(document).ready(function()
 						<td>題目</td>
 						<td>
 							<a href="<?=$SkyOJ->uri('problem','view',$data['pid'],'')?>">
-								<?=\SKYOJ\html(\SKYOJ\Problem::get_title($data['pid']))?>
+								<?=\SkyOJ\html($tmpl['problem']->title)?>
 							</a>
 						</td>
 					</tr>
@@ -88,10 +88,10 @@ $(document).ready(function()
                 <?php endforeach; ?>
 				</tbody>
 			</table>
-		</div>
+		</div> 
 	</div>
-	<?php if( \SKYOJ\Problem::hasCodeviewAccess_s($_G['uid'],$data['uid'],$data['codeview_access'],$data['pid']) ):?>
-		<?php if(\userControl::isAdmin($_G['uid'])):?>
+	<?php if( \SKYOJ\Problem::hasCodeviewAccess_s($_G['uid'],$data['uid'],$tmpl['problem']->codeview_access,$data['pid']) ):?>
+		<?php if( $SkyOJ->User->isAdmin() ):?>
 		<div class="row">
 			<a href="<?=$SkyOJ->uri('problem','api','judge')?>?cid=<?=$data['cid']?>">Rejudge</a>
 		</div>
@@ -110,7 +110,7 @@ $(document).ready(function()
 			</div>
 		</div>
 		<?php endif;?>
-		<?php if( \userControl::isAdmin($_G['uid']) ): ?>
+		<?php if( $SkyOJ->User->isAdmin() ):?>
 		<script>
 			$(document).ready(function()
 			{
