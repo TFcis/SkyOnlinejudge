@@ -46,6 +46,9 @@ class NewProblemUpdate{
 
         echo "SET Contest(2) TO ADMIN",PHP_EOL;
         DB::queryEx("UPDATE `{$t}` SET `content_access`=? WHERE `content_access`=2",SkyOJ\Problem\ProblemLevel::Admin);
+
+        echo "SET Submit(any>0) TO Open",PHP_EOL;
+        DB::queryEx("UPDATE `{$t}` SET `submit_access`=? WHERE `submit_access`>0",SkyOJ\Problem\ProblemSubmitLevel::Open);
     }
 
     function run()

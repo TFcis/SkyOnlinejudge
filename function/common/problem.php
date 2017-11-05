@@ -331,12 +331,12 @@ class Problem
 
     public function GetJudge():string
     {
-        return $this->SQLData['class']??null;
+        return $this->SQLData['judge']??null;
     }
 
     public function SetJudge(string $class):bool
     {
-        if( $class != $this->SQLData['class'] && $class != '' )
+        if( $class != $this->SQLData['judge'] && $class != '' )
         {
             //TODO : Check for installed
             if( !\Plugin::isClassName($class) )
@@ -366,7 +366,7 @@ class Problem
 
     public function GetJudgeType():int
     {
-        return $this->SQLData['judge_type'];
+        return $this->SQLData['judge'];
     }
 
     public function SetJudgeType(string $judge_type):bool
@@ -375,7 +375,7 @@ class Problem
         {
             return false;
         }
-        $this->UpdateSQLLazy('judge_type',$judge_type);
+        $this->UpdateSQLLazy('judge',$judge_type);
         return true;
     }
 

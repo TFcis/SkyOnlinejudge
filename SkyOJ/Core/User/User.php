@@ -23,6 +23,16 @@ class User extends \SkyOJ\Core\CommonObject
         return $this->level >= UserLevel::ADMIN;
     }
 
+    function isUser()
+    {
+        return $this->level >= UserLevel::USER;
+    }
+
+    function isLogin()
+    {
+        return $this->level >= UserLevel::GUEST;
+    }
+
     function checkPermission(\SkyOJ\Core\CommonObject &$obj)
     {
         $ownLevel = self::fetchColByPrimeID($obj->owner,'level');

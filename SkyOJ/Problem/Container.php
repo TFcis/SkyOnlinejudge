@@ -31,6 +31,20 @@ class Container extends \SkyOJ\Core\CommonObject
         return true;
     }
 
+    public function isSubmitFuncOpen()
+    {
+        return $this->submit_access == ProblemSubmitLevel::Open;
+    }
+
+    public function isAllowSubmit($User)
+    {
+        if( !$User->checkPermission($this) )
+            return false;
+        if( !$User->isUser() )
+            return false;
+        return true;
+    }
+
     public function getObjLevel():int
     {
         return $this->content_access;

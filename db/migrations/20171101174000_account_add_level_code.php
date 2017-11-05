@@ -32,5 +32,8 @@ class AccountAddLevelCode extends AbstractMigration
         
         $table  ->addColumn('level','integer')
                 ->save();
+
+        $table = $this->table('problem',['id' => 'pid']);
+        $table  ->renameColumn('class','judge');
     }
 }
