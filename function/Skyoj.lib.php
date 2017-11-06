@@ -501,3 +501,11 @@ function html(?string $str):string
 {
     return htmlentities($str,ENT_HTML5|ENT_COMPAT,"UTF-8");
 }
+
+//From php.net filesize comment
+function human_filesize($bytes, $decimals = 2)
+{
+    $sz = 'BKMGTP';
+    $factor = floor((strlen($bytes) - 1) / 3);
+    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
+}

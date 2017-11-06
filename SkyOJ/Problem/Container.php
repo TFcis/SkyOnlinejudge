@@ -45,6 +45,15 @@ class Container extends \SkyOJ\Core\CommonObject
         return true;
     }
 
+    public function isAllowEdit($User)
+    {
+        if( !$User->checkPermission($this) )
+            return false;
+        if( !$User->isAdmin() )
+            return false;
+        return true;
+    }
+
     public function getObjLevel():int
     {
         return $this->content_access;
@@ -94,6 +103,11 @@ class Container extends \SkyOJ\Core\CommonObject
             case ProblemDescriptionEnum::PDF:
                 return null;
         }
+    }
+
+    public function getFileManager()
+    {
+        return $this->ProblemManager;
     }
 
     public function genAttachLocalPath(string $file)

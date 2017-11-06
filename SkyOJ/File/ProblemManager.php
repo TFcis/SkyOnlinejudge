@@ -52,7 +52,7 @@ class ProblemManager extends ManagerBase
 
     public function getAttachFiles():array
     {
-        return glob($this->base().self::ATTACH_DIR);
+        return glob($this->base().self::ATTACH_DIR.'*');
     }
 }
 

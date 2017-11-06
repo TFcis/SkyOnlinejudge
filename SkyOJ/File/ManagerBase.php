@@ -50,6 +50,13 @@ class ManagerBase
         if( !copy($source,$target) )
             throw new ManagerBaseException('Copy File Error!');
     }
+
+    function copyin($source,$target)
+    {
+        $target = $this->base().$target;
+        if( !copy($source,$target) )
+            throw new ManagerBaseException('Copy File Error!');
+    }
 }
 
 class ManagerBaseException extends \Exception { }

@@ -12,6 +12,7 @@ function apiHandle()
     {
         case 'new':
         case 'modify':
+        case 'add_attach':
         case 'judge':
             break;
 
