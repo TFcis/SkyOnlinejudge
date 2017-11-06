@@ -16,7 +16,7 @@ class ProblemManager extends ManagerBase
     const CONT_ROW_FILE = 'cont/cont.row';
     const CONT_HTML_FILE = 'cont/cont.html';
     const CONT_PDF_FILE = 'cont/cont.pdf';
-    const ASSERT_DIR = 'assert/';
+    const ATTACH_DIR = 'attach/';
     const FILENAME_PATTEN = '/^[a-zA-Z0-9\.]{1,64}$/';
 
     private $pid;
@@ -48,6 +48,11 @@ class ProblemManager extends ManagerBase
     {
         if( !is_string($name) ) return false;
         return preg_match(self::FILENAME_PATTEN,$name);
+    }
+
+    public function getAttachFiles():array
+    {
+        return glob($this->base().self::ATTACH_DIR);
     }
 }
 

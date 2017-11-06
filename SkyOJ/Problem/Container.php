@@ -96,11 +96,11 @@ class Container extends \SkyOJ\Core\CommonObject
         }
     }
 
-    public function genAssertLocalPath(string $file)
+    public function genAttachLocalPath(string $file)
     {
         if( !$this->ProblemManager->checkFilename($file) )
             throw new ContainerException('FILENAME NOT AVAILABLE');
-        return $this->ProblemManager->base().ProblemManager::ASSERT_DIR.$file;
+        return $this->ProblemManager->base().ProblemManager::ATTACH_DIR.$file;
     }
 }
 

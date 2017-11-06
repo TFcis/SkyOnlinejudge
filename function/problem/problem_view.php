@@ -51,7 +51,7 @@ function viewachieveHandle(\SkyOJ\Problem\Container $problem,string $filename)
             throw new \Exception('403');
         }
 
-        $filepath = $problem->genAssertLocalPath($filename);
+        $filepath = $problem->genAttachLocalPath($filename);
         if( !is_file($filepath) )
         {
             throw new \Exception('403');

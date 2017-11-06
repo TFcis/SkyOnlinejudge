@@ -25,6 +25,7 @@ function ProblemHandle()
         case 'list':
         case 'new' :
         case 'modify':
+        case 'attach':
         case 'view':
         case 'submit':
         case 'statistics':
