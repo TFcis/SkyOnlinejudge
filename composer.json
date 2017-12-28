@@ -8,6 +8,7 @@
         "phpseclib/phpseclib": "2.0.*",
         "cache/filesystem-adapter": "^1.0",
         "erusev/parsedown": "^1.6",
-        "robmorgan/phinx": "^0.9.1"
+        "robmorgan/phinx": "^0.9.1",
+        "twbs/bootstrap": "4.0.0-beta.2"
     }
 }

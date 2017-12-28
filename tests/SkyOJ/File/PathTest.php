@@ -36,7 +36,7 @@ class pathTest extends TestCase
     public function testProblemManager()
     {
         global $_E;
-        $p = new \SkyOJ\File\ProblemManager(1);
+        $p = new \SkyOJ\File\ProblemManager(1,true);
         $this->assertEquals($p->base(),self::$base."problem/00/00/00/01/");
     }
 }

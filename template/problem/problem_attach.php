@@ -11,30 +11,31 @@ $(document).ready(function(){
     $('#file-upload').change(function() {
         var name = $(this).val();
         if( name.length == 0 ) return ;
-        api_submit("<?=$SkyOJ->uri('problem','api','add_attach')?>","#form-upload","dbg",function(){
+        api_submit("<?=$SkyOJ->uri('problem','api','add_attach')?>","#form-upload","dbg",function(e){
+            console.log(e)
             location.reload();
         });
     });
+});
 </script>
-<span id="dbg"></span>
-<div id = "image-bar"></div>
 <div class="container">
     <div>
         <div class="page-header">
             <h1>附件列表<small></small></h1>
+            <span id="dbg"></span>
         </div>
-        <table class = "table table-striped">
+        <table class = "table table-dark">
             <thead>
                 <tr>
-                    <th>File name</th>
-                    <th>Size</th>
-                    <th style='width: 140px'>
+                    <th scope="col">File name</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">
                         <form id="form-upload" action="<?=$SkyOJ->uri('problem','api','add_attach')?>">
                             <input id="file-upload" type="file" name="name" style="display: none;">
                             <input type="hidden" name="pid" value="<?=$tmpl['problem']->pid?>">
                         </form>
                         Add<a id="addfile" class="icon-bttn" title="Add File">
-                            <span class="glyphicon glyphicon-plus"></span>
+                            +
                         </a>
                     </th>
                     <th>Timestamp</th>
@@ -42,7 +43,7 @@ $(document).ready(function(){
             </thead>
             <tbody>
             <?php foreach($tmpl['attachs'] as $row) :?>
-                <tr style = "height: 40px">
+                <tr scope="row">
                     <td><a href="<?=$SkyOJ->uri('problem','view',$tmpl['problem']->pid,$row[0])?>"><?=\SKYOJ\html($row[0]);?></a></td>
                     <td><?=\SKYOJ\human_filesize($row[1])?></td>
                     <td>

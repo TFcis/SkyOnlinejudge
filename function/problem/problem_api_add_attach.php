@@ -18,7 +18,7 @@ function problem_api_add_attachHandle()
             \SKYOJ\throwjson('error','param error');
         if( !$problem->isAllowEdit($SkyOJ->User) )
             \SKYOJ\throwjson('error', 'Access denied');
-        
+
         foreach($_FILES as $file)
         {
             $tmppath = $file['tmp_name'];
