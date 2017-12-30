@@ -64,13 +64,15 @@ class Container extends \SkyOJ\Core\CommonObject
         switch($this->content_type)
         {
             case ProblemDescriptionEnum::MarkDown:
-                $Parsedown = new \parsedown\Parsedown();
+                $Parsedown = new \Parsedown();
                 $val = $this->ProblemManager->read(ProblemManager::CONT_ROW_FILE);
                 $val = $Parsedown->text($val);
-                $this->ProblemManager->write($val,ProblemManager::CONT_HTML_FILE);
+                $this->ProblemManager->write(ProblemManager::CONT_HTML_FILE,$val);
+                break;
             case ProblemDescriptionEnum::HTML:
                 $val = $this->ProblemManager->read(ProblemManager::CONT_ROW_FILE);
-                $this->ProblemManager->write($val,ProblemManager::CONT_HTML_FILE);
+                $this->ProblemManager->write(ProblemManager::CONT_HTML_FILE,$val);
+                break;
             default:
                 //Nothing To do
         }
@@ -83,14 +85,21 @@ class Container extends \SkyOJ\Core\CommonObject
         {
             case ProblemDescriptionEnum::MarkDown:
             case ProblemDescriptionEnum::HTML:
-                $this->ProblemManager->write($data,ProblemManager::CONT_ROW_FILE);
+                $this->ProblemManager->write(ProblemManager::CONT_ROW_FILE,$data);
+                break;
             case ProblemDescriptionEnum::PDF:
-                $this->ProblemManager->move($data,ProblemManager::CONT_PDF_FILE);
+                $this->ProblemManager->move(ProblemManager::CONT_PDF_FILE,$data);
+                break;
             default:
                 throw new ContainerException('NO SUCH format!');
         }
         $this->content_type = $format;
         return $this->praseRowContent();
+    }
+
+    public function getContentType()
+    {
+        return $this->content_type;
     }
 
     public function getRendedContent()
@@ -105,6 +114,18 @@ class Container extends \SkyOJ\Core\CommonObject
         }
     }
 
+    public function getRowContent():string
+    {
+        switch($this->content_type)
+        {
+            case ProblemDescriptionEnum::MarkDown:
+            case ProblemDescriptionEnum::HTML:
+                return $this->ProblemManager->read(ProblemManager::CONT_ROW_FILE);
+            case ProblemDescriptionEnum::PDF:
+                return '';
+        }
+    }
+
     public function getFileManager()
     {
         return $this->ProblemManager;
@@ -116,6 +137,79 @@ class Container extends \SkyOJ\Core\CommonObject
             throw new ContainerException('FILENAME NOT AVAILABLE');
         return $this->ProblemManager->base().ProblemManager::ATTACH_DIR.$file;
     }
+
+    public function getTestdata():array
+    {
+        $files = $this->ProblemManager->getTestdataFiles();
+        $map = [];
+        foreach($files as $file)
+        {
+            $info = pathinfo($file);
+            if( !isset($map[$info['filename']]) )
+                $map[$info['filename']] = [];
+            if( in_array($info['extension'],ProblemManager::INPUT_EXT) )
+                $map[$info['filename']][0] = $file;
+            else if( in_array($info['extension'],ProblemManager::OUTPUT_EXT) )
+                $map[$info['filename']][1] = $file;
+        }
+
+        $res = [];
+        foreach($map as $io)
+        {
+            if(!empty($io))
+            {
+                $res[] = new Testdata($io[0]??NULL,$io[1]??NULL);
+            }
+        }
+        return $res;
+    }
+
+    public function checkSet_title(string $string):bool
+    {
+        if( !is_string($string) )
+            throw new ContainerModifyException('type fail');
+        if( strlen($string) > 200 )
+            throw new ContainerModifyException('title len limit error');
+        return true;
+    }
+
+    public function checkSet_judge(string $class):bool
+    {
+        if( $class != $this->judge && $class != '' )
+        {
+            //TODO : Check for installed
+            if( !\Plugin::isClassName($class) )
+                throw new ContainerModifyException('no such judge');
+        }
+        return true;
+    }
+
+    public function checkSet_content_access($val):bool
+    {
+        if( ProblemLevel::isValidValue($val) )
+            throw new ContainerModifyException('no such ContentAccess type');
+        return true;
+    }
+
+    public function checkSet_submit_access($val):bool
+    {
+        if( ProblemSubmitLevel::isValidValue($val) )
+            throw new ContainerModifyException('no such ProblemSubmitLevel type');
+        return true;
+    }
+
+    public function checkSet_codeview_access($val):bool
+    {
+        //if( ProblemLevel::isValidValue($val) )
+        //    throw new ContainerModifyException('no such ContentAccess type');
+        return true;
+    }
+
+    public function checkSet_admmsg($val):bool
+    {
+        return true;
+    }
 }
 
 class ContainerException extends \Exception { }
+class ContainerModifyException extends \Exception { }

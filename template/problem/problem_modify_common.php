@@ -11,10 +11,6 @@ use \SKYOJ\HTML_INPUT_SELECT;
 use \SKYOJ\HTML_INPUT_BUTTOM;
 use \SKYOJ\HTML_INPUT_HIDDEN;
 ?>
-<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/github-gist.min.css">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>-->
 <script>
 $(document).ready(function(){
     $("#modify-problem-from").submit(function(e)
@@ -50,16 +46,17 @@ $(document).ready(function(){
                         new HTML_INPUT_HIDDEN(['name'=>'json_data','id'=>'json_data','value'=>'']),
                         new HTML_INPUT_TEXT(['name'=>'title','value'=>$tmpl['problem']->title,'required'=>'required','option' => ['help_text' => '題目名稱']]),
                         new HTML_INPUT_SELECT(['name'=>'contenttype'
-                            ,'key-pair'=> \SKYOJ\ProblemDescriptionEnum::getConstants()
+                            ,'key-pair'=> \SkyOJ\Problem\ProblemDescriptionEnum::getConstants()
+                            ,'default' => $tmpl['problem']->getContentType()
                             ,'option'  => ['help_text' => '題目格式']]),
 
                         new HTML_INPUT_SELECT(['name'=>'judge'
-                            ,'key-pair'=> []//$tmpl['judges']
-                            ,'default' => []//$tmpl['problem']->GetJudge()
+                            ,'key-pair'=> $tmpl['judges']
+                            ,'default' => $tmpl['problem']->judge
                             ,'option'  => ['help_text' => 'Judge']]),
                         new HTML_INPUT_CODEPAD(['option' =>
                             [
-                                'code'=>'',//$tmpl['problem']->GetRowContent(),
+                                'code'=>$tmpl['problem']->getRowContent(),
                                 'language'=>'markdown',
                                 'id'=> 'editor',
                                 'setting'=>['minLines'=>20,'maxLines'=>20],
@@ -67,21 +64,21 @@ $(document).ready(function(){
                             ]]),
 
                         new HTML_ROW(['html'=>'</div><div class="col">']),
-                        new HTML_INPUT_SELECT(['name'=>'judge_type'
+                        /*new HTML_INPUT_SELECT(['name'=>'judge_type'
                             ,'key-pair'=> \SKYOJ\ProblemJudgeTypeEnum::getConstants()
                             ,'default' => 0//$tmpl['problem']->GetJudgeType()
-                            ,'option'  => ['help_text' => '題目輸入類型']]),
+                            ,'option'  => ['help_text' => '題目輸入類型']]),*/
                         new HTML_INPUT_SELECT(['name'=>'content_access'
-                            ,'key-pair'=> \SKYOJ\ProblemContentAccessEnum::getConstants()
-                            ,'default' => 0//$tmpl['problem']->GetContentAccess()
+                            ,'key-pair'=> \SkyOJ\Problem\ProblemLevel::getConstants()
+                            ,'default' => $tmpl['problem']->content_access
                             ,'option'  => ['help_text' => '題目檢視權限']]),
                         new HTML_INPUT_SELECT(['name'=>'submit_access'
-                            ,'key-pair'=> \SKYOJ\ProblemSubmitAccessEnum::getConstants()
-                            ,'default' => 0//$tmpl['problem']->GetSubmitAccess()
+                            ,'key-pair'=> \SkyOJ\Problem\ProblemSubmitLevel::getConstants()
+                            ,'default' => $tmpl['problem']->submit_access
                             ,'option'  => ['help_text' => '上傳權限']]),
                         new HTML_INPUT_SELECT(['name'=>'codeview_access'
                             ,'key-pair'=> \SKYOJ\ProblemCodeviewAccessEnum::getConstants()
-                            ,'default' => 0//$tmpl['problem']->GetCodeviewAccess()
+                            ,'default' => $tmpl['problem']->codeview_access
                             ,'option'  => ['help_text' => '程式碼檢視']]),
                         new HTML_HR(),
                         new HTML_INPUT_CODEPAD(['option' =>

@@ -33,7 +33,7 @@ abstract class CommonObject{
 
     public function __set(string $name,$var):void
     {
-        $called = "checkSet".$name;
+        $called = "checkSet_".$name;
         if( !method_exists($this,$called) )
         {
             trigger_error("Set {$name} without Check is danger!");
@@ -42,6 +42,8 @@ abstract class CommonObject{
         {
             throw new CommonObjectError($called,SKY_ERROR::UNKNOWN_ERROR);
         }
+        if( $this->sqldata[$name]!==$var )
+            $this->UpdateSQLLazy($name,$var);
         $this->sqldata[$name] = $var;
     }
 
@@ -112,7 +114,7 @@ abstract class CommonObject{
     public function save():bool
     {
         $table = DB::tname(static::$table);
-        $prime_key = $this->prime_key;
+        $prime_key = static::$prime_key;
         $data = $this->UpdateSQLLazy();
 
         if( empty($data) )
@@ -120,9 +122,9 @@ abstract class CommonObject{
 
         try{
             DB::$pdo->beginTransaction();
-            $this->UpdateSQL_extend();
+
             foreach( $data as $d )
-                if( \DB::queryEx("UPDATE `{$table}` SET `{$d[0]}`= ? WHERE `{$prime_key}`=?",$d[1],$this->$idname()) === false )
+                if( \DB::queryEx("UPDATE `{$table}` SET `{$d[0]}`= ? WHERE `{$prime_key}`=?",$d[1],$this->$prime_key) === false )
                     throw \DB::$last_exception;
             DB::$pdo->commit();
             return true;

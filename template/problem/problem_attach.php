@@ -11,8 +11,7 @@ $(document).ready(function(){
     $('#file-upload').change(function() {
         var name = $(this).val();
         if( name.length == 0 ) return ;
-        api_submit("<?=$SkyOJ->uri('problem','api','add_attach')?>","#form-upload","dbg",function(e){
-            console.log(e)
+        api_submit("<?=$SkyOJ->uri('problem','api','add_attach')?>","#form-upload","#attach_dbg",function(e){
             location.reload();
         });
     });
@@ -22,7 +21,8 @@ $(document).ready(function(){
     <div>
         <div class="page-header">
             <h1>附件列表<small></small></h1>
-            <span id="dbg"></span>
+            <div>limit per file : <?=ini_get('upload_max_filesize')?></div>
+            <span id="attach_dbg"></span>
         </div>
         <table class = "table table-dark">
             <thead>

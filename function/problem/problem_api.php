@@ -17,6 +17,7 @@ function apiHandle()
             break;
 
         case 'submit':
+        case 'add_testcasezip':
             $SkyOJ->setOutputMode(\SKYOJ\_SkyOJ::OUTPUT_HTML_BG);
             break;
             

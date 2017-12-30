@@ -25,7 +25,7 @@ class ManagerBase
         }
         $data = file_get_contents($full);
         if( $data === false )
-        throw new ManagerBaseException('Get File Error!');
+            throw new ManagerBaseException('Get File Error!');
         return $data;
     }
 
@@ -55,7 +55,7 @@ class ManagerBase
     {
         $target = $this->base().$target;
         if( !copy($source,$target) )
-            throw new ManagerBaseException('Copy File Error!');
+            throw new ManagerBaseException('Copy In File Error!');
     }
 }
 

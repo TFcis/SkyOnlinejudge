@@ -33,19 +33,17 @@ function modifyHandle()
                         ];
         }
         $_E['template']['attachs'] = $attachs;
-        /*$problem = new \SKYOJ\Problem($pid);
-        $pid = $problem->pid();
 
-        if( $problem->pid()===null || !\userControl::getpermission($problem->owner()) )
-            throw new \Exception('Access denied');
+        //Testdata
+        $_E['template']['testdata'] = $problem->getTestdata();
 
         $judges_info = \Plugin::listInstalledClassFileByFolder('judge');
         $judges = [];
 
         $judges['empty'] = '';
-        if( !empty($problem->GetJudge()) && !isset($judges_info[$problem->GetJudge()]) )
+        if( !empty($problem->judge) && !isset($judges_info[$problem->judge]) )
         {
-            $judges['default(Not Availible)'] = $problem->judge();
+            $judges['default(Not Availible)'] = $problem->judge;
         }
 
         foreach( $judges_info as $data )
@@ -53,9 +51,8 @@ function modifyHandle()
            $class = $data['class'];
            $judges[$class] = $class;
         }
-        $_E['template']['pjson'] = @file_get_contents($_E['DATADIR']."problem/{$pid}/{$pid}.json");
-        $_E['template']['problem'] = $problem;
-        $_E['template']['judges'] = $judges;*/
+        //$_E['template']['pjson'] = @file_get_contents($_E['DATADIR']."problem/{$pid}/{$pid}.json");
+        $_E['template']['judges'] = $judges;
 
         $_E['template']['problem'] = $problem;
         $SkyOJ->SetTitle( '修改: '.$problem->title );

@@ -6,7 +6,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 
 function problem_api_modifyHandle()
 {
-    global $_G,$_E;
+    global $_G,$_E,$SkyOJ;
 
     if( !\userControl::isAdmin($_G['uid']) )
         \SKYOJ\throwjson('error', 'Access denied');
@@ -20,32 +20,29 @@ function problem_api_modifyHandle()
     $content_access = \SKYOJ\safe_post('content_access');
     $submit_access  = \SKYOJ\safe_post('submit_access');
     $codeview_access  = \SKYOJ\safe_post('codeview_access');
-    $pjson = \SKYOJ\safe_post('json_data');
-    \Log::msg(\Level::Debug,"",$pjson);
-    if( !isset($pid,$title,$content,$contenttype) )
-        \SKYOJ\throwjson('error','param error');
+    //$pjson = \SKYOJ\safe_post('json_data');
+    //\Log::msg(\Level::Debug,"",$pjson);
+    
     try{
-        $problem = new \SKYOJ\Problem($pid);
-        $pid = $problem->pid();
-        if( $problem->pid()===null || !\userControl::getpermission($problem->owner()) )
+        if( !isset($pid,$title,$content,$contenttype) )
+            throw new \Exception('param error');
+
+        $problem = new \SkyOJ\Problem\Container();
+        if( !$problem->load($pid) )
+            throw new \Exception('NO SUCH PROBLEM');
+        
+        if( !$problem->isAllowEdit($SkyOJ->User) )
             throw new \Exception('Access denied');
 
-        if( !$problem->SetTitle($title) )
-            throw new \Exception('title length more than limit');
-        if( !$problem->SetJudge($judge) )
-            throw new \Exception('no such judge');
-        if( !$problem->SetJudgeType($judge_type) )
-            throw new \Exception('no such judge type');
-        if( !$problem->SetContentAccess($content_access) )
-            throw new \Exception('no such ContentAccess type');
-        if( !$problem->SetSubmitAccess($submit_access) )
-            throw new \Exception('no such SubmitAccess type');
-        if( !$problem->SetCodeviewAccess($codeview_access) )
-            throw new \Exception('no such CodeviewAccess type');
-        $problem->SetRowContent($content);
+        $problem->title = $title;
+        $problem->judge = $judge;
+        $problem->content_access = $content_access;
+        $problem->submit_access = $submit_access;
+        $problem->codeview_access = $codeview_access;
+        $problem->SetRowContent($content,$contenttype);
 
-        file_put_contents($_E['DATADIR']."problem/{$pid}/{$pid}.json",$pjson);
-        $problem->Update();
+        //file_put_contents($_E['DATADIR']."problem/{$pid}/{$pid}.json",$pjson);
+        $problem->save();
         \SKYOJ\throwjson('SUCC','succ');
 
     }catch(\Exception $e){

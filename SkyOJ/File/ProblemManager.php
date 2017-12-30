@@ -17,8 +17,11 @@ class ProblemManager extends ManagerBase
     const CONT_HTML_FILE = 'cont/cont.html';
     const CONT_PDF_FILE = 'cont/cont.pdf';
     const ATTACH_DIR = 'attach/';
+    const TESTDATA_DIR = 'testdata/data/';
     const FILENAME_PATTEN = '/^[a-zA-Z0-9\.]{1,64}$/';
 
+    const INPUT_EXT = ["txt","in"];
+    const OUTPUT_EXT = ["ans","out"];
     private $pid;
     public function __construct(int $id,bool $builddir = false)
     {
@@ -54,6 +57,42 @@ class ProblemManager extends ManagerBase
     {
         return glob($this->base().self::ATTACH_DIR.'*');
     }
+
+    public function getTestdataFiles():array
+    {
+        return glob($this->base().self::TESTDATA_DIR.'*');
+    }
+
+    public function copyTestcasesZip(string $filepath,bool $cover = true):array
+    {
+        if( !class_exists('\\ZipArchive') )
+            throw new ProblemManagerException('php ZipArchive not enabled!');
+        $zip = new \ZipArchive;
+  
+        if( $zip->open($filepath) === false )
+            throw new ProblemManagerException('Not a zip file!');
+
+        $tmpdir = tempnam( sys_get_temp_dir() , 'CAS' );
+
+        if( file_exists($tmpdir) )
+            unlink($tmpdir);
+        mkdir($tmpdir);
+ 
+        $zip->extractTo($tmpdir);
+        $zip->close();
+        $files = glob($tmpdir.'/*');
+
+        foreach($files as $file)
+        {
+            $info = pathinfo($file);
+            if( in_array($info['extension'],self::INPUT_EXT) || in_array($info['extension'],self::OUTPUT_EXT) )
+            {
+                $this->copyin($file,self::TESTDATA_DIR.$info['basename']);
+            }
+        }
+
+        return [];
+    }
 }
 
-class ProblemManagerException extends \Exception {}
+class ProblemManagerException extends \Exception {} 
