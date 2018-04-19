@@ -4,7 +4,7 @@ SKY Online Judge (Developing)
 
 Required
 -------------
-1. PHP 7.0.0 +<br>
+1. PHP 7.2.0 +<br>
    Required modules:
    1. pdo
    2. pdo-mysql
