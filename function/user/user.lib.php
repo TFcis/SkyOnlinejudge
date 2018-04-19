@@ -95,8 +95,8 @@ function register(string $email, string $nickname, string $password, string $rep
     //$nickname = addslashes($nickname);
     $password = GetPasswordHash($password);
     if (!\DB::queryEx("INSERT INTO `$acctable` ".
-                    '(`uid`, `email`, `passhash`, `nickname`, `timestamp`) '.
-                    'VALUES (NULL,?,?,?,CURRENT_TIMESTAMP)', $email, $password, $nickname)) {
+                    '(`uid`, `email`, `passhash`, `nickname`, `timestamp`, `level`) '.
+                    'VALUES (NULL,?,?,?,CURRENT_TIMESTAMP,?)', $email, $password, $nickname, 6)) {
         $resultdata[1] = '帳號已被註冊';
 
         return $resultdata;
