@@ -8,6 +8,7 @@ class SKY_ERROR extends \SkyOJ\Helper\Enum
     const NO_SUCH_METHOD = 1;
     const NO_SUCH_ENUM_VALUE = 2;
     const NO_SUCH_DATA = 3;
+    const SQL_OPERATOR_ERROR = 4;
     const UNKNOWN_ERROR = 9999;
 }
 
@@ -18,10 +19,11 @@ class CommonObjectError extends \Exception
         parent::__construct(SKY_ERROR::str($code).':'.$msg, $code, $previous);
     }
 }
-
-abstract class CommonObject{
+//TODO: rename it to SQLBaseObject
+abstract class CommonObject
+{
     
-    protected static $table; 
+    protected static $table;
     protected static $prime_key;
     protected $sqldata = [];
     protected $lock = false;
@@ -135,5 +137,40 @@ abstract class CommonObject{
         }
     }
 
+    //TODO: implementation me
+    private static function ensureTableColumnNameVaild( string $table )
+    {
+        
+    }
+
+    protected static function insertInto( array $insert_data )
+    {
+        $table = DB::tname(static::$table);
+
+        //mysql syntax : INSERT INTO `table` (`c1`,`c2`...`cn`) VALUES ('a','b','c')
+        $insert_into_table = "INSERT INTO `{$table}`";
+        $cols = "";
+        $vals = "";
+        $data = [];
+
+        foreach( $insert_data as $col => $val )
+        {
+            self::ensureTableColumnNameVaild($col);
+            $cols.="`{$col}`,";
+            $vals.="?,";
+            $data[] = $val;
+        }
+
+        $cols = rtrim($cols,",");
+        $vals = rtrim($vals,",");
+
+        $res = DB::query( "{$insert_into_table} ({$cols}) VALUES ({$vals})" , $data );
+
+        if( $res === false )
+            throw new CommonObjectError("insertInto",SKY_ERROR::SQL_OPERATOR_ERROR);
+        
+        return DB::lastInsertId(static::$prime_key);
+    }
     abstract public function getObjLevel():int;
+    //static abstract public function create(array $data):int;
 }

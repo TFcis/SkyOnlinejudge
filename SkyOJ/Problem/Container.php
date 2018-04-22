@@ -10,7 +10,7 @@ base    /cont //put problem decript
 */
 use \SkyOJ\File\ProblemManager;
 
-class Container extends \SkyOJ\Core\CommonObject
+class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permission\Permissible
 {
     protected static $table = 'problem'; 
     protected static $prime_key = 'pid';
@@ -21,6 +21,21 @@ class Container extends \SkyOJ\Core\CommonObject
     function __construct()
     {
 
+    }
+
+    static public function create(int $owner):int
+    {
+        $default = [
+            'owner' => $owner,
+            'content_access' => ProblemLevel::Hidden,
+            'submit_access'  => ProblemLevel::Hidden,
+            'codeview_access'=> ProblemLevel::Hidden,
+            'title' => '[Empty Problem]',
+            'judge' => '',
+            'judge_type' => 0,
+            'content_type' => ProblemDescriptionEnum::MarkDown
+        ];
+        return self::insertInto($default);
     }
 
     protected function afterLoad()

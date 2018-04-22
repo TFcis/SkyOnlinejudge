@@ -3,8 +3,6 @@ if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
 use \SKYOJ\FormInfo;
-use \SKYOJ\HTML_INPUT_TEXT;
-use \SKYOJ\HTML_INPUT_SELECT;
 use \SKYOJ\HTML_INPUT_BUTTOM;
 ?>
 <script>
@@ -32,10 +30,6 @@ $(document).ready(function(){
             <?php
                 Render::renderForm(new FormInfo([
                     'data'=>[
-                        new HTML_INPUT_TEXT(['name'=>'title','required'=>'required','option' => ['help_text' => '題目名稱']]),
-                        new HTML_INPUT_SELECT(['name'=>'default','key-pair'=>
-                            \SKYOJ\ProblemDescriptionEnum::getConstants()
-                            ,'option' => ['help_text' => '題目類型']]),
                         new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出','option' => ['help_text' => 'true']]),
                     ]
                 ]),'new-problem-from');
