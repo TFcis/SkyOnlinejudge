@@ -14,9 +14,9 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
 {
     protected static $table = 'problem'; 
     protected static $prime_key = 'pid';
-    private $ProblemManager;
-    private $content_type;
+    private $m_problem_manager;
     private $json;
+    private $m_content;
 
     function __construct()
     {
@@ -40,9 +40,9 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
 
     protected function afterLoad()
     {
-        $this->ProblemManager = new ProblemManager($this->pid,true);
-        $this->json = json_decode($this->ProblemManager->read(ProblemManager::PROBLEM_JSON_FILE),true);
-        $this->content_type = $this->json['content']['type'];
+        $this->m_problem_manager = new ProblemManager($this->pid, true);
+        $this->m_content = Content::init($this->content_type, $this->m_problem_manager);
+        $this->json = json_decode($this->m_problem_manager->read(ProblemManager::PROBLEM_JSON_FILE),true);
         return true;
     }
 
@@ -74,88 +74,47 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
         return $this->content_access;
     }
 
-    private function praseRowContent():bool
-    {
-        switch($this->content_type)
-        {
-            case ProblemDescriptionEnum::MarkDown:
-                $Parsedown = new \Parsedown();
-                $val = $this->ProblemManager->read(ProblemManager::CONT_ROW_FILE);
-                $val = $Parsedown->text($val);
-                $this->ProblemManager->write(ProblemManager::CONT_HTML_FILE,$val);
-                break;
-            case ProblemDescriptionEnum::HTML:
-                $val = $this->ProblemManager->read(ProblemManager::CONT_ROW_FILE);
-                $this->ProblemManager->write(ProblemManager::CONT_HTML_FILE,$val);
-                break;
-            default:
-                //Nothing To do
-        }
-        return true;
-    }
-
-    public function setRowContent(string $data,int $format):bool
-    {
-        switch($format)
-        {
-            case ProblemDescriptionEnum::MarkDown:
-            case ProblemDescriptionEnum::HTML:
-                $this->ProblemManager->write(ProblemManager::CONT_ROW_FILE,$data);
-                break;
-            case ProblemDescriptionEnum::PDF:
-                $this->ProblemManager->move(ProblemManager::CONT_PDF_FILE,$data);
-                break;
-            default:
-                throw new ContainerException('NO SUCH format!');
-        }
-        $this->content_type = $format;
-        return $this->praseRowContent();
-    }
-
-    public function getContentType()
-    {
-        return $this->content_type;
-    }
-
-    public function getRendedContent()
-    {
-        switch($this->content_type)
-        {
-            case ProblemDescriptionEnum::MarkDown:
-            case ProblemDescriptionEnum::HTML:
-                return $this->ProblemManager->read(ProblemManager::CONT_HTML_FILE);
-            case ProblemDescriptionEnum::PDF:
-                return null;
-        }
-    }
-
     public function getRowContent():string
     {
-        switch($this->content_type)
+        return $this->m_content->getRowContent();
+    }
+
+    public function getRendedContent():string
+    {
+        return $this->m_content->getRendedContent();
+    }
+
+    public function setContent(string $data,int $format):bool
+    {
+        if( $this->content_type !== $format )
         {
-            case ProblemDescriptionEnum::MarkDown:
-            case ProblemDescriptionEnum::HTML:
-                return $this->ProblemManager->read(ProblemManager::CONT_ROW_FILE);
-            case ProblemDescriptionEnum::PDF:
-                return '';
+            $this->content_type = $format;
+            $this->m_content = Content::init($this->content_type, $this->m_problem_manager);
         }
+        $this->m_content->setContent($data);
+        return $this->m_content->praseRowContent();
+    }
+
+    private function praseRowContent():bool
+    {
+        return $this->m_content->praseRowContent();
     }
 
     public function getFileManager()
     {
-        return $this->ProblemManager;
+        return $this->m_problem_manager;
     }
 
     public function genAttachLocalPath(string $file)
     {
-        if( !$this->ProblemManager->checkFilename($file) )
+        if( !$this->m_problem_manager->checkFilename($file) )
             throw new ContainerException('FILENAME NOT AVAILABLE');
-        return $this->ProblemManager->base().ProblemManager::ATTACH_DIR.$file;
+        return $this->m_problem_manager->base().ProblemManager::ATTACH_DIR.$file;
     }
 
     public function getTestdata():array
     {
-        $files = $this->ProblemManager->getTestdataFiles();
+        $files = $this->m_problem_manager->getTestdataFiles();
         $map = [];
         foreach($files as $file)
         {
