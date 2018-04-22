@@ -36,10 +36,10 @@ function problem_api_modifyHandle()
 
         $problem->title = $title;
         $problem->judge = $judge;
-        $problem->content_access = $content_access;
-        $problem->submit_access = $submit_access;
-        $problem->codeview_access = $codeview_access;
-        $problem->SetRowContent($content,$contenttype);
+        $problem->content_access = (int)$content_access;
+        $problem->submit_access = (int)$submit_access;
+        $problem->codeview_access = (int)$codeview_access;
+        $problem->setContent($content,(int)$contenttype);
 
         //file_put_contents($_E['DATADIR']."problem/{$pid}/{$pid}.json",$pjson);
         $problem->save();

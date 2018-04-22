@@ -46,8 +46,8 @@ $(document).ready(function(){
                         new HTML_INPUT_HIDDEN(['name'=>'json_data','id'=>'json_data','value'=>'']),
                         new HTML_INPUT_TEXT(['name'=>'title','value'=>$tmpl['problem']->title,'required'=>'required','option' => ['help_text' => '題目名稱']]),
                         new HTML_INPUT_SELECT(['name'=>'contenttype'
-                            ,'key-pair'=> \SkyOJ\Problem\ProblemDescriptionEnum::getConstants()
-                            ,'default' => $tmpl['problem']->getContentType()
+                            ,'key-pair'=> \SkyOJ\Problem\ContentTypenEnum::getConstants()
+                            ,'default' => $tmpl['problem']->content_type
                             ,'option'  => ['help_text' => '題目格式']]),
 
                         new HTML_INPUT_SELECT(['name'=>'judge'

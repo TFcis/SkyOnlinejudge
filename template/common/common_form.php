@@ -54,7 +54,7 @@ TAG;
             if( $info['this'] instanceof \SKYOJ\HTML_INPUT_SELECT ){
                 $default = $setting['default']??null;
                 foreach($setting['key-pair'] as $index => $key){
-                    if( $key === $default )
+                    if( $key == $default )
                         $rev.="<option value='{$key}' selected>{$index}</option>";
                     else
                         $rev.="<option value='{$key}'>{$index}</option>";

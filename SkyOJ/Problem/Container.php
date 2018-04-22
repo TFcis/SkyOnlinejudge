@@ -160,14 +160,21 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
 
     public function checkSet_content_access($val):bool
     {
-        if( ProblemLevel::isValidValue($val) )
+        if( !ProblemLevel::isValidValue($val) )
             throw new ContainerModifyException('no such ContentAccess type');
+        return true;
+    }
+
+    public function checkSet_content_type($val):bool
+    {
+        if( !ContentTypenEnum::isValidValue($val) )
+            throw new ContainerModifyException('no such ContentType type');
         return true;
     }
 
     public function checkSet_submit_access($val):bool
     {
-        if( ProblemSubmitLevel::isValidValue($val) )
+        if( !ProblemSubmitLevel::isValidValue($val) )
             throw new ContainerModifyException('no such ProblemSubmitLevel type');
         return true;
     }

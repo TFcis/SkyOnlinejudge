@@ -40,7 +40,7 @@ class ProblemManager extends ManagerBase
     {
         $res = true;
         $res &= $this->mkdir('cont');
-        $res &= $this->mkdir('assert');
+        $res &= $this->mkdir('attach');
         $res &= $this->mkdir('testdata/data');
         $res &= $this->mkdir('testdata/make');
         $res &= $this->mkdir('testdata/checker');

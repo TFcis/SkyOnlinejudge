@@ -2,11 +2,6 @@
 
 use \SkyOJ\File\ProblemManager;
 
-class ContentTypenEnum extends \SkyOJ\Helper\Enum
-{
-    const MarkdownContent  = 1;
-}
-
 abstract class Content
 {
     public static function init(int $type, ProblemManager $manager):?Content

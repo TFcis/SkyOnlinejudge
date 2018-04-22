@@ -19,7 +19,7 @@ $(document).ready(function(){
 <div class="container-fluid">
     <div class="row">
         <div id="image-bar"></div>
-        <div class="col"><h1>編輯題目</h1><small>status: <?=\SKYOJ\html($tmpl['problem']->admmsg)?></small></div>
+        <div class="col"><h1>編輯題目</h1><small>status: <?php /*\SKYOJ\html($tmpl['problem']->admmsg)*/ ?></small></div>
     </div>
     <div class="row">
         <div class="col">
