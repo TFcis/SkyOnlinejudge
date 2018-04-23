@@ -3,9 +3,10 @@ use PHPUnit\Framework\TestCase;
 
 class pathTest extends TestCase
 {
-    private static $base = "D:/web/tmp/";//sys_get_temp_dir();
+    private static $base = "";//sys_get_temp_dir();
     public static function setUpBeforeClass()
     {
+        self::$base = sys_get_temp_dir()."/";
         \SkyOJ\File\Path::initialize(self::$base);
     }
 
