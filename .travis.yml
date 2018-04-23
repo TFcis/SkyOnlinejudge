@@ -4,12 +4,14 @@ language: php
 # list any PHP version you want to test against
 php:
   # using major version aliases
-  - 7.1
+  - 7.2
 # - hhvm
   - nightly
 
-  
-script: phpunit --configuration phpunit.xml --coverage-text
+before_script:
+  - composer install
+script: 
+  - phpunit --configuration phpunit.xml --coverage-text
 
 notifications:
   slack:
