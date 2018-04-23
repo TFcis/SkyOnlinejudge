@@ -5,11 +5,11 @@ use \SkyOJ\Problem\ContainerModifyException;
 
 function problem_api_newHandle()
 {
-    global $_G,$_E;
+    global $SkyOJ,$_G,$_E;
 
     try
     {
-        if( !\userControl::isAdmin($_G['uid']) )
+        if( !Container::creatable($SkyOJ->User) )
             \SKYOJ\throwjson('error', 'Access denied');
 
         $pid = Container::create($_G['uid']);

@@ -7,23 +7,20 @@ if (!defined('IN_SKYOJSYSTEM')) {
 function problem_api_modifyHandle()
 {
     global $_G,$_E,$SkyOJ;
-
-    if( !\userControl::isAdmin($_G['uid']) )
-        \SKYOJ\throwjson('error', 'Access denied');
-
-    $pid = \SKYOJ\safe_post('pid');
-    $title   = \SKYOJ\safe_post('title');
-    $content = \SKYOJ\safe_post('content');
-    $judge   = \SKYOJ\safe_post('judge')??'';
-    $judge_type   = \SKYOJ\safe_post('judge_type');
-    $contenttype  = \SKYOJ\safe_post('contenttype');
-    $content_access = \SKYOJ\safe_post('content_access');
-    $submit_access  = \SKYOJ\safe_post('submit_access');
-    $codeview_access  = \SKYOJ\safe_post('codeview_access');
-    //$pjson = \SKYOJ\safe_post('json_data');
-    //\Log::msg(\Level::Debug,"",$pjson);
-    
+  
     try{
+        $pid = \SKYOJ\safe_post('pid');
+        $title   = \SKYOJ\safe_post('title');
+        $content = \SKYOJ\safe_post('content');
+        $judge   = \SKYOJ\safe_post('judge')??'';
+        $judge_type   = \SKYOJ\safe_post('judge_type');
+        $contenttype  = \SKYOJ\safe_post('contenttype');
+        $content_access = \SKYOJ\safe_post('content_access');
+        $submit_access  = \SKYOJ\safe_post('submit_access');
+        $codeview_access  = \SKYOJ\safe_post('codeview_access');
+        //$pjson = \SKYOJ\safe_post('json_data');
+        //\Log::msg(\Level::Debug,"",$pjson);
+    
         if( !isset($pid,$title,$content,$contenttype) )
             throw new \Exception('param error');
 
@@ -31,7 +28,7 @@ function problem_api_modifyHandle()
         if( !$problem->load($pid) )
             throw new \Exception('NO SUCH PROBLEM');
         
-        if( !$problem->isAllowEdit($SkyOJ->User) )
+        if( !$problem->writeable($SkyOJ->User) )
             throw new \Exception('Access denied');
 
         $problem->title = $title;

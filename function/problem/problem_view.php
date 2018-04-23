@@ -26,7 +26,7 @@ function viewHandle()
             exit(0);
         }
 
-        if( !$SkyOJ->User->checkPermission($problem) )
+        if( !$problem->readable($SkyOJ->User) )
         {
             throw new \Exception('權限不足，不開放此題目');
         }
@@ -46,7 +46,7 @@ function viewachieveHandle(\SkyOJ\Problem\Container $problem,string $filename)
 {
     global $SkyOJ;
     try{
-        if( !$SkyOJ->User->checkPermission($problem) )
+        if( !$problem->readable($SkyOJ->User) )
         {
             throw new \Exception('403');
         }

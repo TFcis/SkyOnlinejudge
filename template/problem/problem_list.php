@@ -36,7 +36,7 @@ $(document).ready(function()
         </thead>
         <tbody>
         <?php foreach ($_E['template']['problem_info'] as $row) :?>
-            <?php if( !$SkyOJ->User->checkPermission( $row ) ) continue;?>
+            <?php if( !$row->readable($SkyOJ->User) ) continue;?>
             <tr style = "height: 40px">
                 <td>
                     <?php if( $_G['uid'] ):?>
@@ -51,7 +51,7 @@ $(document).ready(function()
                 <td><?=$row->pid;?></td>
                 <td><a href="<?=$SkyOJ->uri('problem','view',$row->pid,'')?>"><?=htmlspecialchars($row->title);?></a></td>
                 <td class="hidden-xs">
-                    <?php if( $SkyOJ->User->checkPermission( $row ) && $SkyOJ->User->isAdmin() ): ?>
+                    <?php if( $row->writeable($SkyOJ->User) ): ?>
                         <a class="icon-bttn" href="<?=$SkyOJ->uri('problem','modify',$row->pid)?>">
                             <span class="glyphicon glyphicon-pencil" title="編輯"></span>
                         </a>

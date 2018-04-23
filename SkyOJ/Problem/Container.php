@@ -8,6 +8,8 @@ base    /cont //put problem decript
         judge.json //judge setting
 
 */
+use \SkyOJ\Core\User\User;
+use \SkyOJ\Core\Permission\ObjectLevel;
 use \SkyOJ\File\ProblemManager;
 
 class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permission\Permissible
@@ -51,22 +53,25 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
         return $this->submit_access == ProblemSubmitLevel::Open;
     }
 
-    public function isAllowSubmit($User)
+    public function readable(User $user):bool
     {
-        if( !$User->checkPermission($this) )
-            return false;
-        if( !$User->isUser() )
-            return false;
-        return true;
+        return $user->testStisfyPermission($this->owner, $this->content_access);
     }
 
-    public function isAllowEdit($User)
+    public function writeable(User $user):bool
     {
-        if( !$User->checkPermission($this) )
-            return false;
-        if( !$User->isAdmin() )
-            return false;
-        return true;
+        return $user->testStisfyPermission($this->owner, ObjectLevel::atLeastAdmin($this->content_access));
+    }
+
+    public static function creatable(User $user):bool
+    {
+        return $user->isAdmin();
+    }
+
+
+    public function isAllowSubmit(User $user)
+    {
+        return $this->readable($user) && $this->isSubmitFuncOpen();
     }
 
     public function getObjLevel():int

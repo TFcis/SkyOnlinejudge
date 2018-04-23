@@ -19,9 +19,9 @@ function modifyHandle()
         if( !$problem->load($pid) )
             throw new \Exception('NO SUCH PROBLEM');
 
-        if( !$problem->isAllowEdit($SkyOJ->User) )
+        if( !$problem->writeable($SkyOJ->User) )
             throw new \Exception('權限不足，不開放此題目');
-        
+
         //For attachs
         $files = $problem->getFileManager()->getAttachFiles();
         $attachs = [];

@@ -13,7 +13,7 @@ function problem_api_add_testcasezipHandle()
 
         if( !$problem->load($pid) )
             \SKYOJ\throwjson('error','param error');
-        if( !$problem->isAllowEdit($SkyOJ->User) )
+        if( !$problem->writeable($SkyOJ->User) )
             \SKYOJ\throwjson('error', 'Access denied');
         
         $file = $_FILES['file']??['error'=>1];

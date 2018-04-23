@@ -13,6 +13,13 @@ class User extends \SkyOJ\Core\CommonObject
         ];
     }
 
+    public function afterLoad()
+    {
+        $this->sqldata['uid'] = (int)$this->uid;
+        $this->sqldata['level'] = (int)$this->level;
+        return true;
+    }
+
     public function getObjLevel():int
     {
         return $this->level-1;
@@ -33,11 +40,12 @@ class User extends \SkyOJ\Core\CommonObject
         return $this->level >= UserLevel::GUEST;
     }
 
-    function checkPermission(\SkyOJ\Core\CommonObject &$obj)
+    function testStisfyPermission(int $owner,int $minReqlevel):bool
     {
-        $ownLevel = self::fetchColByPrimeID($obj->owner,'level');
+        $ownLevel = (int)(self::fetchColByPrimeID($owner,'level')[0]);
         return  $this->level > $ownLevel ||
-                $this->level > $obj->getObjLevel() || 
-                $this->uid == $obj->owner;
+                $this->level > $minReqlevel ||
+                $this->uid == $owner;
+
     }
 }
