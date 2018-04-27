@@ -7,8 +7,8 @@ use \SKYOJ\HTML_INPUT_HIDDEN;
 use \SKYOJ\HTML_INPUT_TEXT;
 use \SKYOJ\HTML_ROW;
 use \SKYOJ\HTML_INPUT_BUTTOM;
-$data = $tmpl['challenge_result_info'];
-$result = json_decode($data['package'],true) ?? [];
+$data = $tmpl['chal'];
+$result = json_decode($data->package,true) ?? [];
 //$result = $_E['template']['challenge_result_info']['result'];
 ?>
 <script>
@@ -17,8 +17,8 @@ $(document).ready(function()
     var editor = ace.edit("rcode");
 	var sec = 1;
     editor.setReadOnly(true);
-	<?php if( $data['result'] < \SKYOJ\RESULTCODE::AC):?>
-	updateJudgeVerdict("<?=$SkyOJ->uri('chal','api','waitjudge')?>",<?=$data['cid']?>,function(cid,res){
+	<?php if( $data->result < \SKYOJ\RESULTCODE::AC):?>
+	updateJudgeVerdict("<?=$SkyOJ->uri('chal','api','waitjudge')?>",<?=$data->cid?>,function(cid,res){
 		location.reload();
 	});
 	<?php endif ;?>
@@ -31,36 +31,36 @@ $(document).ready(function()
 				<tbody>
 					<tr>
 						<td>上傳編號</td>
-						<td><?=$data['cid']?></td>
+						<td><?=$data->cid?></td>
 					</tr>
 					<tr>
 						<td>上傳時間</td>
-						<td><?=$data['timestamp']?></td>
+						<td><?=$data->timestamp?></td>
 					</tr>
 					<tr>
 						<td>題目</td>
 						<td>
-							<a href="<?=$SkyOJ->uri('problem','view',$data['pid'],'')?>">
-								<?=\SkyOJ\html($tmpl['problem']->title)?>
+							<a href="<?=$SkyOJ->uri('problem','view',$data->pid,'')?>">
+								<?=\SkyOJ\html($data->problem()->title)?>
 							</a>
 						</td>
 					</tr>
 					<tr>
 						<td>使用者</td>
 						<?php
-                        $nickname = \SKYOJ\nickname($data['uid']);
+                        $nickname = \SKYOJ\nickname($data->uid);
                         ?>
 						<td>
-							<a href="<?=$SkyOJ->uri('user','view',$data['uid'])?>">
-								<?=\SKYOJ\html($nickname[$data['uid']])?>
+							<a href="<?=$SkyOJ->uri('user','view',$data->uid)?>">
+								<?=\SKYOJ\html($nickname[$data->uid])?>
 							</a>
 						</td>
 					</tr>
 					<tr>
 						<td>總得分</td>
-						<td><?=$data['score']?>, <?=\SKYOJ\getresulttexthtml($data['result'])?>
-							<?php if( $data['result'] >= \SKYOJ\RESULTCODE::AC && $data['result'] <= \SKYOJ\RESULTCODE::CE): ?>
-								 in <?=$data['runtime']?> ms
+						<td><?=$data->score?>, <?=\SKYOJ\getresulttexthtml($data->score)?>
+							<?php if( $data->result >= \SKYOJ\RESULTCODE::AC && $data->result <= \SKYOJ\RESULTCODE::CE): ?>
+								 in <?=$data->runtime?> ms
 							<?php endif; ?>
 						</td>
 					</tr>
@@ -90,10 +90,11 @@ $(document).ready(function()
 			</table>
 		</div> 
 	</div>
-	<?php if( \SKYOJ\Problem::hasCodeviewAccess_s($_G['uid'],$data['uid'],$tmpl['problem']->codeview_access,$data['pid']) ):?>
+
+	<?php if( $tmpl['allowCodeview'] ):?>
 		<?php if( $SkyOJ->User->isAdmin() ):?>
 		<div class="row">
-			<a href="<?=$SkyOJ->uri('problem','api','judge')?>?cid=<?=$data['cid']?>">Rejudge</a>
+			<a href="<?=$SkyOJ->uri('problem','api','judge')?>?cid=<?=$data->cid?>">Rejudge</a>
 		</div>
 		<?php endif;?>
 		<?php if( !empty($t) ):?>
@@ -127,20 +128,20 @@ $(document).ready(function()
 			<?php
 				Render::renderForm(new FormInfo([
                     'data' => [
-                        new HTML_INPUT_HIDDEN(['name' => 'cid','value'=>$data['cid']]),
-                        new HTML_INPUT_TEXT(  ['name' => 'result','value'=>$data['result'],'option'=>['help_text'=>'result code']]),
-                        new HTML_INPUT_TEXT(  ['name' => 'comment','value'=>$data['comment'],'option'=>['help_text'=>'comment']]),
+                        new HTML_INPUT_HIDDEN(['name' => 'cid','value'=>$data->cid]),
+                        new HTML_INPUT_TEXT(  ['name' => 'result','value'=>$data->result,'option'=>['help_text'=>'result code']]),
+                        new HTML_INPUT_TEXT(  ['name' => 'comment','value'=>$data->comment,'option'=>['help_text'=>'comment']]),
                         new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出','option' => ['help_text' => 'true']]),
                     ],
                 ]),"cont_comment");?>
-		<?php elseif( !empty($data['comment']) ):?>
+		<?php elseif( !empty($data->comment) ):?>
 		<div class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">Admin's Comment</div>
 					<div class="panel-body">
 						<div class="container-fluid">
-							<tt><?=nl2br(htmlspecialchars($data['comment']))?></tt>
+							<tt><?=nl2br(htmlspecialchars($data->comment))?></tt>
 						</div>
 					</div>
 				</div>
@@ -150,8 +151,8 @@ $(document).ready(function()
 		<div class="row">
 			<div class="col-md-12">
 				<?php 
-					$tmpl['defaultcode'] = $data['code'];
-					Render::renderCode($data['code'],'c_cpp','rcode'); 
+					$tmpl['defaultcode'] = $data->code;
+					Render::renderCode($data->code,'c_cpp','rcode'); 
 				?>
 			</div>
 		</div>

@@ -171,6 +171,5 @@ abstract class CommonObject
         
         return DB::lastInsertId(static::$prime_key);
     }
-    abstract public function getObjLevel():int;
     //static abstract public function create(array $data):int;
 }

@@ -1,23 +1,14 @@
 <?php namespace SKYOJ\Problem;
 
-if (!defined('IN_SKYOJSYSTEM')) {
-    exit('Access denied');
-}
-
-require_once($_E['ROOT'].'/function/challenge/challenge.lib.php');
 function problem_api_submitHandle()
 {
     global $SkyOJ,$_G,$_E;
     $CODE_LIMIT_LEN = 100000;
 
-    //TODO : 題目權限
-    if( !$_G['uid'] )
-        \SKYOJ\throwjson('error', 'Access denied');
-
     $pid = \SKYOJ\safe_post('pid');
     $compiler = \SKYOJ\safe_post('compiler');
     $code = \SKYOJ\safe_post('code');
-    $uid = $_G['uid'];
+
     try{
         if( isset($_FILES['codefile']) )
         {
@@ -37,47 +28,36 @@ function problem_api_submitHandle()
         if( !isset($pid,$compiler,$code) )
             throw new \Exception('param error');
 
-        $problem = new \SKYOJ\Problem($pid);
-        $pid = $problem->pid();
+        $problem = new \SkyOJ\Problem\Container();
+        if( !$problem->load($pid) )
+            throw new \Exception('problem error');
 
-        $judge = null;
-        $judgename = $problem->GetJudge();
-        if( \Plugin::loadClassFileInstalled('judge',$judgename)!==false )
-            $judge = new $judgename;
+        //$judge = null;
+        //$judgename = $problem->GetJudge();
+        //if( \Plugin::loadClassFileInstalled('judge',$judgename)!==false )
+        //    $judge = new $judgename;
 
-        if( $problem->pid()===null )
-            throw new \Exception('Problem data load fail!');
-
-        #題目權限
-        if( !$problem->hasSubmitAccess($_G['uid']) )
-            throw new \Exception('Access denied');
         
-        //TODO
-        if( $judge ){
-            $compilers = $judge->get_compiler();
-            if( !\array_key_exists($compiler,$compilers) )
-                throw new \Exception('NoSuchJudge');
-        }else if( !empty($compiler) ){
-            throw new \Exception('NoSuchJudge');
-        }
+    
+        #題目權限
+        if( !$problem->isAllowSubmit($SkyOJ->User) )
+            throw new \Exception('Access denied');
 
+        //TODO Check compiler code
+        $lang = 0; //this can be calc by judge, but we not implementation
 
-        if( strlen($code)>$CODE_LIMIT_LEN )
-            throw new \Exception('code length more than limit');
         if( !\SKYOJ\is_utf8($code) )
             throw new \Exception('This is not a utf-8 encoding file!');
 
-        $cid = \SKYOJ\Challenge\Challenge::create($uid,$pid,$code,$compiler);
-        if( $cid===null )
-            throw new \Exception('SQL Error');
-
+        $cid = \SkyOJ\Challenge\Container::create($SkyOJ->User->uid, $code, $pid, $lang, $compiler);
+        \SKYOJ\throwjson('SUCC',$cid);
         $SkyOJ->throwjson_keep('SUCC',$cid);
     }catch(\Exception $e){
         \SKYOJ\throwjson('error',$e->getMessage());
     }
 
     //Flushed! run on back round
-    try{
+    /*try{
         $data = new \SKYOJ\Challenge\Challenge($cid);
         $res = $data->run_judge();
 
@@ -88,5 +68,5 @@ function problem_api_submitHandle()
         }
     }catch(\Exception $e){
         \Log::msg(\Level::Error,'judge error:'.$e->getMessage());
-    }
+    }*/
 }

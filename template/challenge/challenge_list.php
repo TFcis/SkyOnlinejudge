@@ -2,7 +2,6 @@
 if (!defined('IN_TEMPLATE')) {
     exit('Access denied');
 }
-$cl_prob = $tmpl['challenge_prob'];
 ?>
 <div id = "image-bar"></div>
 <div class="container">
@@ -53,20 +52,19 @@ $cl_prob = $tmpl['challenge_prob'];
                 </thead>
                 <tbody>
                 <?php foreach ($_E['template']['challenge_info'] as $row):?>
-                    <?php $c=$SkyOJ->User->checkPermission($cl_prob[$row['pid']]);?>
+                    <?php if( !$row->readable($SkyOJ->User) )continue;?>
                     <tr>
-                        <td><a href="<?=$SkyOJ->uri('chal','result',$row['cid'])?>"><?=$row['cid'];?></a></td>
-                        <?php $nickname = \SKYOJ\nickname($row['uid']); ?>
-                        <td><a href="<?=$SkyOJ->uri('chal','result',$row['cid'])?>"><?=\SKYOJ\html($nickname[$row['uid']])?></a></td>
-                        <?php $title = \SKYOJ\html( $c?$cl_prob[$row['pid']]->title:'' )?>
-                        <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'],'')?>" title="<?=$title?>">
-                            <span class="hidden-xs"><?=$title?></span>
-                            <span class="visible-xs-inline"><?=$row['pid']?></span>
+                        <td><a href="<?=$SkyOJ->uri('chal','result',$row->cid)?>"><?=$row->cid;?></a></td>
+                        <?php $nickname = \SKYOJ\nickname($row->uid); ?>
+                        <td><a href="<?=$SkyOJ->uri('chal','result',$row->cid)?>"><?=\SKYOJ\html($nickname[$row->uid])?></a></td>
+                        <td><a href="<?=$SkyOJ->uri('problem','view',$row->pid,'')?>" title="<?=\SKYOJ\html( $row->problem()->title )?>">
+                            <span class="hidden-xs"><?=\SKYOJ\html( $row->problem()->title )?></span>
+                            <span class="visible-xs-inline"><?=$row->pid?></span>
                         </a></td>
-                        <td><?=$c?\SKYOJ\getresulttexthtml($row['result']):''?></td>
-                        <td class="hidden-xs"><?=$c?$row['runtime']:0?></td>
-                        <td><?=$c?$row['score']:0?></td>
-                        <td><?=$row['timestamp']?></td>
+                        <td><?=\SKYOJ\getresulttexthtml($row->result)?></td>
+                        <td class="hidden-xs"><?=$row->runtime?></td>
+                        <td><?=$row->score?></td>
+                        <td><?=$row->timestamp?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -74,7 +72,7 @@ $cl_prob = $tmpl['challenge_prob'];
             <center>
             <?php Render::renderPagination(
             $_E['template']['challenge_list_pagelist'],
-            $_E['SITEROOT'].'index.php/chal/list/%d'.$tmpl['challenge_query'],
+            $_E['SITEROOT'].'index.php/chal/list/%d',
             $_E['template']['challenge_list_now']) ?>
             </center>
         </div>
