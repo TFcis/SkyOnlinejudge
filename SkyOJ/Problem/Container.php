@@ -152,15 +152,16 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
         return true;
     }
 
+    public function checkSet_judge_type($val):bool
+    {
+        if( !\SkyOJ\Judge\JudgeTypenEnum::isValidValue($val) )
+            throw new ContainerModifyException('no such JudgeTypen type');
+        return true;
+    }
+
     public function checkSet_judge(string $class):bool
     {
-        if( $class != $this->judge && $class != '' )
-        {
-            //TODO : Check for installed
-            if( !\Plugin::isClassName($class) )
-                throw new ContainerModifyException('no such judge');
-        }
-        return true;
+        throw new ContainerModifyException('judge is unused');
     }
 
     public function checkSet_content_access($val):bool

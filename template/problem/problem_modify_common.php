@@ -45,14 +45,14 @@ $(document).ready(function(){
                         new HTML_INPUT_HIDDEN(['name'=>'content','id'=>'content','value'=>'']),
                         new HTML_INPUT_HIDDEN(['name'=>'json_data','id'=>'json_data','value'=>'']),
                         new HTML_INPUT_TEXT(['name'=>'title','value'=>$tmpl['problem']->title,'required'=>'required','option' => ['help_text' => '題目名稱']]),
-                        new HTML_INPUT_SELECT(['name'=>'contenttype'
+                        new HTML_INPUT_SELECT(['name'=>'content_type'
                             ,'key-pair'=> \SkyOJ\Problem\ContentTypenEnum::getConstants()
                             ,'default' => $tmpl['problem']->content_type
                             ,'option'  => ['help_text' => '題目格式']]),
 
-                        new HTML_INPUT_SELECT(['name'=>'judge'
-                            ,'key-pair'=> $tmpl['judges']
-                            ,'default' => $tmpl['problem']->judge
+                        new HTML_INPUT_SELECT(['name'=>'judge_type'
+                            ,'key-pair'=> \SkyOJ\Judge\JudgeTypenEnum::getConstants()
+                            ,'default' => $tmpl['problem']->judge_type
                             ,'option'  => ['help_text' => 'Judge']]),
                         new HTML_INPUT_CODEPAD(['option' =>
                             [
