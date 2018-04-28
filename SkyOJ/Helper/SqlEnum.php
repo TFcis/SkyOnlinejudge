@@ -3,8 +3,17 @@
 use \SkyOJ\Core\DataBase\DB;
 
 //TODO: Write a DB operation class to remove DB class
-abstract class SqlEnumDBHelper 
+abstract class SqlEnumDBHelper extends \SkyOJ\Core\CommonObject
 {
+    protected static $table;
+    protected static $prime_key;
+
+    static function setTable($table,$prime_key)
+    {
+        self::$table = $table;
+        self::$prime_key = $prime_key;
+    }
+
     static function selectall(string $table)
     {
         $table = DB::tname($table);
@@ -12,6 +21,11 @@ abstract class SqlEnumDBHelper
         if( $data === false )
             throw new \Exception('sql error');
         return $data;
+    }
+
+    static function _insertinto($val)
+    {
+        return self::insertinto($val);
     }
 }
 
@@ -43,6 +57,7 @@ abstract class SqlEnum extends Enum
         self::$cacheTextToValue[static::$table] = $t2v;
         self::$cacheValueToText[static::$table] = $v2t;
         self::$cacheValueToData[static::$table] = $v2d;
+        //Todo add reflectRef const here
     }
 
     protected static function _getConstants()
@@ -95,5 +110,11 @@ abstract class SqlEnum extends Enum
             return [];
         }
         return self::$cacheValueToData[static::$table][$value];
+    }
+
+    protected static function insertinto($val)
+    {
+        SqlEnumDBHelper::setTable(static::$table,static::$prime_key);
+        return SqlEnumDBHelper::_insertinto($val);
     }
 }

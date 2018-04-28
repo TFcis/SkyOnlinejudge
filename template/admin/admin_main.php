@@ -49,14 +49,13 @@ if (!defined('IN_TEMPLATE')) {
         <ul class="nav nav-pills nav-stacked">
             <li role="presentation" navpage='dashboard'><a href="#">摘要</a></li>
             <li role="presentation" navpage='log'><a href="#">系統紀錄</a></li>
+            <li role="presentation" navpage='judge_profile/list'><a href="#">Judge Profile</a></li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="plugindb">插件<span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="plugindb">
-                    <?php foreach ($_E['template']['pluginfolders'] as $folder) {
-    ?>
+                    <?php foreach ($_E['template']['pluginfolders'] as $folder): ?>
                     <li navpage="plugins/list/?folder=<?=urlencode($folder)?>"><a href="#"><?=htmlentities($folder)?></a></li>
-                    <?php 
-}?>
+                    <?php endforeach;?>
                 </ul>
             </li>
         </ul>

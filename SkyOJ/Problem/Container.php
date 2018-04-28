@@ -163,7 +163,7 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
 
     public function checkSet_judge_profile($val):bool
     {
-        if( !\SkyOJ\Judge\JudgeTypenProfile::isValidValue($val) )
+        if( !\SkyOJ\Judge\JudgeProfileEnum::isValidValue($val) )
             throw new ContainerModifyException('no such JudgeTypen type');
         return true;
     }

@@ -1,25 +1,38 @@
 <?php namespace SKYOJ\Problem;
-if (!defined('IN_SKYOJSYSTEM')) {
-    exit('Access denied');
-}
 
-require_once($_E['ROOT'].'/function/challenge/challenge.lib.php');
+use \SkyOJ\Judge\Judge;
+
 function problem_api_judgeHandle()
 {
-    global $_G,$_E;
-    $cid = \SKYOJ\safe_get('cid');
-    try{
-        if( !\userControl::isAdmin($_G['uid']) )
+    global $SkyOJ,$_G,$_E;
+    try
+    {
+        $cid = \SKYOJ\safe_get('cid');
+
+        session_write_close(); // prevent stuck
+        if( !$SkyOJ->User->isAdmin() )
             \SKYOJ\throwjson('error', 'Access denied');
         
-        session_write_close(); // prevent stuck
-        $data = new \SKYOJ\Challenge\Challenge($cid);
-        $res = $data->run_judge();
+        
+        $data = new \SkyOJ\Challenge\Container();
+        if( !$data->load($cid) )
+            \SKYOJ\throwjson('error', 'Load Chal Error');
 
+        $judge = Judge::getJudgeReference($data->problem()->judge_profile);
+
+        $res = '';
+        if( isset($judge) )
+        {
+            $res = $judge->judge($data);
+        }
+
+        //$data->applyResult($res);
         if( $res === false )
             throw new \Exception('judge error');
         \SKYOJ\throwjson('SUCC',"Yeeee!");
-    }catch(\Exception $e){
+    }
+    catch(\Exception $e)
+    {
         \SKYOJ\throwjson('error',$e->getMessage());
     }
 }
