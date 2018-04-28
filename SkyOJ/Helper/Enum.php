@@ -4,11 +4,39 @@
  * Copy From PHP.net 
  * http://php.net/manual/en/class.splenum.php
  */
-abstract class Enum {
+abstract class Enum 
+{
     private static $constCacheArray  = [];
     private static $constCacheRArray = [];
 
-    public static function getConstants() {
+    public static function getConstants()
+    {
+        return static::_getConstants();
+    }
+
+    //Todo rename this
+    public static function getRConstants()
+    {
+        return static::_getRConstants();
+    }
+
+    public static function isValidName($name, $strict = false)
+    {
+        return static::_isValidName($name, $stric);
+    }
+
+    public static function isValidValue($value, $strict = true)
+    {
+        return static::_isValidValue($value, $strict);
+    }
+
+    public static function str($value, $strict=false):string
+    {
+        return static::_str($value, $strict);
+    }
+
+    protected static function _getConstants()
+    {
         $calledClass = get_called_class();
         if (!array_key_exists($calledClass, self::$constCacheArray)) {
             $reflect = new \ReflectionClass($calledClass);
@@ -17,7 +45,7 @@ abstract class Enum {
         return self::$constCacheArray[$calledClass];
     }
 
-    public static function getRConstants()
+    protected static function _getRConstants()
     {
         $calledClass = get_called_class();
         if( !array_key_exists($calledClass, self::$constCacheRArray) )
@@ -30,10 +58,12 @@ abstract class Enum {
         return self::$constCacheRArray[$calledClass];
     }
 
-    public static function isValidName($name, $strict = false) {
+    protected static function _isValidName($name, $strict = false)
+    {
         $constants = self::getConstants();
 
-        if ($strict) {
+        if( $strict )
+        {
             return array_key_exists($name, $constants);
         }
 
@@ -41,14 +71,15 @@ abstract class Enum {
         return in_array(strtolower($name), $keys);
     }
 
-    public static function isValidValue($value, $strict = true) {
+    protected static function _isValidValue($value, $strict = true)
+    {
         $values = array_values(self::getConstants());
         return in_array($value, $values, $strict);
     }
 
-    public static function str($value,$strict=false):string
+    protected static function _str($value, $strict=false):string
     {
-        if( !self::isValidValue($value,$strict) )
+        if( !self::isValidValue($value, $strict) )
         {
             return "[Unknown EnumVal]";
         }
