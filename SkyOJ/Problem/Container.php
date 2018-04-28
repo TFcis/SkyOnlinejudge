@@ -33,8 +33,7 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
             'submit_access'  => ProblemLevel::Hidden,
             'codeview_access'=> ProblemLevel::Hidden,
             'title' => '[Empty Problem]',
-            'judge' => '',
-            'judge_type' => 0,
+            'judge_profile' => 0,
             'content_type' => ProblemDescriptionEnum::MarkDown
         ];
         return self::insertInto($default);
@@ -105,6 +104,11 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
         return $this->m_content->praseRowContent();
     }
 
+    public function getJudgeJson()
+    {
+        return $this->m_problem_manager->read('judge.json');
+    }
+
     public function getFileManager()
     {
         return $this->m_problem_manager;
@@ -143,6 +147,11 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
         return $res;
     }
 
+    public function setJudgeJson($string)
+    {
+        return $this->m_problem_manager->write('judge.json',$string);
+    }
+
     public function checkSet_title(string $string):bool
     {
         if( !is_string($string) )
@@ -152,9 +161,9 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
         return true;
     }
 
-    public function checkSet_judge_type($val):bool
+    public function checkSet_judge_profile($val):bool
     {
-        if( !\SkyOJ\Judge\JudgeTypenEnum::isValidValue($val) )
+        if( !\SkyOJ\Judge\JudgeTypenProfile::isValidValue($val) )
             throw new ContainerModifyException('no such JudgeTypen type');
         return true;
     }

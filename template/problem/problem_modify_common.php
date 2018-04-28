@@ -50,9 +50,9 @@ $(document).ready(function(){
                             ,'default' => $tmpl['problem']->content_type
                             ,'option'  => ['help_text' => '題目格式']]),
 
-                        new HTML_INPUT_SELECT(['name'=>'judge_type'
-                            ,'key-pair'=> \SkyOJ\Judge\JudgeTypenEnum::getConstants()
-                            ,'default' => $tmpl['problem']->judge_type
+                        new HTML_INPUT_SELECT(['name'=>'judge_profile'
+                            ,'key-pair'=> \SkyOJ\Judge\JudgeProfileEnum::getConstants()
+                            ,'default' => $tmpl['problem']->judge_profile
                             ,'option'  => ['help_text' => 'Judge']]),
                         new HTML_INPUT_CODEPAD(['option' =>
                             [
@@ -64,10 +64,6 @@ $(document).ready(function(){
                             ]]),
 
                         new HTML_ROW(['html'=>'</div><div class="col">']),
-                        /*new HTML_INPUT_SELECT(['name'=>'judge_type'
-                            ,'key-pair'=> \SKYOJ\ProblemJudgeTypeEnum::getConstants()
-                            ,'default' => 0//$tmpl['problem']->GetJudgeType()
-                            ,'option'  => ['help_text' => '題目輸入類型']]),*/
                         new HTML_INPUT_SELECT(['name'=>'content_access'
                             ,'key-pair'=> \SkyOJ\Problem\ProblemLevel::getConstants()
                             ,'default' => $tmpl['problem']->content_access
@@ -83,7 +79,7 @@ $(document).ready(function(){
                         new HTML_HR(),
                         new HTML_INPUT_CODEPAD(['option' =>
                             [
-                                'code'=>'',//$tmpl['pjson'],
+                                'code'=>$tmpl['problem']->getJudgeJson(),//$tmpl['pjson'],
                                 'language'=>'json',
                                 'id'=> '_json_data',
                                 'setting'=>['minLines'=>20,'maxLines'=>20],
