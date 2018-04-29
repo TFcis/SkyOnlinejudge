@@ -122,28 +122,15 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
         return $this->m_problem_data_manager->base().ProblemDataManager::ATTACH_DIR.$file;
     }
 
-    public function getTestdata():array
+    public function getTestdataInfo():array
     {
-        $files = $this->m_problem_data_manager->getTestdataFiles();
-        $map = [];
-        foreach($files as $file)
-        {
-            $info = pathinfo($file);
-            if( !isset($map[$info['filename']]) )
-                $map[$info['filename']] = [];
-            if( in_array($info['extension'],ProblemDataManager::INPUT_EXT) )
-                $map[$info['filename']][0] = $file;
-            else if( in_array($info['extension'],ProblemDataManager::OUTPUT_EXT) )
-                $map[$info['filename']][1] = $file;
-        }
+        $files = $this->m_problem_data_manager->getTestdataFiles(true);
 
+        $size = count($files);
         $res = [];
-        foreach($map as $io)
+        for( $i=0 ; $i<$size ; $i+=2 )
         {
-            if(!empty($io))
-            {
-                $res[] = new Testdata($io[0]??NULL,$io[1]??NULL);
-            }
+            $res [] = new Testcase\Data($i/2, $files[$i+1], $files[$i]);
         }
         return $res;
     }

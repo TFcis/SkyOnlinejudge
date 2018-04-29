@@ -35,7 +35,7 @@ function modifyHandle()
         $_E['template']['attachs'] = $attachs;
 
         //Testdata
-        $_E['template']['testdata'] = $problem->getTestdata();
+        $_E['template']['testdata'] = $problem->getTestdataInfo();
 
         $judges_info = \Plugin::listInstalledClassFileByFolder('judge');
         $judges = [];

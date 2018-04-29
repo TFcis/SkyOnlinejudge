@@ -20,9 +20,10 @@ class ProblemDataManager extends ManagerBase
     const TESTDATA_DIR = 'testdata/data/';
     const FILENAME_PATTEN = '/^[a-zA-Z0-9\.]{1,64}$/';
 
-    const INPUT_EXT = ["txt","in"];
-    const OUTPUT_EXT = ["ans","out"];
+    const INPUT_EXT  = "in";
+    const OUTPUT_EXT = "ans";
     private $pid;
+
     public function __construct(int $id,bool $builddir = false)
     {
         $this->pid = $id;
@@ -58,9 +59,47 @@ class ProblemDataManager extends ManagerBase
         return glob($this->base().self::ATTACH_DIR.'*');
     }
 
-    public function getTestdataFiles():array
+    public function getTestdataFiles(bool $require_valid_files = false):array
     {
-        return glob($this->base().self::TESTDATA_DIR.'*');
+        $files = glob($this->base().self::TESTDATA_DIR.'*');
+        $testcases = [];
+        $lastfilename = '';
+        $lastfileext  = '';
+
+        foreach( $files as $filename )
+        {
+            if( !is_file($filename) )
+                continue;
+            
+            if( $require_valid_files )
+            {
+                $name = pathinfo($filename,PATHINFO_FILENAME);
+                $ext  = pathinfo($filename,PATHINFO_EXTENSION);
+                if( $ext !== self::INPUT_EXT && $ext !== self::OUTPUT_EXT ) 
+                    continue;
+
+                if( $ext === self::INPUT_EXT )
+                {
+                    // glob will sort all data in alphabetical order, so that .ans will appear first than .in
+                    // we can use this ensure all case has an output
+                    if( $lastfilename !== $name || $lastfileext !== self::OUTPUT_EXT )
+                        continue;
+                }
+                else
+                { 
+                    if( $lastfileext === self::OUTPUT_EXT )
+                        array_pop($testcases);
+                }
+                $lastfilename = $name;
+                $lastfileext = $ext;
+            }
+            $testcases[] = $filename;
+        }
+
+        if( $require_valid_files && $lastfileext === self::OUTPUT_EXT )
+            array_pop($testcases);
+
+        return $testcases;
     }
 
     public function copyTestcasesZip(string $filepath,bool $cover = true):array
@@ -85,7 +124,7 @@ class ProblemDataManager extends ManagerBase
         foreach($files as $file)
         {
             $info = pathinfo($file);
-            if( in_array($info['extension'],self::INPUT_EXT) || in_array($info['extension'],self::OUTPUT_EXT) )
+            if( $info['extension']!==self::INPUT_EXT || $info['extension']!==self::OUTPUT_EXT )
             {
                 $this->copyin($file,self::TESTDATA_DIR.$info['basename']);
             }
