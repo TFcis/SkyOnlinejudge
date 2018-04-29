@@ -1,5 +1,7 @@
 <?php namespace SkyOJ\Judge;
 
+use \SkyOJ\Challenge\LanguageCode;
+
 class HypeX_wspost
 {
     private $url;
@@ -209,10 +211,13 @@ class HypeX extends Judge
             public $redir_check;
         };
     }
-    public function get_compiler()
+
+    public function getCompilerInfo()
     {
         return [
-            'cpp14' => 'c++14/gnu c++ compiler 5.4.0 | options: -O2 -std=c++14',
+            [0, LanguageCode::C  , "gcc -std=c++11"],
+            [1, LanguageCode::CPP, "g++ -std=c++14 -O2"],
+            [1, LanguageCode::PYTHON3, "python3 | LANG=en_US.UTF-8"]
         ];
     }
 
