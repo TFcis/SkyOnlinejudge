@@ -34,10 +34,10 @@ class pathTest extends TestCase
         $this->assertEquals( "00/00/00/01/", \SkyOJ\File\Path::id2folder(1) );
     }
 
-    public function testProblemManager()
+    public function testProblemDataManager()
     {
         global $_E;
-        $p = new \SkyOJ\File\ProblemManager(1,true);
+        $p = new \SkyOJ\File\ProblemDataManager(1,true);
         $this->assertEquals($p->base(),self::$base."problem/00/00/00/01/");
     }
 }

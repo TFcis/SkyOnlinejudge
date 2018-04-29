@@ -1,10 +1,10 @@
 <?php namespace SkyOJ\Problem;
 
-use \SkyOJ\File\ProblemManager;
+use \SkyOJ\File\ProblemDataManager;
 
 abstract class Content
 {
-    public static function init(int $type, ProblemManager $manager):?Content
+    public static function init(int $type, ProblemDataManager $manager):?Content
     {
         if( !ContentTypenEnum::isValidValue($type) )
             return null;
@@ -12,7 +12,7 @@ abstract class Content
         return new $classname($manager);
     }
 
-    abstract public function __construct(ProblemManager $manager);
+    abstract public function __construct(ProblemDataManager $manager);
     abstract public function getRowContent();
     abstract public function getRendedContent();
     

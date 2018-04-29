@@ -31,7 +31,7 @@ function problem_api_add_testcasezipHandle()
         //Unzip data
         $problem->admmsg = "Unzip...";
         $problem->save();
-        $problem->getFileManager()->copyTestcasesZip($file['tmp_name']);
+        $problem->getDataManager()->copyTestcasesZip($file['tmp_name']);
         
         
         /*$judgename = $problem->GetJudge();

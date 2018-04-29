@@ -23,7 +23,7 @@ function modifyHandle()
             throw new \Exception('權限不足，不開放此題目');
 
         //For attachs
-        $files = $problem->getFileManager()->getAttachFiles();
+        $files = $problem->getDataManager()->getAttachFiles();
         $attachs = [];
         foreach( $files as $file )
         {

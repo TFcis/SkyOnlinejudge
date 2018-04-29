@@ -10,14 +10,14 @@ base    /cont //put problem decript
 */
 use \SkyOJ\Core\User\User;
 use \SkyOJ\Core\Permission\ObjectLevel;
-use \SkyOJ\File\ProblemManager;
+use \SkyOJ\File\ProblemDataManager;
 use \SkyOJ\Judge\JudgeProfileEnum;
 
 class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permission\Permissible
 {
     protected static $table = 'problem'; 
     protected static $prime_key = 'pid';
-    private $m_problem_manager;
+    private $m_problem_data_manager;
     private $json;
     private $m_content;
 
@@ -42,9 +42,9 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
 
     protected function afterLoad()
     {
-        $this->m_problem_manager = new ProblemManager($this->pid, true);
-        $this->m_content = Content::init($this->content_type, $this->m_problem_manager);
-        $this->json = json_decode($this->m_problem_manager->read(ProblemManager::PROBLEM_JSON_FILE),true);
+        $this->m_problem_data_manager = new ProblemDataManager($this->pid, true);
+        $this->m_content = Content::init($this->content_type, $this->m_problem_data_manager);
+        $this->json = json_decode($this->m_problem_data_manager->read(ProblemDataManager::PROBLEM_JSON_FILE),true);
         return true;
     }
 
@@ -94,7 +94,7 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
         if( $this->content_type !== $format )
         {
             $this->content_type = $format;
-            $this->m_content = Content::init($this->content_type, $this->m_problem_manager);
+            $this->m_content = Content::init($this->content_type, $this->m_problem_data_manager);
         }
         $this->m_content->setContent($data);
         return $this->m_content->praseRowContent();
@@ -107,33 +107,33 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
 
     public function getJudgeJson()
     {
-        return $this->m_problem_manager->read('judge.json');
+        return $this->m_problem_data_manager->read('judge.json');
     }
 
-    public function getFileManager()
+    public function getDataManager()
     {
-        return $this->m_problem_manager;
+        return $this->m_problem_data_manager;
     }
 
     public function genAttachLocalPath(string $file)
     {
-        if( !$this->m_problem_manager->checkFilename($file) )
+        if( !$this->m_problem_data_manager->checkFilename($file) )
             throw new ContainerException('FILENAME NOT AVAILABLE');
-        return $this->m_problem_manager->base().ProblemManager::ATTACH_DIR.$file;
+        return $this->m_problem_data_manager->base().ProblemDataManager::ATTACH_DIR.$file;
     }
 
     public function getTestdata():array
     {
-        $files = $this->m_problem_manager->getTestdataFiles();
+        $files = $this->m_problem_data_manager->getTestdataFiles();
         $map = [];
         foreach($files as $file)
         {
             $info = pathinfo($file);
             if( !isset($map[$info['filename']]) )
                 $map[$info['filename']] = [];
-            if( in_array($info['extension'],ProblemManager::INPUT_EXT) )
+            if( in_array($info['extension'],ProblemDataManager::INPUT_EXT) )
                 $map[$info['filename']][0] = $file;
-            else if( in_array($info['extension'],ProblemManager::OUTPUT_EXT) )
+            else if( in_array($info['extension'],ProblemDataManager::OUTPUT_EXT) )
                 $map[$info['filename']][1] = $file;
         }
 
@@ -150,7 +150,7 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
 
     public function setJudgeJson($string)
     {
-        return $this->m_problem_manager->write('judge.json',$string);
+        return $this->m_problem_data_manager->write('judge.json',$string);
     }
 
     public function checkSet_title(string $string):bool

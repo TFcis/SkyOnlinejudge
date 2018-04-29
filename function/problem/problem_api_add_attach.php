@@ -25,7 +25,7 @@ function problem_api_add_attachHandle()
             $filename = $file['name'];
             if( $file['error'] != \UPLOAD_ERR_OK)
                 \SKYOJ\throwjson('error', 'Upload Error : '.$file['error']);
-            $problem->getFileManager()->copyin($tmppath,\SkyOJ\File\ProblemManager::ATTACH_DIR.$file['name']);
+            $problem->getDataManager()->copyin($tmppath,\SkyOJ\File\ProblemDataManager::ATTACH_DIR.$file['name']);
         }
         \SKYOJ\throwjson('SUCC', 'succ');
     }catch(\Exception $e){

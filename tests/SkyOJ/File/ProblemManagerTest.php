@@ -1,7 +1,7 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-class problemManagerTest extends TestCase
+class ProblemDataManagerTest extends TestCase
 {
     private static $base = "";
     public static function setUpBeforeClass()
@@ -12,7 +12,7 @@ class problemManagerTest extends TestCase
 
     public function testunzip()
     {
-        $p = new \SkyOJ\File\ProblemManager(1,true);
+        $p = new \SkyOJ\File\ProblemDataManager(1,true);
         //TODO rewrite this
         //$p->copyTestcasesZip( dirname(__FILE__).'/case.zip',true);
         $this->assertEquals(1,1);

@@ -8,7 +8,7 @@ base    /cont //put problem decript
         judge.json //judge setting
 
 */
-class ProblemManager extends ManagerBase
+class ProblemDataManager extends ManagerBase
 {
     #predefine some file name
     const PROBLEM_JSON_FILE = 'prob.json';
@@ -30,9 +30,9 @@ class ProblemManager extends ManagerBase
         if( !file_exists($this->base()) )
         {
             if( !$builddir )
-                throw new ProblemManagerException('No Such Problem!');
+                throw new ProblemDataManagerException('No Such Problem!');
             if( !$this->buildStructure() )
-                throw new ProblemManagerException('buildStructure fail');
+                throw new ProblemDataManagerException('buildStructure fail');
         }
     }
 
@@ -66,11 +66,11 @@ class ProblemManager extends ManagerBase
     public function copyTestcasesZip(string $filepath,bool $cover = true):array
     {
         if( !class_exists('\\ZipArchive') )
-            throw new ProblemManagerException('php ZipArchive not enabled!');
+            throw new ProblemDataManagerException('php ZipArchive not enabled!');
         $zip = new \ZipArchive;
   
         if( $zip->open($filepath) === false )
-            throw new ProblemManagerException('Not a zip file!');
+            throw new ProblemDataManagerException('Not a zip file!');
 
         $tmpdir = tempnam( sys_get_temp_dir() , 'CAS' );
 
@@ -95,4 +95,4 @@ class ProblemManager extends ManagerBase
     }
 }
 
-class ProblemManagerException extends \Exception {} 
+class ProblemDataManagerException extends \Exception {} 
