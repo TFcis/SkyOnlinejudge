@@ -11,6 +11,7 @@ base    /cont //put problem decript
 use \SkyOJ\Core\User\User;
 use \SkyOJ\Core\Permission\ObjectLevel;
 use \SkyOJ\File\ProblemManager;
+use \SkyOJ\Judge\JudgeProfileEnum;
 
 class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permission\Permissible
 {
@@ -33,7 +34,7 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
             'submit_access'  => ProblemLevel::Hidden,
             'codeview_access'=> ProblemLevel::Hidden,
             'title' => '[Empty Problem]',
-            'judge_profile' => 0,
+            'judge_profile' => JudgeProfileEnum::None,
             'content_type' => ProblemDescriptionEnum::MarkDown
         ];
         return self::insertInto($default);

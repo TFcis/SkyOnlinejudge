@@ -54,6 +54,23 @@ abstract class SqlEnum extends Enum
             $v2t[$row[static::$prime_key]] = $row[static::$text_key];
             $v2d[$row[static::$prime_key]] = $row;
         }
+
+        $constants = new \ReflectionClass(get_called_class());
+        foreach( $constants->getConstants() as $text => $val )
+        {
+            if( isset($t2v[$text]) )
+                throw new \Exception('duplicate text : '.$text);
+            if( isset($v2t[$val]) )
+                throw new \Exception('duplicate key : '.$val);
+    
+            $t2v[$text] = $val;
+            $v2t[$val] = $text;
+            $v2d[$val] = [
+                static::$prime_key => $val,
+                static::$text_key => $text
+            ];
+        }
+        
         self::$cacheTextToValue[static::$table] = $t2v;
         self::$cacheValueToText[static::$table] = $v2t;
         self::$cacheValueToData[static::$table] = $v2d;
@@ -109,11 +126,16 @@ abstract class SqlEnum extends Enum
         {
             return [];
         }
-        return self::$cacheValueToData[static::$table][$value];
+        return self::$cacheValueToData[static::$table][$value]??[];
     }
 
-    protected static function insertinto($val)
+    protected static function insertinto(array $val)
     {
+        if( !isset($val[static::$prime_key]) || self::isValidValue($val[static::$prime_key],false) )
+            throw new \Exception('empty or duplicate key');
+        if( !isset($val[static::$text_key]) || self::isValidValue($val[static::$text_key],false) )
+            throw new \Exception('empty or duplicate text');
+
         SqlEnumDBHelper::setTable(static::$table,static::$prime_key);
         return SqlEnumDBHelper::_insertinto($val);
     }

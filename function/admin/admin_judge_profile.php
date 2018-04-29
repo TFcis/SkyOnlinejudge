@@ -13,6 +13,8 @@ function judge_profileHandle()
         case 'list':
             foreach( \SkyOJ\Judge\JudgeProfileEnum::getConstants() as $key )
             {
+                if( $key == \SkyOJ\Judge\JudgeProfileEnum::None )
+                    continue;
                 $profiles[] = \SkyOJ\Judge\JudgeProfileEnum::getRowData($key);
             }
             $_E['template']['judge_profiles'] = $profiles; 
