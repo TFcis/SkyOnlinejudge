@@ -42,7 +42,7 @@ function viewHandle()
     }
 }
 
-function viewachieveHandle(\SkyOJ\Problem\Container $problem,string $filename)
+function viewachieveHandle(\SkyOJ\Problem\Container $problem, string $filename)
 {
     global $SkyOJ;
     try{
@@ -57,7 +57,12 @@ function viewachieveHandle(\SkyOJ\Problem\Container $problem,string $filename)
             throw new \Exception('403');
         }
 
-        header("Content-type: ".filetype($filepath));
+		header('Content-Length: '.filesize($filepath));
+		if( strtolower( pathinfo($filepath, PATHINFO_EXTENSION) ) == 'pdf' )
+			header('Content-Type: application/pdf');
+		else
+			header("Content-Type: ".filetype($filepath)); //TODO:他媽的filetype
+		
         readfile($filepath);
         exit(0);
     }catch(\Exception $e){

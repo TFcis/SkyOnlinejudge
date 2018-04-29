@@ -34,7 +34,7 @@ $_G = $permission['guest'];
 
 //Log System Setting
 $_E['logsys']['logfile'] = $_E['ROOT'].'/data/log.txt';
-$_E['logsys']['msgshower']['enabled'] = true;
+$_E['logsys']['msgshower']['enabled'] = false;
 $_E['logsys']['msgshower']['ip'] = 'localhost';
 $_E['logsys']['msgshower']['port'] = '19620';
 
