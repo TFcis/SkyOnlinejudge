@@ -30,5 +30,4 @@ function judge_profileHandle()
 
     require_once($funcpath);
     $func();
-    
 }

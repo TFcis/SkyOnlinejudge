@@ -22,7 +22,7 @@ abstract class Enum
 
     public static function isValidName($name, $strict = false)
     {
-        return static::_isValidName($name, $stric);
+        return static::_isValidName($name, $strict);
     }
 
     public static function isValidValue($value, $strict = true)

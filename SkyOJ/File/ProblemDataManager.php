@@ -124,7 +124,7 @@ class ProblemDataManager extends ManagerBase
         foreach($files as $file)
         {
             $info = pathinfo($file);
-            if( $info['extension']!==self::INPUT_EXT || $info['extension']!==self::OUTPUT_EXT )
+            if( $info['extension']==self::INPUT_EXT || $info['extension']==self::OUTPUT_EXT )
             {
                 $this->copyin($file,self::TESTDATA_DIR.$info['basename']);
             }

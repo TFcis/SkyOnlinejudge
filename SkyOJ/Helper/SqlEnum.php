@@ -93,7 +93,7 @@ abstract class SqlEnum extends Enum
     }
 
     protected static function _isValidName($name, $strict = false)
-    {die('Not imp');
+    {
         $constants = self::getConstants();
 
         if ($strict) {
@@ -131,9 +131,7 @@ abstract class SqlEnum extends Enum
 
     protected static function insertinto(array $val)
     {
-        if( !isset($val[static::$prime_key]) || self::isValidValue($val[static::$prime_key],false) )
-            throw new \Exception('empty or duplicate key');
-        if( !isset($val[static::$text_key]) || self::isValidValue($val[static::$text_key],false) )
+        if( !isset($val[static::$text_key]) || self::isValidName($val[static::$text_key],false) )
             throw new \Exception('empty or duplicate text');
 
         SqlEnumDBHelper::setTable(static::$table,static::$prime_key);

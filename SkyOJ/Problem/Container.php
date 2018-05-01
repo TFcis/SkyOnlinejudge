@@ -132,7 +132,7 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
         $res = [];
         for( $i=0 ; $i<$size ; $i+=2 )
         {
-            $res [] = new Testcase\Data($i/2, $files[$i+1], $files[$i]);
+            $res [] = new Testcase\Data($i/2, $files[$i+1], $files[$i], $this->runtime_limit, $this->memory_limit);
         }
         return $res;
     }
