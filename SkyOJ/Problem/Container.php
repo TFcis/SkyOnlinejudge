@@ -126,6 +126,7 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
 
     public function getTestdataInfo():array
     {
+        //TODO: cache me~
         $files = $this->m_problem_data_manager->getTestdataFiles(true);
 
         $size = count($files);

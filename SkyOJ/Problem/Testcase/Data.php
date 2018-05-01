@@ -34,7 +34,7 @@ class Data
 
     public function runtime_limit()
     {
-        return $this->m_runtimelimit;
+        return $this->m_runtime_limit;
     }
 
     public function memory_limit()

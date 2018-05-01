@@ -1,5 +1,7 @@
 <?php namespace SKYOJ\Problem;
 
+use \SkyOJ\Judge\Judge;
+
 function problem_api_submitHandle()
 {
     global $SkyOJ,$_G,$_E;
@@ -43,8 +45,20 @@ function problem_api_submitHandle()
         if( !$problem->isAllowSubmit($SkyOJ->User) )
             throw new \Exception('Access denied');
 
-        //TODO Check compiler code
-        $lang = 0; //this can be calc by judge, but we not implementation
+        $judge = Judge::getJudgeReference( $problem->judge_profile );
+        
+        $compiers = $judge->getCompilerInfo();
+        $lang = -1;
+        foreach( $compiers as $row )
+        {
+            if( $compiler == $row[0] )
+            {
+                $lang = $row[1];
+            }
+        }
+
+        if( $lang == -1 )
+            throw new \Exception('No such compiler info!');
 
         if( !\SKYOJ\is_utf8($code) )
             throw new \Exception('This is not a utf-8 encoding file!');

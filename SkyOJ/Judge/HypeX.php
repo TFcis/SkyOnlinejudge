@@ -32,6 +32,110 @@ class HypeX_FileMethodEnum extends \SkyOJ\Helper\Enum
     const SFTP = 0;
 }
 
+interface RemoteFileAction
+{
+    public function isConnected():bool;
+}
+
+class SSH implements RemoteFileAction
+{
+    private $m_ssh;
+    private $base_dir;
+    private $logined;
+    public function __construct($address, $port, $acct, $pass, $base_dir)
+    {
+        $this->m_ssh = new \phpseclib\Net\SFTP($address, $port);
+        if( !$this->m_ssh->login($acct, $pass) )
+        {
+            $this->logined = false;
+            return;
+        }
+        if( !$this->m_ssh->chdir($base_dir) )
+        {
+            $this->logined = false;
+            return;
+        }
+        $this->logined = true;
+    }
+
+    public function isConnected():bool
+    {
+        return $this->logined;
+    }
+
+    public function mkdir(string $dir):bool
+    {
+        if( $this->m_ssh->is_dir($dir) )
+            return true;
+        return $this->m_ssh->mkdir($dir, -1, true);
+    }
+
+    public function putLocalFile(string $remote, string $local):bool
+    {
+        if( !is_file($local) )
+        {
+            return false;
+        }
+        return $this->m_ssh->put($remote, $local, \phpseclib\Net\SFTP::SOURCE_LOCAL_FILE);
+    }
+
+    public function putStringFile(string $remote, string $string):bool
+    {
+        if( strlen($string) == 0 )
+        {
+            $string = ' ';
+        }
+        return $this->m_ssh->put($remote, $string);
+    }
+}
+
+// API Document
+// http://judge-hypex.readthedocs.io/en/latest/TestOJCompatible.html#test-json-format
+
+class CompTypeEnum
+{
+    const GPP      = 'g++';
+    const CLANGPP  = 'clang++';
+    const MAKEFILE = 'makefile';
+    const PYTHON3  = 'python3';
+}
+
+class CheckTypeEnum
+{
+    const DIFF     = 'diff';
+    const IOREDIR  = 'ioredir';
+}
+
+class ChallengeRequestJson
+{
+    public $chal_id;
+    public $code_path;
+    public $res_path;
+    public $comp_type;
+    public $check_type;
+    public $metadata;
+    public $test = [];
+}
+
+class TestJson
+{
+    public $test_idx;
+    public $timelimit;
+    public $memlimit;
+    public $metadata;
+}
+
+class TestMetaJson
+{
+    public $data = [];
+}
+
+class ChalMetaJson
+{
+    public $redir_test;
+    public $redir_check;
+}
+
 class HypeX extends Judge
 {
     const VERSION = '0.1-alpha';
@@ -48,6 +152,8 @@ class HypeX extends Judge
     private $m_ssh_dir;
     private $m_data_dir;
 
+    private $m_storage;
+
     public function __construct($profile_json)
     {
         $data = json_decode($profile_json,true);
@@ -59,16 +165,26 @@ class HypeX extends Judge
         $this->m_ssh_pass    = $data['ssh_pass']??'';
         $this->m_ssh_dir     = $data['ssh_dir']??'';
         $this->m_data_dir    = $data['data_dir'];
+        $this->m_storage     = null; // it is lazy load
     }
 
-    public static function requiredFunctions():array
+    public function connectStorage()
     {
-        return ['curl_init','curl_setopt','curl_exec','curl_close','curl_close'];
-    }
+        if( isset($this->m_storage) )
+            return ;
 
-    public static function licence_tmpl():array
-    {
-        return ['mit_license', 'user'];
+        switch($this->m_file_method)
+        {
+            case HypeX_FileMethodEnum::SFTP:
+            {
+                $this->m_storage = new SSH($this->m_ssh_host, $this->m_ssh_port, $this->m_ssh_acct, $this->m_ssh_pass, $this->m_ssh_dir);
+                break;
+            }
+            default:
+            $this->m_storage = null;
+        }
+        if( !isset($this->m_storage) || !$this->m_storage->isConnected() )
+            throw new JudgeException('Can not connect remote server');
     }
 
     public static function installForm($oldprofile = null):array
@@ -152,57 +268,6 @@ class HypeX extends Judge
             return false;
         }
     }
-    private function putFileviaSSH(string $file_path,string $data):bool
-    {
-        if( empty($data) )$data = ' ';//Hack
-
-        $host = $this->m_ssh_host;
-        $port = $this->m_ssh_port;
-        $acct = $this->m_ssh_acct;
-        $pass = $this->m_ssh_pass;
-        $dir  = $this->m_ssh_dir;
-
-        $sftp = new \phpseclib\Net\SFTP($host,$port);
-        if(!$sftp->login($acct,$pass))
-        {
-            return false;
-        }
-        return $sftp->put("{$dir}/{$file_path}",$data) !== false;
-    }
-
-    private function putCodeviaSSH(string $code,int $cid,string $type='cpp'):string
-    {
-        $res = $this->putFileviaSSH("{$cid}.{$type}",$code);
-        if( $res==false )
-        {
-            throw new \Exception('Upload Code Error!');
-        }
-
-        return $this->m_data_dir."{$cid}.{$type}";
-    }
-
-    private static function get_json_main()
-    {
-        return new class{
-            public $chal_id;
-            public $code_path;
-            public $res_path;
-            public $comp_type;
-            public $check_type;
-            public $metadata;
-            public $test = [];
-        };
-    }
-
-    private static function get_json_test()
-    {
-        return new class{
-            public $test_idx;
-            public $timelimit;
-            public $memlimit;
-            public $metadata;
-        };
-    }
 
     private static function get_json_chalmeta()
     {
@@ -215,50 +280,86 @@ class HypeX extends Judge
     public function getCompilerInfo()
     {
         return [
-            [0, LanguageCode::C  , "gcc -std=c++11"],
-            [1, LanguageCode::CPP, "g++ -std=c++14 -O2"],
-            [1, LanguageCode::PYTHON3, "python3 | LANG=en_US.UTF-8"]
+            [0, LanguageCode::CPP  , "gcc -std=c++11 -O2"],
+            [2, LanguageCode::PYTHON3, "python3 | LANG=en_US.UTF-8"]
         ];
     }
 
-    private function parseSKYOJJson($pjson,$chal,&$score)
+    private function getCompilerInfoByInfo($id)
     {
-        $score = [];
-        $json = self::get_json_main();
-        $json->chal_id    = $chal->cid;
-        $json->code_path  = $this->putCodeviaSSH($chal->code, $chal->cid);
-        $json->res_path   = $this->m_data_dir."/problem/{$chal->pid}/res";
-        $json->comp_type  = $pjson->compile;
-        $json->check_type = $pjson->check;
+        switch($id)
+        {
+            case 0: return CompTypeEnum::GPP;
+            case 2: return CompTypeEnum::PYTHON3;
+        }
+        return CompTypeEnum::GPP;
+    }
 
-        foreach ($pjson->test as $testdata) {
-            $test = self::get_json_test();
-            $test->test_idx = count($json->test);
-            $score[$test->test_idx] = $testdata->weight;
-            $test->timelimit = $pjson->timelimit;
-            $test->memlimit  = $pjson->memlimit*10;
-            $test->metadata = new class{public $data = [];};
-            $test->metadata->data = $testdata->data;
+    private function parseSKYOJJson($chal)
+    {
+        $json = new ChallengeRequestJson();
+        $json->chal_id    = (int)$chal->cid;
+        $json->code_path  = $this->m_data_dir.'/'.$this->makeSourceFilename($chal->cid, $chal->language);
+        $json->res_path   = $this->m_data_dir."/problem/{$chal->pid}/";
+        //TODO: check special judge such as MAKEFILE
+        $json->comp_type  = $this->getCompilerInfoByInfo($chal->compiler);
+        //TODO Support ID redir
+        $json->check_type = CheckTypeEnum::DIFF;
+
+        //TODO Support ID redir
+        $json->metadata = null;
+
+        //Add testcases
+        foreach( $chal->problem()->getTestdataInfo() as $data )
+        {
+            $test = new TestJson();
+            $test->test_idx  = $data->id();
+            $test->timelimit = $data->runtime_limit();
+            $test->memlimit  = $data->memory_limit();
+            $test->metadata  = new TestMetaJson();
+            $test->metadata->data[] = $data->id();
+
             $json->test[] = $test;
         }
 
-        $json->metadata = self::get_json_chalmeta();
+        $json->metadata = new ChalMetaJson();
         $json = json_encode($json);
         return $json;
     }
 
+    private function makeSourceFilename(int $id, $lang)
+    {
+        $ext = 'txt';
+        switch($lang)
+        {
+            case LanguageCode::C:
+            {
+                $ext = 'c';
+                break;
+            }
+            case LanguageCode::CPP:
+            {
+                $ext = 'cpp';
+                break;
+            }
+            case LanguageCode::PYTHON3:
+            {
+                $ext = 'py';
+                break;
+            }
+        }
+        return "{$id}.{$ext}";
+    }
+
     public function judge(\SKYOJ\Challenge\Container $chal)
     {
-        $pjson = json_decode($chal->problem()->getJudgeJson());
-        if( $pjson === false )
-            throw new JudgeException("Problem Json Ddcode Error pid:{$c->pid()}");
-        
-        $score = [];
-
         #put file to judge
+        $this->connectStorage();
+        $soucecodename = $this->makeSourceFilename($chal->cid, $chal->language);
+        if( !$this->m_storage->putStringFile($soucecodename, $chal->code) );
 
-        $json = $this->parseSKYOJJson($pjson,$chal,$score);
-        
+        $json = $this->parseSKYOJJson($chal);
+
         $post = new HypeX_wspost($this->m_judge);
         $package =  $post->send($json);
         $package = json_decode($package);
@@ -268,7 +369,9 @@ class HypeX extends Judge
         if( !isset($package->result) )
             return false;
         $res = []; 
-        try{
+
+        try
+        {
             
             foreach( $package->result as $row )
             {
@@ -277,13 +380,36 @@ class HypeX extends Judge
                 $tmp->runtime= $row->runtime;//ms
                 $tmp->mem    = $row->peakmem;//in KB
                 $tmp->state  = ($row->state+1)*10; //To SKY Format Code..
-                $tmp->score  = ($row->state==1) * $score[$tmp->taskid];  //sub score
+                $tmp->score  = 0;
                 $tmp->msg    = $row->verdict[0];//judge message
                 $res[] = $tmp;
             }
-        }catch(\Exception $e){ //prevent judge return an empty json, let it make a CE
+        }
+        catch(\Exception $e) //prevent judge return an empty json, let it make a CE
+        { 
             return false;
         }
+        return $res;
+    }
+
+    public function syncTestdata(\SKYOJ\Problem\Container $problem):bool
+    {
+        $this->connectStorage();
+        $testdata = $problem->getTestdataInfo();
+        $pid   = $problem->pid;
+        $problem_testdata_dir = 'problem/'.$pid.'/testdata';
+
+        if( !$this->m_storage->mkdir($problem_testdata_dir) )
+            return false;
+
+        $res = true;
+        foreach( $testdata as $row )
+        {
+            $tid = $row->id();
+            $res &= $this->m_storage->putLocalFile($problem_testdata_dir."/{$tid}.in",  $row->input(true));
+            $res &= $this->m_storage->putLocalFile($problem_testdata_dir."/{$tid}.out", $row->output(true));
+        }
+
         return $res;
     }
 }
