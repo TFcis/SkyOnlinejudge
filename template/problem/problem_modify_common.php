@@ -77,6 +77,8 @@ $(document).ready(function(){
                             ,'default' => $tmpl['problem']->codeview_access
                             ,'option'  => ['help_text' => '程式碼檢視']]),
                         new HTML_HR(),
+                        new HTML_INPUT_TEXT(['name'=>'runtime_limit','value'=>$tmpl['problem']->runtime_limit,'required'=>'required','option' => ['help_text' => '測資運行時限']]),
+                        new HTML_INPUT_TEXT(['name'=>'memory_limit','value'=>$tmpl['problem']->memory_limit,'required'=>'required','option' => ['help_text' => '記憶體使用限制(Byte)']]),
                         new HTML_INPUT_CODEPAD(['option' =>
                             [
                                 'code'=>$tmpl['problem']->getJudgeJson(),//$tmpl['pjson'],

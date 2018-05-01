@@ -14,6 +14,8 @@ function problem_api_modifyHandle()
         $content = \SKYOJ\safe_post('content');
         $judge_profile   = \SKYOJ\safe_post('judge_profile');
         $content_type  = \SKYOJ\safe_post('content_type');
+        $runtime_limit = \SKYOJ\safe_post('runtime_limit');
+        $memory_limit = \SKYOJ\safe_post('memory_limit');
         $content_access = \SKYOJ\safe_post('content_access');
         $submit_access  = \SKYOJ\safe_post('submit_access');
         $codeview_access  = \SKYOJ\safe_post('codeview_access');
@@ -32,6 +34,8 @@ function problem_api_modifyHandle()
 
         $problem->title = $title;
         $problem->judge_profile = (int)$judge_profile;
+        $problem->runtime_limit = $runtime_limit;
+        $problem->memory_limit =  $memory_limit;
         $problem->content_access = (int)$content_access;
         $problem->submit_access = (int)$submit_access;
         $problem->codeview_access = (int)$codeview_access;

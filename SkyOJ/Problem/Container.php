@@ -35,7 +35,9 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
             'codeview_access'=> ProblemLevel::Hidden,
             'title' => '[Empty Problem]',
             'judge_profile' => JudgeProfileEnum::None,
-            'content_type' => ProblemDescriptionEnum::MarkDown
+            'content_type' => ProblemDescriptionEnum::MarkDown,
+            'memory_limit' => 1048576, //1 Mb
+            'runtime_limit' => 1000,   //1 Second
         ];
         return self::insertInto($default);
     }
@@ -179,6 +181,20 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
     {
         if( !ProblemSubmitLevel::isValidValue($val) )
             throw new ContainerModifyException('no such ProblemSubmitLevel type');
+        return true;
+    }
+
+    public function checkSet_runtime_limit($val):bool
+    {
+        if( !ctype_digit($val) )
+            throw new ContainerModifyException('runtime_limit shoudld be interger');
+        return true;
+    }
+
+    public function checkSet_memory_limit($val):bool
+    {
+        if( !ctype_digit($val) )
+            throw new ContainerModifyException('memory_limit shoudld be interger');
         return true;
     }
 
