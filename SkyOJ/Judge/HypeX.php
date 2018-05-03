@@ -1,6 +1,9 @@
 <?php namespace SkyOJ\Judge;
 
 use \SkyOJ\Challenge\LanguageCode;
+use \SkyOJ\Challenge\ResultCode;
+use \SkyOJ\Challenge\Result;
+use \SkyOJ\Challenge\Package;
 
 class HypeX_wspost
 {
@@ -138,11 +141,6 @@ class ChalMetaJson
 
 class HypeX extends Judge
 {
-    const VERSION = '0.1-alpha';
-    const NAME = 'HypeX Judge Bridge';
-    const DESCRIPTION = 'HypeX Judge Bridge';
-    const COPYRIGHT = 'Judge - HypeX Copyright (C) 2016 PZ Read (MIT License)';
-
     private $m_judge;
     private $m_file_method;
     private $m_ssh_host;
@@ -269,14 +267,6 @@ class HypeX extends Judge
         }
     }
 
-    private static function get_json_chalmeta()
-    {
-        return new class{
-            public $redir_test;
-            public $redir_check;
-        };
-    }
-
     public function getCompilerInfo()
     {
         return [
@@ -351,6 +341,22 @@ class HypeX extends Judge
         return "{$id}.{$ext}";
     }
 
+    private function hypexResultToSkyOJ(int $code)
+    {
+        //From https://github.com/pzread/judge/blob/master/StdChal.py#L16
+        switch($code)
+        {
+            case 0: return ResultCode::WAIT;
+            case 1: return ResultCode::AC;
+            case 2: return ResultCode::WA;
+            case 3: return ResultCode::RE;
+            case 4: return ResultCode::TLE;
+            case 5: return ResultCode::MLE;
+            case 6: return ResultCode::CE;
+            default : return ResultCode::JE;
+        }
+    }
+
     public function judge(\SKYOJ\Challenge\Container $chal)
     {
         #put file to judge
@@ -365,29 +371,28 @@ class HypeX extends Judge
         $package = json_decode($package);
 
         if( $package == false )
-            return false;
+            return null;
         if( !isset($package->result) )
-            return false;
-        $res = []; 
+            return null;
+        
+        $res = new Result; 
 
         try
         {
-            
             foreach( $package->result as $row )
             {
-                $tmp = new \SKYOJ\Challenge\ChallengeTask();
-                $tmp->taskid = $row->test_idx;
-                $tmp->runtime= $row->runtime;//ms
-                $tmp->mem    = $row->peakmem;//in KB
-                $tmp->state  = ($row->state+1)*10; //To SKY Format Code..
-                $tmp->score  = 0;
-                $tmp->msg    = $row->verdict[0];//judge message
-                $res[] = $tmp;
+                $tmp = new Package;
+                $tmp->id        = $row->test_idx;
+                $tmp->runtime   = $row->runtime;
+                $tmp->memory    = $row->peakmem;
+                $tmp->result_code = $this->hypexResultToSkyOJ($row->state);
+                $tmp->message   = $row->verdict[0];//judge message
+                $res->tasks   []= $tmp;
             }
         }
         catch(\Exception $e) //prevent judge return an empty json, let it make a CE
         { 
-            return false;
+            return null;
         }
         return $res;
     }
