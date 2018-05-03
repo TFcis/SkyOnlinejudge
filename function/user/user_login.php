@@ -13,21 +13,12 @@ function loginHandle()
     }
 
     $email = \SKYOJ\safe_post('email');
-    $AESenpass = \SKYOJ\safe_post('password');
-    $GB = \SKYOJ\safe_post('GB');
+    $password = \SKYOJ\safe_post('password');
 
-    if( isset($email,$AESenpass,$GB) ) {
+    if( isset($email,$password) ) {
         if (!\userControl::CheckToken('LOGIN')) {
             \SKYOJ\throwjson('error', 'token error, please refresh page');
         }
-
-        //recover password
-        $exkey = unserialize($_SESSION['dhkey']);
-        $key = md5($exkey->decode($GB));
-        $iv = $_SESSION['iv'];
-
-        $decode = openssl_decrypt($AESenpass,'aes-256-cbc',$key,OPENSSL_ZERO_PADDING,$iv);
-        $password = rtrim($decode, "\0");
 
         $user = login($email, $password);
         if (!$user[0]) {
