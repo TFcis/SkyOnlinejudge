@@ -25,12 +25,10 @@ $(document).ready(function()
                 <th>NAME</th>
                 <th style = 'width: 140px' class="hidden-xs">
                 <?php if ($_G['uid']): ?>
-                <!--<button type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="新增記分板" id="b_add" onclick="location.href='rank.php?mod=cbedit'">-->
                     TOOLS
                     <a class = "icon-bttn" title = "Create New" href="<?=$SkyOJ->uri('problem','new')?>">
                         <span class="glyphicon glyphicon-plus"></span>
                     </a>
-                <!--</button>-->
                 <?php endif; ?>
                 </th>
                 <th>Submit AC rate</th>
@@ -38,12 +36,11 @@ $(document).ready(function()
         </thead>
         <tbody>
         <?php foreach ($_E['template']['problem_info'] as $row) :?>
-            <?php if( !\SKYOJ\Problem::hasContentAccess_s($_G['uid'],$row['owner'],$row['content_access'],$row['pid'])&&
-                      !\SKYOJ\Problem::hasSubmitAccess_s($_G['uid'],$row['owner'],$row['submit_access'],$row['pid']) ) continue; ?>
+            <?php if( !$row->readable($SkyOJ->User) ) continue;?>
             <tr style = "height: 40px">
                 <td>
                     <?php if( $_G['uid'] ):?>
-                        <?php $d = \SKYOJ\Problem\UserProblemState($row['pid'],$_G['uid']) ?>
+                        <?php $d = \SKYOJ\Problem\UserProblemState($row->pid,$_G['uid']) ?>
                         <?php if( $d == \SKYOJ\RESULTCODE::AC ): ?>
                             <span class="AC glyphicon glyphicon-ok"></span>
                         <?php elseif( $d > \SKYOJ\RESULTCODE::AC ): ?>
@@ -51,11 +48,11 @@ $(document).ready(function()
                         <?php endif; ?>
                     <?php endif;?>
                 </td>
-                <td><?=$row['pid'];?></td>
-                <td><a href="<?=$SkyOJ->uri('problem','view',$row['pid'],'')?>"><?=htmlspecialchars($row['title']);?></a></td>
+                <td><?=$row->pid;?></td>
+                <td><a href="<?=$SkyOJ->uri('problem','view',$row->pid,'')?>"><?=htmlspecialchars($row->title);?></a></td>
                 <td class="hidden-xs">
-                    <?php if ($_G['uid'] && userControl::getpermission($row['owner'])): ?>
-                        <a class="icon-bttn" href="<?=$SkyOJ->uri('problem','modify',$row['pid'])?>">
+                    <?php if( $row->writeable($SkyOJ->User) ): ?>
+                        <a class="icon-bttn" href="<?=$SkyOJ->uri('problem','modify',$row->pid)?>">
                             <span class="glyphicon glyphicon-pencil" title="編輯"></span>
                         </a>
                         <span class = "icon-bttn">
@@ -64,8 +61,8 @@ $(document).ready(function()
                     <?php endif; ?>
                 </td>
                 <?php
-                    $all = \SKYOJ\Problem\ProblemSubmitNum($row['pid']);
-                    $ac  = \SKYOJ\Problem\ProblemStateNum($row['pid'],\SKYOJ\RESULTCODE::AC);
+                    $all = \SKYOJ\Problem\ProblemSubmitNum($row->pid);
+                    $ac  = \SKYOJ\Problem\ProblemStateNum($row->pid,\SKYOJ\RESULTCODE::AC);
                     $rate = sprintf("%.2f",($all==0&&$ac==0)?0:$ac*100/$all,2);
                 ?>
                 <td><?=$rate?>% (<?=$ac?>/<?=$all?>)</td>

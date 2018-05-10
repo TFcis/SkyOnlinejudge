@@ -31,27 +31,11 @@ $(document).ready(function()
     $("#loginform").submit(function(e)
     {
         e.preventDefault();
-        B = BigNumber.random(40).mul(new BigNumber(10).pow(40)).ceil();
-        GB = PowMod(PublicG,B,PublicPrime);
-        GAB = PowMod(GA,B,PublicPrime);
-        $("#GB").val(GB.toString(10));
-        
-        keyhash = CryptoJS.MD5(GAB.toString(10));
-        key = CryptoJS.enc.Utf8.parse(keyhash);
-        iv  = CryptoJS.enc.Utf8.parse('<?=$tmpl['iv']?>');
-        msg = $("#passwordreal").val();
-        this.passwordreal.disabled = true;
-        encrypted = CryptoJS.AES.encrypt(msg,key,{
-                iv:iv,
-                mode:CryptoJS.mode.CBC,
-                padding:CryptoJS.pad.ZeroPadding});
-        $("#password").val(encrypted);
-        
+
         $("#display").html('...');
         api_submit("<?=$SkyOJ->uri('user','login')?>","#loginform","#display",function(res){
             location.href = "<?=$_E['SITEROOT']?>"+res.data;
         });
-        this.passwordreal.disabled = false;
         return true;
     });
 });
@@ -68,8 +52,6 @@ $(document).ready(function()
                 <form role="form" action="user.php" method="post" id="loginform">
                 
                     <input type="hidden" value="login" name="mod">
-                    <input type="hidden" value="" name="GB" id="GB">
-                    <input type="hidden" value="" name="password" id="password">
                     <br>
                     
                     <div class="form-group">
@@ -79,7 +61,7 @@ $(document).ready(function()
                     
                     <div class="form-group">
                     <label for="password" style = "display: block" class="login_lable_text">PASSWORD</label>
-                    <input type="password" class="textinput" id="passwordreal" placeholder="Password" required>
+                    <input type="password" class="textinput" name="password" placeholder="Password" required>
                     </div>
                     
                     <br>

@@ -15,7 +15,7 @@ function indexHandle()
         {
             case 'log':
             case 'plugins':
-                
+            case 'judge_profile':
                 break;
             default:
                 \Render::renderSingleTemplate('common_message');

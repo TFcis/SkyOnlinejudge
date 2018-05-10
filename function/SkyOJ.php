@@ -22,6 +22,7 @@ require_once 'Skyoj.lib.php';
 
 final class _SkyOJ
 {
+    public $User;
     //Setup cache
     public $cache_pool;
     private function initCache()
@@ -67,11 +68,30 @@ final class _SkyOJ
     //SkyOJ Not deal with init time error
     public function __construct()
     {
-        global $_E;
+        global $_E,$_G,$_config;
+
+        \SkyOJ\File\Path::initialize($_E['DATADIR']);
+        $this->initCache();
+
+        $db = $_config['db'];
+        \SkyOJ\Core\Database\DB::$prefix = $db['tablepre'];
+        \SkyOJ\Core\Database\DB::initialize($db['query_string'], $db['dbuser'], $db['dbpassword'],$db['dbname']);
+        \SkyOJ\Core\Database\DB::query('SET NAMES UTF8');
+
+        #Old functions
         \LOG::intro();
         \DB::intro();
         \DB::query('SET NAMES UTF8');
         \userControl::intro();
+
+        $this->User = new \SkyOJ\Core\User\User();
+        if( !$this->User->load($_G['uid']) )
+        {
+            if( !$this->User->loadByData(\SkyOJ\Core\User\User::getGuestData()) )
+            {
+                die('INIT ERROR'); #TODO;
+            }
+        }
         $this->UriHandler();
     }
 
@@ -171,7 +191,6 @@ final class _SkyOJ
     public function run()
     {
         try{
-            $this->initCache();
             if( empty($this->uri_param[0]) ){
                 $this->uri_param[0] = $this->default_handle;
             }

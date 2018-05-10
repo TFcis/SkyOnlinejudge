@@ -52,19 +52,19 @@ $(document).ready(function()
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
-            <h2><?=$tmpl['problem']->pid()?>. <?=htmlentities($tmpl['problem']->GetTitle())?></h2>
+            <h2><?=$tmpl['problem']->pid?>. <?=htmlentities($tmpl['problem']->title)?></h2>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-12">
             <form id="submit">
                 <input type="hidden" name="code" id="s_code" value="">
-                <input type="hidden" name="pid" value="<?=$tmpl['problem']->pid()?>">
+                <input type="hidden" name="pid" value="<?=$tmpl['problem']->pid?>">
                 <div class="form-group">
                     <label for="language" class="col-sm-2 control-label">Compiler</label>
                     <select class="form-control" name="compiler">
-                        <?php foreach($tmpl['compiler'] as $key => $data): ?>
-                        <option value="<?=htmlentities($key)?>"><?=htmlentities($data)?></option>
+                        <?php foreach($tmpl['compiler'] as $data): ?>
+                        <option value="<?=\SKYOJ\html($data[0])?>"><?=\SKYOJ\html($data[2])?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

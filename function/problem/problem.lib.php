@@ -5,14 +5,6 @@ if (!defined('IN_SKYOJSYSTEM')) {
 }
 require_once 'function/common/problem.php';
 
-//TODO PHP7.1 use ?string
-function CreateNewProblemID(int $owner,string $title):int
-{
-    $tproblem = \DB::tname('problem');
-    $res = \DB::queryEx("INSERT INTO `{$tproblem}` (`pid`, `owner`, `title`) 
-                         VALUES (NULL,?,?)",$owner,$title);
-    return $res?\DB::lastInsertId('pid'):null;
-}
 
 function ProblemSubmitNum(int $pid ,int $uid = 0,bool $update = false):int
 {

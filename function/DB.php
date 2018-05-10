@@ -20,7 +20,7 @@ class DB
         $db = $_config['db'];
 
         try {
-            $pdo = new PDO($db['query_string'], $db['dbuser'], $db['dbpassword']);
+            $pdo = new PDO($db['query_string'].";dbname=$db[dbname]", $db['dbuser'], $db['dbpassword']);
         } catch (PDOException $e) {
             echo 'Error!: '.$e->getMessage().'<br/>';
             die();

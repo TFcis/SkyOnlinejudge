@@ -16,6 +16,7 @@ function listHandle()
 
     $pl = new PageList('problem');
     $data = $pl->GetPageDataByPage($page,'pid','`pid`,`owner`,`title`,`content_access`,`submit_access`');
+    $data = \SkyOJ\Problem\Container::loadRange( ($page-1)*PageList::ROW_PER_PAGE , $page*PageList::ROW_PER_PAGE-1 );
 
     $_E['template']['problem_list_pagelist'] = $pl;
     $_E['template']['problem_list_now'] = $page;

@@ -1,12 +1,11 @@
 <?php namespace SKYOJ\Problem;
-if (!defined('IN_SKYOJSYSTEM')) {
-    exit('Access denied');
-}
+
+use \SkyOJ\Problem\Container;
 
 function newHandle()
 {
-    global $_G;
-    if( !\userControl::isAdmin($_G['uid']) )
+    global $SkyOJ;
+    if( !Container::creatable($SkyOJ->User) )
     {
         \Render::errormessage('Only User who admin allowed can use this!');
         \Render::render('nonedefined');

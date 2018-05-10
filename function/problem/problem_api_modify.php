@@ -6,46 +6,44 @@ if (!defined('IN_SKYOJSYSTEM')) {
 
 function problem_api_modifyHandle()
 {
-    global $_G,$_E;
-
-    if( !\userControl::isAdmin($_G['uid']) )
-        \SKYOJ\throwjson('error', 'Access denied');
-
-    $pid = \SKYOJ\safe_post('pid');
-    $title   = \SKYOJ\safe_post('title');
-    $content = \SKYOJ\safe_post('content');
-    $judge   = \SKYOJ\safe_post('judge')??'';
-    $judge_type   = \SKYOJ\safe_post('judge_type');
-    $contenttype  = \SKYOJ\safe_post('contenttype');
-    $content_access = \SKYOJ\safe_post('content_access');
-    $submit_access  = \SKYOJ\safe_post('submit_access');
-    $codeview_access  = \SKYOJ\safe_post('codeview_access');
-    $pjson = \SKYOJ\safe_post('json_data');
-    \Log::msg(\Level::Debug,"",$pjson);
-    if( !isset($pid,$title,$content,$contenttype) )
-        \SKYOJ\throwjson('error','param error');
+    global $_G,$_E,$SkyOJ;
+  
     try{
-        $problem = new \SKYOJ\Problem($pid);
-        $pid = $problem->pid();
-        if( $problem->pid()===null || !\userControl::getpermission($problem->owner()) )
+        $pid = \SKYOJ\safe_post('pid');
+        $title   = \SKYOJ\safe_post('title');
+        $content = \SKYOJ\safe_post('content');
+        $judge_profile   = \SKYOJ\safe_post('judge_profile');
+        $content_type  = \SKYOJ\safe_post('content_type');
+        $runtime_limit = \SKYOJ\safe_post('runtime_limit');
+        $memory_limit = \SKYOJ\safe_post('memory_limit');
+        $content_access = \SKYOJ\safe_post('content_access');
+        $submit_access  = \SKYOJ\safe_post('submit_access');
+        $codeview_access  = \SKYOJ\safe_post('codeview_access');
+        $judgejson = \SKYOJ\safe_post('json_data');
+        //\Log::msg(\Level::Debug,"",$pjson);
+    
+        if( !isset($pid,$title,$content,$content_type) )
+            throw new \Exception('param error');
+
+        $problem = new \SkyOJ\Problem\Container();
+        if( !$problem->load($pid) )
+            throw new \Exception('NO SUCH PROBLEM');
+        
+        if( !$problem->writeable($SkyOJ->User) )
             throw new \Exception('Access denied');
 
-        if( !$problem->SetTitle($title) )
-            throw new \Exception('title length more than limit');
-        if( !$problem->SetJudge($judge) )
-            throw new \Exception('no such judge');
-        if( !$problem->SetJudgeType($judge_type) )
-            throw new \Exception('no such judge type');
-        if( !$problem->SetContentAccess($content_access) )
-            throw new \Exception('no such ContentAccess type');
-        if( !$problem->SetSubmitAccess($submit_access) )
-            throw new \Exception('no such SubmitAccess type');
-        if( !$problem->SetCodeviewAccess($codeview_access) )
-            throw new \Exception('no such CodeviewAccess type');
-        $problem->SetRowContent($content);
+        $problem->title = $title;
+        $problem->judge_profile = (int)$judge_profile;
+        $problem->runtime_limit = $runtime_limit;
+        $problem->memory_limit =  $memory_limit;
+        $problem->content_access = (int)$content_access;
+        $problem->submit_access = (int)$submit_access;
+        $problem->codeview_access = (int)$codeview_access;
+        $problem->setContent($content,(int)$content_type);
+        $problem->setJudgeJson($judgejson);
 
-        file_put_contents($_E['DATADIR']."problem/{$pid}/{$pid}.json",$pjson);
-        $problem->Update();
+        //file_put_contents($_E['DATADIR']."problem/{$pid}/{$pid}.json",$pjson);
+        $problem->save();
         \SKYOJ\throwjson('SUCC','succ');
 
     }catch(\Exception $e){

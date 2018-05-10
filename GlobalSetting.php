@@ -9,8 +9,7 @@ define('IN_SKYOJSYSTEM', 1);
 date_default_timezone_set('Asia/Taipei');
 
 require_once 'config/config.php';
-$loader = require_once 'vendor/autoload.php';
-$loader->add('',__DIR__.'/library/TFcis');
+require_once 'vendor/autoload.php';
 
 //Environment
 $_E = [];
@@ -35,7 +34,7 @@ $_G = $permission['guest'];
 
 //Log System Setting
 $_E['logsys']['logfile'] = $_E['ROOT'].'/data/log.txt';
-$_E['logsys']['msgshower']['enabled'] = true;
+$_E['logsys']['msgshower']['enabled'] = false;
 $_E['logsys']['msgshower']['ip'] = 'localhost';
 $_E['logsys']['msgshower']['port'] = '19620';
 

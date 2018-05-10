@@ -61,7 +61,7 @@ class DiffieHellman
     {
         $this->Prime = $prime;
         $this->G = $G;
-        $this->keyA = gmp_random(5);
+        $this->keyA = gmp_random_bits(256);
         $this->GA = gmp_strval(gmp_powm($this->G, $this->keyA, $this->Prime));
     }
 

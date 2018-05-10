@@ -7,15 +7,15 @@ if (!defined('IN_TEMPLATE')) {
 <div class="container">
     <div class="row">
         <div class="col-md-9">
-            <h3><?=$tmpl['problem']->pid()?>. <?=\SKYOJ\html($tmpl['problem']->GetTitle())?>
-            <a class="icon-bttn" href="<?=$SkyOJ->uri('problem','view',$tmpl['problem']->pid())?>/">
+            <h3><?=$tmpl['problem']->pid?>. <?=\SKYOJ\html($tmpl['problem']->title)?>
+            <a class="icon-bttn" href="<?=$SkyOJ->uri('problem','view',$tmpl['problem']->pid)?>/">
                 <span class="pointer glyphicon glyphicon-arrow-left" title="回到題目"></span>
             </a>
             </h3>
         </div>
         <div class="col-md-3 text-right">
-            <p><?=array_search($tmpl['problem']->GetJudgeType(),SKYOJ\ProblemJudgeTypeEnum::getConstants())?> Judge</p>
-            <p>Code: <?=array_search($tmpl['problem']->GetCodeviewAccess(),SKYOJ\ProblemCodeviewAccessEnum::getConstants())?></p>
+            <p><?=array_search(0/*$tmpl['problem']->GetJudgeType()*/,SKYOJ\ProblemJudgeTypeEnum::getConstants())?> Judge</p>
+            <p>Code: <?=array_search(0/*$tmpl['problem']->GetCodeviewAccess()*/,SKYOJ\ProblemCodeviewAccessEnum::getConstants())?></p>
         </div>
     </div>
     <hr>

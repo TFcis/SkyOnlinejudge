@@ -20,6 +20,7 @@ function apiHandle()
 
         case 'PluginInstall':
         case 'PluginUninstall':
+		case 'NewJudgeProfile':
             checkToken(true);//use json
             break;
 

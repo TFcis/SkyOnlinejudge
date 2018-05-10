@@ -144,6 +144,18 @@ class Render
         self::renderSingleTemplate('common_footer');
     }
 
+    public static function render_bs4($pagename, $namespace = 'common')
+    {
+        self::renderSingleTemplate('common_header_bs4');
+        self::renderStylesheetLink($namespace);
+
+        self::renderSingleTemplate('common_nav_bs4');
+        if (!self::renderSingleTemplate($pagename, $namespace)) {
+            self::renderSingleTemplate('nonedefined');
+        }
+        self::renderSingleTemplate('common_footer_bs4');
+    }
+
     public static function ShowMessage($cont)
     {
         global $_E;

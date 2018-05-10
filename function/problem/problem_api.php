@@ -12,10 +12,12 @@ function apiHandle()
     {
         case 'new':
         case 'modify':
+        case 'add_attach':
         case 'judge':
             break;
 
         case 'submit':
+        case 'add_testcasezip':
             $SkyOJ->setOutputMode(\SKYOJ\_SkyOJ::OUTPUT_HTML_BG);
             break;
             
