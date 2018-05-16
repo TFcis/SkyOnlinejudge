@@ -36,6 +36,7 @@ final class SkyOJ
     {
         $this->m_router = new Router\Router();
         $this->m_router->addRouter('GET','/ping',[['string','text']],'\\SkyOJ\\API\\Ping');
+        $this->m_router->addRouter('GET','/api',[],'\\SkyOJ\\API\\Openapi');
         $this->addUserAPI();
         
     }
@@ -54,6 +55,11 @@ final class SkyOJ
     public function getCurrentUser()
     {
         return $this->m_user;
+    }
+
+    public function getParsedAPI()
+    {
+        return $this->m_router->getApi();
     }
 
     public function run()

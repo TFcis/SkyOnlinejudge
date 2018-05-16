@@ -32,6 +32,11 @@ class Router
         return $this->m_status_code;
     }
 
+    public function getApi()
+    {
+        return $this->m_api;
+    }
+
     public function run(&$skyoj)
     {
         try
