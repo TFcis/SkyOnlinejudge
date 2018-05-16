@@ -1,6 +1,7 @@
 <?php namespace SkyOJ\Core\User;
 use \SkyOJ\Core\Permission\UserLevel;
-class User extends \SkyOJ\Core\CommonObject
+
+class User extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permission\Permissible
 {
     protected static $table = 'account'; 
     protected static $prime_key = 'uid';
@@ -11,6 +12,18 @@ class User extends \SkyOJ\Core\CommonObject
             'uid'=>0,
             'level' => UserLevel::GUEST
         ];
+    }
+
+    static public function create(string $username, string $password, string $email):int
+    {
+        //TODO: check all!!
+        $default = [
+            'email' => $email,
+            'passhash' => $password,
+            'nickname'  => $username,
+            'level'=> UserLevel::USER
+        ];
+        return self::insertInto($default);
     }
 
     public function afterLoad()
@@ -47,5 +60,18 @@ class User extends \SkyOJ\Core\CommonObject
                 $this->level > $minReqlevel ||
                 $this->uid == $owner;
 
+    }
+
+    public function readable(User $user):bool
+    {
+        return true;
+    }
+    public function writeable(User $user):bool
+    {
+        return testStisfyPermission($user->uid, Level::Admin);
+    }
+    public static function creatable(User $user):bool
+    {
+        return true;
     }
 }
