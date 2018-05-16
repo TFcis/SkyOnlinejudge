@@ -10,6 +10,6 @@ abstract class ApiInterface
 
     function run(...$var)
     {
-        $this->apiCall(...$var);
+        return $this->apiCall(...$var);
     }
 }
