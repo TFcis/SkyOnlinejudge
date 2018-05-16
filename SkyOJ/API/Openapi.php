@@ -90,6 +90,8 @@ class Openapi extends ApiInterface
                     $p->in = "query";
                     $p->description = $param[1];
                     $p->required = true;
+                    $p->type = $param[0];
+                    $p->format = $param[0];
                     $data->parameters[]=$p;
                 }
                 $data->responses = [];
