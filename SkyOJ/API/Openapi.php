@@ -12,7 +12,7 @@ class Openapi extends ApiInterface
         $this->m_json["swagger"] = "2.0";
         $this->appendInfo();
         $this->m_json["host"] = "pc2.tfcis.org";
-        $this->m_json["basePath"] = "/agsky/api.php/";
+        $this->m_json["basePath"] = "/dev/api.php/";
         $this->m_api = $this->m_skyoj->getParsedAPI();
         $this->appendTag();
         $this->m_json["schemes"] = ["https"];
@@ -87,7 +87,7 @@ class Openapi extends ApiInterface
                 {
                     $p = new \stdClass();
                     $p->name = $param[1];
-                    $p->in = "query";
+                    $p->in = $method=="GET"?"query":"formData";
                     $p->description = $param[1];
                     $p->required = true;
                     $p->type = $param[0];
