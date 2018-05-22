@@ -20,11 +20,29 @@ class Router
         switch($method)
         {
             case 'POST':
-                return $_POST;
+                return $this->getPostData();
             case 'GET':
                 return $_GET;
         }
         throw new ApiInterfaceException(-1, 'No such method : '.$method);
+    }
+
+    private function getPostData()
+    {
+        $content_type = $_SERVER['CONTENT_TYPE']??'application/x-www-form-urlencoded';
+        $content_type = explode(';',$content_type,1)[0];
+        switch( $content_type )
+        {
+            case 'application/x-www-form-urlencoded':
+            case 'multipart/form-data':
+                return $_POST;
+            case 'application/json':
+                $json = json_decode(file_get_contents("php://input"), true);
+                if( !$json )
+                    $json = [];
+                return $json;
+        }
+        return [];
     }
 
     public function lastStateCode()
