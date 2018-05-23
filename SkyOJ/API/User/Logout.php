@@ -1,15 +1,18 @@
 <?php namespace SkyOJ\API\User;
 
+use \SkyOJ\API\HttpCode\HttpResponse;
 use \SkyOJ\API\ApiInterface;
 use \SkyOJ\API\ApiInterfaceException;
 
 class Logout extends ApiInterface
 {
-    function apiCall()
+    use \SkyOJ\API\HttpCode\Http200;
+
+    function apiCall(): HttpResponse
     {
         //TODO: Rewrite me
         \userControl::DelLoginToken();
         \userControl::RemoveCookie('uid');
-        return true;
+        return $this->http200();
     }
 }

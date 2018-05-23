@@ -1,20 +1,26 @@
 <?php namespace SkyOJ\API\User;
 
+use \SkyOJ\API\HttpCode\HttpResponse;
 use \SkyOJ\API\ApiInterface;
 use \SkyOJ\API\ApiInterfaceException;
 
 class Login extends ApiInterface
 {
-    function apiCall(string $username, string $password)
+    use \SkyOJ\API\HttpCode\Http200;
+    use \SkyOJ\API\HttpCode\Http403;
+    function apiCall(string $username, string $password): Httpresponse
     {
         //TODO: rewrite me
         $user = login($username, $password);
-        if (!$user[0]) {
+        if( !$user[0] )
+        {
             \LOG::msg(\Level::Notice, "<$username> want to login but fail.(".$user[1].')');
-            throw new ApiInterfaceException( -1 , "login fail" );
-        } else {
+            return $this->http403();
+        }
+        else
+        {
             \userControl::SetLoginToken($user[0]);
-            return true;
+            return $this->http200();
         }
     }
 }

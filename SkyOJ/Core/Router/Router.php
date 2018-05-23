@@ -2,11 +2,15 @@
 
 use \SkyOJ\Helper\ParamTypeChecker;
 use \SkyOJ\API\ApiInterfaceException;
+use \SkyOJ\API\HttpCode\HttpResponse;
 
 class Router
 {
     private $m_api = [];
-    private $m_status_code = 0;
+
+    use \SkyOJ\API\HttpCode\Http400;
+    use \SkyOJ\API\HttpCode\Http501;
+
     public function addRouter(string $method, string $path, array $param, string $class)
     {
         if( !isset($this->m_api[$path]) )
@@ -24,7 +28,7 @@ class Router
             case 'GET':
                 return $_GET;
         }
-        throw new ApiInterfaceException(-1, 'No such method : '.$method);
+        throw $this->http422('No such method : '.$method);
     }
 
     private function getPostData()
@@ -45,17 +49,12 @@ class Router
         return [];
     }
 
-    public function lastStateCode()
-    {
-        return $this->m_status_code;
-    }
-
     public function getApi()
     {
         return $this->m_api;
     }
 
-    public function run(&$skyoj)
+    public function run(&$skyoj): HttpResponse
     {
         try
         {
@@ -64,36 +63,34 @@ class Router
             $input = $this->getParamsByMethod($method);
 
             if( !isset($this->m_api[$path]) || !isset($this->m_api[$path][$method]) )
-                throw new ApiInterfaceException(-1, 'No such route : '.$path);
+                throw $this->http400('No such route : '.$path);
 
             $class = $this->m_api[$path][$method][1];
             $params = [];
             foreach( $this->m_api[$path][$method][0] as $param ) //[type,name]
             {
                 if( !isset($input[$param[1]]) )
-                    throw new ApiInterfaceException(-1, 'missing param : '.$param[1]);
-                ParamTypeChecker::check($param[0],$input[$param[1]]);
+                    throw $this->http400('missing param : '.$param[1]);
+                if( !ParamTypeChecker::check($param[0],$input[$param[1]]) )
+                    throw $this->http400('param format error : '.$param[1]);
                 $params[] = $input[$param[1]];
             }
-            
+
             if( !class_exists($class) )
-                throw new ApiInterfaceException(-1, 'not imp : '.$class);
+                throw $this->http501('not imp : '.$class);
             $c = new $class($skyoj);
 
-
             $res =  $c->run(...$params);
-            $this->m_status_code = 0;
+
             return $res;
+        }
+        catch(HttpResponse $e)
+        {
+            return $e;
         }
         catch(\Exception $e)
         {
-            $this->m_status_code = $e->getCode()??-1;
-            return $e->getMessage();
+            return new HttpResponse(500, $e->getMessage());
         }
-    }
-
-    private function exit($data)
-    {
-        die( json_encode($data) );
     }
 }

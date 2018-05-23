@@ -66,10 +66,11 @@ final class SkyOJ
     {
         $res = $this->m_router->run($this);
         $json = [
-            "code" => $this->m_router->lastStateCode(),
+            "code" => $res->code(),
             "uid"  => $this->getCurrentUser()->uid,
-            "data"=> $res,
+            "data"=> $res->data(),
         ];
+        http_response_code($res->code());
         die( json_encode($json) );
     }
 }

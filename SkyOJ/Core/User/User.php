@@ -6,7 +6,8 @@ class User extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permission\Pe
     protected static $table = 'account'; 
     protected static $prime_key = 'uid';
 
-    public static function getGuestData(){
+    public static function getGuestData()
+    {
         return [
             'username'=>'Guest',
             'uid'=>0,
@@ -14,12 +15,21 @@ class User extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permission\Pe
         ];
     }
 
-    static public function create(string $username, string $password, string $email):int
+    static public function isEmail(string $email)
+    {
+        $pattern = '/^[A-z0-9_.]{1,30}@[A-z0-9_.]{1,20}$/';
+        return preg_match($pattern, $email);
+    }
+
+    static public function create(string $username, string $passhash, string $email):int
     {
         //TODO: check all!!
+        if( !self::isEmail($email) )
+            return false;
+
         $default = [
             'email' => $email,
-            'passhash' => $password,
+            'passhash' => $passhash,
             'nickname'  => $username,
             'level'=> UserLevel::USER
         ];
