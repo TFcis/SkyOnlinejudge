@@ -2,7 +2,6 @@
 
 use SkyOJ\API\HttpCode\HttpResponse;
 use \SkyOJ\API\ApiInterface;
-use \SkyOJ\API\ApiInterfaceException;
 
 use SkyOJ\Core\User\User;
 

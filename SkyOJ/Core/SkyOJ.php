@@ -38,6 +38,7 @@ final class SkyOJ
         $this->m_router->addRouter('GET','/ping',[['string','text']],'\\SkyOJ\\API\\Ping');
         $this->m_router->addRouter('GET','/api',[],'\\SkyOJ\\API\\Openapi');
         $this->addUserAPI();
+        $this->addProblemAPI();
         
     }
 
@@ -50,6 +51,11 @@ final class SkyOJ
             ,'\\SkyOJ\\API\\User\\Register');
         $this->m_router->addRouter('POST','/user/login',[['string','username'],['string','password']],'\\SkyOJ\\API\\User\\Login');
         $this->m_router->addRouter('POST','/user/logout',[],'\\SkyOJ\\API\\User\\Logout');
+    }
+
+    private function addProblemAPI()
+    {
+        $this->m_router->addRouter('GET','/problem/list',[['int','offset'],['int','number']],'\\SkyOJ\\API\\Problem\\ListProblem');
     }
 
     public function getCurrentUser()

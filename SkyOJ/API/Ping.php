@@ -1,6 +1,7 @@
 <?php namespace SkyOJ\API;
 
 use \SkyOJ\API\HttpCode\HttpResponse;
+use \SkyOJ\API\ApiInterface;
 
 class Ping extends ApiInterface
 {
