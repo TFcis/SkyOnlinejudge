@@ -87,7 +87,7 @@ class Openapi extends ApiInterface
                 {
                     $p = new \stdClass();
                     $p->name = $param[1];
-                    $p->in = $method=="GET"?"query":"body"//TODO: FixMe
+                    $p->in = $method=="GET"?"query":"body";//TODO: FixMe
                     $p->description = $param[1];
                     $p->required = true;
                     $p->type = $param[0];
