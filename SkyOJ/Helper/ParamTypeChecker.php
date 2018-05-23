@@ -4,13 +4,29 @@ final class ParamTypeChecker
 {
     function __construct(){die();}
 
-    static public function check(string $type,$val)
+    static public function check($type,$val)
     {
-        switch($type)
-        {
-            case 'int':    return self::isInt($val);
-            case 'string': return self::isString($val);
+        if(self::isString($type)){
+            switch($type)
+            {
+                case 'int':    return self::isInt($val);
+                case 'string': return self::isString($val);
+                case 'json': return self::isJson($val);
+            }
         }
+        else if(self::isArray($type)){
+            if(!self::isArray($val)){
+                return false;
+            }
+            return self::checkArray($type[0],$val);
+        }
+        else if(self::isObject($type)){
+            if(!self::isObject($val)){
+                return false;
+            }
+            return self::checkObject($type,$val);
+        }
+        
         return false;
     }
 
@@ -25,5 +41,45 @@ final class ParamTypeChecker
     static private function isString($v):bool
     {
         return is_string($v);
+    }
+
+    static private function isJson($v):bool
+    {
+        if(json_decode($v)===NULL){
+            return false;
+        }
+        return true;
+    }
+
+    static private function isArray($v):bool
+    {
+        return is_array($v);
+    }
+
+    static private function checkArray($type,$v):bool
+    {
+        $check=true;
+        foreach($v as $e){
+            if(!self::check($type,$e)){
+                $check=false;
+            }
+        }
+        return $check;
+    }
+
+    static private function isObject($v):bool
+    {
+        return is_object($v);
+    }
+
+    static private function checkObject($type,$v):bool
+    {
+        $check=true;
+        foreach($v as $key => $e){
+            if(!self::check($type->$key,$e)){
+                $check=false;
+            }
+        }
+        return $check;
     }
 }
