@@ -8,6 +8,7 @@ class Router
 {
     private $m_api = [];
 
+    use \SkyOJ\API\HttpCode\Http200;
     use \SkyOJ\API\HttpCode\Http400;
     use \SkyOJ\API\HttpCode\Http501;
 
@@ -60,6 +61,10 @@ class Router
         {
             $method = $_SERVER['REQUEST_METHOD']??'';
             $path = $_SERVER['PATH_INFO']??'/';
+
+            //TODO: Check CROS
+            if( $method == 'OPTIONS' )
+                throw $this->http200();
             $input = $this->getParamsByMethod($method);
 
             if( !isset($this->m_api[$path]) || !isset($this->m_api[$path][$method]) )
