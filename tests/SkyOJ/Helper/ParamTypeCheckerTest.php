@@ -87,4 +87,56 @@ class paramTypeCheckerTest extends TestCase
         $type = [['string']];
         $this->assertFalse( ParamTypeChecker::check($type,$array) );
     }
+
+    public function testCheckObject()
+    {
+        $obj = new stdclass();
+        $type = new stdclass();
+        $obj->a = 'a';
+        $obj->num = 1;
+        $obj->arr = [1,2];
+        $obj->arr2d = [[1,2],[3,4]];
+        $obj->o = new stdclass();
+        $obj->o->a = 'a';
+        $type->a = 'string';
+        $type->num = 'int';
+        $type->arr = ['int'];
+        $type->arr2d = [['int']];
+        $type->o = new stdclass();
+        $type->o->a = 'string';
+        $this->assertTrue( ParamTypeChecker::check($type,$obj) );
+        $obj = new stdclass();
+        $type = new stdclass();
+        $obj->a = 'a';
+        $obj->b = 'b';
+        $obj->num = 1;
+        $obj->arr = [1,2];
+        $obj->arr2d = [[1,2],[3,4]];
+        $obj->o = new stdclass();
+        $obj->o->a = 'a';
+        $type->a = 'string';
+        $type->num = 'int';
+        $type->arr = ['int'];
+        $type->arr2d = [['int']];
+        $type->o = new stdclass();
+        $type->o->a = 'string';
+        $this->assertTrue( ParamTypeChecker::check($type,$obj) );
+
+        $obj = new stdclass();
+        $type = new stdclass();
+        $obj->a = 'a';
+        $obj->num = 1;
+        $obj->arr = [1,2];
+        $obj->arr2d = [[1,2],[3,4]];
+        $obj->o = new stdclass();
+        $obj->o->a = 'a';
+        $type->a = 'string';
+        $type->num = 'int';
+        $type->arr = ['int'];
+        $type->arr2d = [['int']];
+        $type->o = new stdclass();
+        $type->o->a = 'string';
+        $type->b = 'string';
+        $this->assertFalse( ParamTypeChecker::check($type,$obj) );
+    }
 }
