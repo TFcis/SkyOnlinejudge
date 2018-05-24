@@ -16,6 +16,7 @@ final class SkyOJ
         \SkyOJ\Core\Database\DB::query('SET NAMES UTF8');
 
         \LOG::intro();
+        \DB::intro();
         \userControl::intro();
 
         $this->User = new \SkyOJ\Core\User\User();
@@ -35,6 +36,26 @@ final class SkyOJ
     {
         $this->m_router = new Router\Router();
         $this->m_router->addRouter('GET','/ping',[['string','text']],'\\SkyOJ\\API\\Ping');
+        $this->m_router->addRouter('GET','/api',[],'\\SkyOJ\\API\\Openapi');
+        $this->addUserAPI();
+        $this->addProblemAPI();
+        
+    }
+
+    private function addUserAPI()
+    {
+        $this->m_router->addRouter('POST','/user/register',
+            [['string','username'],
+            ['string','password'],
+            ['string','email']]
+            ,'\\SkyOJ\\API\\User\\Register');
+        $this->m_router->addRouter('POST','/user/login',[['string','username'],['string','password']],'\\SkyOJ\\API\\User\\Login');
+        $this->m_router->addRouter('POST','/user/logout',[],'\\SkyOJ\\API\\User\\Logout');
+    }
+
+    private function addProblemAPI()
+    {
+        $this->m_router->addRouter('GET','/problem/list',[['int','offset'],['int','number']],'\\SkyOJ\\API\\Problem\\ListProblem');
     }
 
     public function getCurrentUser()
@@ -42,14 +63,20 @@ final class SkyOJ
         return $this->m_user;
     }
 
+    public function getParsedAPI()
+    {
+        return $this->m_router->getApi();
+    }
+
     public function run()
     {
         $res = $this->m_router->run($this);
         $json = [
-            "code" => 1,
+            "code" => $res->code(),
             "uid"  => $this->getCurrentUser()->uid,
-            "data"=> $res,
+            "data"=> $res->data(),
         ];
+        http_response_code($res->code());
         die( json_encode($json) );
     }
 }
