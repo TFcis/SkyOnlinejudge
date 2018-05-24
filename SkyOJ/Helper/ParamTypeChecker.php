@@ -4,9 +4,10 @@ final class ParamTypeChecker
 {
     function __construct(){die();}
 
-    static public function check($type,$val)
+    static public function check($type, $val)
     {
-        if(self::isString($type)){
+        if( self::isString($type) )
+        {
             switch($type)
             {
                 case 'int':    return self::isInt($val);
@@ -14,17 +15,21 @@ final class ParamTypeChecker
                 case 'json': return self::isJson($val);
             }
         }
-        else if(self::isArray($type)){
-            if(!self::isArray($val)){
+        else if( self::isArray($type) )
+        {
+            if( !self::isArray($val) )
+            {
                 return false;
             }
-            return self::checkArray($type[0],$val);
+            return self::checkArray($type[0], $val);
         }
-        else if(self::isObject($type)){
-            if(!self::isObject($val)){
+        else if( self::isObject($type) )
+        {
+            if( !self::isObject($val) )
+            {
                 return false;
             }
-            return self::checkObject($type,$val);
+            return self::checkObject($type, $val);
         }
         
         return false;
@@ -45,7 +50,8 @@ final class ParamTypeChecker
 
     static private function isJson($v):bool
     {
-        if(json_decode($v)===NULL){
+        if( json_decode($v)===NULL )
+        {
             return false;
         }
         return true;
@@ -56,11 +62,13 @@ final class ParamTypeChecker
         return is_array($v);
     }
 
-    static private function checkArray($type,$v):bool
+    static private function checkArray($type, $v):bool
     {
         $check=true;
-        foreach($v as $e){
-            if(!self::check($type,$e)){
+        foreach($v as $e)
+        {
+            if( !self::check($type, $e) )
+            {
                 $check=false;
             }
         }
@@ -72,11 +80,17 @@ final class ParamTypeChecker
         return is_object($v);
     }
 
-    static private function checkObject($type,$v):bool
+    static private function checkObject($type, $v):bool
     {
         $check=true;
-        foreach($v as $key => $e){
-            if(!self::check($type->$key,$e)){
+        foreach($type as $key => $te)
+        {
+            if( !property_exists($v, $key) )
+            {
+                return false;
+            }
+            if( !self::check($te, $v->$key) )
+            {
                 $check=false;
             }
         }
