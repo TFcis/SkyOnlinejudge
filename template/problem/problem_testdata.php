@@ -13,6 +13,22 @@ $(document).ready(function(){
         });
     });
 });
+function rmTestdata(){
+    var pid = <?=$tmpl['problem']->pid?>;
+    $.get("<?=$SkyOJ->uri('problem','api','rm_testcase')?>",{pid:pid},function(e){
+        location.reload();
+    });
+}
+function syncTestdata(){
+    var pid = <?=$tmpl['problem']->pid?>;
+    console.log(87);
+    $.get("<?=$SkyOJ->uri('problem','api','sync_testcase')?>",{pid:pid},function(e){
+        $("#misc-dbg").html(e.data);
+    },"json").fail(function(e){
+        console.log(e);
+        $("#misc-dbg").html(e.responseText);
+    });
+}
 </script>
 <div class="container">
     <div class="row">
@@ -29,7 +45,7 @@ $(document).ready(function(){
                     <div id="collapseZip" class="collapse" role="tabpanel" aria-labelledby="collapseZip" data-parent="#accordion">
                         <div class="card-body">
                             <form class="form-inline" id="testcase-zip-form">
-                                <input type='hidden' name="pid" value="1">
+                                <input type='hidden' name="pid" value="<?=$tmpl['problem']->pid?>">
                                 <div class="form-group">
                                     <label for="testdata-zip">Testdata Zip </label>
                                     <input type="file" class="form-control-file" id="testdata-zip" name="file" accept=".zip">
@@ -37,6 +53,10 @@ $(document).ready(function(){
                                 <button type="submit" class="btn btn-primary">Submit</button>
                                 <span id="zip-dbg"></span>             
                             </form>
+                            <hr>
+                            <button type="submit" class="btn btn-danger" onclick="rmTestdata()">Remove All Tests</button>
+                            <button type="submit" class="btn btn-info" onclick="syncTestdata()">Sync To Judge</button>
+                            <span id="misc-dbg"></span>
                         </div>
                     </div>
                 </div>

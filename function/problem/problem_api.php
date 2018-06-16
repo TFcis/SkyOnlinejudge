@@ -14,13 +14,15 @@ function apiHandle()
         case 'modify':
         case 'add_attach':
         case 'judge':
+        case 'rm_testcase':
+        case 'sync_testcase':
             break;
 
         case 'submit':
         case 'add_testcasezip':
             $SkyOJ->setOutputMode(\SKYOJ\_SkyOJ::OUTPUT_HTML_BG);
             break;
-            
+    
         default:
             \SKYOJ\throwjson('error', 'Access denied');
     }
