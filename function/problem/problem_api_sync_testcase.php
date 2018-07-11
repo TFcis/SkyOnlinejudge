@@ -1,6 +1,6 @@
 <?php namespace SKYOJ\Problem;
 
-function problem_api_add_testcasezipHandle()
+function problem_api_sync_testcaseHandle()
 {
     global $_G,$_E,$SkyOJ;
 
@@ -8,19 +8,20 @@ function problem_api_add_testcasezipHandle()
         if( !$SkyOJ->User->isAdmin() )
             \SKYOJ\throwjson('error', 'Access denied');
 
-        $pid = \SKYOJ\safe_post('pid');
+        $pid = \SKYOJ\safe_get('pid')??0;
         $problem = new \SkyOJ\Problem\Container();
 
         if( !$problem->load($pid) )
             \SKYOJ\throwjson('error','param error');
         if( !$problem->writeable($SkyOJ->User) )
             \SKYOJ\throwjson('error', 'Access denied');
-        
-        $file = $_FILES['file']??['error'=>1];
-        if( $file['error'] != \UPLOAD_ERR_OK)
-            \SKYOJ\throwjson('error', 'Upload Error : '.$file['error']);
 
-        $problem->getDataManager()->copyTestcasesZip($file['tmp_name']);
+        $judge = \SkyOJ\Judge\Judge::getJudgeReference($problem->judge_profile);
+
+        if( isset($judge) )
+        {
+            $judge->syncTestdata($problem);
+        }
         \SKYOJ\throwjson('SUCC',"succ");
     }catch(\Exception $e){
         \SKYOJ\throwjson('error',$e->getMessage());

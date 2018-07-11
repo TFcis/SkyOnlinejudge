@@ -26,7 +26,7 @@ function problem_api_judgeHandle()
             $res = $judge->judge($data);
         }
 
-        //$data->applyResult($res);
+        $data->applyResult($res);
         if( $res === false )
             throw new \Exception('judge error');
         \SKYOJ\throwjson('SUCC',"Yeeee!");

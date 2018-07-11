@@ -58,7 +58,7 @@ $(document).ready(function()
 					</tr>
 					<tr>
 						<td>總得分</td>
-						<td><?=$data->score?>, <?=\SKYOJ\getresulttexthtml($data->score)?>
+						<td><?=$data->score?>, <?=\SKYOJ\getresulttexthtml($data->result)?>
 							<?php if( $data->result >= \SKYOJ\RESULTCODE::AC && $data->result <= \SKYOJ\RESULTCODE::CE): ?>
 								 in <?=$data->runtime?> ms
 							<?php endif; ?>
@@ -78,12 +78,13 @@ $(document).ready(function()
 					</tr>
 				</thead>
 				<tbody>
-                <?php $t = '' ; foreach ($result as $i): $t = $i['msg']??''?>
+				<?php //var_dump($result) ?>
+                <?php $t = '' ; foreach ($result['tasks']??[] as $i): $t = $i['message']??''?>
 					<tr>
-                        <td><?=$i['taskid']?></td>
-						<td><?=\SKYOJ\getresulttexthtml($i['state'])?></td>
+                        <td><?=$i['id']?></td>
+						<td><?=\SKYOJ\getresulttexthtml($i['result_code'])?></td>
 						<td><?=$i['runtime']?></td>
-                        <td><?=$i['mem']?></td>
+                        <td><?=$i['memory']?></td>
 					</tr>
                 <?php endforeach; ?>
 				</tbody>

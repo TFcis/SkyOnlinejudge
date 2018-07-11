@@ -81,6 +81,7 @@ $(document).ready(function()
                             <li class="divider"></li>
                             <li><a href="<?=$SkyOJ->uri('index','old')?>">Dev Message</a></li>
                             <li><a href="http://forum.tfcis.org/forum.php?mod=group&fid=107" target="_blank">Discuss</a></li>
+                            <li><a href="https://drive.google.com/open?id=1ZV0KxsQodu7GozPWIQ73ZrIXp-QRY-G3qu8ED2s4T4Y" target="_blank">Make-A-Wish</a></li>
                         </ul>
                     </li>
                 </ul>

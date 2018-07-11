@@ -51,7 +51,7 @@ if (!defined('IN_TEMPLATE')) {
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($_E['template']['challenge_info'] as $row):?>
+                <?php foreach(array_reverse($_E['template']['challenge_info']) as $row):?>
                     <?php if( !$row->readable($SkyOJ->User) )continue;?>
                     <tr>
                         <td><a href="<?=$SkyOJ->uri('chal','result',$row->cid)?>"><?=$row->cid;?></a></td>

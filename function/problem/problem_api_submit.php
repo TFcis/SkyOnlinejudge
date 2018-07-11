@@ -64,23 +64,24 @@ function problem_api_submitHandle()
             throw new \Exception('This is not a utf-8 encoding file!');
 
         $cid = \SkyOJ\Challenge\Container::create($SkyOJ->User->uid, $code, $pid, $lang, $compiler);
-        \SKYOJ\throwjson('SUCC',$cid);
         $SkyOJ->throwjson_keep('SUCC',$cid);
     }catch(\Exception $e){
         \SKYOJ\throwjson('error',$e->getMessage());
     }
 
     //Flushed! run on back round
-    /*try{
-        $data = new \SKYOJ\Challenge\Challenge($cid);
-        $res = $data->run_judge();
-
-        if( $res === false )
+    try{
+        $data = new \SkyOJ\Challenge\Container();
+        $data->load($cid);
+        $judge = Judge::getJudgeReference($data->problem()->judge_profile);
+    
+        $res = '';
+        if( isset($judge) )
         {
-            //Give JE for this
-            throw new \Exception('run_judge error');
+            $res = $judge->judge($data);
         }
+        $data->applyResult($res);
     }catch(\Exception $e){
         \Log::msg(\Level::Error,'judge error:'.$e->getMessage());
-    }*/
+    }
 }

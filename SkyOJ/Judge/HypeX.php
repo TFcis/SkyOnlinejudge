@@ -391,7 +391,7 @@ class HypeX extends Judge
             }
         }
         catch(\Exception $e) //prevent judge return an empty json, let it make a CE
-        { 
+        {
             return null;
         }
         return $res;

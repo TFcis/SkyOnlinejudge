@@ -1,7 +1,6 @@
 <?php namespace SkyOJ\API;
 
 use \SkyOJ\API\ApiInterface;
-use \SkyOJ\API\ApiInterfaceException;
 
 class Openapi extends ApiInterface
 {
