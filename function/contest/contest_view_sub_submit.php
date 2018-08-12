@@ -1,4 +1,8 @@
 <?php namespace SKYOJ\Contest;
+
+use \SkyOJ\Challenge\LanguageCode;
+use \SkyOJ\Judge\Judge;
+
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
@@ -15,18 +19,23 @@ function sub_submitHandle(\SKYOJ\Contest $contest)
 
     //TODO: Check submit access
 
-    $problem = new \SKYOJ\Problem($pid);
-    $pid = $problem->pid();
+    $problem = new \SkyOJ\Problem\Container();
 
-    if( $pid===null )
+    if( !$problem->load($pid) )
         throw new \Exception('Load Problem Error!');
+
+    if( !$problem->isAllowSubmit($SkyOJ->User) )
+    {
+        if( !$SkyOJ->User->isLogin() )
+            throw new \Exception('請登入後再操作');
+        throw new \Exception('沒有權限');
+    }
     $judge = null;
-    $judgename = $problem->GetJudge();
-    if( \Plugin::loadClassFileInstalled('judge',$judgename)!==false )
-        $judge = new $judgename;
+    $judge = Judge::getJudgeReference($problem->judge_profile);
+    $info = $judge->getCompilerInfo();
 
     $_E['template']['problem'] = $problem;
-    $_E['template']['compiler'] = $judge->get_compiler();
+    $_E['template']['compiler'] = $info;
     $_E['template']['jscallback'] = 'loadTemplate("log")';
     \Render::renderSingleTemplate('problem_submit','problem');
     exit(0);

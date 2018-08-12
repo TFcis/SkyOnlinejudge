@@ -7,7 +7,7 @@ if (!defined('IN_TEMPLATE')) {
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <?=$tmpl['problem']->GetRenderedContent()?>
+            <?=$tmpl['problem']->getRendedContent()?>
         </div>
     </div>
     <br>
