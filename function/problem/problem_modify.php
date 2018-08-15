@@ -55,6 +55,7 @@ function modifyHandle()
         $_E['template']['judges'] = $judges;
 
         $_E['template']['problem'] = $problem;
+        $_E['template']['upload_size_limits'] = \SkyOJ\Helper\Env\UploadLimits::value();
         $SkyOJ->SetTitle( '修改: '.$problem->title );
         \Render::render_bs4('problem_modify','problem');
     }catch(\Exception $e){
