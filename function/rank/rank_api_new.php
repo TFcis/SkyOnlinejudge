@@ -16,12 +16,12 @@ function rank_api_newHandle()
         $title = \SKYOJ\safe_post('title');
         $type  = \SKYOJ\safe_post_int('type');
         
-        if( !\SKYOJ\ScoreBoardTypeEnum::isValidValue($type) )
+        if( !\SkyOJ\Scoreboard\ScoreBoardTypeEnum::isValidValue($type) )
         {
             \SKYOJ\throwjson('error', 'Type Error');
         }
         
-        $sb_id = \SKYOJ\ScoreBoard::CreateNew($title,$type);
+        $sb_id = \SkyOJ\Scoreboard\ScoreBoard::CreateNew($title,$type);
         \SKYOJ\throwjson('SUCC',$sb_id);
     }catch(\Exception $e){
         \SKYOJ\throwjson('error',$e->getMessage());

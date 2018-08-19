@@ -7,9 +7,12 @@ if (!defined('IN_SKYOJSYSTEM')) {
 function setting_ojacctHandle(UserInfo $userInfo)
 {
     global $_E;
-    $viewdata = $userInfo->load_data('ojacct');
+    $table = \DB::tname("userojacct");
+    $viewdata = \DB::fetchALLEx("SELECT * FROM $table WHERE uid=?",$userInfo->uid());
     $_E['template']['acct'] = $viewdata;
-    $_E['template']['ojs'] = list_oj_column();
+    $ojcaptures = \SkyOJ\Scoreboard\OJCaptureEnum::getConstants();
+    unset( $ojcaptures[\SkyOJ\Scoreboard\OJCaptureEnum::str(\SkyOJ\Scoreboard\OJCaptureEnum::None)] );
+    $_E['template']['ojs'] = $ojcaptures;
     $ojacct= [];
     foreach( $viewdata as $row )
     {

@@ -16,11 +16,9 @@ function modifyHandle()
         if( !\userControl::isAdmin($_G['uid']) )
             throw new \Exception('Access denied');
 
-        $sb = new \SKYOJ\ScoreBoard($sb_id);
-        if( $sb->sb_id() === null )
-        {
-            throw new \Exception('沒有這一個記分板');
-        }
+        $sb = new \SkyOJ\Scoreboard\ScoreBoard();
+        if( !$sb->load($sb_id) )
+            throw new \Exception('Load Scoreboard error!');
 
         //TODO: getpermission
 

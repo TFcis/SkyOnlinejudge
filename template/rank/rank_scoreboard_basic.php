@@ -11,7 +11,7 @@ if (!defined('IN_TEMPLATE')) {
             <th class="text-center" style="padding: 4px;width: 50px;"><a onclick="change_rate()" id="svchange" title="Change rate/source">Score<span></th>
             <?php foreach( $tmpl['sb']->GetProblems() as $prob ):?>
                 <th class="text-center" style="padding: 4px;width: 40px;">
-                    <div class="problmname" title="<?=\SKYOJ\html($tmpl['sb']->problem_title($prob['problem']))?>"><a href='<?=$SkyOJ->uri('problem','view',$prob['problem'])?>'><?=$prob['problem']?></a></div>
+                    <div class="problmname" title="<?=\SKYOJ\html($tmpl['sb']->problem_title($prob['problem']))?>"><a href='<?=\SKYOJ\html($tmpl['sb']->problem_link($prob['problem']))?>'><?=$prob['problem']?></a></div>
                 </th>
             <?php endforeach;?>
             <th></th>
@@ -21,7 +21,7 @@ if (!defined('IN_TEMPLATE')) {
         <?php foreach ($tmpl['sb']->GetSortedUsers() as $uid): ?>
         <tr>
             <td style="left:0px;position: absolute;">
-                <?php if (false): ?>
+                <?php if ($tmpl['sb']->rebuildUserable($SkyOJ->User,$uid)): ?>
                 <a class = "icon-bttn" onclick="build_cb_data('<?=$uid?>')">
                     <span class="pointer glyphicon glyphicon-refresh"  title="重新擷取"></span>
                 </a>
@@ -47,7 +47,7 @@ if (!defined('IN_TEMPLATE')) {
             </td>
 <?php foreach( $tmpl['sb']->GetProblems() as $prob ):?><?php
     $vid = $tmpl['tsb'][$uid][$prob['problem']][0];
-    $chal = '';
+    $chal = $tmpl['tsb'][$uid][$prob['problem']]['challink'];
     $vid = ($vid == \SKYOJ\RESULTCODE::WAIT ||  $vid == \SKYOJ\RESULTCODE::JUDGING) ? 'NO' : \SKYOJ\getresulttext($vid);
 ?><td class="text-center <?=$vid?>" style="width:50px;font-size:20px;"><?php
     if ($chal == '') {

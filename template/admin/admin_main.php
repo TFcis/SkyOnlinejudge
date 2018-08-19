@@ -50,6 +50,7 @@ if (!defined('IN_TEMPLATE')) {
             <li role="presentation" navpage='dashboard'><a href="#">摘要</a></li>
             <li role="presentation" navpage='log'><a href="#">系統紀錄</a></li>
             <li role="presentation" navpage='judge_profile/list'><a href="#">Judge Profile</a></li>
+            <li role="presentation" navpage='ojcapture_profile/list'><a href="#">OJCapture Profile</a></li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="plugindb">插件<span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="plugindb">
