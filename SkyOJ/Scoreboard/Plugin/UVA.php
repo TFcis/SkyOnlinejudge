@@ -258,6 +258,7 @@ class UVA extends \SkyOJ\Scoreboard\OJCapture
                 continue;
             $verdict = min($verdict,$sub["verdict"]);
         }
+        if($verdict==100)$verdict = 0;
         if($verdict==\SKYOJ\RESULTCODE::AC)return [$verdict,100];
         return [$verdict,0];
     }

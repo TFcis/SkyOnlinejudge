@@ -34,7 +34,7 @@ $(document).ready(function(){
                     'data'=>[
                         new HTML_INPUT_TEXT(['name'=>'title','required'=>'required','option' => ['help_text' => '記分板名稱']]),
                         new HTML_INPUT_SELECT(['name'=>'type','key-pair'=>
-                            \SKYOJ\ScoreBoardTypeEnum::getConstants()
+                            \SkyOJ\Scoreboard\ScoreBoardTypeEnum::getConstants()
                             ,'option' => ['help_text' => '記分板類型']]),
                         new HTML_INPUT_BUTTOM(['name'=>'btn','title'=>'送出','option' => ['help_text' => 'true']]),
                     ]
