@@ -415,7 +415,7 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
                 {
                     $pname = $problem['problem'];
                     $class = $this->prob_match[$pname];
-                    $data[$uid][$pname] = self::$plugins[$class]->query($uid,$pname);
+                    $data[$uid][$pname] = self::$plugins[$class]->query($uid,$pname,strtotime($this->start),strtotime($this->end));
                     $data[$uid][$problem['problem']]['challink'] = self::$plugins[$class]->challink($uid,$pname);
                 }
             }
