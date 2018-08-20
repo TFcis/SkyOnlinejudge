@@ -17,6 +17,8 @@ function indexHandle()
             case 'plugins':
             case 'judge_profile':
                 break;
+            case 'ojcapture_profile':
+                break;
             default:
                 \Render::renderSingleTemplate('common_message');
                 exit(0);

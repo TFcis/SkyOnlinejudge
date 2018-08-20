@@ -11,6 +11,7 @@ function apiHandle()
     switch( $param )
     {
         case 'new':
+        case 'rebuild':
         case 'modify':
             break;
             
