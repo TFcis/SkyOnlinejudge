@@ -46,10 +46,10 @@ abstract class OJCapture
     //problem information
     abstract function get_title(string $name):?string;
 
-    abstract public function prepare($uids,$problems);
-    abstract public function query($uid,$problem,$start=null,$end=null):array; //use unix timestamp
+    abstract public function prepare($uids, $problems);
+    abstract public function query($uid, $problem, $start=null, $end=null):array; //use unix timestamp
     abstract public function verifyAccount(string $acct):bool;
-    abstract public function rebuild($uids,$problems);
+    abstract public function rebuild($uids, $problems);
     public static function installForm($oldprofile = null):array
     {
         return [];

@@ -42,7 +42,7 @@ class TOJ extends \SkyOJ\Scoreboard\OJCapture
         return "/^toj[0-9]+$/i";
     }
 
-    public function get($page,$data)
+    public function get($page, $data)
     {
         $context['http'] =  [
             'timeout'   => 60,
@@ -89,7 +89,7 @@ class TOJ extends \SkyOJ\Scoreboard\OJCapture
         return false;
     }
 
-    private function getSubmissions($uid,$pid)
+    private function getSubmissions($uid, $pid)
     {
         $req = [];
         $req['proid'] = $pid;
@@ -104,12 +104,12 @@ class TOJ extends \SkyOJ\Scoreboard\OJCapture
     }
 
     private $acmap = [];
-    public function prepare($uids,$problems)
+    public function prepare($uids, $problems)
     {
         
     }
 
-    public function query($uid,$problem,$start=null,$end=null):array
+    public function query($uid, $problem, $start=null, $end=null):array
     {
         return [0,0];
     }

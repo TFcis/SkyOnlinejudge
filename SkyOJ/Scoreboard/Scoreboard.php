@@ -304,7 +304,7 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
         return $tname;
     }
 
-    public function rebuild($uids=null,$pros=null)
+    public function rebuild($uids=null, $pros=null)
     {
         global $SkyOJ;
         $users = $this->GetUsers();
@@ -361,7 +361,7 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
         $this->make_inline();
     }
 
-    public function rebuildUserable(User $user,$uid):bool
+    public function rebuildUserable(User $user, $uid):bool
     {
         return $user->testStisfyPermission($uid, ObjectLevel::ADMIN);
     }

@@ -130,7 +130,7 @@ class UVA extends \SkyOJ\Scoreboard\OJCapture
         return 0;
     }
 
-    private function getSubmissionsFromUVA($uids,$pids)
+    private function getSubmissionsFromUVA($uids, $pids)
     {
         $uidstr = implode(',',$uids);
         $pidstr = implode(',',$pids);
@@ -171,7 +171,7 @@ class UVA extends \SkyOJ\Scoreboard\OJCapture
         return $submissions;
     }
 
-    private function getSubmission($uid,$pid)
+    private function getSubmission($uid, $pid)
     {
         if(isset($this->submissions[$uid][$pid]))
             return $this->submissions[$uid][$pid];
@@ -185,7 +185,7 @@ class UVA extends \SkyOJ\Scoreboard\OJCapture
         return $this->username2uid($acct) !== 0;
     }
 
-    public function rebuild($uids,$problems)
+    public function rebuild($uids, $problems)
     {
         $uvauid = [];
         $uvapid = [];
@@ -219,7 +219,7 @@ class UVA extends \SkyOJ\Scoreboard\OJCapture
         $this->cachechange = true;
     }
 
-    public function prepare($uids,$problems)
+    public function prepare($uids, $problems)
     {
         foreach($uids as $uid)
         {
@@ -239,7 +239,7 @@ class UVA extends \SkyOJ\Scoreboard\OJCapture
         //echo json_encode($this->submissions);
     }
 
-    public function query($uid,$problem,$start=null,$end=null):array
+    public function query($uid, $problem, $start=null, $end=null):array
     {
         $acct = $this->uid2ojaccount($uid);
         if( !isset($acct) ) return [0,0];
