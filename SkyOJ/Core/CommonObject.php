@@ -33,6 +33,11 @@ abstract class CommonObject
         return $this->sqldata[$name];
     }
 
+    public function __isset(string $name)
+    {
+        return isset($this->sqldata[$name]);
+    }
+
     public function __set(string $name,$var):void
     {
         $called = "checkSet_".$name;
