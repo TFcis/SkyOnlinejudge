@@ -28,6 +28,7 @@ class Profile extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('profile') ) return ;
         $table = $this->table('profile',['id' => 'uid']);
         $table  ->addColumn('quote','text',['null'=>true,'encoding'=>'utf8','collation'=>'utf8_bin'])
                 ->addColumn('quote_ref','text',['null'=>true,'encoding'=>'utf8','collation'=>'utf8_bin'])

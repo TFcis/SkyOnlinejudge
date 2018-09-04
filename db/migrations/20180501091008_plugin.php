@@ -28,6 +28,7 @@ class Plugin extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('plugin') ) return ;
         $table = $this->table('plugin');
         $table  ->addColumn('class','string',['limit'=>64,'encoding'=>'utf8','collation'=>'utf8_bin'])
                 ->addColumn('version','text',['encoding'=>'utf8','collation'=>'utf8_bin'])

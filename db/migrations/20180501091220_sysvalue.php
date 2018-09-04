@@ -28,6 +28,7 @@ class Sysvalue extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('sysvalue') ) return ;
         $table = $this->table('sysvalue',['id'=>false]);
         $table  ->addColumn('name','string',['limit'=>64,'encoding'=>'utf8','collation'=>'utf8_bin'])
                 ->addColumn('var','text',['encoding'=>'utf8','collation'=>'utf8_bin'])

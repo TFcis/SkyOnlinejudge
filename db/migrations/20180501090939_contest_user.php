@@ -28,6 +28,7 @@ class ContestUser extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('contest_user') ) return ;
         $table = $this->table('contest_user',['id'=>false]);
         $table  ->addColumn('cont_id','integer')
                 ->addColumn('uid','integer')
