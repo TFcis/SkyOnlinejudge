@@ -187,14 +187,14 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
 
     public function checkSet_runtime_limit($val):bool
     {
-        if( !ctype_digit($val) )
+        if( !ctype_digit((string)$val) )
             throw new ContainerModifyException('runtime_limit shoudld be interger');
         return true;
     }
 
     public function checkSet_memory_limit($val):bool
     {
-        if( !ctype_digit($val) )
+        if( !ctype_digit((string)$val) )
             throw new ContainerModifyException('memory_limit shoudld be interger');
         return true;
     }
