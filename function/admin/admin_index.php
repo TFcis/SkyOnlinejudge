@@ -15,7 +15,10 @@ function indexHandle()
         {
             case 'log':
             case 'plugins':
+            case 'userlist':
             case 'judge_profile':
+                break;
+            case 'ojcapture_profile':
                 break;
             default:
                 \Render::renderSingleTemplate('common_message');

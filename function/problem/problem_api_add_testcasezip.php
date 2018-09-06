@@ -19,38 +19,10 @@ function problem_api_add_testcasezipHandle()
         $file = $_FILES['file']??['error'=>1];
         if( $file['error'] != \UPLOAD_ERR_OK)
             \SKYOJ\throwjson('error', 'Upload Error : '.$file['error']);
-        $problem->admmsg = "wait system deal with it...";
-        $problem->save();
-        $SkyOJ->throwjson_keep('SUCC',"succ");
+
+        $problem->getDataManager()->copyTestcasesZip($file['tmp_name']);
+        \SKYOJ\throwjson('SUCC',"succ");
     }catch(\Exception $e){
         \SKYOJ\throwjson('error',$e->getMessage());
-    }
-
-    //Flushed! run on back round
-    try{
-        //Unzip data
-        $problem->admmsg = "Unzip...";
-        $problem->save();
-        $problem->getDataManager()->copyTestcasesZip($file['tmp_name']);
-        
-        
-        /*$judgename = $problem->GetJudge();
-        if( \Plugin::loadClassFileInstalled('judge',$judgename)!==false )
-            $judge = new $judgename;
-        
-        //TODO
-        if( $judge ){
-            $compilers = $judge->get_compiler();
-            if( !\array_key_exists($compiler,$compilers) )
-                throw new \Exception('NoSuchJudge');
-        }else if( !empty($compiler) ){
-            throw new \Exception('NoSuchJudge');
-        }*/
-        $problem->admmsg = "ok";
-        $problem->save();
-    }catch(\Exception $e){
-        $problem->admmsg = $e->getMessage();
-        $problem->save();
-        \Log::msg(\Level::Error,'judge error:'.$e->getMessage());
     }
 }

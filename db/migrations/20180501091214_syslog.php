@@ -28,6 +28,7 @@ class Syslog extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('syslog') ) return ;
         $table = $this->table('syslog');
         $table  ->addColumn('timestamp','timestamp',['default'=>'CURRENT_TIMESTAMP'])
                 ->addColumn('level','string',['null'=>true,'limit'=>64,'encoding'=>'utf8','collation'=>'utf8_bin'])

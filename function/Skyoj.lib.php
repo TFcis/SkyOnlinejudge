@@ -387,6 +387,8 @@ function nickname($uid)
         $u = (string) $u;
         if (isset($res[$u])) {
             $_E['nickname'][$u] = $res[$u]['nickname'];
+        } else {
+            $_E['nickname'][$u] = '[ NULL ]';
         }
     }
     $_E['nickname']['0'] = 'anonymous';
@@ -508,4 +510,11 @@ function human_filesize($bytes, $decimals = 2)
     $sz = 'BKMGTP';
     $factor = floor((strlen($bytes) - 1) / 3);
     return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor];
+}
+
+//not safe method
+function get_ip()
+{
+    $ip = $_SERVER['REMOTE_ADDR'];
+    return $ip;
 }

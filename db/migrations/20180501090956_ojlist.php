@@ -28,6 +28,7 @@ class Ojlist extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('ojlist') ) return ;
         $table = $this->table('ojlist');
         $table  ->addColumn('class','string',['limit'=>64,'encoding'=>'utf8','collation'=>'utf8_bin'])
                 ->addColumn('name','text',['encoding'=>'utf8','collation'=>'utf8_bin'])

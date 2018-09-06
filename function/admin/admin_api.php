@@ -23,6 +23,10 @@ function apiHandle()
 		case 'NewJudgeProfile':
             checkToken(true);//use json
             break;
+        case 'NewOJCaptureProfile':
+            checkToken(true);//use json
+            break;
+        break;
 
         default:
             \SKYOJ\throwjson('error', 'Access denied');

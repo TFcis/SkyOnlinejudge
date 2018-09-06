@@ -28,6 +28,7 @@ class Challenge extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('challenge') ) return ;
         $table = $this->table('challenge',['id' => 'cid']);
         $table  ->addColumn('pid','integer')
                 ->addColumn('uid','integer')

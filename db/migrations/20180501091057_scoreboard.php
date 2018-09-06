@@ -28,6 +28,7 @@ class Scoreboard extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('scoreboard') ) return ;
         $table = $this->table('scoreboard',['id' => 'sb_id']);
         $table  ->addColumn('title','text',['encoding'=>'utf8','collation'=>'utf8_bin'])
                 ->addColumn('owner','integer')

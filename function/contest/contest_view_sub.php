@@ -57,8 +57,8 @@ function viewPlayingProblem(\SKYOJ\Contest $contest,string $ptag,string $filenam
     }
 
     #TODO Use common object
-    $prob_data = new \SKYOJ\Problem($prob->pid);
-    if( $prob_data->pid()===null )
+    $prob_data = new \SkyOJ\Problem\Container();
+    if( !$prob_data->load($prob->pid) )
     {
         return false;
     }

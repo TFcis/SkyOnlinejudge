@@ -14,13 +14,14 @@ function loginHandle()
 
     $email = \SKYOJ\safe_post('email');
     $password = \SKYOJ\safe_post('password');
+	$user_ip = \SKYOJ\get_ip();
 
     if( isset($email,$password) ) {
         if (!\userControl::CheckToken('LOGIN')) {
             \SKYOJ\throwjson('error', 'token error, please refresh page');
         }
 
-        $user = login($email, $password);
+        $user = login($email, $password, $user_ip);
         if (!$user[0]) {
             $_E['template']['alert'] = $user[1];
             \LOG::msg(\Level::Notice, "<$email> want to login but fail.(".$user[1].')');

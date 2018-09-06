@@ -54,6 +54,13 @@ use \SKYOJ\HTML_INPUT_HIDDEN;
         </div>
         <div class="col-md-10">
             <?=$tmpl['problem']->getRendedContent()?>
+            <br/>
+            <h2>Judge Setting</h2>
+            run-time limit: <?=$tmpl['problem']->runtime_limit?> ms
+            <br/>
+            memory limit: <?=$tmpl['problem']->memory_limit?> byte
+            <br/>
+            測資數量: <?=count($tmpl['problem']->getTestdataInfo())?> 
         </div><!--Main end-->
     </div>
     <br>

@@ -28,6 +28,7 @@ class Userojacct extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('userojacct') ) return ;
         $table = $this->table('userojacct',['id' => false]);
         $table  ->addColumn('uid','integer')
                 ->addColumn('id','integer')

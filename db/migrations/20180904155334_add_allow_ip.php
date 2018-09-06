@@ -3,7 +3,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CreateJudgeProfile extends AbstractMigration
+class AddAllowIp extends AbstractMigration
 {
     /**
      * Change Method.
@@ -28,12 +28,8 @@ class CreateJudgeProfile extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('judge_profile');
-
-        $table  ->addColumn('text', 'string', ['limit'=> 64])
-                ->addIndex(['text'],['unique'=>true])
-                ->addColumn('judge', 'integer')
-                ->addColumn('profile', 'text')
+        $table = $this->table('account',['id' => 'uid']);
+        $table  ->addColumn('allow_ip','text')
                 ->save();
     }
 }

@@ -1,24 +1,16 @@
-<?php namespace SKYOJ;
-/**
- * scoreboard
- * 2016 Sky Online Judge Project
- * By LFsWang
- *
- */
+<?php namespace SkyOJ\Scoreboard;
 
+use \SkyOJ\Core\User\User;
+use \SkyOJ\Core\Permission\ObjectLevel;
 
-class ScoreBoardTypeEnum extends BasicEnum
+class ScoreBoard extends \SkyOJ\Core\CommonObject
 {
-    const ScoreBoard = 1;
-}
-require_once 'common_object.php';
-class ScoreBoard extends CommonObject
-{
-    private $sb_id;
     private $sb_data;
     private $sb_users;
     private $sb_problems;
     private $sb_sb;
+    protected static $table = 'scoreboard';
+    protected static $prime_key = 'sb_id';
 
     protected function getTableName():string
     {
@@ -32,43 +24,6 @@ class ScoreBoard extends CommonObject
         return 'sb_id';
     }
 
-    private $flag_modify_users = false;
-    private $flag_modify_problems = false;
-    protected function UpdateSQL_extend()
-    {
-        if( $this->sb_id() === null )
-            throw new \Exception('SBID ERROR');
-        //Update Users & Problems
-        if( $this->flag_modify_users )
-        {
-            $tscoreboard_users = \DB::tname('scoreboard_users');
-            if( \DB::queryEx("DELETE FROM `$tscoreboard_users` WHERE `sb_id`=?",$this->sb_id())===false )
-                throw \DB::$last_exception;
-            foreach( $this->sb_users as $uid )
-            {
-                if( \DB::queryEx("INSERT INTO `{$tscoreboard_users}`(`sb_id`, `uid`) VALUES (?,?)",$this->sb_id(),$uid) === false )
-                {
-                    throw \DB::$last_exception;
-                }
-            }
-        }
-        if( $this->flag_modify_problems )
-        {
-            $i = 0;
-            $tscoreboard_problems = \DB::tname('scoreboard_problems');
-            if( \DB::queryEx("DELETE FROM `$tscoreboard_problems` WHERE `sb_id`=?",$this->sb_id())===false )
-                throw \DB::$last_exception;
-            foreach( $this->sb_problems as $row )
-            {
-                if( \DB::queryEx("INSERT INTO `$tscoreboard_problems`(`sb_id`, `ord`, `problem`, `note`) VALUES (?,?,?,?)"
-                    ,$this->sb_id(),$i++,$row['problem'],$row['note']) === false )
-                {
-                    throw \DB::$last_exception;
-                }
-            }
-        }
-    }
-
     static $plugins = [];
     static function pluginInit()
     {
@@ -79,107 +34,68 @@ class ScoreBoard extends CommonObject
         $loaded = true;
 
         //TODO Plugin Loder
-        $class_files = \SkyOJ\Helper\DirScanner::open($_E['ROOT'].'/library/TFcis/SkyOJ/Scoreboard/Plugin/*.php');
-        foreach($class_files as $path)
+        //$class_files = \SkyOJ\Helper\DirScanner::open($_E['ROOT'].'/SkyOJ/Scoreboard/Plugin/*.php');
+        $class_files = OJCaptureEnum::getConstants();
+        unset( $class_files[OJCaptureEnum::str(OJCaptureEnum::None)] );
+        foreach($class_files as $cl)
         {
-            $base = pathinfo($path,PATHINFO_FILENAME);
+            $base = OJCaptureEnum::str($cl);
             $classname = '\\SkyOJ\\Scoreboard\\Plugin\\'.$base;
             self::$plugins[$base] = new $classname;
         }
     }
 
-    function __construct(int $sb_id)
+    private function loadcache()
+    {
+        global $SkyOJ; 
+        $this->sb_sb = $SkyOJ->cache_pool->get("Scoreboard_$this->sb_id",[]);
+    }
+
+    private function setcache()
+    {
+        global $SkyOJ; 
+        $SkyOJ->cache_pool->set("Scoreboard_$this->sb_id",$this->sb_sb,time()+8640000);
+    }
+
+    function __construct()
     {
         self::pluginInit();
-        try{
-            $tscoreboard = \DB::tname('scoreboard');
-
-            $data = \DB::fetchEx("SELECT * FROM `{$tscoreboard}` WHERE `sb_id` = ?",$sb_id);
-            if( $data===false )
-            {
-                throw new \Exception('Load Problem Failed!');
-            }
-
-            $this->sb_id = $sb_id;
-            $this->sb_data = $data;
-        }catch(\Exception $e){
-            $this->sb_id = null;
-        }
     }
 
-    function sb_id()
-    {
-        return $this->sb_id;
-    }
-
-    function GetTitle():string
-    {
-        return $this->sb_data['title']??'(null)';
-    }
-
-    function SetTitle(string $title):bool
+    function checkSet_title(string $title):bool
     {
         if( strlen($title)>100 )
         {
             return false;
         }
-        $this->UpdateSQLLazy('title',$title);
         return true;
     }
-    
-    function GetStart():string
-    {
-        return $this->sb_data['start']??'';
-    }
 
-    function SetStart(string $start):bool
+    function checkSet_start(string $start):bool
     {
-        if( !check_totimestamp($start,$start) )
+        if( !\SKYOJ\check_totimestamp($start,$start) )
         {
             return false;
         }
-        $this->UpdateSQLLazy('start',$start);
         return true;
     }
 
-    function GetEnd():string
+    function checkSet_end(string $end):bool
     {
-        return $this->sb_data['end']??'';
-    }
-
-    function SetEnd(string $end):bool
-    {
-        if( !check_totimestamp($end,$end) )
+        if( !\SKYOJ\check_totimestamp($end,$end) )
         {
             return false;
         }
-        $this->UpdateSQLLazy('end',$end);
         return true;
     }
 
-    function GetAnnounce():string
-    {
-        return $this->sb_data['announce']??'';
-    }
-
-    function SetAnnounce(string $announce):bool
+    function checkSet_announce(string $announce):bool
     {
         if( strlen($announce)>30000 )
         {
             return false;
         }
-        $this->UpdateSQLLazy('announce',$announce);
         return true;
-    }
-
-    function GetState():int
-    {
-        return $this->sb_data['state']??0;
-    }
-
-    function owner():int
-    {
-        return $this->sb_data['owner'];
     }
 
     private function load_users():bool
@@ -188,13 +104,13 @@ class ScoreBoard extends CommonObject
         {
             return true;   
         }
-        if( $this->sb_id() === false )
+        if( $this->sb_id === false )
         {
             return false;
         }
 
         $tscoreboard_users = \DB::tname('scoreboard_users');
-        $data = \DB::fetchAllEx("SELECT `uid` FROM {$tscoreboard_users} WHERE `sb_id`=? ORDER BY `uid`",$this->sb_id());
+        $data = \DB::fetchAllEx("SELECT `uid` FROM {$tscoreboard_users} WHERE `sb_id`=? ORDER BY `uid`",$this->sb_id);
         if( $data === false )
         {
             return false;
@@ -212,13 +128,13 @@ class ScoreBoard extends CommonObject
         {
             return true;   
         }
-        if( $this->sb_id() === false )
+        if( $this->sb_id === false )
         {
             return false;
         }
 
         $tscoreboard_problems = \DB::tname('scoreboard_problems');
-        $data = \DB::fetchAllEx("SELECT `problem`,`note` FROM {$tscoreboard_problems} WHERE `sb_id`=? ORDER BY `ord`",$this->sb_id());
+        $data = \DB::fetchAllEx("SELECT `problem`,`note` FROM {$tscoreboard_problems} WHERE `sb_id`=? ORDER BY `ord`",$this->sb_id);
         if( $data === false )
         {
             return false;
@@ -227,7 +143,6 @@ class ScoreBoard extends CommonObject
         $this->sb_problems = [];
         foreach( $data as $row )
         {
-            $this->sb_problems[] = ['problem'=>$row['problem'],'note'=>$row['note']];
             foreach( self::$plugins as $name => $plugin )
             {
                 if( $plugin->is_match($row['problem']) )
@@ -235,6 +150,9 @@ class ScoreBoard extends CommonObject
                     $this->prob_match[$row['problem']] = $name;
                 }
             }
+            if(!array_key_exists($row['problem'],$this->prob_match))
+                continue;
+            $this->sb_problems[] = ['problem'=>$row['problem'],'note'=>$row['note']];
         }
         return true;
     }
@@ -243,7 +161,14 @@ class ScoreBoard extends CommonObject
     {
         if( isset($this->prob_match[$pname]) )
             return self::$plugins[ $this->prob_match[$pname] ]::get_title($pname);
-        return \SKYOJ\Problem::get_title($pname);
+        return '[NoPlugin]';
+    }
+
+    function problem_link(string $pname):string
+    {
+        if( isset($this->prob_match[$pname]) )
+            return self::$plugins[ $this->prob_match[$pname] ]::problink($pname);
+        return '';
     }
 
     function GetSortedUsers():array
@@ -293,14 +218,23 @@ class ScoreBoard extends CommonObject
             {
                 continue;
             }
-            if( !check_tocint($d) || $d == 0 )
+            if( !\SKYOJ\check_tocint($d) || $d == 0 )
             {
                 return false;
             }
             $users[]= (int)$d;
         }
         $this->sb_users = array_unique($users);
-        $this->flag_modify_users = true;
+        $tscoreboard_users = \DB::tname('scoreboard_users');
+        if( \DB::queryEx("DELETE FROM `{$tscoreboard_users}` WHERE `sb_id`=?",$this->sb_id)===false )
+            throw \DB::$last_exception;
+        foreach( $this->sb_users as $uid )
+        {
+            if( \DB::queryEx("INSERT INTO `{$tscoreboard_users}` (`sb_id`, `uid`) VALUES (?,?)",$this->sb_id,$uid) === false )
+            {
+                throw \DB::$last_exception;
+            }
+        }
         return true;
     }
 
@@ -330,7 +264,18 @@ class ScoreBoard extends CommonObject
             }
         }
         $this->sb_problems = $problems;
-        $this->flag_modify_problems = true;
+        $i = 0;
+        $tscoreboard_problems = \DB::tname('scoreboard_problems');
+        if( \DB::queryEx("DELETE FROM `$tscoreboard_problems` WHERE `sb_id`=?",$this->sb_id)===false )
+            throw \DB::$last_exception;
+        foreach( $this->sb_problems as $row )
+        {
+            if( \DB::queryEx("INSERT INTO `$tscoreboard_problems`(`sb_id`, `ord`, `problem`, `note`) VALUES (?,?,?,?)"
+                ,$this->sb_id,$i++,$row['problem'],$row['note']) === false )
+            {
+                throw \DB::$last_exception;
+            }
+        }
         return true;
     }
 
@@ -359,13 +304,78 @@ class ScoreBoard extends CommonObject
         return $tname;
     }
 
+    public function rebuild($uids=null, $pros=null)
+    {
+        global $SkyOJ;
+        $users = $this->GetUsers();
+        $problems = $this->GetProblems();
+        $data = [];
+        $users_pool = [];
+
+        if(($uids==null || $pros==null) && !$this->rebuildAllable($SkyOJ->User))
+        {
+            $uids = [];
+            $pros = [];
+        }
+
+        if($uids==null)
+        {
+            $users_pool = $users;
+        }
+        else
+        {
+            foreach($users as $user)
+            {
+                if(in_array($user,$uids) && $this->rebuildUserable($SkyOJ->User,$user))
+                    $users_pool[] = $user;
+            }
+        }
+        
+        $problems_pool = [];
+        foreach( $problems as $prob )
+        {
+            $pname = $prob['problem'];
+            if($pros!==null)
+            {
+                if(!in_array($pname,$pros))
+                {
+                    continue;
+                }
+            }
+
+            if( array_key_exists($pname,$this->prob_match) )
+            {
+                $class = $this->prob_match[$pname];
+                if( !isset($problems_pool[$class]) )
+                    $problems_pool[$class] = [];
+                $problems_pool[$this->prob_match[$pname]][] = $pname;
+            }
+        }
+        //echo json_encode($users_pool)."\n";
+        //echo json_encode($problems_pool)."\n";
+
+        foreach( $problems_pool as $class => $probs )
+        {
+            self::$plugins[$class]->rebuild($users_pool,$probs);
+        }
+        $this->make_inline();
+    }
+
+    public function rebuildUserable(User $user, $uid):bool
+    {
+        return $user->testStisfyPermission($uid, ObjectLevel::ADMIN);
+    }
+
+    public function rebuildAllable(User $user):bool
+    {
+        return $user->testStisfyPermission($this->owner, ObjectLevel::ADMIN);
+    }
+
     /*
         Make Scoreboard Data
     */
     public function make_inline()
     {
-        if( isset($this->sb_sb) )
-            return ;
         $users = $this->GetUsers();
         $problems = $this->GetProblems();
         $skyoj_problems = [];
@@ -390,14 +400,14 @@ class ScoreBoard extends CommonObject
             self::$plugins[$class]->prepare($users,$probs);
         }
 
-
         foreach( $users as $uid )
         {
             $data[$uid] = [];
             foreach( $problems as $problem )
             {
                 $data[$uid][$problem['problem']] = [0,0];
-                if( check_tocint($problem['problem']) )
+                $data[$uid][$problem['problem']]['challink'] = '';
+                if( \SKYOJ\check_tocint($problem['problem']) )
                 {
                     $skyoj_problems[] = $problem['problem'];
                 }
@@ -405,11 +415,13 @@ class ScoreBoard extends CommonObject
                 {
                     $pname = $problem['problem'];
                     $class = $this->prob_match[$pname];
-                    $data[$uid][$pname] = self::$plugins[$class]->query($uid,$pname);
+                    $data[$uid][$pname] = self::$plugins[$class]->query($uid,$pname,strtotime($this->start),strtotime($this->end));
+                    $data[$uid][$problem['problem']]['challink'] = self::$plugins[$class]->challink($uid,$pname);
                 }
             }
         }
         $this->sb_sb = $data;
+        $this->setcache();
         if( !empty($skyoj_problems) ){
             $this->QuerySKYOJ($skyoj_problems);
         }
@@ -477,6 +489,8 @@ TAG;
 
     public function GetScoreBoard()
     {
+        if(!isset($this->sb_sb))
+            $this->loadcache();
         return $this->sb_sb;
     }
 

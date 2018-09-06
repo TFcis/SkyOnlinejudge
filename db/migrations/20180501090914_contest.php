@@ -28,6 +28,7 @@ class Contest extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('contest') ) return ;
         $table = $this->table('contest',['id'=>'cont_id']);
         $table  ->addColumn('owner','integer')
                 ->addColumn('timestamp','timestamp',['default'=>'CURRENT_TIMESTAMP'])

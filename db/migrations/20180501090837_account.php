@@ -28,6 +28,7 @@ class Account extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('account') ) return ;
         $table = $this->table('account',['id' => 'uid']);
         $table  ->addColumn('email','string',['limit'=>64,'encoding'=>'utf8','collation'=>'utf8_bin'])
                 ->addColumn('passhash','string',['limit'=>200,'encoding'=>'utf8','collation'=>'utf8_bin'])
@@ -35,6 +36,7 @@ class Account extends AbstractMigration
                 ->addColumn('timestamp','timestamp',['default'=>'CURRENT_TIMESTAMP'])
                 ->addColumn('realname','string',['limit'=>30,'null' => true,'encoding'=>'utf8','collation'=>'utf8_bin'])
                 ->addColumn('level','integer')
+                ->addColumn('allow_ip','text')
                 ->addIndex(['email'],['name'=>'email'])
                 ->addIndex(['nickname'],['name'=>'nickname'])
                 ->create();

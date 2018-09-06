@@ -28,6 +28,7 @@ class Codepad extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('codepad') ) return ;
         $table = $this->table('codepad');
         $table  ->addColumn('owner','integer')
                 ->addColumn('hash','string',['limit'=>30,'encoding'=>'utf8','collation'=>'utf8_bin'])

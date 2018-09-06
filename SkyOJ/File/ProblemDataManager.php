@@ -102,7 +102,7 @@ class ProblemDataManager extends ManagerBase
         return $testcases;
     }
 
-    public function copyTestcasesZip(string $filepath,bool $cover = true):array
+    public function copyTestcasesZip(string $filepath, bool $cover = true):array
     {
         if( !class_exists('\\ZipArchive') )
             throw new ProblemDataManagerException('php ZipArchive not enabled!');
@@ -131,6 +131,15 @@ class ProblemDataManager extends ManagerBase
         }
 
         return [];
+    }
+
+    public function cleanTestdata()
+    {
+        $files = glob($this->base().self::TESTDATA_DIR.'*');
+        foreach($files as $file)
+        {
+            unlink($file);
+        }
     }
 }
 

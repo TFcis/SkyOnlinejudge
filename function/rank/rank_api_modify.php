@@ -21,17 +21,19 @@ function rank_api_modifyHandle()
         if( !\SKYOJ\check_tocint($sb_id) )
             throw new \Exception('ID Error');
 
-        $sb = new \SKYOJ\ScoreBoard($sb_id);
-        $sb_id = $sb->sb_id();
+        $sb = new \SkyOJ\Scoreboard\ScoreBoard();
+        if( !$sb->load($sb_id) )
+            throw new \Exception('Load Scoreboard error!');
+        $sb_id = $sb->sb_id;
 
-        if( $sb->sb_id()===null || !\userControl::isAdmin($_G['uid']) )
+        if( $sb->sb_id===null || !\userControl::isAdmin($_G['uid']) )
             throw new \Exception('Access denied');
 
-        if( !$sb->SetTitle($title) )
+        if( !$sb->title = $title )
             throw new \Exception('modify title error');
-        if( !$sb->SetStart($start) )
+        if( !$sb->start = $start )
             throw new \Exception('modify start error');
-        if( !$sb->SetEnd($end) )
+        if( !$sb->end = $end )
             throw new \Exception('modify end error:');
         if( !$sb->SetUsers($users) )
             throw new \Exception('modify users error');
@@ -39,11 +41,15 @@ function rank_api_modifyHandle()
             throw new \Exception('modify problems error');
         if( strtotime($start) > strtotime($end) )
             throw new \Exception('time range error');
-        if( !$sb->SetAnnounce($announce) )
+        if( !$sb->announce = $announce )
             throw new \Exception('modify announce error');
 
-        if( !$sb->UpdateSQL() )
+        if( !$sb->save() )
             throw new \Exception('SQL Error!');
+
+        $sb1 = new \SkyOJ\Scoreboard\ScoreBoard();
+        $sb1->load($sb_id);
+        $sb1->make_inline();
         \SKYOJ\throwjson('SUCC','yee');
     }catch(\Exception $e){
         \SKYOJ\throwjson('error',$e->getMessage());

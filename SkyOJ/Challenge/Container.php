@@ -66,6 +66,27 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
     {
         return $this->m_problem;
     }
+
+    public function applyResult($res)
+    {
+        $runtime = 0;
+        $result = 0;
+        $ac = 0;
+        $all = count($res->tasks)??1;
+        foreach($res->tasks as $row)
+        {
+            $runtime += $row->runtime;
+            @$this->memory = $this->memory + $row->memory;
+            $result= max($result, $row->result_code);
+            if( $row->result_code == 20 )
+                $ac++;
+        }
+        @$this->score = (int)($ac/$all*100);
+        @$this->runtime = $runtime;
+        @$this->package = json_encode($res);
+        @$this->result = $result;
+        $this->save();
+    }
 }
 
 class ContainerException extends \Exception { }

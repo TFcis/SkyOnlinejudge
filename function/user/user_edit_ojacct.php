@@ -1,30 +1,34 @@
 <?php namespace SKYOJ\User;
+use \SkyOJ\Scoreboard;
 
 if (!defined('IN_SKYOJSYSTEM')) {
     exit('Access denied');
 }
-require_once $_E['ROOT'].'/function/common/scoreboard.php';
+
 function edit_ojacctHandle(UserInfo $userInfo)
 {
-    $olddata = $userInfo->load_data('ojacct');
-    $ojs = list_oj_column();
+    $table = \DB::tname("userojacct");
+    $olddata = \DB::fetchALLEx("SELECT * FROM $table WHERE uid=?",$userInfo->uid());
+    $ojs = \SkyOJ\Scoreboard\OJCaptureEnum::getConstants();
+    unset( $ojs[\SkyOJ\Scoreboard\OJCaptureEnum::str(\SkyOJ\Scoreboard\OJCaptureEnum::None)] );
     $plugins = [];
 
     $ojacctinfo = [];
-    foreach( $ojs as $oj )
+    foreach( $ojs as $ojname => $ojid )
     {
-        $username = \SKYOJ\safe_post("oj{$oj['id']}")??'';
-        if( !isset($plugins[$oj['class']]) )
+        $username = \SKYOJ\safe_post("oj{$ojid}")??'';
+        if( !isset($plugins[$ojid]) )
         {
-            $plugins[$oj['class']] = new $oj['class'];
+            $cname = '\\SkyOJ\\Scoreboard\\Plugin\\'.$ojname;
+            $plugins[$ojid] = new $cname;
         }
-        if( $username!=='' && !$plugins[$oj['class']]->verify_account($username) )
+        if( $username!=='' && !$plugins[$ojid]->verifyAccount($username) )
         {
-            \SKYOJ\throwjson('error', 'verify account no.'.$oj['id'].' error!');
+            \SKYOJ\throwjson('error', 'verify account no.'.$ojname.' error!');
         }
         $ojacctinfo[] = [
             'uid' => $userInfo->uid(),
-            'id' => $oj['id'],
+            'id' => $ojid,
             'account' => $username,
             'approve' => 0
         ];

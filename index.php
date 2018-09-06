@@ -1,8 +1,6 @@
 <?php namespace SKYOJ;
-
 require_once 'GlobalSetting.php';
 require_once 'function/SkyOJ.php';
-
 $SkyOJ->RegisterHandle('index','\\SKYOJ\\Index',null,true);
 $SkyOJ->RegisterHandle('code' ,'\\SKYOJ\\Code\\CodeHandle',$_E['ROOT'].'/code.php');
 $SkyOJ->RegisterHandle('rank' ,'\\SKYOJ\\Rank\\RankHandle',$_E['ROOT'].'/function/rank/rank.php');

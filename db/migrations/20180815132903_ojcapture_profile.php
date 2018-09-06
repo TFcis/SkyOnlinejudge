@@ -3,7 +3,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class AddJudgeProfile extends AbstractMigration
+class OjcaptureProfile extends AbstractMigration
 {
     /**
      * Change Method.
@@ -28,17 +28,11 @@ class AddJudgeProfile extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('problem');
-
-        if( $table->hasColumn('judge') )
-        {
-            $table->removeColumn('judge');
-        }
-        if( $table->hasColumn('judge_type') )
-        {
-            $table->removeColumn('judge_type');
-        }
-        $table  ->addColumn('judge_profile', 'integer')
-                ->save();
+        $table = $this->table('ojcapture_profile');
+        $table  ->addColumn('text','string',['limit'=>64,'encoding'=>'utf8','collation'=>'utf8_general_ci'])
+                ->addColumn('ojcapture','integer')
+                ->addColumn('profile','text',['encoding'=>'utf8','collation'=>'utf8_general_ci'])
+                ->addIndex(['text'],['unique'=>true,'name'=>'text'])
+                ->create();
     }
 }

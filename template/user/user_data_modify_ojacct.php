@@ -25,11 +25,11 @@ $(document).ready(function()
         <div>
             <form class="form-horizontal" role="form" id="ojacct">
                 <input type='hidden' name='id' value='<?=$tmpl['showid']?>'>
-                <?php foreach($tmpl['ojs'] as $oj):?>
+                <?php foreach($tmpl['ojs'] as $ojname => $ojid):?>
                 <div class="form-group">
-                    <label class="col-md-3 control-label"><?=$oj['name']?></label>
+                    <label class="col-md-3 control-label"><?=$ojname?></label>
                     <div class="col-md-4">
-                        <input type="text" class="form-control" name="oj<?=$oj['id']?>" placeholder="<?=$oj['description']?>" value="<?=$tmpl['ojacct'][$oj['id']]??''?>">
+                        <input type="text" class="form-control" name="oj<?=$ojid?>" value="<?=$tmpl['ojacct'][$ojid]??''?>">
                     </div>
                     <div class="col-md-5"></div>
                 </div>

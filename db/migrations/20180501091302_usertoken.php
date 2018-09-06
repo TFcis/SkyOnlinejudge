@@ -28,6 +28,7 @@ class Usertoken extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('usertoken') ) return ;
         $table = $this->table('usertoken',['id' => false]);
         $table  ->addColumn('uid','integer')
                 ->addColumn('timeout','integer')

@@ -6,7 +6,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 function RankHandle()
 {
     global $SkyOJ,$_E;
-    require_once $_E['ROOT'].'/function/common/scoreboard.php';
+    //require_once $_E['ROOT'].'/function/common/scoreboard.php';
     require_once $_E['ROOT'].'/function/common/problem.php';
     require_once 'rank.lib.php';
 

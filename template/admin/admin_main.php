@@ -8,10 +8,14 @@ if (!defined('IN_TEMPLATE')) {
 	var old = 'dashboard';
 	$(document).ready(function(){
 	    CONT = document.getElementById('content');
-	    $( "[navpage]" ).click(function(){loadTemplate($(this).attr('navpage'));});
+	    //$( "[navpage]" ).click(function(){loadTemplate($(this).attr('navpage'));});
         $("[navpage='"+old+"']").addClass('active');
         loadTemplate(old);
 	});
+    $(document).on("click","[navpage]",function(event){
+        event.preventDefault();
+        loadTemplate($(this).attr('navpage'));
+    });
 
 	function loadTemplate(template){
         $("[navpage='"+old+"']").removeClass();
@@ -49,7 +53,9 @@ if (!defined('IN_TEMPLATE')) {
         <ul class="nav nav-pills nav-stacked">
             <li role="presentation" navpage='dashboard'><a href="#">摘要</a></li>
             <li role="presentation" navpage='log'><a href="#">系統紀錄</a></li>
+            <li role="presentation" navpage='userlist?page=1'><a href="#">使用者清單</a></li>
             <li role="presentation" navpage='judge_profile/list'><a href="#">Judge Profile</a></li>
+            <li role="presentation" navpage='ojcapture_profile/list'><a href="#">OJCapture Profile</a></li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="plugindb">插件<span class="caret"></span></a>
                 <ul class="dropdown-menu" aria-labelledby="plugindb">
