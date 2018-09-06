@@ -387,6 +387,8 @@ function nickname($uid)
         $u = (string) $u;
         if (isset($res[$u])) {
             $_E['nickname'][$u] = $res[$u]['nickname'];
+        } else {
+            $_E['nickname'][$u] = '[ NULL ]';
         }
     }
     $_E['nickname']['0'] = 'anonymous';
