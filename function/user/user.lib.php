@@ -95,8 +95,8 @@ function register(string $email, string $nickname, string $password, string $rep
     //$nickname = addslashes($nickname);
     $password = GetPasswordHash($password);
     if (!\DB::queryEx("INSERT INTO `$acctable` ".
-                    '(`uid`, `email`, `passhash`, `nickname`, `timestamp`, `level`,`allow_ip`) '.
-                    'VALUES (NULL,?,?,?,CURRENT_TIMESTAMP,?,\'\')', $email, $password, $nickname, 6)) {
+                    '(`uid`, `email`, `passhash`, `nickname`, `timestamp`, `level`, `allow_ip`) '.
+                    'VALUES (NULL,?,?,?,CURRENT_TIMESTAMP,?)', $email, $password, $nickname, 6, '%')) {
         $resultdata[1] = '帳號已被註冊';
 
         return $resultdata;
@@ -113,7 +113,7 @@ function register(string $email, string $nickname, string $password, string $rep
 //     : False
 //        des = Error Information
 //TODO : Use Common Error Id To Replace Const-Strings
-function login(string $userinput, string $password)
+function login(string $userinput, string $password, string $user_ip)
 {
     global $_E;
 
@@ -132,6 +132,14 @@ function login(string $userinput, string $password)
             return $resultdata;
         }
         $email = $res['email'];
+    }
+
+    $ip = \DB::fetchEx("SELECT `allow_ip` FROM `$acctable` WHERE `email`=?", $email);
+    if (ip2long($user_ip)!=ip2long($ip['allow_ip']) && $ip['allow_ip']!='%' && $_E['iplock']) {
+        
+        $resultdata[1] = 'this ip is not allowed to login';
+        
+        return $resultdata;
     }
 
     if (!CheckPasswordFormat($password)) {
