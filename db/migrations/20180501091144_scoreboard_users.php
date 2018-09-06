@@ -28,6 +28,7 @@ class ScoreboardUsers extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('scoreboard_users') ) return ;
         $table = $this->table('scoreboard_users',['id' => false]);
         $table  ->addColumn('sb_id','integer')
                 ->addColumn('uid','integer')

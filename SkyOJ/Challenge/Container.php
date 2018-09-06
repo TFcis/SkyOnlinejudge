@@ -78,7 +78,7 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
             $runtime += $row->runtime;
             @$this->memory = $this->memory + $row->memory;
             $result= max($result, $row->result_code);
-            if( $row->result_code == 30 )
+            if( $row->result_code == 20 )
                 $ac++;
         }
         @$this->score = (int)($ac/$all*100);

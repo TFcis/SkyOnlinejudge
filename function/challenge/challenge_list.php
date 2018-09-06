@@ -18,9 +18,12 @@ function listHandle()
         $page = '1';
 
     $pl = new PageList('challenge');
+    $allpage = $pl->all();
 
-    $data = $pl->GetPageDataByPage($page,'cid','*','DESC');
-    $data = \SkyOJ\Challenge\Container::loadRange( ($page-1)*PageList::ROW_PER_PAGE , $page*PageList::ROW_PER_PAGE-1 );
+    $relpage = $allpage - $page + 1;
+
+    //$data = $pl->GetPageDataByPage($page,'cid','*','DESC');
+    $data = \SkyOJ\Challenge\Container::loadRange( ($relpage-1)*PageList::ROW_PER_PAGE , $relpage*PageList::ROW_PER_PAGE-1 );
 
     //LOG::msg(Level::Debug, '', $data);
     $_E['template']['challenge_list_pagelist'] = $pl;

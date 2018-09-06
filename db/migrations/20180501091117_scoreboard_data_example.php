@@ -28,6 +28,7 @@ class ScoreboardDataExample extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('scoreboard_data_example') ) return ;
         $table = $this->table('scoreboard_data_example',['id' => false]);
         $table  ->addColumn('sb_id','integer')
                 ->addColumn('uid','integer')

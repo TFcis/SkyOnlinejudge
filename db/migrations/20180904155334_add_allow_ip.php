@@ -3,7 +3,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class Syslog extends AbstractMigration
+class AddAllowIp extends AbstractMigration
 {
     /**
      * Change Method.
@@ -28,11 +28,8 @@ class Syslog extends AbstractMigration
      */
     public function change()
     {
-        if( $this->hasTable('syslog') ) return ;
-        $table = $this->table('syslog');
-        $table  ->addColumn('timestamp','timestamp',['default'=>'CURRENT_TIMESTAMP'])
-                ->addColumn('level','string',['null'=>true,'limit'=>64,'encoding'=>'utf8','collation'=>'utf8_bin'])
-                ->addColumn('message','text',['null'=>true,'encoding'=>'utf8','collation'=>'utf8_bin'])
-                ->create();
+        $table = $this->table('account',['id' => 'uid']);
+        $table  ->addColumn('allow_ip','text')
+                ->save();
     }
 }

@@ -5,10 +5,12 @@ if (!$isCLI) {
 }
 
 $base = __DIR__.'/../';
-echo "RUN ROOT AT $base",PHP_EOL;
+chdir($base);
+echo "RUN ROOT AT ",getcwd(),PHP_EOL;
 
-require_once $base.'vendor/autoload.php';
-require $base.'config/config.php';
+require_once 'vendor/autoload.php';
+require 'config/config.php';
+require 'GlobalSetting.php';
 use \SkyOJ\Core\Database\DB as DB;
 
 class NewProblemUpdate{
@@ -49,7 +51,53 @@ class NewProblemUpdate{
 
         echo "SET Submit(any>0) TO Open",PHP_EOL;
         DB::queryEx("UPDATE `{$t}` SET `submit_access`=? WHERE `submit_access`>0",SkyOJ\Problem\ProblemSubmitLevel::Open);
+
+
+        echo PHP_EOL,"===CHANGE PROBLEM CONTENT LEVEL!===",PHP_EOL,PHP_EOL;
+
+        echo "SET HIDDEN(0) TO Hidden",PHP_EOL;
+        DB::queryEx("UPDATE `{$t}` SET `content_type`=? WHERE `content_type` = 0", \SkyOJ\Problem\ContentTypenEnum::MarkdownContent);
     }
+
+	function moveProblemData()
+	{
+        global $_E;
+
+		$t = DB::tname('problem');
+        $pids = DB::fetchAllEx("SELECT `pid` FROM {$t} WHERE 1");
+        \SkyOJ\File\Path::initialize($_E['DATADIR']);
+        
+        echo PHP_EOL,"===UPDATE PROBLEM FORMAT!===",PHP_EOL,PHP_EOL;
+
+        foreach($pids as $row)
+        {
+            $pid = $row['pid'];
+            try {
+                $row = @file_get_contents("./data/problem/$pid/http/row.txt");
+                $json = @file_get_contents("./data/problem/$pid/$pid.json");
+                
+                #Create new problem dir
+                $manger = new \SkyOJ\File\ProblemDataManager($pid, true);
+ 
+                $problem = new \SkyOJ\Problem\Container;
+                if( !$problem->load($pid) )
+                    throw new Exception("Can not oprn problem $pid");
+
+                $problem->setContent($row, (int)\SkyOJ\Problem\ContentTypenEnum::MarkdownContent);
+                $problem->setJudgeJson($json);
+
+                //try fix setting
+                if( $setting = json_decode($json, true) )
+                {
+                    $problem->memory_limit  = (int)$setting['memlimit']??1024*1024;
+                    $problem->runtime_limit = $setting['timelimit']??1000;
+                }
+                $problem->save();
+            } catch(Exception $e) {
+                echo "Error at problem ",$pid,":",$e->getMessage(),PHP_EOL;
+            }
+        }
+	}
 
     function run()
     {
@@ -58,8 +106,11 @@ class NewProblemUpdate{
         $this->connect();
         $this->fixUserLevel();
         $this->fixProblem();
+		$this->moveProblemData();
     }
 }
 
 $app = new NewProblemUpdate();
 $app->run();
+
+echo "DONE. Please check your SKYOJ System",PHP_EOL;

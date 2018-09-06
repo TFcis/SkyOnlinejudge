@@ -50,12 +50,13 @@ function syncTestdata(){
                                     <label for="testdata-zip">Testdata Zip </label>
                                     <input type="file" class="form-control-file" id="testdata-zip" name="file" accept=".zip">
                                 </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Submit</button> (大小限制 : <?=\SKYOJ\human_filesize($tmpl['upload_size_limits'])?>)
                                 <span id="zip-dbg"></span>             
                             </form>
                             <hr>
-                            <button type="submit" class="btn btn-danger" onclick="rmTestdata()">Remove All Tests</button>
                             <button type="submit" class="btn btn-info" onclick="syncTestdata()">Sync To Judge</button>
+                            <button type="submit" class="btn btn-danger" onclick="rmTestdata()">Remove All Tests</button>
+                            
                             <span id="misc-dbg"></span>
                         </div>
                     </div>

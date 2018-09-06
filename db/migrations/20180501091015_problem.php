@@ -28,7 +28,8 @@ class Problem extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('problem',['id' => 'pid']);
+        if( $this->hasTable('account') ) return ;
+        $table = $this->table('problem', ['id' => 'pid']);
         $table  ->addColumn('owner','integer')
                 ->addColumn('content_access','integer')
                 ->addColumn('submit_access','integer')

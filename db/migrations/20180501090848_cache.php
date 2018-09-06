@@ -28,6 +28,7 @@ class Cache extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('cache') ) return ;
         $table = $this->table('cache',['id'=>false,'primary_key'=>'name']);
         $table  ->addColumn('name','string',['limit'=>64,'encoding'=>'utf8','collation'=>'utf8_bin'])
                 ->addColumn('timeout','integer')

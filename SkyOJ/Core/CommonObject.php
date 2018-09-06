@@ -131,8 +131,8 @@ abstract class CommonObject
             DB::$pdo->beginTransaction();
 
             foreach( $data as $d )
-                if( \DB::queryEx("UPDATE `{$table}` SET `{$d[0]}`= ? WHERE `{$prime_key}`=?",$d[1],$this->$prime_key) === false )
-                    throw \DB::$last_exception;
+                if( DB::queryEx("UPDATE `{$table}` SET `{$d[0]}`= ? WHERE `{$prime_key}`=?",$d[1],$this->$prime_key) === false )
+                    throw DB::$last_exception;
             DB::$pdo->commit();
             return true;
         }catch(\Exception $e){

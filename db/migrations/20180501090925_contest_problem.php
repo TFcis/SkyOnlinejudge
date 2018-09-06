@@ -28,6 +28,7 @@ class ContestProblem extends AbstractMigration
      */
     public function change()
     {
+        if( $this->hasTable('contest_problem') ) return ;
         $table = $this->table('contest_problem',['id'=>false]);
         $table  ->addColumn('cont_id','integer')
                 ->addColumn('pid','integer')
