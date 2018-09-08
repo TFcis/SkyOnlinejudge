@@ -2,7 +2,7 @@
 
 class OJCaptureProfileEnum extends \SkyOJ\Helper\SqlEnum
 {
-    protected static $table = 'OJCapture_profile';
+    protected static $table = 'ojcapture_profile';
     const None = 0;
 
     public static function create(string $profile_name, int $ojcapture, string $profile = '')
