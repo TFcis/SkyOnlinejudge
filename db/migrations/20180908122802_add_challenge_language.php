@@ -3,7 +3,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class AddAllowIp extends AbstractMigration
+class AddChallengeLanguage extends AbstractMigration
 {
     /**
      * Change Method.
@@ -28,8 +28,8 @@ class AddAllowIp extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('account',['id' => 'uid']);
-        if( !$table->hasColumn('allow_ip') )$table  ->addColumn('allow_ip','text');
+        $table = $this->table('challenge',['id' => 'cid']);
+        if( !$table->hasColumn('language') ) $table->addColumn('language','string',['limit'=>25,'encoding'=>'utf8','collation'=>'utf8_bin']);
         $table->save();
     }
 }
