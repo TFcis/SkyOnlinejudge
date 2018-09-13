@@ -4,28 +4,7 @@ if (!defined('IN_TEMPLATE')) {
 }
 ?>
 <script src="<?=$_E['SITEROOT']?>js/third/bignumber.min.js"></script>
-<script src="<?=$_E['SITEROOT']?>js/third/crypto-js/rollups/aes.js"></script>
-<script src="<?=$_E['SITEROOT']?>js/third/crypto-js/rollups/md5.js"></script>
-<script src="<?=$_E['SITEROOT']?>js/third/crypto-js/components/pad-zeropadding.js"></script>
 <script>
-GA = new BigNumber('<?=$tmpl['dh_ga']?>');
-PublicPrime = new BigNumber('<?=$tmpl['dh_prime']?>');
-PublicG = new BigNumber('<?=$tmpl['dh_g']?>');
-
-function PowMod(a,e,m)
-{
-    //a!=0 always
-    res = new BigNumber(1);
-    while( !e.eq(0) )
-    {
-        if( e.mod(2).eq(1) )
-            res = res.mul(a).mod(m);
-        a = a.mul(a).mod(m);
-        e = e.div(2).floor();
-    }
-    return res;
-}
-
 $(document).ready(function()
 {
     $("#loginform").submit(function(e)
