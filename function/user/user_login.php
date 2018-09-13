@@ -33,12 +33,7 @@ function loginHandle()
         }
     }else{
         \userControl::RegisterToken('LOGIN', 600);
-        $exkey = new \SKYOJ\DiffieHellman();
-        $_SESSION['dhkey'] = serialize($exkey);
         $_SESSION['iv'] = \SKYOJ\GenerateRandomString(16, SET_HEX);
-        $_E['template']['dh_ga'] = $exkey->getGA();
-        $_E['template']['dh_prime'] = $exkey->getPrime();
-        $_E['template']['dh_g'] = $exkey->getG();
         $_E['template']['iv'] = $_SESSION['iv'];
 
         \Render::setbodyclass('loginbody');
