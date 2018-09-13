@@ -79,7 +79,7 @@ function CheckUidFormat($uid):bool
 //     : False
 //        des = Error Information
 //TODO : Use Common Error Id To Replace Const-Strings
-function register(string $email, string $nickname, string $password, string $repeat)
+function register(string $email, string $nickname, string $password, string $repeat, string $allow_ip='%')
 {
     $acctable = \DB::tname('account');
     $resultdata = [false, ''];
@@ -96,7 +96,7 @@ function register(string $email, string $nickname, string $password, string $rep
     $password = GetPasswordHash($password);
     if (!\DB::queryEx("INSERT INTO `$acctable` ".
                     '(`uid`, `email`, `passhash`, `nickname`, `timestamp`, `level`, `allow_ip`) '.
-                    'VALUES (NULL,?,?,?,CURRENT_TIMESTAMP,?)', $email, $password, $nickname, 6, '%')) {
+                    'VALUES (NULL,?,?,?,CURRENT_TIMESTAMP,?,?)', $email, $password, $nickname, 6, $allow_ip)) {
         $resultdata[1] = '帳號已被註冊';
 
         return $resultdata;
