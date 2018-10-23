@@ -17,12 +17,14 @@ class ContestUserRegisterStateEnum extends BasicEnum
     const NotAllow  = 0; //< Only admin allow add user to contest
     const Open      = 1; //< All user without guest can join contest within time limit
     const PermitRequired = 2; //< require admin check
+    const Password = 3; //< set the contest password
 
     static function allow(int $Case):bool
     {
         switch($Case)
         {
             case self::Open:
+            case self::Password:
             case self::PermitRequired:
                 return true;
             default:
@@ -267,6 +269,12 @@ class Contest extends CommonObject
             throw new CommonObjectError("register type",SKY_ERROR::NO_SUCH_ENUM_VALUE);
 
         $this->UpdateSQLLazy('register_type',$reg_type);
+        return true;
+    }
+
+    public function set_register_password(string $regpass):bool
+    {
+        $this->UpdateSQLLazy('register_password',$regpass);
         return true;
     }
 

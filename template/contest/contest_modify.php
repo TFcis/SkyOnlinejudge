@@ -48,7 +48,7 @@ $(document).ready(function(){
                             ,'key-pair'=> \SKYOJ\ContestUserRegisterStateEnum::getConstants()
                             ,'default' =>(int)$tmpl['contest']->register_type
                             ,'option'  => ['help_text' => '註冊模式']]),
-							
+                        new HTML_INPUT_TEXT(['name'=>'registerpassword','value'=>$tmpl['contest']->register_password,'option' => ['help_text' => '註冊密碼（少於100個字元）']]),
 						new HTML_INPUT_TEXT(['name'=>'registerbegin','value'=>$tmpl['contest']->register_beginsec,'option' => ['help_text' => '註冊開放於競賽開始前(sec)']]),
                         new HTML_INPUT_TEXT(['name'=>'registerdelay','value'=>$tmpl['contest']->register_delaysec,'option' => ['help_text' => '註冊開放於競賽開始後(sec)']]),
                         new HTML_INPUT_TEXT(['name'=>'freezesec','value'=>$tmpl['contest']->freeze_sec,'option' => ['help_text' => '凍結於競賽結束前(sec)']]),

@@ -17,6 +17,7 @@ function contest_api_modifyHandle()
         $endtime  = \SKYOJ\safe_post('end');
 
         $registertype  = \SKYOJ\safe_post_int('registertype');
+        $registerpassword  = \SKYOJ\safe_post('registerpassword');
         $registerbegin = \SKYOJ\safe_post_int('registerbegin');
         $registerdelay = \SKYOJ\safe_post_int('registerdelay');
 
@@ -42,6 +43,7 @@ function contest_api_modifyHandle()
         $contest->starttime = $starttime;
         $contest->endtime = $endtime;
 
+        $contest->register_password = $registerpassword;
         $contest->register_beginsec = $registerbegin;
         $contest->register_delaysec = $registerdelay;
 

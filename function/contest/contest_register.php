@@ -8,6 +8,7 @@ function RegisterHandle()
 {
     global $_G,$_E,$SkyOJ;
     $param = $SkyOJ->UriParam(2)??null;
+    $pass = \SKYOJ\safe_post('password');
     try{
         if( $param===null )
             throw new \Exception('????');
@@ -25,6 +26,19 @@ function RegisterHandle()
         $state_code = \SKYOJ\ContestTeamStateEnum::Pending;
         if( $contest->register_type ==  \SKYOJ\ContestUserRegisterStateEnum::Open )
             $state_code = \SKYOJ\ContestTeamStateEnum::Accept;
+        else if( $contest->register_type ==  \SKYOJ\ContestUserRegisterStateEnum::Password )
+        {
+            if( $pass === $contest->register_password )
+            {
+                $state_code = \SKYOJ\ContestTeamStateEnum::Accept;
+            }
+            else
+            {
+                $state_code = \SKYOJ\ContestTeamStateEnum::NoRegister;
+                \Log::msg(\Level::Notice,"Register Error : not correct password! User:{$_G['uid']},WrongPassword:$pass");
+                throw new \Exception('Please enter correct password!!!');
+            }
+        }
 
         $table = \DB::tname('contest_user');
 

@@ -18,6 +18,11 @@ function viewHandle()
             //TODO reheader to register page
             if( \SKYOJ\ContestUserRegisterStateEnum::allow($contest->register_type) )
             {
+                $_E['template']['needpassword'] = false;
+                if( $contest->register_type ==  \SKYOJ\ContestUserRegisterStateEnum::Password )
+                {
+                    $_E['template']['needpassword'] = true;
+                }
                 \Render::render('contest_reg', 'contest');
                 exit(0);
             }
