@@ -387,6 +387,14 @@ class HypeX extends Judge
                 $tmp->memory    = $row->peakmem;
                 $tmp->result_code = $this->hypexResultToSkyOJ($row->state);
                 $tmp->message   = $row->verdict[0];//judge message
+                if(ResultCode::AC==$tmp->result_code)
+                {
+                    $tmp->score = 1.0;
+                }
+                else
+                {
+                    $tmp->score = 0.0;
+                }
                 $res->tasks   []= $tmp;
             }
         }
