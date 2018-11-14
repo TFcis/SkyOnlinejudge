@@ -1,6 +1,7 @@
 <?php namespace SkyOJ\Challenge;
 
 use \SkyOJ\Core\User\User;
+use \SkyOJ\Core\Permission\ObjectLevel;
 
 class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permission\Permissible
 {
@@ -50,6 +51,11 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
     {
         //TODO
         return true;
+    }
+
+    public function codereadable(User $user):bool
+    {
+        return $user->testStisfyPermission($this->uid, ObjectLevel::atLeastAdmin());
     }
 
     public function writeable(User $user):bool

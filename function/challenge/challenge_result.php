@@ -21,7 +21,7 @@ function resultHandle()
             throw new \Exception('不具有檢視權限，無法觀看');
         }
         
-        $_E['template']['allowCodeview'] = true;
+        $_E['template']['allowCodeview'] = $chal->codereadable($SkyOJ->User);
         $_E['template']['chal'] = $chal;
 
         \Render::render('challenge_result', 'challenge');
