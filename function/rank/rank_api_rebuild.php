@@ -34,8 +34,7 @@ function rank_api_rebuildHandle()
                 throw new \Exception('Access denied');
             }
         }
-
-        if( $sb->rebuildUserable($SkyOJ->User,$user) )
+        else if( $sb->rebuildUserable($SkyOJ->User,$user) )
         {
             $sb->rebuild([$user]);
             \SKYOJ\throwjson('SUCC','yes');

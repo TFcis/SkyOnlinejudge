@@ -312,12 +312,6 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
         $data = [];
         $users_pool = [];
 
-        if(($uids==null || $pros==null) && !$this->rebuildAllable($SkyOJ->User))
-        {
-            $uids = [];
-            $pros = [];
-        }
-
         if($uids==null)
         {
             $users_pool = $users;
