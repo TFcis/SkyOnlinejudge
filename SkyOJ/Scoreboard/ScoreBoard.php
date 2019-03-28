@@ -179,7 +179,7 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
             return $res;
         }
         $users = $this->GetUsers();
-        $this->make_inline();
+        //$this->make_inline();
         $sb = $this->getScoreBoard();
         $total_score = [];
         foreach($sb as $uid => $pids)
