@@ -179,7 +179,7 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
             return $res;
         }
         $users = $this->GetUsers();
-        $this->make_inline();
+        //$this->make_inline();
         $sb = $this->getScoreBoard();
         $total_score = [];
         foreach($sb as $uid => $pids)
@@ -306,59 +306,79 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
 
     public function rebuild($uids=null, $pros=null)
     {
-        global $SkyOJ;
-        $users = $this->GetUsers();
-        $problems = $this->GetProblems();
-        $data = [];
-        $users_pool = [];
-
-        if(($uids==null || $pros==null) && !$this->rebuildAllable($SkyOJ->User))
+        global $SkyOJ,$_E;
+        try
         {
-            $uids = [];
-            $pros = [];
-        }
-
-        if($uids==null)
-        {
-            $users_pool = $users;
-        }
-        else
-        {
-            foreach($users as $user)
+            set_time_limit(0);
+            ignore_user_abort(true);
+            $lockfile = fopen($_E['DATADIR']."cache/Scoreboard_$this->sb_id"."_working","w");
+            $waittime = 0;
+            while( !flock($lockfile,LOCK_EX) )
             {
-                if(in_array($user,$uids) && $this->rebuildUserable($SkyOJ->User,$user))
-                    $users_pool[] = $user;
-            }
-        }
-        
-        $problems_pool = [];
-        foreach( $problems as $prob )
-        {
-            $pname = $prob['problem'];
-            if($pros!==null)
-            {
-                if(!in_array($pname,$pros))
+                if($waittime>300)
                 {
-                    continue;
+                    throw new \Exception('WORKING, try later');
+                }
+                $wait = rand(1,10);
+                sleep($wait);
+                $waittime += $wait;
+            }
+
+            $users = $this->GetUsers();
+            $problems = $this->GetProblems();
+            $data = [];
+            $users_pool = [];
+
+            if($uids==null)
+            {
+                $users_pool = $users;
+            }
+            else
+            {
+                foreach($users as $user)
+                {
+                    if(in_array($user,$uids) && $this->rebuildUserable($SkyOJ->User,$user))
+                        $users_pool[] = $user;
                 }
             }
-
-            if( array_key_exists($pname,$this->prob_match) )
+            
+            $problems_pool = [];
+            foreach( $problems as $prob )
             {
-                $class = $this->prob_match[$pname];
-                if( !isset($problems_pool[$class]) )
-                    $problems_pool[$class] = [];
-                $problems_pool[$this->prob_match[$pname]][] = $pname;
-            }
-        }
-        //echo json_encode($users_pool)."\n";
-        //echo json_encode($problems_pool)."\n";
+                $pname = $prob['problem'];
+                if($pros!==null)
+                {
+                    if(!in_array($pname,$pros))
+                    {
+                        continue;
+                    }
+                }
 
-        foreach( $problems_pool as $class => $probs )
-        {
-            self::$plugins[$class]->rebuild($users_pool,$probs);
+                if( array_key_exists($pname,$this->prob_match) )
+                {
+                    $class = $this->prob_match[$pname];
+                    if( !isset($problems_pool[$class]) )
+                        $problems_pool[$class] = [];
+                    $problems_pool[$this->prob_match[$pname]][] = $pname;
+                }
+            }
+            //echo json_encode($users_pool)."\n";
+            //echo json_encode($problems_pool)."\n";
+
+            foreach( $problems_pool as $class => $probs )
+            {
+                self::$plugins[$class]->rebuild($users_pool,$probs);
+            }
+            $this->make_inline();
+
+            fclose($lockfile);
         }
-        $this->make_inline();
+        catch(\Exception $e)
+        {
+            return [false,$e->getMessage()];
+        }
+        
+        return [true,""];
     }
 
     public function rebuildUserable(User $user, $uid):bool
