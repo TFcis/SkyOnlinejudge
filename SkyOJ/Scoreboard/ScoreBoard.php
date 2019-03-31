@@ -311,7 +311,7 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
         {
             set_time_limit(0);
             ignore_user_abort(true);
-            $lockfile = fopen($_E['DATADIR']."cache/Scoreboard_$this->sb_id"."_working","w");
+            $lockfile = fopen($_E['DATADIR']."cache/Scoreboard_working","w");
             $waittime = 0;
             while( !flock($lockfile,LOCK_EX) )
             {
