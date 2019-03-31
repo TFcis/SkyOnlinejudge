@@ -8,9 +8,6 @@ function rank_api_rebuildHandle()
     global $SkyOJ,$_E,$_G;
 
     try{
-        set_time_limit(0);
-        ignore_user_abort(true);
-        
         $sb_id = $SkyOJ->UriParam(3);
 
         $user = $SkyOJ->UriParam(4);
@@ -29,24 +26,19 @@ function rank_api_rebuildHandle()
         {
             if($sb->rebuildAllable($SkyOJ->User))
             {
-                $res = $sb->rebuild();
-                if($res[0])
-                    \SKYOJ\throwjson('SUCC','yes');
-                else
-                    throw new \Exception($res[1]);
+                $sb->rebuild();
+                \SKYOJ\throwjson('SUCC','yes');
             }
             else
             {
                 throw new \Exception('Access denied');
             }
         }
-        else if( $sb->rebuildUserable($SkyOJ->User,$user) )
+
+        if( $sb->rebuildUserable($SkyOJ->User,$user) )
         {
-            $res = $sb->rebuild();
-            if($res[0])
-                \SKYOJ\throwjson('SUCC','yes');
-            else
-                throw new \Exception($res[1]);
+            $sb->rebuild([$user]);
+            \SKYOJ\throwjson('SUCC','yes');
         }
         throw new \Exception('Access denied');
     }catch(\Exception $e){
