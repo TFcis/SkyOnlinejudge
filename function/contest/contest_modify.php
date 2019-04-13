@@ -13,7 +13,6 @@ function modifyHandle()
 
         if( $contest->isIdfail() || !\userControl::getpermission($contest->owner) )
             throw new \Exception('Access denied');
-        $_E['template']['pstate_keypair'] = \SKYOJ\ContestProblemStateEnum::getConstants();
         $_E['template']['contest'] = $contest;
         \Render::render('contest_modify','contest');
     }catch(\Exception $e){

@@ -5,12 +5,11 @@ if (!defined('IN_TEMPLATE')) {
 ?>
 <script>
 	var old = 'dashboard';
-    if(location.hash!='#')old = location.hash.substr(1);
     var cont_sub_url = "<?=$SkyOJ->uri('contest','view',$tmpl['contest']->cont_id(),'subpage')?>/";
 	$(document).ready(function(){
 	    $( "[navpage]" ).click(function(){loadTemplate($(this).attr('navpage'));});
         $("[navpage='"+old+"']").addClass('active');
-        loadTemplate(old);
+        //loadTemplate(old);
 	});
 
 	function loadTemplate(template){
@@ -64,11 +63,11 @@ if (!defined('IN_TEMPLATE')) {
             <hr>
             <ul class="nav nav-pills nav-stacked">
                 <?php foreach($tmpl['contest']->get_user_problems_info($_G['uid']) as $prob):?>
-                    <li role="presentation" navpage='prob_<?=\SKYOJ\html($prob->ptag)?>'><a href="#prob_<?=\SKYOJ\html($prob->ptag)?>"><?=\SKYOJ\html($prob->ptag.', '.\SKYOJ\Problem::get_title($prob->pid))?></a></li>
+                    <li role="presentation" navpage='prob_<?=\SKYOJ\html($prob->ptag)?>'><a href="#"><?=\SKYOJ\html($prob->ptag.', '.\SKYOJ\Problem::get_title($prob->pid))?></a></li>
                 <?php endforeach;?>
-                <li role="presentation" navpage='submit'><a href="#submit">上傳</a></li>
-                <li role="presentation" navpage='log'><a href="#log">上傳紀錄</a></li>
-                <li role="presentation" navpage='scoreboard'><a href="#scoreboard">記分板</a></li>
+                <li role="presentation" navpage='submit'><a href="#">上傳</a></li>
+                <li role="presentation" navpage='log'><a href="#">上傳紀錄</a></li>
+                <li role="presentation" navpage='scoreboard'><a href="#">記分板</a></li>
             </ul>
         </div>
         <div class="col-sm-10 col-md-10" id="main-page"></div>
