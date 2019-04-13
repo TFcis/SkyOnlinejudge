@@ -18,14 +18,14 @@ function challenge_api_waitjudgeHandle()
         
         while( $Times-- )
         {
-            $res = \DB::fetchEx("SELECT `result` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
+            $res = \DB::fetchEx("SELECT `result`,`score` FROM `{$tchallenge}` WHERE `cid` = ?",$cid);
             if( $res === false )
             {
                 throw new \Exception('SQL Error');
             }
             if( $res['result'] >= \SKYOJ\RESULTCODE::AC ) //AC
             {
-                \SKYOJ\throwjson('SUCC',["wait"=>false,'verdict'=>\SKYOJ\getresulttexthtml($res['result'])]);
+                \SKYOJ\throwjson('SUCC',["wait"=>false,'verdict'=>\SKYOJ\getresulttexthtml($res['result']),'score'=>$res['score']]);
             }
             sleep($Wait);
         }

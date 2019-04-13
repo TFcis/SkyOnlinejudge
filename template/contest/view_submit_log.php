@@ -7,7 +7,8 @@ if (!defined('IN_TEMPLATE')) {
 <?php foreach ($tmpl['challenge_info'] as $data): ?>
     <?php if( $data['result'] < \SKYOJ\RESULTCODE::AC ):?>
         updateJudgeVerdict("<?=$SkyOJ->uri('chal','api','waitjudge')?>",<?=$data['cid']?>,function(cid,res){
-            $("#cid-"+cid).html(res.data.verdict);
+            $("#cid-"+cid+"-verdict").html(res.data.verdict);
+            $("#cid-"+cid+"-score").html(res.data.score);
             $("#update_info").show();
         });
     <?php endif?>
@@ -42,9 +43,9 @@ if (!defined('IN_TEMPLATE')) {
                             <span class="hidden-xs"><?=\SKYOJ\html(\SKYOJ\Problem::get_title($row['pid']))?></span>
                             <span class="visible-xs-inline"><?=$row['pid']?></span>
                         </a></td>
-                        <td><span id="cid-<?=$row['cid']?>"><?=\SKYOJ\getresulttexthtml($row['result'])?></span></td>
+                        <td><span id="cid-<?=$row['cid']?>-verdict"><?=\SKYOJ\getresulttexthtml($row['result'])?></span></td>
                         <td class="hidden-xs"><?=$row['runtime']?></td>
-                        <td><?=$row['score']?></td>
+                        <td><span id="cid-<?=$row['cid']?>-score"><?=$row['score']?></span></td>
                         
                         <td><?=(int)floor((strtotime($row['timestamp'])-strtotime($tmpl['contest']->starttime))/60)?></td>
                         <td><?=$row['timestamp']?></td>
