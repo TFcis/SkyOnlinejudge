@@ -17,6 +17,7 @@ function update_problem_string()
     problem_str = "";
     problem_str = $("#problem_editor div.row").map(function()
     {
+        $(this).find("input[name='state']").val($(this).find("select[name='state']").val());
         return $(this).find("input").map(function(){return $(this).val()}).get().join(":");
     }).get().join(",");
     $("#prostr").val(problem_str);
@@ -45,8 +46,9 @@ function problem_editor_add(tag="",pid="",state="",priority="")
     </div>\
     <div class="form-group col-md-2">\
         <div class="input-group">\
+            <input type="hidden" class="form-control" name="state" value="${state}" placeholder="Problem ID">\
             <span class="input-group-addon">State</span>\
-            <select class="form-control">\
+            <select class="form-control" name="state">\
             <?php foreach($tmpl['pstate_keypair'] as $key => $val):?>
                 <option value="<?=$val?>" ${selected[<?=$val?>]}><?=$key?></option>
             <?php endforeach;?>
