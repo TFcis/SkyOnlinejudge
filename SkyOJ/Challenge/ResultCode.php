@@ -14,4 +14,5 @@ class ResultCode extends \SkyOJ\Helper\Enum
     const RF        = 65;
     const CE        = 70;
     const JE        = 80;
+    const SCOREE    = 85;
 }

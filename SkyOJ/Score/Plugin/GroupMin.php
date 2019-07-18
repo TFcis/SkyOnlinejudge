@@ -36,6 +36,10 @@ class GroupMin extends \SkyOJ\Score\ScoreMode
         $scoretype = json_decode($scoretype);
         $scoregroup = [];
         $id = 0;
+
+        if( $scoretype === null )
+            throw new \Exception("Json Error!");
+
         foreach($scoretype as $row)
         {
             $g = [];
