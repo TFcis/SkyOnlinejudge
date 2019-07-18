@@ -12,6 +12,7 @@ use \SkyOJ\Core\User\User;
 use \SkyOJ\Core\Permission\ObjectLevel;
 use \SkyOJ\File\ProblemDataManager;
 use \SkyOJ\Judge\JudgeProfileEnum;
+use \SkyOJ\Score;
 
 class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permission\Permissible
 {
@@ -210,6 +211,20 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
 
     public function checkSet_admmsg($val):bool
     {
+        return true;
+    }
+
+    public function checkSet_score_type($val):bool
+    {
+        if( !\SkyOJ\Score\ScoreModeEnum::isValidValue($val) )
+            throw new ContainerModifyException('no such Score type');
+        return true;
+    }
+
+    public function checkSet_score_data($val):bool
+    {
+        if( strlen($val) >= 1000 )
+            throw new ContainerModifyException('score data size should less than 1000');
         return true;
     }
 }
