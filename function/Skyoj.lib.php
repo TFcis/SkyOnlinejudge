@@ -437,6 +437,7 @@ class RESULTCODE extends BasicEnum
     const RF = 65;
     const CE = 70;
     const JE = 80;
+    const SCOREE = 85;
 }
 
 function getresulttext($resultid)
@@ -455,6 +456,7 @@ function getresulttext($resultid)
         case RESULTCODE::RF:        $res = 'RF'; break;
         case RESULTCODE::CE:        $res = 'CE'; break;
         case RESULTCODE::JE:        $res = 'JE'; break;
+        case RESULTCODE::SCOREE:    $res = 'SE'; break;
     }
     return $res;
 }
@@ -473,6 +475,7 @@ function getresultcolor($resultid)
         case RESULTCODE::MLE:       $res = '#e83015'; break;
         case RESULTCODE::CE:        $res = '#ffeb00'; break;
         //case RESULTCODE::JE:        $res = '#000'; break;
+        case RESULTCODE::SCOREE:    $res = '#0C0'; break;
     }
     return $res;
 }
@@ -490,6 +493,7 @@ function getresulttexthtml($resultid,bool $simple = false)
         case RESULTCODE::MLE:       $res = 'Memory Limit Exceed'; break;
         case RESULTCODE::CE:        $res = 'Compile Error'; break;
         case RESULTCODE::JE:        $res = 'Judge Error'; break;
+        case RESULTCODE::SCOREE:    $res = 'Score Error'; break;
         default:                    $res = $mini; break;
     }
     if( $simple )

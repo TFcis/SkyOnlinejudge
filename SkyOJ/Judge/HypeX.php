@@ -33,11 +33,65 @@ class HypeX_wspost
 class HypeX_FileMethodEnum extends \SkyOJ\Helper\Enum
 {
     const SFTP = 0;
+    const LOCAL_COPY = 1;
 }
 
 interface RemoteFileAction
 {
     public function isConnected():bool;
+}
+
+class LocalStorge implements RemoteFileAction
+{
+    private $base_dir;
+    private $logined;
+    public function __construct($base_dir)
+    {
+        $this->logined = false;
+        $this->base_dir = $base_dir . "/";
+
+        if( is_writable($base_dir."/HypeX") )
+        {
+            $this->logined = true;
+        }
+    }
+
+    public function isConnected():bool
+    {
+        return $this->logined;
+    }
+
+    public function mkdir(string $dir):bool
+    {
+        $dir = $this->base_dir . $dir;
+        if( file_exists($dir) && is_dir($dir) )
+            return true;
+        return mkdir($dir, 0644, true);
+    }
+
+    public function putLocalFile(string $remote, string $local):bool
+    {
+        $remote = $this->base_dir . $remote;
+
+        if( !is_file($local) )
+        {
+            return false;
+        }
+        
+        return copy($local, $remote);
+    }
+
+    public function putStringFile(string $remote, string $string):bool
+    {
+        $remote = $this->base_dir . $remote;
+
+        if( strlen($string) == 0 )
+        {
+            $string = ' ';
+        }
+        
+        return file_put_contents($remote, $string) !== false;
+    }
 }
 
 class SSH implements RemoteFileAction
@@ -178,8 +232,13 @@ class HypeX extends Judge
                 $this->m_storage = new SSH($this->m_ssh_host, $this->m_ssh_port, $this->m_ssh_acct, $this->m_ssh_pass, $this->m_ssh_dir);
                 break;
             }
+            case HypeX_FileMethodEnum::LOCAL_COPY:
+            {
+                $this->m_storage = new LocalStorge($this->m_ssh_dir);
+                break;
+            }
             default:
-            $this->m_storage = null;
+                $this->m_storage = null;
         }
         if( !isset($this->m_storage) || !$this->m_storage->isConnected() )
             throw new JudgeException('Can not connect remote server');
@@ -247,6 +306,14 @@ class HypeX extends Judge
                     if( !$sftp->put($ssh_dir.'/HypeX'," ") ) throw new \Exception('SFTP 權限不足(put)');
                     $sftp->mkdir($ssh_dir.'/'."problem");
                     if( !$sftp->put($ssh_dir.'/problem/HypeX'," ") ) throw new \Exception('SFTP 權限不足(put)');
+                    break;
+                case HypeX_FileMethodEnum::LOCAL_COPY:
+                    @file_put_contents($ssh_dir."/Hypex", " ");
+                    if( !file_exists($ssh_dir."/Hypex") ) throw new \Exception('檔案無法寫入 '.$ssh_dir."/Hypex");
+                    @mkdir($ssh_dir."/problem", 0644);
+
+                    @file_put_contents($ssh_dir."/problem/Hypex", " ");
+                    if( !file_exists($ssh_dir."/problem/Hypex") ) throw new \Exception('檔案無法寫入 '.$ssh_dir."/problem/Hypex");
                     break;
                 default: throw new \Exception('file_method error');
             }

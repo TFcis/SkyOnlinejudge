@@ -36,7 +36,6 @@ class Account extends AbstractMigration
                 ->addColumn('timestamp','timestamp',['default'=>'CURRENT_TIMESTAMP'])
                 ->addColumn('realname','string',['limit'=>30,'null' => true,'encoding'=>'utf8','collation'=>'utf8_bin'])
                 ->addColumn('level','integer')
-                ->addColumn('allow_ip','text')
                 ->addIndex(['email'],['name'=>'email'])
                 ->addIndex(['nickname'],['name'=>'nickname'])
                 ->create();

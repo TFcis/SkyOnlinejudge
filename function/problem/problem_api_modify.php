@@ -19,6 +19,8 @@ function problem_api_modifyHandle()
         $content_access = \SKYOJ\safe_post('content_access');
         $submit_access  = \SKYOJ\safe_post('submit_access');
         $codeview_access  = \SKYOJ\safe_post('codeview_access');
+        $score_type = \SKYOJ\safe_post('score_type');
+        $score_data = \SKYOJ\safe_post('score_data');
         $judgejson = \SKYOJ\safe_post('json_data');
         //\Log::msg(\Level::Debug,"",$pjson);
     
@@ -39,6 +41,8 @@ function problem_api_modifyHandle()
         $problem->content_access = (int)$content_access;
         $problem->submit_access = (int)$submit_access;
         $problem->codeview_access = (int)$codeview_access;
+        $problem->score_type = (int)$score_type;
+        $problem->score_data = $score_data;
         $problem->setContent($content,(int)$content_type);
         $problem->setJudgeJson($judgejson);
 

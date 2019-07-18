@@ -3,7 +3,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class Problem extends AbstractMigration
+class AddProblemScoreCol extends AbstractMigration
 {
     /**
      * Change Method.
@@ -28,17 +28,9 @@ class Problem extends AbstractMigration
      */
     public function change()
     {
-        if( $this->hasTable('problem') ) return ;
-        $table = $this->table('problem', ['id' => 'pid']);
-        $table  ->addColumn('owner','integer')
-                ->addColumn('content_access','integer')
-                ->addColumn('submit_access','integer')
-                ->addColumn('codeview_access','integer')
-                ->addColumn('title','text',['encoding'=>'utf8','collation'=>'utf8_general_ci'])
-                ->addColumn('content_type','integer')
-                ->addColumn('judge_profile','integer')
-                ->addColumn('memory_limit','integer')
-                ->addColumn('runtime_limit','integer')
-                ->create();
+        $table = $this->table('problem',['id' => 'pid']);
+        $table->addColumn('score_type','integer');
+        $table->addColumn('score_data','string', ['limit' => 1000]);
+        $table->save();
     }
 }

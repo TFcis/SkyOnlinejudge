@@ -77,17 +77,23 @@ class Container extends \SkyOJ\Core\CommonObject implements \SkyOJ\Core\Permissi
     {
         $runtime = 0;
         $result = 0;
-        $ac = 0;
-        $all = count($res->tasks)??1;
+
         foreach($res->tasks as $row)
         {
             $runtime += $row->runtime;
             @$this->memory = $this->memory + $row->memory;
             $result= max($result, $row->result_code);
-            if( $row->result_code == 20 )
-                $ac++;
+
         }
-        @$this->score = (int)($ac/$all*100);
+    
+        $sc = new \SkyOJ\Score\Score;
+        try {
+            @$this->score = (int)$sc->score( \SkyOJ\Score\ScoreModeEnum::str($this->problem()->score_type), $res, $this->problem()->score_data);
+        } catch (\Exception $e) {
+            @$this->score = 0;
+            $result = ResultCode::SCOREE;
+            @$this->comment ="Score Error: ".  $e->getMessage();
+        }
         @$this->runtime = $runtime;
         @$this->package = json_encode($res);
         @$this->result = $result;

@@ -24,6 +24,10 @@ $(document).ready(function(){
         json_data = editor.getValue();
         $("#json_data").val(json_data);
 
+        var editor = ace.edit("_score_data");
+        score_data = editor.getValue();
+        $("#score_data").val(score_data);
+
         api_submit("<?=$SkyOJ->uri('problem','api','modify',$tmpl['problem']->pid)?>","#modify-problem-from","#btn-show",function(e){
             setTimeout(function(){
                 location.reload();
@@ -44,6 +48,7 @@ $(document).ready(function(){
                         new HTML_INPUT_HIDDEN(['name'=>'pid','value'=>$tmpl['problem']->pid]),
                         new HTML_INPUT_HIDDEN(['name'=>'content','id'=>'content','value'=>'']),
                         new HTML_INPUT_HIDDEN(['name'=>'json_data','id'=>'json_data','value'=>'']),
+                        new HTML_INPUT_HIDDEN(['name'=>'score_data','id'=>'score_data','value'=>'']),
                         new HTML_INPUT_TEXT(['name'=>'title','value'=>$tmpl['problem']->title,'required'=>'required','option' => ['help_text' => '題目名稱']]),
                         new HTML_INPUT_SELECT(['name'=>'content_type'
                             ,'key-pair'=> \SkyOJ\Problem\ContentTypenEnum::getConstants()
@@ -79,6 +84,18 @@ $(document).ready(function(){
                         new HTML_HR(),
                         new HTML_INPUT_TEXT(['name'=>'runtime_limit','value'=>$tmpl['problem']->runtime_limit,'required'=>'required','option' => ['help_text' => '測資運行時限']]),
                         new HTML_INPUT_TEXT(['name'=>'memory_limit','value'=>$tmpl['problem']->memory_limit,'required'=>'required','option' => ['help_text' => '記憶體使用限制(Byte)']]),
+                        new HTML_INPUT_SELECT(['name'=>'score_type'
+                            ,'key-pair'=> \SkyOJ\Score\ScoreModeEnum::getConstants()
+                            ,'default' => $tmpl['problem']->score_type
+                            ,'option'  => ['help_text' => '配分系統']]),
+                        new HTML_INPUT_CODEPAD(['option' =>
+                            [
+                                'code'=>$tmpl['problem']->score_data,
+                                'language'=>'json',
+                                'id'=> '_score_data',
+                                'setting'=>['minLines'=>10,'maxLines'=>10],
+                                'help_text' => '配分方法'
+                            ]]),
                         new HTML_INPUT_CODEPAD(['option' =>
                             [
                                 'code'=>$tmpl['problem']->getJudgeJson(),//$tmpl['pjson'],
