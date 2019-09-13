@@ -89,30 +89,39 @@ class class_uva{
 		foreach($problist as &$pnum)
 			$pnum = $this->realpname($pnum);
 
-		//fetch
-		$data = file_get_contents("http://uhunt.felix-halim.net/api/subs-nums/".implode(',', $userlist)."/".implode(',', $problist)."/0");
-		if($data === false) return ;
-		$data = json_decode($data, true);
+		$userchunks = array_chunk($userlist, 100);
+		$probchunks = array_chunk($problist, 100);
 
-		foreach($userlist as $user)
+		//fetch
+		foreach ($userchunks as $userlist)
 		{
-			$uid = intval($user);
-			$udata = $data[$uid]['subs'];
-			$verdict = array();
-			foreach($udata as $sub)
+			foreach ($probchunks as $problist)
 			{
-				if($sub[2] != 20)
+				$data = file_get_contents("http://uhunt.felix-halim.net/api/subs-nums/".implode(',', $userlist)."/".implode(',', $problist)."/0");
+				if($data === false) continue;
+				$data = json_decode($data, true);
+
+				foreach($userlist as $user)
 				{
-				    $pnum = $this->probId2Num($sub[1]);
-				    if(!isset($verdict[$pnum])) 
-				        $verdict[$pnum] = 0;
-					$verdict[$pnum] = max($verdict[$pnum], $sub[2]);
+					$uid = intval($user);
+					$udata = $data[$uid]['subs'];
+					$verdict = array();
+					foreach($udata as $sub)
+					{
+						if($sub[2] != 20)
+						{
+							$pnum = $this->probId2Num($sub[1]);
+							if(!isset($verdict[$pnum]))
+								$verdict[$pnum] = 0;
+							$verdict[$pnum] = max($verdict[$pnum], $sub[2]);
+						}
+					}
+					if(! isset($this->rate[$uid]) )
+						$this->rate[$uid] = array();
+					foreach($verdict as $p => $v){
+						$this->rate[$uid][$p] = $v;
+					}
 				}
-			}
-			if(! isset($this->rate[$uid]) )
-			    $this->rate[$uid] = array();
-			foreach($verdict as $p => $v){
-			    $this->rate[$uid][$p] = $v;
 			}
 		}
 	}
