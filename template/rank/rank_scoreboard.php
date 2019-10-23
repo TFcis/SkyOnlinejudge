@@ -41,6 +41,9 @@ if (!defined('IN_TEMPLATE')) {
             <a class = "icon-bttn" onclick="build_cb_data(0)">
                 <span class="pointer glyphicon glyphicon-refresh"  title="重新擷取"></span>
             </a>
+                <?php if($tmpl['sb']->allowJoin($SkyOJ->User)): ?>
+                <a onclick="">申請加入</a>
+                <?php endif; ?>
                 <?php endif; ?>
             <?php endif; ?>
                 </small>
