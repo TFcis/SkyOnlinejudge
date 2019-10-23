@@ -13,6 +13,7 @@ function apiHandle()
         case 'new':
         case 'rebuild':
         case 'modify':
+        case 'join':
             break;
             
         default:

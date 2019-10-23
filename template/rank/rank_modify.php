@@ -92,7 +92,7 @@ $(document).ready(function()
                         new HTML_INPUT_TEXT(['name'=>'end','value'=>$tmpl['sb']->end,'option' => ['help_text' => '結束時間']]),
                         new HTML_INPUT_TEXT(['name'=>'users','value'=>implode(',',$tmpl['sb']->GetUsers()),'option' => ['help_text' => '登記ID']]),
                         new HTML_INPUT_SELECT(['name'=>'allow_join'
-                            ,'key-pair'=> \SKYOJ\Scoreboard\ScoreBoardAllowJoinEnum::getConstants()
+                            ,'key-pair'=> \SkyOJ\Scoreboard\ScoreBoardAllowJoinEnum::getConstants()
                             ,'default' =>(int)$tmpl['sb']->allow_join
                             ,'option'  => ['help_text' => '允許用戶申請加入']]),
                         new HTML_INPUT_TEXT(['name'=>'problems','value'=>implode(',',$p),'option' => ['help_text' => '題目列表']]),

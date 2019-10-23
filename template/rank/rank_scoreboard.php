@@ -27,6 +27,14 @@ if (!defined('IN_TEMPLATE')) {
         });
         return true;
     }
+    function request_join(uid)
+    {
+        $("#infobox").html("Request join...");
+        api_submit("<?=$SkyOJ->uri('rank','api','join',$tmpl['sb']->sb_id)?>/"+uid,'#board','#infobox',function(res){
+            setTimeout(function(){location.reload();}, 500);
+        });
+        return true;
+    }
 </script>
 <div id="image-bar"></div>
 <div class="container">
@@ -41,9 +49,9 @@ if (!defined('IN_TEMPLATE')) {
             <a class = "icon-bttn" onclick="build_cb_data(0)">
                 <span class="pointer glyphicon glyphicon-refresh"  title="重新擷取"></span>
             </a>
-                <?php if($tmpl['sb']->allowJoin($SkyOJ->User)): ?>
-                <a onclick="">申請加入</a>
                 <?php endif; ?>
+                <?php if($tmpl['sb']->isAllowJoin($SkyOJ->User)): ?>
+					<a onclick="request_join(<?=$SkyOJ->User->uid?>);">申請加入</a>
                 <?php endif; ?>
             <?php endif; ?>
                 </small>
