@@ -25,7 +25,7 @@ class AddRankAllowJoin extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('rank',['id' => 'cont_id']);
+        $table = $this->table('scoreboard',['id' => 'sb_id']);
         if( !$table->hasColumn('allow_join') ) $table->addColumn('allow_join','integer');
         $table->save();
     }
