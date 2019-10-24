@@ -89,6 +89,13 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
         return true;
     }
 
+    function checkSet_allow_join(string $allow_join):bool
+    {
+		if ( !ScoreBoardAllowJoinEnum::isValidValue((int)$allow_join) )
+			return false;
+        return true;
+    }
+
     function checkSet_announce(string $announce):bool
     {
         if( strlen($announce)>30000 )
@@ -170,6 +177,14 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
             return self::$plugins[ $this->prob_match[$pname] ]::problink($pname);
         return '';
     }
+	
+	function isAllowJoin(int $uid):bool
+	{
+		if ( $this->allow_join == ScoreBoardAllowJoinEnum::NotAllowed )
+			return false;
+		$users = $this->GetUsers();
+		return !in_array($uid, $users);
+	}
 
     function GetSortedUsers():array
     {
@@ -193,6 +208,13 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
         });
         return $res = array_reverse($users);
     }
+	
+	function SetAllowJoin(int $value):bool
+	{
+		if ( !ScoreBoardAllowJoinEnum::isValidValue($value) )
+			return false;
+		return $this->allow_join = $value;
+	}
 
     function GetUsers():array
     {
@@ -518,10 +540,11 @@ TAG;
     {
         global $_G;
         $tstatsboard = \DB::tname('scoreboard');
+		//error_log( (string)\DB::$pdo->errorInfo() );
         $res = \DB::queryEx("INSERT INTO `{$tstatsboard}`
-            (`sb_id`, `title`, `owner`, `type`, `type_note`, `timestamp`) 
-            VALUES (NULL,?,?,?,NULL,NULL)",
-                       $title,$_G['uid'],$type);
+            (`sb_id`, `title`, `owner`, `type`, `type_note`, `timestamp`, `allow_join`) 
+            VALUES (NULL,?,?,?,NULL,NULL,?)",
+                       $title,$_G['uid'],$type,ScoreBoardAllowJoinEnum::Allowed);
         if( $res===false )
             throw new \Exception('SQL Error!');
         $sb_id = \DB::lastInsertId('sb_id');

@@ -27,8 +27,17 @@ if (!defined('IN_TEMPLATE')) {
         });
         return true;
     }
+    function request_join(uid)
+    {
+        $("#infobox").html("Request join...");
+        api_submit("<?=$SkyOJ->uri('rank','api','join',$tmpl['sb']->sb_id)?>/"+uid,'#board','#infobox',function(res){
+            setTimeout(function(){location.reload();}, 500);
+        });
+        return true;
+    }
 </script>
 <div id="image-bar"></div>
+<form id="board"></form>
 <div class="container">
     <div>
         <div class="page-header">
@@ -43,6 +52,9 @@ if (!defined('IN_TEMPLATE')) {
             </a>
                 <?php endif; ?>
             <?php endif; ?>
+			<?php if($SkyOJ->User->isUser() && $tmpl['sb']->isAllowJoin($SkyOJ->User->uid)): ?>
+				<a onclick="request_join(<?=$SkyOJ->User->uid?>);">申請加入</a>
+			<?php endif; ?>
                 </small>
             </h1>
         </div>
