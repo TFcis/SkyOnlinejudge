@@ -53,7 +53,7 @@ if (!defined('IN_TEMPLATE')) {
                 <?php endif; ?>
             <?php endif; ?>
 			<?php if($SkyOJ->User->isUser() && $tmpl['sb']->isAllowJoin($SkyOJ->User->uid)): ?>
-				<a onclick="request_join(<?=$SkyOJ->User->uid?>);">申請加入</a>
+				<buttom class="btn btn-primary" onclick="request_join(<?=$SkyOJ->User->uid?>);">申請加入</buttom>
 			<?php endif; ?>
                 </small>
             </h1>
