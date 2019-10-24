@@ -15,7 +15,6 @@ function rank_api_modifyHandle()
         $end   = \SKYOJ\safe_post('end');
 		$allow_join = \SKYOJ\safe_post('allow_join');
         $users = \SKYOJ\safe_post('users');
-		error_log( $users );
         $problems = \SKYOJ\safe_post('problems');
         
         $announce = \SKYOJ\safe_post('announce');
@@ -37,7 +36,7 @@ function rank_api_modifyHandle()
             throw new \Exception('modify start error');
         if( !$sb->end = $end )
             throw new \Exception('modify end error:');
-		if( !$sb->SetAllowJoin($allow_join) )
+		if( !$sb->allow_join = $allow_join )
 			throw new \Exception('modify allow_join error');
         if( !$sb->SetUsers($users) )
             throw new \Exception('modify users error');
