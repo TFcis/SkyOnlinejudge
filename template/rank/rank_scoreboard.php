@@ -37,6 +37,7 @@ if (!defined('IN_TEMPLATE')) {
     }
 </script>
 <div id="image-bar"></div>
+<form id="board"></form>
 <div class="container">
     <div>
         <div class="page-header">
@@ -50,10 +51,10 @@ if (!defined('IN_TEMPLATE')) {
                 <span class="pointer glyphicon glyphicon-refresh"  title="重新擷取"></span>
             </a>
                 <?php endif; ?>
-                <?php if($tmpl['sb']->isAllowJoin($SkyOJ->User)): ?>
-					<a onclick="request_join(<?=$SkyOJ->User->uid?>);">申請加入</a>
-                <?php endif; ?>
             <?php endif; ?>
+			<?php if($SkyOJ->User && $tmpl['sb']->isAllowJoin($SkyOJ->User->uid)): ?>
+				<a onclick="request_join(<?=$SkyOJ->User->uid?>);">申請加入</a>
+			<?php endif; ?>
                 </small>
             </h1>
         </div>

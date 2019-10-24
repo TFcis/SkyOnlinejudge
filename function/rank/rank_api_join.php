@@ -9,23 +9,24 @@ function rank_api_joinHandle()
 
     try{
         $sb_id = $SkyOJ->UriParam(3);
-        $user = $SkyOJ->UriParam(4);
+        $uid = $SkyOJ->UriParam(4);
 		
         if( !\SKYOJ\check_tocint($sb_id) )
             throw new \Exception('ID Error');
-        if( !\SKYOJ\check_tocint($user) )
+        if( !\SKYOJ\check_tocint($uid) )
             throw new \Exception('User Error');
 
+		$uid = (int)$uid;
         $sb = new \SkyOJ\Scoreboard\ScoreBoard();
         if( !$sb->load($sb_id) )
             throw new \Exception('Load Scoreboard error!');
         $sb_id = $sb->sb_id;
 		
-		if( !$sb->isAllowJoin( $user ) )
+		if( !$sb->isAllowJoin( $uid ) )
 			throw new \Exception('request rejected');
 		
 		$users = $sb->GetUsers();
-		$users[] = $user;
+		$users[] = $uid;
 		if( !$sb->SetUsers($users) )
 			throw new \Exception('modify users error');
 

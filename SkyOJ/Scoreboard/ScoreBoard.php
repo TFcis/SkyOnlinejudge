@@ -89,6 +89,13 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
         return true;
     }
 
+    function checkSet_allow_join(string $allow_join):bool
+    {
+		if ( !ScoreBoardAllowJoinEnum::isValidValue((int)$allow_join) )
+			return false;
+        return true;
+    }
+
     function checkSet_announce(string $announce):bool
     {
         if( strlen($announce)>30000 )
@@ -171,12 +178,12 @@ class ScoreBoard extends \SkyOJ\Core\CommonObject
         return '';
     }
 	
-	function isAllowJoin(User $user):bool
+	function isAllowJoin(int $uid):bool
 	{
 		if ( $this->allow_join == ScoreBoardAllowJoinEnum::NotAllowed )
 			return false;
 		$users = $this->GetUsers();
-		return !in_array($user->uid, $users);
+		return !in_array($uid, $users);
 	}
 
     function GetSortedUsers():array
