@@ -6,6 +6,7 @@ if (!defined('IN_SKYOJSYSTEM')) {
 
 function edit_accountHandle(UserInfo $userInfo)
 {
+    global $_G;
     $oldpass = \SKYOJ\safe_post('oldpasswd');
 
     $newpass  =\SKYOJ\safe_post('newpasswd');
@@ -14,7 +15,7 @@ function edit_accountHandle(UserInfo $userInfo)
 
     $data = $userInfo->load_data('account');
     
-    if ( empty($data) || !password_verify($oldpass,$data['passhash'])) {
+    if ( (empty($data) || !password_verify($oldpass,$data['passhash'])) && && !\userControl::isAdmin($_G['uid'])) {
         \SKYOJ\throwjson('error', 'Worng Old Password');
     }
 
