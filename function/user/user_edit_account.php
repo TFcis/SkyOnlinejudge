@@ -15,7 +15,7 @@ function edit_accountHandle(UserInfo $userInfo)
 
     $data = $userInfo->load_data('account');
     
-    if ( (empty($data) || !password_verify($oldpass,$data['passhash'])) && && !\userControl::isAdmin($_G['uid'])) {
+    if ( (empty($data) || !password_verify($oldpass,$data['passhash'])) && !\userControl::isAdmin($_G['uid'])) {
         \SKYOJ\throwjson('error', 'Worng Old Password');
     }
 
