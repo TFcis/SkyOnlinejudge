@@ -23,7 +23,7 @@
             });
     	</script>
         <?php if ($_E['uesLocalMathJaxFile']):?>
-        <script type="text/javascript" src=<?=$_E['SITEROOT']?>"js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="<?=$_E['SITEROOT']?>js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <?php else:?>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <?php endif; ?>
