@@ -66,7 +66,7 @@ function viewPlayingProblem(\SKYOJ\Contest $contest,string $ptag,string $filenam
     if( strlen($filename)>0 )
     {
         require_once($_E['ROOT'].'/function/problem/problem_view.php');
-        \SKYOJ\Problem\viewachieveHandle($prob_data,$filename);
+        \SKYOJ\Problem\viewachieveHandle($prob_data,$filename,true);
         exit(0);
     }
 
