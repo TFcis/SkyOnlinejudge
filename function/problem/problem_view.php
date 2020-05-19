@@ -42,11 +42,11 @@ function viewHandle()
     }
 }
 
-function viewachieveHandle(\SkyOJ\Problem\Container $problem, string $filename)
+function viewachieveHandle(\SkyOJ\Problem\Container $problem, string $filename, bool $force_allow = false)
 {
     global $SkyOJ;
     try{
-        if( !$problem->readable($SkyOJ->User) )
+        if( !$problem->readable($SkyOJ->User) && !$force_allow)
         {
             throw new \Exception('403');
         }
