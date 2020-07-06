@@ -308,12 +308,12 @@ class HypeX extends Judge
                     if( !$sftp->put($ssh_dir.'/problem/HypeX'," ") ) throw new \Exception('SFTP 權限不足(put)');
                     break;
                 case HypeX_FileMethodEnum::LOCAL_COPY:
-                    @file_put_contents($ssh_dir."/Hypex", " ");
-                    if( !file_exists($ssh_dir."/Hypex") ) throw new \Exception('檔案無法寫入 '.$ssh_dir."/Hypex");
-                    @mkdir($ssh_dir."/problem", 0644);
+                    @file_put_contents($data_dir."/Hypex", " ");
+                    if( !file_exists($data_dir."/Hypex") ) throw new \Exception('檔案無法寫入 '.$data_dir."/Hypex");
+                    @mkdir($data_dir."/problem", 0644);
 
-                    @file_put_contents($ssh_dir."/problem/Hypex", " ");
-                    if( !file_exists($ssh_dir."/problem/Hypex") ) throw new \Exception('檔案無法寫入 '.$ssh_dir."/problem/Hypex");
+                    @file_put_contents($data_dir."/problem/Hypex", " ");
+                    if( !file_exists($data_dir."/problem/Hypex") ) throw new \Exception('檔案無法寫入 '.$data_dir."/problem/Hypex");
                     break;
                 default: throw new \Exception('file_method error');
             }
